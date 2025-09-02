@@ -1,0 +1,744 @@
+<div class="main_content_iner main_content_padding">
+    <div class="dashboard_lg_card">
+        <div class="container-fluid no-gutters">
+            <div class="row">
+                <div class="col-xl-12">
+                    <!-- account_profile_wrapper  -->
+                    <div class="account_profile_wrapper p-4">
+                        <div class="account_profile_thumb text-center">
+                            {{-- <div class="thumb">
+                                <img src="{{getProfileImage($profile->image)}}" alt="">
+                            </div> --}}
+                            <x-student-profile-image-update :profile="$profile" />
+                            <h4>{{ $profile->name }}</h4>
+                            <p>{{ $profile->headline }}</p>
+
+                            <div id="show_file">
+                                @if(!empty($user_form))
+                                    @if ($user_form->user_agreement_form == null || $user_form->status == 2)
+                                        <p class="mt-3 text-left">
+                                            @php
+                                                echo $user_form->status == 2 ? '<span class="text-danger">Your Form was Not Correct, Please Upload Correct Form Again</span>' : 'If you Already Not Downloaded Form';
+                                            @endphp
+                                        </p>
+                                        @if($user_form && $user_form->status == 2)
+                                            <p>Admin Comment</p>
+                                            <small><i>{{ $user_form->comment }}</i></small>
+                                        @endif
+                                        @if ($user_form->user_agreement_form == null)
+                                            <a href="{{ 'public/student_affidavit/agreement_form/Agreement_file.pdf' }}"
+                                               class="theme_btn w-100 small_btn4 mt-2 text-center" download
+                                               id="download_btn">Download</a>
+                                        @endif
+                                        <hr>
+                                        <form action="" enctype="multipart/form-data" method="POST"
+                                              id="upload_user_agreement_form">
+                                            @csrf
+                                            <p class="mt-3">
+                                                @php
+                                                    echo $user_form->status == null ? 'Form Not Uploaded Yet' : '';
+                                                @endphp
+                                            </p>
+
+                                            <input type="hidden" id="user_id" value="{{ $profile->id }}">
+                                            <label for="form_upload" class="form-label theme_btn mb-4">Upload Form</label>
+                                            <input type="file" name="user_agreement_form" id="form_upload"
+                                                   class="form-control primary-input">
+                                        </form>
+                                    @else
+                                        <div class="mt-4">
+                                            <p class="float-left">
+                                                {{ $user_form->status == 1 ? 'You Can Download File' : 'You will be able to Download File after Approval' }}
+                                            </p>
+                                            <a href="{{ $user_form->user_agreement_form }}"
+                                               class="theme_btn w-100 small_btn4 {{ $user_form->status != 1 ? 'anchor_disabled' : '' }} mt-3 text-center"
+                                               download id="download_btn">Download</a>
+                                        </div>
+                                    @endif
+                                @else
+
+                                        <a href="{{ 'public/student_affidavit/agreement_form/Agreement_file.pdf' }}"
+                                           class="theme_btn w-100 small_btn4 mt-2 text-center" download
+                                           id="download_btn">Download</a>
+
+                                    <hr>
+                                    <form action="" enctype="multipart/form-data" method="POST"
+                                          id="upload_user_agreement_form">
+                                        @csrf
+                                        <p class="mt-3">
+                                            @php
+                                                echo $user_form == null ? 'Form Not Uploaded Yet' : '';
+                                            @endphp
+                                        </p>
+
+                                        <input type="hidden" id="user_id" value="{{ $profile->id }}">
+                                        <label for="form_upload" class="form-label theme_btn mb-4">Upload Form</label>
+                                        <input type="file" name="user_agreement_form" id="form_upload"
+                                               class="form-control primary-input">
+                                    </form>
+                                @endif
+                                <div class="alert px-2 py-3 my-2 d-none" id="formUploadMsg"></div>
+                            </div>
+                        </div>
+                        <div class="account_profile_form">
+                            <h3 class="font_22 f_w_700 mb_30">{{ __('frontendmanage.My Profile') }}</h3>
+
+                            <form action="{{ route('myProfileUpdate') }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <div class="row">
+                                    <input type="hidden" name="username" value="{{ $profile->email }}">
+                                    <div class="col-lg-12">
+                                        <label class="primary_label2">{{ __('student.Full Name') }}
+                                            <span>*</span></label>
+                                        <input name="name" placeholder="{{ __('frontend.Enter First Name') }}"
+                                            onfocus="this.placeholder = ''"
+                                            onblur="this.placeholder = '{{ __('frontend.Enter First Name') }}'"
+                                            class="primary_input4" {{ $errors->first('name') ? 'autofocus' : '' }}
+                                            {{ !$custom_field->editable_name ? 'readonly' : '' }}
+                                            value="{{ $profile->name != '' ? @$profile->name : old('name') }}"
+                                            type="text">
+                                        <span class="text-danger" role="alert">{{ $errors->first('name') }}</span>
+                                    </div>
+
+
+                                    <div class="col-lg-12 mt_20">
+                                        <label
+                                            class="primary_label2">{{ __('student.Add a professional headline like') }}
+                                            ({{ __('student.Student') }})</label>
+                                        <input name="headline" placeholder="{{ __('student.Headline') }}"
+                                            onfocus="this.placeholder = ''"
+                                            onblur="this.placeholder = '{{ __('student.Headline') }}'"
+                                            class="primary_input4" type="text"
+                                            value="{{ $profile->headline != '' ? @$profile->headline : old('headline') }}">
+                                        <span class="text-danger"
+                                            role="alert">{{ $errors->first('headline') }}</span>
+                                    </div>
+
+
+                                    <div class="col-lg-6 col-md-6 mt_20">
+                                        <div class="single_input">
+                                            <span class="primary_label2">{{ __('student.Phone Number') }} </span>
+                                            <input type="text" placeholder="{{ __('student.Phone Number') }}"
+                                                class="primary_input4 {{ @$errors->has('phone') ? ' is-invalid' : '' }}"
+                                                value="{{ $profile->phone != '' ? @$profile->phone : old('phone') }}"
+                                                name="phone" {{ $errors->first('phone') ? 'autofocus' : '' }}>
+                                            <span class="text-danger"
+                                                role="alert">{{ $errors->first('phone') }}</span>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 mt_20">
+                                        <div class="single_input">
+                                            <span class="primary_label2">{{ __('common.Email') }} <span class="">
+                                                    *</span></span>
+                                            <input type="email" placeholder="{{ __('common.Email') }}"
+                                                class="primary_input4 {{ @$errors->has('email') ? ' is-invalid' : '' }}"
+                                                value="{{ $profile->email != '' ? @$profile->email : old('email') }}"
+                                                name="email" {{ $errors->first('email') ? 'autofocus' : '' }}>
+                                            <span class="text-danger"
+                                                role="alert">{{ $errors->first('email') }}</span>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 mt_20">
+                                        <div class="single_input">
+                                            <span class="primary_label2">{{ __('common.Language') }} <span
+                                                    class="">
+                                                    *</span> </span>
+                                            <select class="theme_select wide mb_20" name="language"
+                                                {{ $errors->first('language') ? 'autofocus' : '' }}>
+                                                <option data-display="{{ __('common.Language') }}" value="#">
+                                                    {{ __('common.Select') }} {{ __('common.Language') }}</option>
+                                                @if (isset($langs))
+                                                    @foreach ($langs as $lang)
+                                                        <option
+                                                            value="{{ @$lang->id }}|{{ @$lang->code }}|{{ @$lang->native }}|{{ @$lang->rtl }}"
+                                                            @if ($profile->language_code == $lang->code) selected @endif>
+                                                            {{ @$lang->native }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                            <span class="text-danger"
+                                                role="alert">{{ $errors->first('language') }}</span>
+                                        </div>
+
+                                    </div>
+
+
+                                    @if ($custom_field->show_dob)
+                                        <div class="col-lg-6 col-md-6 mt_20">
+                                            <div class="single_input">
+                                                <span class="primary_label2">{{ __('common.Date of Birth') }}
+                                                    <span>{{ $custom_field->required_dob ? '*' : '' }}</span>
+                                                </span>
+                                                <input type="date" placeholder="{{ __('common.Date of Birth') }}"
+                                                    class="primary_input4 {{ @$errors->has('dob') ? ' is-invalid' : '' }}"
+                                                    value="{{ $profile->dob != '' ? \Carbon\Carbon::parse($profile->dob)->format('Y-m-d') : old('dob') }}"
+                                                    name="dob" {{ $errors->first('dob') ? 'autofocus' : '' }}
+                                                    {{ $custom_field->required_dob ? 'required' : '' }}
+                                                    {{ $custom_field->editable_dob ? '' : 'readonly' }}>
+                                                <span class="text-danger"
+                                                    role="alert">{{ $errors->first('dob') }}</span>
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    @if ($custom_field->show_gender)
+                                        <div class="col-lg-6 col-md-6 mt_20">
+                                            <div class="single_input">
+                                                <span class="primary_label2">{{ __('common.gender') }}
+                                                    <span>{{ $custom_field->required_gender ? '*' : '' }}</span>
+                                                </span>
+
+                                                <select class="theme_select wide mb_20" name="gender"
+                                                    {{ $errors->first('gender') ? 'autofocus' : '' }}
+                                                    {{ $custom_field->editable_gender ? '' : 'readonly' }}
+                                                   >
+
+                                                    <option data-display="{{ __('common.gender') }}" value="">
+                                                        {{ __('common.Select') }}</option>
+                                                    <option value="male"
+                                                        @if ($profile->gender == 'male') selected @endif>
+                                                        Male
+                                                    </option>
+                                                    <option value="female"
+                                                        @if ($profile->gender == 'female') selected @endif>Female
+                                                    </option>
+                                                    <option value="other"
+                                                        @if ($profile->gender == 'other') selected @endif>Other
+                                                    </option>
+                                                </select>
+                                                <span class="text-danger"
+                                                    role="alert">{{ $errors->first('gender') }}</span>
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    @if ($custom_field->show_company)
+                                        <div class="col-lg-6 col-md-6 mt_20">
+                                            <div class="single_input">
+                                                <span class="primary_label2">{{ __('common.company') }}
+                                                    <span>{{ $custom_field->required_company ? '*' : '' }}</span>
+                                                </span>
+                                                <input type="text" placeholder="{{ __('common.company') }}"
+                                                    class="primary_input4 {{ @$errors->has('company_id') ? ' is-invalid' : '' }}"
+                                                    value="{{ $profile->company != '' ? @$profile->company : old('company') }}"
+                                                    name="company"
+                                                    {{ $errors->first('company_id') ? 'autofocus' : '' }}
+                                                    {{ $custom_field->required_company ? 'required' : '' }}
+                                                    {{ $custom_field->editable_company ? '' : 'readonly' }}>
+                                                <span class="text-danger"
+                                                    role="alert">{{ $errors->first('company_id') }}</span>
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    @if ($custom_field->show_student_type)
+                                        <div class="col-lg-6 col-md-6 mt_20">
+                                            <div class="single_input">
+                                                <span class="primary_label2">{{ __('common.student_type') }}
+                                                    <span>{{ $custom_field->required_student_type ? '*' : '' }}</span>
+                                                </span>
+
+
+                                                <select class="theme_select wide mb_20" name="student_type"
+                                                    {{ $custom_field->required_student_type ? 'required' : '' }}
+                                                    {{ $custom_field->editable_student_type ? '' : 'readonly' }}
+                                                    id="student_type"
+                                                    {{ $errors->first('student_type') ? 'autofocus' : '' }}>
+                                                    <option data-display="{{ __('common.student_type') }}"
+                                                        value="">{{ __('common.Select') }}</option>
+                                                    <option value="personal"
+                                                        @if ($profile->student_type == 'personal') selected @endif>
+                                                        Personal
+                                                    </option>
+
+                                                    <option value="corporate"
+                                                        @if ($profile->student_type == 'corporate') selected @endif>
+                                                        Corporate
+                                                    </option>
+                                                </select>
+                                                <span class="text-danger"
+                                                    role="alert">{{ $errors->first('student_type') }}</span>
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    @if ($custom_field->show_identification_number)
+                                        <div class="col-lg-6 col-md-6 mt_20">
+                                            <div class="single_input">
+                                                <span class="primary_label2">{{ __('common.identification_number') }}
+                                                    <span>{{ $custom_field->required_identification_number ? '*' : '' }}</span>
+                                                </span>
+                                                <input type="text"
+                                                    placeholder="{{ __('common.identification_number') }}"
+                                                    class="primary_input4 {{ @$errors->has('identification_number') ? ' is-invalid' : '' }}"
+                                                    value="{{ $profile->identification_number != '' ? @$profile->identification_number : old('identification_number') }}"
+                                                    name="identification_number"
+                                                    {{ $errors->first('identification_number') ? 'autofocus' : '' }}
+                                                    {{ $custom_field->required_identification_number ? 'required' : '' }}
+                                                    {{ $custom_field->editable_identification_number ? '' : 'readonly' }}>
+                                                <span class="text-danger"
+                                                    role="alert">{{ $errors->first('identification_number') }}</span>
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    @if ($custom_field->show_job_title)
+                                        <div class="col-lg-6 col-md-6 mt_20">
+                                            <div class="single_input">
+                                                <span class="primary_label2">{{ __('common.job_title') }}
+                                                    <span>{{ $custom_field->required_job_title ? '*' : '' }}</span>
+                                                </span>
+                                                <input type="text" placeholder="{{ __('common.job_title') }}"
+                                                    class="primary_input4 {{ @$errors->has('job_title') ? ' is-invalid' : '' }}"
+                                                    value="{{ $profile->job_title != '' ? @$profile->job_title : old('job_title') }}"
+                                                    name="job_title"
+                                                    {{ $errors->first('job_title') ? 'autofocus' : '' }}
+                                                    {{ $custom_field->required_job_title ? 'required' : '' }}
+                                                    {{ $custom_field->editable_job_title ? '' : 'readonly' }}>
+                                                <span class="text-danger"
+                                                    role="alert">{{ $errors->first('job_title') }}</span>
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    <div class="col-lg-6 col-md-6 mt_20">
+                                        <div class="single_input">
+                                            <span class="primary_label2">{{ __('common.Country') }} <span
+                                                    class="">
+                                                    *</span> </span>
+                                            <select class="wide w-100 mb-3" name="country" id="country"
+                                                {{ $errors->first('country') ? 'autofocus' : '' }}>
+                                                <option data-display="{{ __('common.Country') }}" value="">
+                                                    {{ __('common.Select') }}</option>
+                                                @if (isset($countries))
+                                                    @foreach ($countries as $country)
+                                                        <option value="{{ @$country->id }}"
+                                                            @if ($profile->country == $country->id) selected @endif>
+                                                            {{ @$country->name }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                            <span class="text-danger"
+                                                role="alert">{{ $errors->first('country') }}</span>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 mt_20">
+                                        <div class="single_input" id="state_div">
+                                            <span class="primary_label2">{{ __('common.State') }} </span>
+                                            <select class="wide mb_20 stateList" name="state" id="state"
+                                                {{ $errors->first('state') ? 'autofocus' : '' }}>
+                                                <option data-display="{{ __('common.State') }}" value="#">
+                                                    {{ __('common.Select') }} {{ __('common.State') }}</option>
+                                                @if (isset($states))
+                                                    @foreach ($states as $state)
+                                                        <option value="{{ $state->id }}"
+                                                            @if ($profile->state == $state->id) selected @endif>
+                                                            {{ $state->name }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                            <span class="text-danger"
+                                                role="alert">{{ $errors->first('state') }}</span>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-lg-6 col-md-6 mt_20">
+                                        <div class="single_input" id="city_div">
+                                            <span class="primary_label2">{{ __('common.City') }} </span>
+                                            <select class="wide mb_20 cityList" name="city" id="city"
+                                                {{ $errors->first('city') ? 'autofocus' : '' }}>
+                                                <option data-display="{{ __('common.City') }}" value="#">
+                                                    {{ __('common.Select') }} {{ __('common.City') }}</option>
+                                                @if (isset($cities))
+                                                    @foreach ($cities as $city)
+                                                        <option value="{{ $city->id }}"
+                                                            @if ($profile->city == $city->id) selected @endif>
+                                                            {{ $city->name }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                            <span class="text-danger"
+                                                role="alert">{{ $errors->first('city') }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6 col-md-6 mt_20">
+                                        <div class="single_input">
+                                            <span class="primary_label2">{{ __('common.Address') }} </span>
+                                            <input type="text" placeholder="{{ __('common.Address') }}"
+                                                class="primary_input4 {{ @$errors->has('address') ? ' is-invalid' : '' }}"
+                                                value="{{ $profile->address != '' ? @$profile->address : old('address') }}"
+                                                name="address" {{ $errors->first('address') ? 'autofocus' : '' }}>
+                                            <span class="text-danger"
+                                                role="alert">{{ $errors->first('address') }}</span>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 mt_20">
+                                        <div class="single_input">
+                                            <span class="primary_label2">{{ __('common.Zip Code') }} </span>
+                                            <input type="text" placeholder="{{ __('common.Zip Code') }}"
+                                                class="primary_input4 {{ @$errors->has('zip') ? ' is-invalid' : '' }}"
+                                                value="{{ $profile->zip != '' ? @$profile->zip : old('zip') }}"
+                                                name="zip" {{ $errors->first('zip') ? 'autofocus' : '' }}>
+                                            <span class="text-danger"
+                                                role="alert">{{ $errors->first('zip') }}</span>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-12 mt_20 mb-3">
+                                        <label class="primary_label2">{{ __('common.About') }}</label>
+                                        <textarea name="about" id="aboutTextarea" class="custom_summernote mb_20" placeholder="{{ __('student.Write Note here') }}"
+                                            >{!! $profile->about != '' ? @$profile->about : old('about') !!}</textarea>
+                                    </div>
+
+{{--                                    <div class="col-12">--}}
+{{--                                        <div class="preview_upload">--}}
+{{--                                            <div class="preview_upload_thumb">--}}
+{{--                                                <img src="" alt="" id="imgPreview"--}}
+{{--                                                    style=" display:none;height: 100%;width: 100%;">--}}
+{{--                                                <span id="previewTxt">{{ __('student.Preview') }}</span>--}}
+{{--                                            </div>--}}
+{{--                                            <div class="preview_drag">--}}
+{{--                                                <div class="preview_drag_inner">--}}
+{{--                                                    <div class="img">--}}
+{{--                                                        <img src="{{ asset('public/frontend/infixlmstheme') }}/img/account/gallery_icon.png"--}}
+{{--                                                            alt="">--}}
+{{--                                                    </div>--}}
+{{--                                                    <p>{{ __('student.Drop your file here') }}</p>--}}
+{{--                                                    <small>{{ __('student.Recommended image size') }}--}}
+{{--                                                        (330x400)</small>--}}
+{{--                                                    <div class="chose_file">--}}
+{{--                                                        <input type="file" name="image" id="imgInp"--}}
+{{--                                                            onchange="readURL(this)">--}}
+{{--                                                        {{ __('student.or choose files to upload') }}--}}
+{{--                                                    </div>--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+                                </div>
+                                <h3 class="font_22 f_w_700 mb_30">{{ __('student.Social Links') }}</h3>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <label
+                                            class="primary_label2">{{ __('student.Add your Facebook URL') }}</label>
+                                        <div class="input-group  mb_20">
+                                            <div class="input-group-prepend">
+
+                                                <span class="input-group-text"> <i class="ti-facebook"></i>
+{{--                                                    <span>www.facebook.com/</span> --}}
+                                                </span>
+                                            </div>
+                                            <input name="facebook" type="text"
+                                                value="{{ $profile->facebook != '' ? @$profile->facebook : old('facebook') }}"
+                                                placeholder="{{ __('student.Facebook URL') }}"
+                                                onfocus="this.placeholder = ''"
+                                                onblur="this.placeholder = '{{ __('student.Facebook URL') }}'"
+                                                class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <label
+                                            class="primary_label2">{{ __('student.Add your Twitter URL') }}</label>
+                                        <div class="input-group  mb_20">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text twitter_bg"> <i
+                                                        class="ti-twitter-alt"></i>
+{{--                                                    <span>www.twitter.com/</span>--}}
+                                                </span>
+                                            </div>
+                                            <input type="text" placeholder="{{ __('student.Twitter URL') }}"
+                                                name="twitter" onfocus="this.placeholder = ''"
+                                                onblur="this.placeholder = '{{ __('student.Twitter URL') }}'"
+                                                class="form-control"
+                                                value="{{ $profile->twitter != '' ? @$profile->twitter : old('twitter') }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <label
+                                            class="primary_label2">{{ __('student.Add your LinkedIn URL') }}</label>
+                                        <div class="input-group  mb_20">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text linkedin_bg"> <i
+                                                        class="ti-linkedin"></i>
+{{--                                                    <span>www.linkedin.com/</span>--}}
+                                                </span>
+                                            </div>
+                                            <input type="text" placeholder="{{ __('student.LinkedIn profile') }}"
+                                                onfocus="this.placeholder = ''"
+                                                onblur="this.placeholder = '{{ __('student.LinkedIn profile') }}'"
+                                                class="form-control" name="linkedin"
+                                                value="{{ $profile->linkedin != '' ? @$profile->linkedin : old('linkedin') }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12">
+                                        <label
+                                            class="primary_label2">{{ __('student.Add your Youtube URL') }}</label>
+                                        <div class="input-group
+{{--                                         custom_input_group--}}
+                                         mb_20">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text youtube_bg"> <i class="ti-youtube"></i>
+{{--                                                    <span>www.youtube.com/</span> --}}
+                                                </span>
+                                            </div>
+                                            <input type="text" placeholder="{{ __('student.Youtube Profile') }}"
+                                                onfocus="this.placeholder = ''"
+                                                onblur="this.placeholder = '{{ __('student.Youtube Profile') }}'"
+                                                class="form-control"
+                                                value="{{ $profile->youtube != '' ? @$profile->youtube : old('youtube') }}"
+                                                name="youtube">
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <button
+                                            class="theme_btn w-100 mt_40 text-center">{{ __('student.Save') }}</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    // Image Cropper Start
+    $(document).ready(function() {
+    	var customFontFam = ['Arial','Helvetica','Cavolini','Jost','Impact','Tahoma','Verdana','Garamond','Georgia','monospace','fantasy','Papyrus','Poppins'];
+        // $('.custom_summernote').each(function() {
+        //         var elId = $(this).attr('id');
+        //         ClassicEditor
+        //             .create(document.getElementById(elId), {
+        //                 ckfinder: {
+        //                     uploadUrl: "{{ route('ckeditor.upload', ['_token' => csrf_token()]) }}",
+        //                 },
+        //                 mediaEmbed: {
+        //                     previewsInData: true,
+        //                     removeProviders: ['instagram', 'twitter', 'googleMaps', 'flickr',
+        //                         'facebook'
+        //                     ],
+        //                 },
+        //                 fontSize: {
+        //                     options: [
+        //                         9,
+        //                         11,
+        //                         13,
+        //                         'default',
+        //                         17,
+        //                         19,
+        //                         21
+        //                     ]
+        //                 },
+        //                 fontFamily: {
+        //                     options: customFontFam
+        //                 },
+        //                 toolbar: {
+        //                     items: [
+        //                         'heading',
+        //                         '|',
+        //                         'bold',
+        //                         'italic',
+        //                         'link',
+        //                         'bulletedList',
+        //                         'numberedList',
+        //                         '|',
+        //                         'blockQuote',
+        //                         'fontFamily',
+        //                         'fontSize',
+        //                         'fontColor',
+        //                         'alignment',
+        //                         'outdent',
+        //                         'indent',
+        //                         '|',
+        //                         'insertTable',
+        //                         'imageInsert',
+        //                         //	'imageUpload',
+        //                         'mediaEmbed',
+        //                         //	'CKFinder',
+        //                         //	'codeBlock',
+        //                         '|',
+        //                         'undo',
+        //                         'redo'
+        //                     ]
+        //                 },
+        //                 language: 'en',
+        //                 image: {
+        //                     toolbar: [
+        //                         // 'imageTextAlternative',
+        //                         // 'toggleImageCaption',
+        //                         'imageStyle:inline',
+        //                         'imageStyle:block',
+        //                         'imageStyle:side'
+        //                     ],
+        //                     insert: {
+        //                         // This is the default configuration, you do not need to provide
+        //                         // this configuration key if the list content and order reflects your needs.
+        //                         integrations: ['upload', 'url']
+        //                     }
+        //                 },
+        //                 table: {
+        //                     contentToolbar: [
+        //                         'tableColumn',
+        //                         'tableRow',
+        //                         'mergeTableCells'
+        //                     ]
+        //                 }
+        //             })
+        //             .then(editor => {
+        //                 // Save the editor instance to use it later
+        //                 window.editor = editor;
+
+                        
+        //                 // Listen to the change:data event
+        //                 editor.model.document.on('change:data', () => {
+        //                     // Get the editor content
+        //                     const editorData = editor.getData();
+        //                     // Update the textarea with the editor content
+        //                     // document.querySelector('#editor').value = editorData;
+        //                     $(this).val(editorData);
+        //                 });
+        //             })
+        //             .catch(error => {
+        //                 console.error(error);
+        //             });
+        //     });
+        // Summer Note
+        $('.custom_summernote').summernote({
+        	fontNames: customFontFam,
+            fontNamesIgnoreCheck: ['Cavolini','Jost'],
+            fontSizes: ['8', '9', '10', '11', '12', '14', '16', '18', '20'],
+            codeviewFilter: true,
+            codeviewIframeFilter: true,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['fontname', ['fontname']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen']],
+            ],
+            height: 188,
+            tooltip: true
+        });
+        // 1st Cropper
+
+        // var old_file = $("#instructorImage").val();
+        //
+        // $('#Browseeeditinstructor').on('click', function() {
+        //     old_file = $("#instructorImage").val();
+        //     console.log(old_file);
+        // });
+
+        //
+        // var _URL1 = window.URL || window.webkitURL;
+        // $("#pofile_image").change(function(e) {
+        //
+        //     var file, img;
+        //     if ((file = this.files[0])) {
+        //         img = new Image();
+        //         img.onload = function() {
+        //             var image_width = this.width;
+        //             var image_height = this.height;
+        //             if (image_width == 350 && image_height == 500) {
+        //
+        //             } else {
+        //                 $('#pofile_image').val('');
+        //                 toastr.error(
+        //                     'Wrong Image Dimensions, Please Select Image of 350 X 500 !',
+        //                     'Error')
+        //             }
+        //         };
+        //         img.src = _URL1.createObjectURL(file);
+        //     }
+        // });
+        $('.image-editor-cancel-button-1').on('click', function() {
+            if ($('#image_preview-1').attr('src') != '' || $('#image_preview-1').attr('src') != null) {
+                $('#image_file-1').children().val('');
+            }
+            $('#image-editor-modal-1').trigger("reset");
+            $('#image-editor-modal-1').modal('hide');
+        });
+    });
+    // Image Cropper End
+
+    $(document).ready(function() {
+        $("#form_upload").change(function() {
+            var fileName = $(this).val();
+            let user_id = $('#user_id').val();
+            let form = $('#upload_user_agreement_form');
+            let data = new FormData(form[0]);
+
+            var url = '{{ route('uploadUserForm', '') }}/' + user_id;
+
+            if (data != null) {
+                $.ajax({
+                    type: "POST",
+                    beforeSend: function() {
+                        $('#formUploadMsg').removeClass('d-none');
+                        $('#formUploadMsg').removeClass('alert-success');
+                        $('#formUploadMsg').addClass('alert-warning');
+                        $('#formUploadMsg').html('Please wait while form is uploading...<br><b>Do not close the window</b>');
+                        toastr.options = {
+                            "progressBar": true,
+                            "showDuration": 500,
+                            "timeOut": 3000,
+                            "hideDuration": 500,
+                            "preventDuplicates": true,
+                        }
+                        toastr.warning('File Uploading...');
+                    },
+                    url: url,
+                    data: data,
+                    dataType: 'json',
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        toastr.options = {
+                            "closeButton": true,
+                            "progressBar": true,
+                            "showDuration": 300,
+                            "timeOut": 3000,
+                            "hideDuration": 1000,
+                            "preventDuplicates": true,
+                        }
+                        if (response.status == 200) {
+                            toastr[response.state](response.message);
+                            // $('#upload_user_agreement_form').addClass('d-none');
+                            // form.trigger("reset");
+                            $('#show_file').html(`
+                            <div class='mt-4'>
+                                    <p class='float-left'>You will be able to Download File after Approval</p>
+                                    <a href='#'
+                                        class='theme_btn w-100 small_btn4 mt-3 text-center anchor_disabled' download
+                                        id='download_btn'>Download</a>
+                                </div>`);
+
+                        } else {
+                            toastr[response.state](response.message);
+                            form.trigger("reset");
+                        }
+                        // $('#formUploadMsg').addClass('d-none');
+                        $('#formUploadMsg').removeClass('alert-warning');
+                        $('#formUploadMsg').addClass('alert-success');
+                        $('#formUploadMsg').html('Form uploaded successfully.');
+                        setInterval(() => {
+                            $('#formUploadMsg').addClass('d-none');
+                        }, 3000);
+                    }
+                });
+            }
+        });
+    });
+</script>
