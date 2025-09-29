@@ -705,6 +705,9 @@
     font-size: 16px;
 }
 }
+.addToCartBuyNow{
+    cursor: pointer;
+}
 </style>
 {{-- @endsection --}}
 {{--
@@ -733,6 +736,7 @@
             <!-- <div class="px-xl-5 row px-1"> -->
                 @php
                     $count_enrolled = 0;
+                    $count_plans = $program_detail->programPlans->count();
                     if (isset($program_detail->effectiveProgramPlan[0])) {
                         $count_enrolled = \Modules\CourseSetting\Entities\CourseEnrolled::where('program_id', $program_detail->id)
                             ->where('plan_id', $program_detail->effectiveProgramPlan[0]->id)
@@ -778,35 +782,36 @@
                             @elseif(isStudent())
                                 @if (isset($program_detail->effectiveProgramPlan[0]) &&
                                        $program_detail->effectiveProgramPlan[0]->no_of_students > $count_enrolled)
-                                    <a href="{{ route('addToCart', ['id' => $program_detail->id, 'plan_id' => $program_detail->effectiveProgramPlan[0]->id]) }}"
-                                       class="small_btn theme_btn text-nowrap">Add
-                                        to Cart
+                                    <a {{--href="{{ route('addToCart', ['id' => $program_detail->id, 'plan_id' => $program_detail->effectiveProgramPlan[0]->id]) }}"--}}
+                                       class="small_btn theme_btn text-nowrap addToCartBuyNow" data-installment="{{count(@$program_detail->effectiveProgramPlan[0]->initialProgramPalnDetail)}}"
+                                       data-url="{{ route('addToCart', ['id' => $program_detail->id, 'plan_id' => $program_detail->effectiveProgramPlan[0]->id]) }}">
+                                       Add to Cart
                                     </a>
-                                    <a href="{{ route('buyNow', ['id' => $program_detail->id, 'plan_id' => $program_detail->effectiveProgramPlan[0]->id]) }}"
-                                       class="small_btn theme_btn text-nowrap">Buy
-                                        Now
+                                    <a {{--href="{{ route('buyNow', ['id' => $program_detail->id, 'plan_id' => $program_detail->effectiveProgramPlan[0]->id]) }}"--}}
+                                       class="small_btn theme_btn text-nowrap addToCartBuyNow" data-installment="{{count(@$program_detail->effectiveProgramPlan[0]->initialProgramPalnDetail)}}"
+                                       data-url="{{ route('buyNow', ['id' => $program_detail->id, 'plan_id' => $program_detail->effectiveProgramPlan[0]->id]) }}">
+                                       Buy Now
                                     </a>
                                 @else
-                                    <a href="javascript:void(0)"
-                                       class="bgwebs btn rounded-0 small_btn theme_btn disabled m-1">Enrolled
-                                        Complete
+                                    <a href="javascript:void(0)" class="bgwebs btn rounded-0 small_btn theme_btn disabled m-1">Enrolled Complete
                                     </a>
                                 @endif
                             @endif
                         @else
                             @if (isset($program_detail->effectiveProgramPlan[0]) &&
                                     $program_detail->effectiveProgramPlan[0]->no_of_students > $count_enrolled)
-                                <a href="{{ route('addToCart', ['id' => $program_detail->id, 'plan_id' => $program_detail->effectiveProgramPlan[0]->id]) }}"
-                                   class="small_btn theme_btn text-nowrap">Add to
-                                    Cart
+                                <a {{--href="{{ route('addToCart', ['id' => $program_detail->id, 'plan_id' => $program_detail->effectiveProgramPlan[0]->id]) }}"--}}
+                                   class="small_btn theme_btn text-nowrap addToCartBuyNow" data-installment="{{count(@$program_detail->effectiveProgramPlan[0]->initialProgramPalnDetail)}}"
+                                    data-url="{{ route('addToCart', ['id' => $program_detail->id, 'plan_id' => $program_detail->effectiveProgramPlan[0]->id]) }}">
+                                    Add to Cart
                                 </a>
-                                <a href="{{ route('buyNow', ['id' => $program_detail->id, 'plan_id' => $program_detail->effectiveProgramPlan[0]->id]) }}"
-                                   class="small_btn theme_btn text-nowrap">Buy Now
+                                <a {{--href="{{ route('buyNow', ['id' => $program_detail->id, 'plan_id' => $program_detail->effectiveProgramPlan[0]->id]) }}"--}}
+                                   class="small_btn theme_btn text-nowrap addToCartBuyNow" data-installment="{{count(@$program_detail->effectiveProgramPlan[0]->initialProgramPalnDetail)}}"
+                                   data-url="{{ route('buyNow', ['id' => $program_detail->id, 'plan_id' => $program_detail->effectiveProgramPlan[0]->id]) }}">
+                                   Buy Now
                                 </a>
                             @else
-                                <a href="javascript:void(0)" class="small_btn theme_btn m-1">Enrolled
-                                    Complete
-                                </a>
+                                <a href="javascript:void(0)" class="small_btn theme_btn m-1">Enrolled Complete </a>
                             @endif
                         @endif
                     </div>
@@ -1276,24 +1281,27 @@
                                                                                        class="bgwebs btn small_btn theme_btn m-1">Enrolled
                                                                                     </a>
                                                                                 @elseif(isStudent())
-                                                                                    <a href="{{ route('addToCart', ['id' => $program_detail->id, 'plan_id' => $programPlans->id]) }}"
-                                                                                       class="bgwebs btn small_btn theme_btn m-1">Add
-                                                                                        to
-                                                                                        Cart
+                                                                                    <a {{--href="{{ route('addToCart', ['id' => $program_detail->id, 'plan_id' => $programPlans->id]) }}"--}}
+                                                                                       class="bgwebs btn small_btn theme_btn m-1 addToCartBuyNow" data-installment="{{count($programPlans->programPalnDetail)}}"
+                                                                                       data-url="{{ route('addToCart', ['id' => $program_detail->id, 'plan_id' => $programPlans->id]) }}">
+                                                                                       Add to Cart
                                                                                     </a>
-                                                                                    <a href="{{ route('buyNow', ['id' => $program_detail->id, 'plan_id' => $programPlans->id]) }}"
-                                                                                       class="bgwebs btn small_btn theme_btn m-1">Buy
-                                                                                        Now
+                                                                                    <a {{--href="{{ route('buyNow', ['id' => $program_detail->id, 'plan_id' => $programPlans->id]) }}"--}}
+                                                                                       class="bgwebs btn small_btn theme_btn m-1 addToCartBuyNow" data-installment="{{count($programPlans->programPalnDetail)}}"
+                                                                                       data-url="{{ route('buyNow', ['id' => $program_detail->id, 'plan_id' => $programPlans->id]) }}">
+                                                                                       Buy Now
                                                                                     </a>
                                                                                 @endif
                                                                             @else
-                                                                                <a href="{{ route('addToCart', ['id' => $program_detail->id, 'plan_id' => $programPlans->id]) }}"
-                                                                                   class="bgwebs btn small_btn theme_btn m-1">Add
-                                                                                    to Cart
+                                                                                <a {{--href="{{ route('addToCart', ['id' => $program_detail->id, 'plan_id' => $programPlans->id]) }}" --}}
+                                                                                   class="bgwebs btn small_btn theme_btn m-1 addToCartBuyNow" data-installment="{{count($programPlans->programPalnDetail)}}"
+                                                                                   data-url="{{ route('addToCart', ['id' => $program_detail->id, 'plan_id' => $programPlans->id]) }}">
+                                                                                   Add to Cart
                                                                                 </a>
-                                                                                <a href="{{ route('buyNow', ['id' => $program_detail->id, 'plan_id' => $programPlans->id]) }}"
-                                                                                   class="bgwebs btn small_btn theme_btn m-1">Buy
-                                                                                    Now
+                                                                                <a {{--href="{{ route('buyNow', ['id' => $program_detail->id, 'plan_id' => $programPlans->id]) }}"--}}
+                                                                                   class="bgwebs btn small_btn theme_btn m-1 addToCartBuyNow" data-installment="{{count($programPlans->programPalnDetail)}}"
+                                                                                   data-url="{{ route('buyNow', ['id' => $program_detail->id, 'plan_id' => $programPlans->id]) }}">
+                                                                                   Buy Now
                                                                                 </a>
                                                                             @endif
                                                                         @else
@@ -1878,7 +1886,43 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
             integrity="sha384-JZR6Spejh5U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
+        $(document).on('click','.addToCartBuyNow',function(){
+            var installmentCount = $(this).attr('data-installment');
+            var redirectURL = $(this).attr('data-url');
+            
+            console.log(installmentCount);
+            console.log(redirectURL);
+
+            if (parseInt(installmentCount) > 0) {
+                Swal.fire({
+                    title: 'Choose your option',
+                    text: 'Would you like to buy with installments or full payment?',
+                    icon: 'question',
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: 'Buy Installment',
+                    denyButtonText: 'Buy Full',
+                    cancelButtonText: 'Close'
+                }).then((result) => {
+                    if (result.isConfirmed) { // User chose installment
+                        redirectURL += (redirectURL.includes("?") ? "&" : "?") + "is_installment=true";
+                        window.location.href = redirectURL;
+                    } else if (result.isDenied) {   // User chose full payment
+                        redirectURL += (redirectURL.includes("?") ? "&" : "?") + "is_installment=false";
+                        window.location.href = redirectURL;
+                    } 
+                });
+            } else {
+                // If no installments available, directly proceed as full buy
+                redirectURL += (redirectURL.includes("?") ? "&" : "?") + "is_installment=false";
+                window.location.href = redirectURL;
+            }
+        });
+
         function fire(id) {
             if (id == 1) {
                 $(".text").addClass("d-none");

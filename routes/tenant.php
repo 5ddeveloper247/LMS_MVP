@@ -51,6 +51,11 @@ Route::group(['namespace' => 'Frontend'], function () {
     Route::get('/resource', 'FrontendHomeController@resource')->name('resource');
     Route::get('/our-nursing', 'FrontendHomeController@ourNursing')->name('ourNursing');
     
+    Route::get('/shop', 'ShopController@index')->name('shop.index');
+    Route::get('/shop/product/detail/{id}', 'ShopController@productDetail')->name('shop.product.detail');
+    Route::get('/shop/book/detail/{id}', 'ShopController@bookDetail')->name('shop.book.detail');
+    Route::get('/shop/addToCart/{id}', 'ShopController@addToCartShop')->name('shop.addToCart');
+    Route::get('/shop/buyNow/{id}', 'ShopController@buyNowShop')->name('shop.buyNow');
 
     Route::get('/get-courses-by-category/{category_id}', 'EdumeFrontendThemeController@getCourseByCategory')->name('getCourseByCategory');
     //wetech theme controller
@@ -246,6 +251,8 @@ Route::group(['namespace' => 'Frontend', 'middleware' => ['student']], function 
 
     Route::get('my-leaderboard', 'StudentController@leaderboard')->name('my-leaderboard');
     Route::get('my-skill', 'StudentSkillController@mySkill')->name('mySkill');
+
+    Route::get('my-orders', 'StudentController@myDashboard')->name('myOrders');
 });
 Route::group(['middleware' => ['student']], function () {
     Route::get('my-notification-setup', 'NotificationController@myNotificationSetup')->name('myNotificationSetup');

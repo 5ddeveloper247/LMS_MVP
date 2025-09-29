@@ -2358,6 +2358,7 @@ if (!function_exists('getMenuLink')) {
                 }
                 return $menu->link;
             }
+            
             $type = $menu->type;
             $element_id = $menu->element_id;
             if ($type == "Dynamic Page") {

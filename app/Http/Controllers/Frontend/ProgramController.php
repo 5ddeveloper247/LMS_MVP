@@ -70,7 +70,7 @@ class ProgramController extends Controller
         $program_detail = Program::where('id', $id)->with(['programPlans.programPalnDetail', 'currentPlan', 'nextPlans', 'effectiveProgramPlan' => function ($q) {
             $q->with(['initialProgramPalnDetail', 'programPalnDetail']);
         }])->first();
-
+        
         if(!$program_detail){
             abort(404);
         }

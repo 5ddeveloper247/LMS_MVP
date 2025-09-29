@@ -197,6 +197,7 @@
                                     {{ $title ?? '' }} {{ __('courses.Course') }}
                                 @endif
                             </h3>
+                            
                             @if (permissionCheck('course.store'))
                                 <ul class="d-flex">
                                     @if (isAdmin() || isInstructor())

@@ -37,6 +37,8 @@ use Modules\MercadoPago\Http\Controllers\MercadoPagoController;
 use Modules\Invoice\Repositories\Interfaces\InvoiceRepositoryInterface;
 use Modules\AuthorizeNetPayment\Http\Controllers\DoAuthorizeNetPaymentController;
 use Illuminate\Support\Facades\Validator;
+use Modules\Shop\Entities\ShopProduct;
+use Modules\Shop\Entities\ShopOrder;
 
 class PaymentController extends Controller
 {
@@ -233,68 +235,76 @@ class PaymentController extends Controller
             Toastr::error('Terms & Conditions must be accepted.', 'Error');
                   return redirect()->back();
             }
+
+            $checkout_info = Checkout::where('user_id', Auth::user()->id)->latest()->first();
+            session()->put('checkout_tracking', $checkout_info->tracking ?? '');
+
             // $clover = new CloverController();
             // $paymentResponse = $clover->makePayment($request, 'pay', true, null, true);
             $plan_id = $request->plan_id ?? 0;
             $payment_plan = PaymentPlans::find($plan_id);
             $authorize = new DoAuthorizeNetPaymentController();
+            
             $paymentResponse = $authorize->makePayment($request, 'pay', true, null, true);
             if ($paymentResponse["paid"]) {
+                
                 $customer = User::find(Auth::id());
                 $customer->balance = $request->remaining_balance ?? 0;
                 $customer->save();
+
                 $this->payWithGateWay($paymentResponse, "AuthorizeNet", $user = null, session()->get('invoice'));
+                
                 $cart = Cart::where('user_id', Auth::id())->first();
-            // dd($cart);
+                
                 if (!empty($cart) && !empty($cart->program_id)) {
                     $programs = Program::where('id', $cart->program_id)->with('effectiveProgramPlan')->first();
-                // dd($programs);
+                    
                     $plan_id = $cart->plan_id ?? 0;
                     $payment_plan = PaymentPlans::find($plan_id);
                     $count = 1;
                         
                     $html = '<table>
-                <tr>
-                <th colspan="6">' . $programs->programtitle . '</th>
-                </tr>
                     <tr>
-                        <th>Sr #</th>
-                        <th>Amount</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                    </tr>';
-                    if($payment_plan){
-                        foreach ($payment_plan->programPalnDetail as $plan) {
-                        $html .= '<tr>
-                            <td>' . $count . '</td>
-                            <td>' . $plan->amount . '</td>
-                            <td>' . $plan->sdate . '</td>
-                            <td>' . $plan->edate . '</td>
+                    <th colspan="6">' . $programs->programtitle . '</th>
+                    </tr>
+                        <tr>
+                            <th>Sr #</th>
+                            <th>Amount</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
                         </tr>';
-                        $count++;
-                        }
-                    }else{
-
-                        foreach ($programs->effectiveProgramPlan as $plan) {
+                        if($payment_plan){
+                            foreach ($payment_plan->programPalnDetail as $plan) {
                             $html .= '<tr>
                                 <td>' . $count . '</td>
-                                <td>' . $plan["amount"] . '</td>
-                                <td>' . $plan["sdate"] . '</td>
-                                <td>' . $plan["edate"] . '</td>
+                                <td>' . $plan->amount . '</td>
+                                <td>' . $plan->sdate . '</td>
+                                <td>' . $plan->edate . '</td>
                             </tr>';
                             $count++;
+                            }
+                        }else{
+
+                            foreach ($programs->effectiveProgramPlan as $plan) {
+                                $html .= '<tr>
+                                    <td>' . $count . '</td>
+                                    <td>' . $plan["amount"] . '</td>
+                                    <td>' . $plan["sdate"] . '</td>
+                                    <td>' . $plan["edate"] . '</td>
+                                </tr>';
+                                $count++;
+                            }
                         }
-                    }
-                    $html .= '</table>';
-                    $shortCodes = [
-                        'program' => $programs->programtitle,
-                        'installment' => $html,
-                        'time' => \Illuminate\Support\Carbon::now()->format('d-M-Y ,H:i A'),
-                        // 'instructor' => $tutor_hire->name,
-                        // 'price' =>  $programs->price,
-                        'buyer' => Auth::user()->name,
-                        'type' => 'program',
-                    ];
+                        $html .= '</table>';
+                        $shortCodes = [
+                            'program' => $programs->programtitle,
+                            'installment' => $html,
+                            'time' => \Illuminate\Support\Carbon::now()->format('d-M-Y ,H:i A'),
+                            // 'instructor' => $tutor_hire->name,
+                            // 'price' =>  $programs->price,
+                            'buyer' => Auth::user()->name,
+                            'type' => 'program',
+                        ];
 
                     send_email(Auth::user(), 'Program_Plans', $shortCodes);
                 }
@@ -400,15 +410,6 @@ class PaymentController extends Controller
 
 
 
-
-
-
-
-
-
-
-
-
     public function payWithGateWay($response, $gateWayName, $user = null, $invoice = null)
     {
               $encoded=  json_encode($response);//string
@@ -416,21 +417,29 @@ class PaymentController extends Controller
               $encoded1=  json_encode($decoded1);//std string
               $response= $encoded1;
 
-
         try {
-
             if (Auth::check()) {
                 if (!$user) {
                     $user = Auth::user();
                 }
             }
 
-
             if ($user) {
                 $certificate = session()->get('certificate_order') ?? null;
-                $checkout_info = Checkout::where('user_id', $user->id)->latest()->first();
-               // dd($checkout_info);
+                
+                $tracking = session()->get('checkout_tracking');
+                $checkout_info = null;
 
+                if ($tracking) {
+                    $checkout_info = Checkout::where('tracking', $tracking)->first();
+                    session()->forget('checkout_tracking');
+                }
+
+                if (!$checkout_info) {
+                    $checkout_info = Checkout::where('user_id', $user->id)->latest()->first();
+                }
+                
+               
                 if ($invoice) {
                     $checkout_info = Checkout::where('user_id', $invoice->user_id)
                         ->where('tracking', $invoice->tracking)
@@ -465,7 +474,7 @@ class PaymentController extends Controller
                             $this->forAppointment($checkout_info, $instructor, $discount, $cart, $carts, $gateWayName);
                         } elseif ($certificate) {
                         } else {
-                           // dd($response);
+                            // dd($response);
 
                             $this->defaultPayment($checkout_info, $user, $discount, $cart, $carts, $courseType, $gateWayName, $response);
                         }
@@ -724,14 +733,14 @@ class PaymentController extends Controller
 
     public function defaultPayment($checkout_info, $user, $discount = 0, $cart, $carts, $courseType, $gateWayName = null, $response)
     {
-        // dd($cart);
+        
         if ($cart->program_id > 0) {
             $courseType->single = 1;
 
             $Program = Program::where('id', $cart->program_id)->with(['programPlans' => function ($q) use ($cart) {
                 $q->where('id', $cart->plan_id)->with('initialProgramPalnDetail');
             }])->first();
-            //dd($Program);
+            
             $enrolled = $Program->total_enrolled;
             $Program->total_enrolled = ($enrolled + 1);
 
@@ -790,7 +799,11 @@ class PaymentController extends Controller
                         $student_program_plan->program_id = $cart->program_id;
                         $student_program_plan->plan_id = $cart->plan_id;
                         $student_program_plan->user_id = $user->id;
-                        $student_program_plan->pay_status = 'pay';
+                        if(isset($cart->is_installment) && $cart->is_installment == 0){
+                            $student_program_plan->pay_status = 'paid';
+                        }else{
+                            $student_program_plan->pay_status = 'pay';
+                        }
                         $student_program_plan->save();
                     }
 
@@ -809,7 +822,7 @@ class PaymentController extends Controller
                 $discount_amount = 0.00;
             }
             $response=json_decode($response);// (a) string to std object
-         //   dd($cart["plan_id"]);
+         
 
             $enroll = new CourseEnrolled();
             $instractor = User::find($cart->instructor_id);
@@ -1161,7 +1174,76 @@ class PaymentController extends Controller
                     GettingError($exception->getMessage(), url()->current(), request()->ip(), request()->userAgent(), true);
                 }
             }
+
+        } else if ($cart->product_id > 0) {
+
+            $product = ShopProduct::where('id', $cart->product_id)->first();
+            
+            // $enrolled = $Program->total_enrolled;
+            // $Program->total_enrolled = ($enrolled + 1);
+
+            // //==========================Start Referral========================
+            $purchase_history = CourseEnrolled::where('user_id', $user->id)->first();
+            $referral_check = UserWiseCoupon::where('invite_accept_by', $user->id)->where('category_id', null)->where('course_id', null)->first();
+            $referral_settings = UserWiseCouponSetting::where('role_id', $user->role_id)->first();
+
+            if ($purchase_history == null && $referral_check != null) {
+                $referral_check->category_id = '';
+                $referral_check->subcategory_id = '';
+                $referral_check->product_id = $product->id;
+                $referral_check->save();
+                $percentage_cal = ($referral_settings->amount / 100) * $checkout_info->price;
+
+                if ($referral_settings->type == 1) {
+                    if ($checkout_info->price > $referral_settings->max_limit) {
+                        $bonus_amount = $referral_settings->max_limit;
+                    } else {
+                        $bonus_amount = $referral_settings->amount;
+                    }
+                } else {
+                    if ($percentage_cal > $referral_settings->max_limit) {
+                        $bonus_amount = $referral_settings->max_limit;
+                    } else {
+                        $bonus_amount = $percentage_cal;
+                    }
+                }
+
+                $referral_check->bonus_amount = $bonus_amount;
+                $referral_check->save();
+
+                $invite_by = User::find($referral_check->invite_by);
+                $invite_by->balance += $bonus_amount;
+                $invite_by->save();
+
+                $invite_accept_by = User::find($referral_check->invite_accept_by);
+                $invite_accept_by->balance += $bonus_amount;
+                $invite_accept_by->save();
+            }
+           
+            //==========================End Referral========================
+            
+            //======================Shop Order Entry Add===================
+            if ($discount != 0 || !empty($discount)) {
+                $itemPrice = $cart->price - ($discount / count($carts));
+                $discount_amount = $cart->price - $itemPrice;
+            } else {
+                $itemPrice = $cart->price;
+                $discount_amount = 0.00;
+            }
+            $response = json_decode($response);// (a) string to std object
+            // dd($response->id);
+            $enroll = new ShopOrder();
+            $enroll->user_id = $user->id;
+            $enroll->tracking = $response->id ?? 0;
+            $enroll->product_id = $product->id;
+            $enroll->purchase_price = $itemPrice;
+            $enroll->coupon = null;
+            $enroll->discount_amount = $discount_amount;
+            $enroll->status = 1;
+            $enroll->save();
+            
         } else {
+
             $bundleCheck = BundleCoursePlan::find($cart->bundle_course_id);
 
             $totalCount = count($bundleCheck->course);

@@ -18,6 +18,7 @@ use Modules\StudentSetting\Entities\Program;
 use Rennokki\QueryCache\Traits\QueryCacheable;
 
 use Modules\BundleSubscription\Entities\BundleCoursePlan;
+use Modules\Shop\Entities\ShopProduct;
 
 
 
@@ -48,6 +49,11 @@ use Tenantable;
 
         return $this->belongsTo(Program::class, 'program_id', 'id');
 
+    }
+
+    public function programPlan()
+    {
+        return $this->belongsTo(PaymentPlans::class, 'plan_id', 'id')->where('type', 'program')->where('status', 1);
     }
 
 
@@ -82,6 +88,14 @@ use Tenantable;
     {
 
         return $this->belongsTo(User::class, 'user_id', 'id')->withDefault();
+
+    }
+
+    public function product()
+
+    {
+
+        return $this->belongsTo(ShopProduct::class, 'product_id', 'id');
 
     }
 

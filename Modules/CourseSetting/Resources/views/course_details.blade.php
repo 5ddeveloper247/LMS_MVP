@@ -401,13 +401,13 @@
                                                                                     <i class="ti-plus"></i>
                                                                                     {{ __('courses.Lesson') }}
                                                                                 </button>
-                                                                                <button data-purpose="add-quiz-btn"
+                                                                                {{--<button data-purpose="add-quiz-btn"
                                                                                     aria-label="Add Quiz" type="button"
                                                                                     id="show_quiz_section"
                                                                                     class="ellipsis btn btn-tertiary btn-block curriculumn-btn">
                                                                                     <i class="ti-plus"></i>
                                                                                     {{ __('Add Exam') }}
-                                                                                </button>
+                                                                                </button>--}}
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -915,8 +915,9 @@
                                                                 value="{{ $course->course_code ?? '' }}">
                                                         </div>
                                                     </div>
-                                                    <div
-                                                        class="col-xl-6 courseBox {{ $d_none }}" @if($course->type == 7 || $course->type == 9) style="display:none !important" @endif>
+
+                                                    <input type="hidden" name="total_courses" id="total_courses" value="100">
+                                                    {{--<div class="col-xl-6 courseBox {{ $d_none }}" @if($course->type == 7 || $course->type == 9) style="display:none !important" @endif>
                                                         <div class="primary_input mb-25">
                                                             <label class="primary_input_label"
                                                                 for="total_courses">{{ __('Total Classes') }} *
@@ -927,7 +928,7 @@
                                                                 class="primary_input_field active mb-15 e1"
                                                                 value="{{ $course->total_classes }}">
                                                         </div>
-                                                    </div>
+                                                    </div>--}}
                                                     @endif
 
                                                 </div>
@@ -1931,7 +1932,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
+                                                    @if (permissionCheck('course.edit'))
                                                     <div class="col-lg-12 pt_15 text-center">
                                                         <div class="d-flex justify-content-center">
                                                             <a class="primary-btn semi_large2 fix-gr-bg"
@@ -1942,6 +1943,7 @@
                                                             </a>
                                                         </div>
                                                     </div>
+                                                    @endif
                                                 </div>
                                             </form>
                                         </div>

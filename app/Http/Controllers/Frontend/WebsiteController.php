@@ -42,6 +42,7 @@ use Modules\Newsletter\Entities\NewsletterSetting;
 use Modules\Newsletter\Http\Controllers\AcelleController;
 use Modules\Payment\Entities\Cart;
 use Modules\Payment\Entities\PaymentPlans;
+use Modules\Payment\Entities\StudentProgramPaymentPlans;
 use Modules\Quiz\Entities\OnlineQuiz;
 use Modules\Quiz\Entities\QuestionBankMuOption;
 use Modules\Quiz\Entities\QuizeSetup;
@@ -57,6 +58,7 @@ use Modules\AuthorizeNetPayment\Http\Controllers\DoAuthorizeNetPaymentController
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
 use Modules\FrontendManage\Entities\RequirementSlider;
+use Modules\Shop\Entities\ShopProduct;
 class WebsiteController extends Controller
 {
     public function __construct()
@@ -1291,15 +1293,15 @@ class WebsiteController extends Controller
     public function addToCart(Request $request, $id)
     {
         try {
-
+            
             $program = Program::where('id', $id)->with(['effectiveProgramPlan.initialProgramPalnDetail', 'programPlans' => function ($q) use ($request) {
                 $q->where('id', $request->plan_id)->with('initialProgramPalnDetail');
             }])->first();
 
-
+            // dd($program);
             if (!Auth::check()) {
                 Toastr::error('You must login', 'Error');
-                session(['redirectTo' => route('addToCart', ['id' => $id, 'plan_id' => $request->plan_id])]);
+                session(['redirectTo' => route('addToCart', ['id' => $id, 'plan_id' => $request->plan_id, 'is_installment' => @$request->is_installment ?? 'true'])]);
                 return \redirect()->route('login');
             }
 
@@ -1319,7 +1321,46 @@ class WebsiteController extends Controller
 
             if (Auth::check() && ($user->role_id != 1)) {
 
-                $exist = Cart::where('user_id', $user->id)->where('program_id', $id)->where('plan_id', $request->plan_id)->first();
+                // Date conflict: You already have a plan in cart with overlapping dates.
+                $existingCart = Cart::where('user_id', $user->id)->when(isModuleActive('Appointment'), function ($query) {
+                    $query->whereNotNull('program_id');
+                })->with('programPlan')->get()->pluck('programPlan');
+                
+                foreach ($existingCart as $plan) {
+                    if (
+                        $program->programPlans[0]->sdate <= $plan->edate &&
+                        $program->programPlans[0]->edate >= $plan->sdate
+                    ) {
+                        Toastr::error(trans('Date conflict: You already have a plan in cart with overlapping dates.'), trans('common.Failed'));
+                        return redirect()->to(route('programs.detail', $id));
+                    }
+                }
+                // check overlap enrolled plan with new added plan 
+                $enrolledPlansExist = CourseEnrolled::where('user_id', $user->id)
+                                    ->whereHas('plan', function($q) use ($program) {
+                                        $q->whereDate('sdate', '<=', $program->programPlans[0]->edate)
+                                        ->whereDate('edate', '>=', $program->programPlans[0]->sdate);
+                                    })
+                                    ->exists();
+
+                if ($enrolledPlansExist) {
+                    Toastr::error(trans('This plan cannot be added because its schedule overlaps with one of your enrolled plans.'), trans('common.Failed'));
+                    return redirect()->to(route('programs.detail', $id));
+                }
+                                    
+                // already enrolled plan wrt to current date
+                $enrolledPlansExist1 = CourseEnrolled::where('user_id', $user->id)->with('plan')
+                                    // ->where('program_id', $program->id)
+                                    ->whereHas('plan', function($q){
+                                        $q->whereDate('sdate','<=',now())->whereDate('edate','>=',now());
+                                    })->exists();
+
+                if ($enrolledPlansExist1) {
+                    Toastr::error(trans('You already have a program in progress. Please complete it before enrolling in a new one.'), trans('common.Failed'));
+                    return redirect()->to(route('programs.detail', $id));
+                }
+
+                $exist = Cart::where('user_id', $user->id)->where('program_id', $id)->first();//->where('plan_id', $request->plan_id)
                 $oldCart = Cart::where('user_id', $user->id)->when(isModuleActive('Appointment'), function ($query) {
                     $query->whereNotNull('program_id');
                 })->first();
@@ -1343,13 +1384,20 @@ class WebsiteController extends Controller
                         $cart->program_id = $id;
                         $cart->plan_id = $request->plan_id;
                         $cart->tracking = $oldCart->tracking;
-                        if ($program->discount_price > 0) {
-                            $cart->price = $program->discount_price;
-                        } else {
-                            if (!empty($program->programPlans[0]->initialProgramPalnDetail[0])) {
-                                $cart->price = $program->programPlans[0]->initialProgramPalnDetail[0]->amount;
+
+                        if($request->has('is_installment') && $request->is_installment == 'false'){
+                            $cart->price = $program->programPlans[0]->amount ?? 0;
+                            $cart->is_installment = false;
+                        }else{
+                            $cart->is_installment = true;
+                            if ($program->discount_price > 0) {
+                                $cart->price = $program->discount_price;
                             } else {
-                                $cart->price = $program->programPlans[0]->amount;
+                                if (!empty($program->programPlans[0]->initialProgramPalnDetail[0])) {
+                                    $cart->price = $program->programPlans[0]->initialProgramPalnDetail[0]->amount;
+                                } else {
+                                    $cart->price = $program->programPlans[0]->amount;
+                                }
                             }
                         }
 
@@ -1362,13 +1410,20 @@ class WebsiteController extends Controller
                         $cart->program_id = $id;
                         $cart->plan_id = $request->plan_id;
                         $cart->tracking = getTrx();
-                        if ($program->discount_price > 0) {
-                            $cart->price = $program->discount_price;
-                        } else {
-                            if (!empty($program->programPlans[0]->initialProgramPalnDetail[0])) {
-                                $cart->price = $program->programPlans[0]->initialProgramPalnDetail[0]->amount;
+                        
+                        if($request->has('is_installment') && $request->is_installment == 'false'){
+                            $cart->price = $program->programPlans[0]->amount ?? 0;
+                            $cart->is_installment = false;
+                        }else{
+                            $cart->is_installment = true;
+                            if ($program->discount_price > 0) {
+                                $cart->price = $program->discount_price;
                             } else {
-                                $cart->price = $program->programPlans[0]->amount;
+                                if (!empty($program->programPlans[0]->initialProgramPalnDetail[0])) {
+                                    $cart->price = $program->programPlans[0]->initialProgramPalnDetail[0]->amount;
+                                } else {
+                                    $cart->price = $program->programPlans[0]->amount;
+                                }
                             }
                         }
 
@@ -1459,7 +1514,7 @@ class WebsiteController extends Controller
           if (Session::has('pre-registered-user')) {
             if (!Auth::check()) {
                 // Toastr::error('You must register first', 'Error');
-                Session::put('redirectTo', route('buyNow', ['id' => $id, 'plan_id' => $request->plan_id]));
+                Session::put('redirectTo', route('buyNow', ['id' => $id, 'plan_id' => $request->plan_id, 'is_installment' => @$request->is_installment ?? 'true']));
                 return redirect()->route('register');
 
             }
@@ -1469,7 +1524,7 @@ class WebsiteController extends Controller
 
             if (!Auth::check()) {
                 Toastr::error('You must login', 'Error');
-                session(['redirectTo' => route('buyNow', ['id' => $id, 'plan_id' => $request->plan_id])]);
+                session(['redirectTo' => route('buyNow', ['id' => $id, 'plan_id' => $request->plan_id, 'is_installment' => @$request->is_installment ?? 'true'])]);
                 return \redirect()->route('login');
             }
         }
@@ -1495,7 +1550,7 @@ class WebsiteController extends Controller
             if (Auth::check() && ($user->role_id != 1)) {
 
 
-                $exist = Cart::where('user_id', $user->id)->where('program_id', $id)->where('plan_id', $request->plan_id)->first();
+                $exist = Cart::where('user_id', $user->id)->where('program_id', $id)->first();//->where('plan_id', $request->plan_id)
                 $oldCart = Cart::where('user_id', $user->id)->when(isModuleActive('Appointment'), function ($query) {
                     $query->whereNotNull('program_id');
                 })->first();
@@ -1518,13 +1573,20 @@ class WebsiteController extends Controller
                         $cart->program_id = $id;
                         $cart->plan_id = $request->plan_id;
                         $cart->tracking = $oldCart->tracking;
-                        if ($program->discount_price < 0) {
-                            $cart->price = $program->discount_price;
-                        } else {
-                            if (!empty($program->programPlans[0]->initialProgramPalnDetail[0])) {
-                                $cart->price = $program->programPlans[0]->initialProgramPalnDetail[0]->amount;
+
+                        if($request->has('is_installment') && $request->is_installment == 'false'){
+                            $cart->price = $program->programPlans[0]->amount ?? 0;
+                            $cart->is_installment = false;
+                        }else{
+                            $cart->is_installment = true;
+                            if ($program->discount_price < 0) {
+                                $cart->price = $program->discount_price;
                             } else {
-                                $cart->price = $program->programPlans[0]->amount;
+                                if (!empty($program->programPlans[0]->initialProgramPalnDetail[0])) {
+                                    $cart->price = $program->programPlans[0]->initialProgramPalnDetail[0]->amount;
+                                } else {
+                                    $cart->price = $program->programPlans[0]->amount;
+                                }
                             }
                         }
 
@@ -1538,13 +1600,19 @@ class WebsiteController extends Controller
                         $cart->plan_id = $request->plan_id;
                         $cart->tracking = getTrx();
 
-                        if ($program->discount_price < 0) {
-                            $cart->price = $program->discount_price;
-                        } else {
-                            if (!empty($program->programPlans[0]->initialProgramPalnDetail[0])) {
-                                $cart->price = $program->programPlans[0]->initialProgramPalnDetail[0]->amount;
+                        if($request->has('is_installment') && $request->is_installment == 'false'){
+                            $cart->price = $program->programPlans[0]->amount ?? 0;
+                            $cart->is_installment = false;
+                        }else{
+                            $cart->is_installment = true;
+                            if ($program->discount_price < 0) {
+                                $cart->price = $program->discount_price;
                             } else {
-                                $cart->price = $program->programPlans[0]->amount;
+                                if (!empty($program->programPlans[0]->initialProgramPalnDetail[0])) {
+                                    $cart->price = $program->programPlans[0]->initialProgramPalnDetail[0]->amount;
+                                } else {
+                                    $cart->price = $program->programPlans[0]->amount;
+                                }
                             }
                         }
 
@@ -1568,13 +1636,19 @@ class WebsiteController extends Controller
                     return redirect()->back();
                 }
 
-                if ($program->discount_price > 0) {
-                    $price = $program->discount_price;
-                } else {
-                    if (!empty($program->programPlans[0]->initialProgramPalnDetail[0])) {
-                        $price->price = $program->programPlans[0]->initialProgramPalnDetail[0]->amount;
+                if($request->has('is_installment') && $request->is_installment == 'false'){
+                    $price = $program->programPlans[0]->amount ?? 0;
+                    $is_installment = false;
+                }else{
+                    $is_installment = true;
+                    if ($program->discount_price > 0) {
+                        $price = $program->discount_price;
                     } else {
-                        $price->price = $program->programPlans[0]->amount;
+                        if (!empty($program->programPlans[0]->initialProgramPalnDetail[0])) {
+                            $price->price = $program->programPlans[0]->initialProgramPalnDetail[0]->amount;
+                        } else {
+                            $price->price = $program->programPlans[0]->amount;
+                        }
                     }
                 }
 
@@ -1591,6 +1665,7 @@ class WebsiteController extends Controller
                             "title" => $program->programtitle,
                             "image" => $program->image,
                             "price" => $price,
+                            "is_installment" => $is_installment,
                         ]
                     ];
                     session()->put('cart', $cart);
@@ -1611,6 +1686,7 @@ class WebsiteController extends Controller
                         "title" => $program->title,
                         "image" => $program->image,
                         "price" => $price,
+                        "is_installment" => $is_installment,
                     ];
 
                     session()->put('cart', $cart);
@@ -2425,6 +2501,17 @@ class WebsiteController extends Controller
                             $carts[$key]['price'] = getPriceFormat($cart->price);
                         }
                     }
+                    $check = ShopProduct::find($cart['product_id']);
+                    if ($check) {
+                        $carts[$key]['id'] = $cart['id'];
+                        $carts[$key]['product_id'] = $cart['program_id'];
+                        $carts[$key]['instructor_id'] = $cart['instructor_id'];
+                        $carts[$key]['title'] = $check->title;
+                        $carts[$key]['instructor_name'] = '';
+                        $carts[$key]['image'] = getCourseImage($check->files[0]->file_path ?? '');
+                        $carts[$key]['price'] = getPriceFormat($cart->price);
+                        
+                    }
 
                     //                    if (isModuleActive('BundleSubscription')) {
                     //                        $bundleCheck = BundleCoursePlan::find($cart['bundle_course_id']);
@@ -2467,6 +2554,7 @@ class WebsiteController extends Controller
                 //                }
             }
         }
+        // dd($carts);
         return response()->json($carts);
     }
 

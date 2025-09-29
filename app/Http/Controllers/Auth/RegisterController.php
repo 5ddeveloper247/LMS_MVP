@@ -549,19 +549,34 @@ class RegisterController extends Controller
     //     }
         $redirectTo = \session('redirectTo') ?  \session('redirectTo') : '';
         // dd($redirectTo);
-        if ((stripos($redirectTo, '/buyNow/') !== false || stripos($redirectTo, '/addtocart/') !== false)
-         && (stripos($redirectTo, '/quiz') === false || stripos($redirectTo, '/quiz') === false)
-        ) {
-            // $goto = \session('redirectTo') ?  \session('redirectTo') : route('studentDashboard');
-            Toastr::success('Pre Registration Successfull. You need to Enroll yourself to buy programs', 'Success');
+        // if ((stripos($redirectTo, '/buyNow/') !== false || stripos($redirectTo, '/addtocart/') !== false) && 
+        //     (stripos($redirectTo, '/quiz') === false)
+        // ) {
+        //     // $goto = \session('redirectTo') ?  \session('redirectTo') : route('studentDashboard');
+        //     Toastr::success('Pre Registration Successfull. You need to Enroll yourself to buy programs', 'Success');
+        //     session()->forget('redirectTo');
+        //     return $redirectTo ? redirect()->to($redirectTo) : redirect()->to(route('studentDashboard'));
+        // }
+
+        if ((stripos($redirectTo, '/buyNow/') !== false || stripos($redirectTo, '/addToCart/') !== false) && 
+            stripos($redirectTo, 'quiz') !== false) {
+            
+            Toastr::success('Pre Registration Successfull. You need to Enroll yourself to buy course', 'Success');
             session()->forget('redirectTo');
-            return redirect()->to(route('studentDashboard'));
+            return $redirectTo ? redirect()->to($redirectTo) : redirect()->to(route("studentDashboard"));
+        }
+
+        // in case of program buy student need to complete enrollment process
+        if ((stripos($redirectTo, '/buyNow/') !== false || stripos($redirectTo, '/addToCart/') !== false) && 
+            stripos($redirectTo, 'plan_id') !== false) {
+            
+            return redirect()->to(route("register.3"));
         }
         
         Toastr::success('Pre Registration Successfull. Now you can proceed with buying courses', 'Success');
         $goto = \session('redirectTo') ?  \session('redirectTo') : route('studentDashboard');
         session()->forget('redirectTo');
-      return redirect()->to($goto);
+        return redirect()->to($goto);
     }
 
     public function RegisterForm3Create(Request $request)

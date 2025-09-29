@@ -65,7 +65,8 @@ class TimeTableController extends Controller
     public function update(Request $request)
     {
         // dd($request->all());
-        $week_start_date = Carbon::parse($request->start_date)->startOfWeek()->format('Y-m-d');
+        // $week_start_date = Carbon::parse($request->start_date)->startOfWeek()->format('Y-m-d');
+        $week_start_date = Carbon::parse($request->start_date)->format('Y-m-d');
         $selected_date = Carbon::parse($request->start_date)->format('Y-m-d');
         Session::flash('Addtime', 1);
         $request->validate([

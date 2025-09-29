@@ -10,6 +10,10 @@
             height: 90px;
             object-fit: contain;
         }
+        .clear_area{
+            color: #f0742c;
+            font-size: 16px;
+        }
     </style>
 @endpush
 
@@ -80,7 +84,7 @@
                                 <div class="row mt-30 mb-40">
                                     <div class="col-xl-5">
                                         <label class="primary_input_label">
-                                            Course Thumbnail (Max Image Size 1MB, Recommended Dimensions: 1170X600)
+                                            Program Thumbnail (Max Image Size 1MB, Recommended Dimensions: 1170X600)
                                         </label>
                                     </div>
                                     <div class="col-xl-4">
@@ -176,9 +180,8 @@
                                     <div class="col-xl-12">
 
                                         <div class="primary_input mb-25">
-                                            <label class="primary_input_label" for="">Program description</label>
-                                            <textarea class="custom_summernote" name="description" id="description"
-                                                      cols="30" rows="10">{!! $progaram->discription !!}</textarea>
+                                            <label class="primary_input_label" for="">Program description <i class="fa fa-retweet clear_area" data-field-id="description" title="Clear Text Area..."></i></label>
+                                            <textarea class="custom_summernote" name="description" id="description" cols="30" rows="10">{!! $progaram->discription !!}</textarea>
                                         </div>
                                     </div>
 
@@ -188,9 +191,8 @@
 
                                     <div class="col-xl-12">
                                         <div class="primary_input mb-25">
-                                            <label class="primary_input_label" for=""> Program outcome *</label>
-                                            <textarea class="custom_summernote" name="outcome" id="outcome" cols="30"
-                                                      rows="10">{!! $progaram->outcome !!}</textarea>
+                                            <label class="primary_input_label" for=""> Program outcome * <i class="fa fa-retweet clear_area" data-field-id="outcome" title="Clear Text Area..."></i></label>
+                                            <textarea class="custom_summernote" name="outcome" id="outcome" cols="30" rows="10">{!! $progaram->outcome !!}</textarea>
 
                                         </div>
                                     </div>
@@ -199,11 +201,8 @@
                                     <div class="col-xl-12">
 
                                         <div class="primary_input mb-25">
-                                            <label class="primary_input_label" for=""> Program
-                                                requirements *</label>
-                                            <textarea class="custom_summernote" name="requirements" id="requirements"
-                                                      cols="30"
-                                                      rows="10">{!! $progaram->requirement !!}</textarea>
+                                            <label class="primary_input_label" for=""> Program requirements * <i class="fa fa-retweet clear_area" data-field-id="requirements" title="Clear Text Area..."></i></label>
+                                            <textarea class="custom_summernote" name="requirements" id="requirements" cols="30" rows="10">{!! $progaram->requirement !!}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -276,9 +275,8 @@
                                     <div class="col-xl-12">
 
                                         <div class="primary_input mb-25">
-                                            <label class="primary_input_label" for="">Program Costing Details *</label>
-                                            <textarea class="custom_summernote" name="Payment_plan" id="Payment_plan"
-                                                      cols="30" rows="10">{!! $progaram->payment_plan !!}</textarea>
+                                            <label class="primary_input_label" for="">Program Costing Details * <i class="fa fa-retweet clear_area" data-field-id="payment_plan" title="Clear Text Area..."></i></label>
+                                            <textarea class="custom_summernote" name="Payment_plan" id="Payment_plan" cols="30" rows="10">{!! $progaram->payment_plan !!}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -352,8 +350,9 @@
 
     </section>
     <script>
+        
         function program_update_form() {
-            $('.preloader').show();
+            // $('.preloader').show();
             var errors = [];
             isUnique(
                 {
@@ -376,13 +375,13 @@
                         errors.push("FAQS is required");
                     }
 
-                    if (isEmptySummernote('#description')) {
+                    if (isEmptyEditor('#description')) {
                         errors.push("Description is required");
                     }
-                    if (isEmptySummernote('#outcome')) {
+                    if (isEmptyEditor('#outcome')) {
                         errors.push("Outcome is required");
                     }
-                    if (isEmptySummernote('#requirements')) {
+                    if (isEmptyEditor('#requirements')) {
                         errors.push("Requirement is required");
                     }
 
@@ -390,7 +389,7 @@
                         errors.push("Courses is required");
                     }
 
-                    if (isEmptySummernote('#Payment_plan')) {
+                    if (isEmptyEditor('#Payment_plan')) {
                         errors.push("Program Costing Details is required");
                     }
 
@@ -407,6 +406,19 @@
                     $('#program_update_form').submit();
                 });
 
+        }
+
+        function isEmptyEditor(id) {
+            if (
+                $(id).val() == '' ||
+                $(id).val() == '<p><br><p/>' ||
+                // $(id).summernote('isEmpty') ||
+                // $(id).summernote('code') == '<p><br><p/>' ||
+                $(id).next('.note-editor').find('.note-editing-area').find('.note-editable').children().first().html() == '<br>'
+            ) {
+                return true;
+            }
+            return false;
         }
 
         // Image Cropper Start
@@ -442,6 +454,7 @@
                 $('#image-editor-modal-1').modal('hide');
             });
 
+            var editorInstance = {};
             var customFontFam = ['Arial','Helvetica','Cavolini','Jost','Impact','Tahoma','Verdana','Garamond','Georgia','monospace','fantasy','Papyrus','Poppins'];
             
             $('.custom_summernote').each(function (){
@@ -507,62 +520,63 @@
                         fontFamily: {
                             options: customFontFam
                         },
-                toolbar: {
-			items: [
-				'heading',
-				'|',
-				'bold',
-				'italic',
-				'link',
-				'bulletedList',
-				'numberedList',
-				'|',
-				'blockQuote',
-				'fontFamily',
-				'fontSize',
-				'fontColor',
-				'alignment',
-				'outdent',
-				'indent',
-				'|',
-				'insertTable',
-				'imageInsert',
-			//	'imageUpload',
-				'mediaEmbed',
-			//	'CKFinder',
-			//	'codeBlock',
-				'|',
-				'undo',
-				'redo'
-			]
-		},
-		language: 'en',
-		image: {
-			toolbar: [
-				// 'imageTextAlternative',
-				// 'toggleImageCaption',
-				'imageStyle:inline',
-				'imageStyle:block',
-				'imageStyle:side'
-			],
-            insert: {
-                // This is the default configuration, you do not need to provide
-                // this configuration key if the list content and order reflects your needs.
-                integrations: [ 'upload', 'url' ]
-            }
-		},
-		table: {
-			contentToolbar: [
-				'tableColumn',
-				'tableRow',
-				'mergeTableCells'
-			]
-		}
+                        toolbar: {
+                            items: [
+                                'heading',
+                                '|',
+                                'bold',
+                                'italic',
+                                'link',
+                                'bulletedList',
+                                'numberedList',
+                                '|',
+                                'blockQuote',
+                                'fontFamily',
+                                'fontSize',
+                                'fontColor',
+                                'alignment',
+                                'outdent',
+                                'indent',
+                                '|',
+                                'insertTable',
+                                'imageInsert',
+                            //	'imageUpload',
+                                'mediaEmbed',
+                            //	'CKFinder',
+                            //	'codeBlock',
+                                '|',
+                                'undo',
+                                'redo'
+                            ]
+                        },
+                        language: 'en',
+                        image: {
+                            toolbar: [
+                                // 'imageTextAlternative',
+                                // 'toggleImageCaption',
+                                'imageStyle:inline',
+                                'imageStyle:block',
+                                'imageStyle:side'
+                            ],
+                            insert: {
+                                // This is the default configuration, you do not need to provide
+                                // this configuration key if the list content and order reflects your needs.
+                                integrations: [ 'upload', 'url' ]
+                            }
+                        },
+                        table: {
+                            contentToolbar: [
+                                'tableColumn',
+                                'tableRow',
+                                'mergeTableCells'
+                            ]
+                        }
                 } )
                 .then(editor => {
                     // Save the editor instance to use it later
                     window.editor = editor;
 
+                    editorInstance[elId] = editor;
                     // Listen to the change:data event
                     editor.model.document.on('change:data', () => {
                         // Get the editor content
@@ -575,47 +589,28 @@
                 .catch( error => {
                     console.error( error );
                 });
+
+                $(document).on('click','.clear_area',function(){
+                    var field_id = $(this).attr('data-field-id');
+                    if(field_id != '' && field_id != undefined){
+                        
+                        if(field_id == 'description'){
+                            editorInstance.description.setData('');
+                        }
+                        if(field_id == 'outcome'){
+                            editorInstance.outcome.setData('');
+                        }
+                        if(field_id == 'requirements'){
+                            editorInstance.requirements.setData('');
+                        }
+                        if(field_id == 'payment_plan'){
+                            editorInstance.Payment_plan.setData('');
+                        }
+                    }
+                });
             });
             
-            // Summer Note
-            // $('.custom_summernote').summernote({
-            // 	fontNames: customFontFam,
-            //     fontNamesIgnoreCheck: ['Cavolini','Jost'],
-            //     fontSizes: ['8', '9', '10', '11', '12', '14', '16', '18', '20'],
-            //     codeviewFilter: true,
-            //     codeviewIframeFilter: true,
-            //     toolbar: [
-            //         ['style', ['style']],
-            //         ['font', ['bold', 'underline', 'clear']],
-            //         ['fontname', ['fontname']],
-            //         ['fontsize', ['fontsize']],
-            //         ['color', ['color']],
-            //         ['para', ['ul', 'ol', 'paragraph']],
-            //         ['table', ['table']],
-            //         ['insert', ['link', 'picture', 'video']],
-            //         ['view', ['fullscreen','codeview']],
-            //     ],
-            //     height: 188,
-            //     tooltip: true
-            // });
-//             $('.lms_summernote').summernote({
-//                 fontSizes: ['8', '9', '10', '11', '12', '14', '16', '18', '20'],
-//                 codeviewFilter: true,
-//                 codeviewIframeFilter: true,
-//                 toolbar: [
-//                     ['style', ['style']],
-//                     ['font', ['bold', 'underline', 'clear']],
-//                     ['fontname', ['fontname']],
-//                     ['fontsize', ['fontsize']],
-//                     ['color', ['color']],
-//                     ['para', ['ul', 'ol', 'paragraph']],
-//                     ['table', ['table']],
-//                     ['insert', ['link', 'picture', 'video']],
-//                     ['view', ['fullscreen']],
-//                 ],
-//                 height: 188,
-//                 tooltip: true
-//             });
+            
         });
         // Image Cropper End
 
@@ -634,5 +629,7 @@
             $(this).attr('disabled');
             $(this).find('span').attr('class', '').addClass('fa fa-spinner fa-spin fa-lg');
         });
+
+        
     </script>
 @endsection

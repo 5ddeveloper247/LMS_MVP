@@ -80,7 +80,7 @@ class DoAuthorizeNetPaymentController extends Controller
 //  dd($data);
 
 
-        if (!$request->session()->get('payment_details')) {
+        if (!$request->session()->get('payment_details') || $request->session()->get('payment_details') == null) {
             $refId = 'ref' . time();
             //dd(  $refId );
 

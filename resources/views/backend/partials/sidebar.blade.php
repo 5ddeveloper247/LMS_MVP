@@ -27,7 +27,7 @@
         </div>
     @endif
     <ul id="sidebar_menu">
-
+       
         @if ((isModuleActive('LmsSaas') || isModuleActive('LmsSaasMD')) && SaasDomain() != 'main' && !hasActiveSaasPlan())
             <li>
                 <a href="#" class="has-arrow" aria-expanded="false">
@@ -46,6 +46,7 @@
                 </ul>
             </li>
         @else
+        
             @if(isset($sections))
                 @foreach($sections as $key => $section)
                     @if(!empty($section->name))

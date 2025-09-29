@@ -11,15 +11,15 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> --}}
-@include(theme('partials._header'))
-@include(theme('partials._menu'))
-@extends(theme('auth.layouts.app'))
-@section('title')
-    {{ Settings('site_title') ? Settings('site_title') : 'Infix LMS' }} | {{ __('Login') }}
-@endsection
-<script src="https://kit.fontawesome.com/b98cad50b5.js" crossorigin="anonymous"></script>
+    @include(theme('partials._header'))
+    @include(theme('partials._menu'))
+    @extends(theme('auth.layouts.app'))
+    @section('title')
+        {{ Settings('site_title') ? Settings('site_title') : 'Infix LMS' }} | {{ __('Login') }}
+    @endsection
+    <script src="https://kit.fontawesome.com/b98cad50b5.js" crossorigin="anonymous"></script>
 
-@section('content')
+    @section('content')
     <style>
         @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css");
 
@@ -305,7 +305,7 @@
             <!-- Left side - Registration Form -->
             <div class="col-lg-7 mt-4">
                 <h3 class="text-uppercase text-center text_reg">We are Merkaii Xcellence </h3>
-
+                
                 <h6 class="text-center mb-4 text-capitalize heading-reg">welcome to Merkaii Xcellence <br><span
                         class="font-weight-300">please fill the form below</span></h6>
                         <div class="timeline">

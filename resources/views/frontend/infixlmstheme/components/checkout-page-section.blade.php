@@ -310,7 +310,7 @@ $clover = DB::table('clover_details')->first();
                                     </span>
                                     <a href="#" class="text-danger bg-light px-1 removeFromCart" data-id="{{$cart->id}}">X</a>
                                 </div>
-                            @else
+                            @elseif (!empty($cart->program_id))
                                 @php
                                     $price = 0;
                                     if ($cart->program_id != 0) {
@@ -332,6 +332,26 @@ $clover = DB::table('clover_details')->first();
                                                 alt="">
                                         </div>
                                         <span>{{ @$cart->program->programtitle }}</span>
+                                    </div>
+                                    <span class="order_prise f_w_500 font_16 text-nowrap">
+                                        {{ getPriceFormat($price) }}
+                                    </span>
+                                    <a href="#" class="text-danger bg-light px-1 removeFromCart" data-id="{{$cart->id}}">X</a>
+                                </div>
+                            @elseif (!empty($cart->product_id))
+                                @php
+                                    $title = $cart->product->title;
+                                    $price = $cart->price;
+                                    $totalSum = $totalSum + $price;
+                                @endphp
+
+                                <div class="single_ordered_product">
+                                    <div class="product_name d-flex align-items-center">
+                                        <div class="thumb">
+                                            <img src="{{ getCourseImage(@$cart->product->files[0]->file_path ?? '') }}" class="h-100"
+                                                alt="">
+                                        </div>
+                                        <span>{{ $title }}</span>
                                     </div>
                                     <span class="order_prise f_w_500 font_16 text-nowrap">
                                         {{ getPriceFormat($price) }}

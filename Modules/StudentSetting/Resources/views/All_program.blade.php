@@ -17,6 +17,10 @@
             max-height: 300px;
             overflow-y: auto;
         }
+        .clear_area{
+            color: #f0742c;
+            font-size: 16px;
+        }
     </style>
 @endpush
 
@@ -54,7 +58,7 @@
                                             <label class="primary_input_label" for="">Program Title <small>(Max size
                                                     100 Characters)</small> *</label>
                                             <input class="primary_input_field @if($errors->has('title')) border-danger @endif" id="ProgramTitle" name="ProgramTitle" placeholder="-"
-                                                id="addTitle" maxlength="100" type="text"
+                                                maxlength="100" type="text"
                                                 {{ $errors->has('title') ? 'autofocus' : '' }}
                                                 value="{{ old('ProgramTitle') }}" maxlength="100" required>
                                         </div>
@@ -76,7 +80,7 @@
                                 <div class="row mt-30 mb-40">
                                     <div class="col-xl-5">
                                         <label class="primary_input_label">
-                                            Course Thumbnail (Max Image Size 1MB, Recommended Dimensions: 1170X600)
+                                            Program Thumbnail (Max Image Size 1MB, Recommended Dimensions: 1170X600)
 
                                         </label>
                                     </div>
@@ -151,7 +155,7 @@
                                             <label class="primary_input_label" for="">Program duration in
                                                 weeks *</label>
                                             <input class="primary_input_field" name="duration" placeholder="-weeks"
-                                                id="addTitle" type="number"
+                                                id="" type="number"
                                                 {{ $errors->has('title') ? 'autofocus' : '' }} value="{{old('duration')}}">
                                         </div>
                                     </div>
@@ -159,7 +163,7 @@
                                         <div class="primary_input mb-25">
                                             <label class="primary_input_label" for=""> Program total cost *</label>
                                             <input class="primary_input_field" name="totalcost" placeholder="-"
-                                                id="addTitle" type="text"
+                                                id="" type="text"
                                                 {{ $errors->has('title') ? 'autofocus' : '' }} value="{{old('totalcost')}}" required>
                                         </div>
                                     </div>
@@ -170,8 +174,7 @@
                                     <div class="col-xl-12">
 
                                         <div class="primary_input mb-25">
-                                            <label class="primary_input_label" for="">Program description
-                                                *</label>
+                                            <label class="primary_input_label" for="">Program description * <i class="fa fa-retweet clear_area" data-field-id="description" title="Clear Text Area..."></i></label>
                                             <textarea class="custom_summernote" name="description" id="description" cols="30" rows="10" required>{{old('description')}}</textarea>
                                         </div>
                                     </div>
@@ -179,7 +182,7 @@
                                 <div class="row mt-30 mb-40">
                                     <div class="col-xl-12">
                                         <div class="primary_input mb-25">
-                                            <label class="primary_input_label" for=""> Program outcome *</label>
+                                            <label class="primary_input_label" for=""> Program outcome * <i class="fa fa-retweet clear_area" data-field-id="outcome" title="Clear Text Area..."></i></label>
                                             <textarea class="custom_summernote" name="outcome" id="outcome" cols="30" rows="10" required>{{old('outcome')}}</textarea>
                                         </div>
                                     </div>
@@ -187,8 +190,7 @@
                                 <div class="row mt-30 mb-40">
                                     <div class="col-xl-12">
                                         <div class="primary_input mb-25">
-                                            <label class="primary_input_label" for=""> Program
-                                                requirements *</label>
+                                            <label class="primary_input_label" for=""> Program requirements * <i class="fa fa-retweet clear_area" data-field-id="requirements" title="Clear Text Area..."></i></label>
                                             <textarea class="custom_summernote" name="requirements" id="requirements" cols="30" rows="10" required>{{old('requirements')}}</textarea>
                                         </div>
                                     </div>
@@ -202,7 +204,7 @@
                                     {{--                                                   for="">Number of courses </label> --}}
                                     {{--                                            <input class="primary_input_field" name="numberofcourses" --}}
                                     {{--                                                   placeholder="-" --}}
-                                    {{--                                                   id="addTitle" --}}
+                                    {{--                                                   id="" --}}
                                     {{--                                                   type="number" {{$errors->has('title') ? 'autofocus' : ''}} --}}
                                     {{--                                                   value="{{ old('numberofcourses') }}" > --}}
                                     {{--                                        </div> --}}
@@ -258,7 +260,7 @@
                                     <div class="col-xl-12">
 
                                         <div class="primary_input mb-25">
-                                            <label class="primary_input_label" for="">Program Costing Details *</label>
+                                            <label class="primary_input_label" for="">Program Costing Details * <i class="fa fa-retweet clear_area" data-field-id="payment_plan" title="Clear Text Area..."></i></label>
                                             <textarea class="custom_summernote" name="Payment_plan" id="Payment_plan" cols="30" rows="10">{{old('Payment_plan')}}</textarea>
                                         </div>
                                     </div>
@@ -357,24 +359,24 @@
         });
         
         $(document).on('click','.clearSearch',function(){
+            $("#searchForContent").val('');  
             $('.search_programs').html('');
         });
 
-        
         function program_add_form() {
             $('.preloader').show();
             var errors = [];
             isUnique(
                 {
                     columns: [
-                        ['courses', 'title', $('#addTitle').val()]
+                        ['programs', 'programtitle', $('#ProgramTitle').val()]
                     ]
                 }
                 , function (res) {
                     errors = [...res.errors]
                     var type = $(".addType[name='type']:checked").val(); // 1 for course, 7 for timetable, 2 for big quiz
 
-                    if (isEmpty($('#addTitle').val())) {
+                    if (isEmpty($('#ProgramTitle').val())) {
                         errors.push('Program Title is required');
                     }
                     if (isEmpty($('#subtitle').val())) {
@@ -388,13 +390,13 @@
                         errors.push("FAQS is required");
                     }
 
-                    if (isEmptySummernote('#description')) {
+                    if (isEmptyEditor('#description')) {
                         errors.push("Description is required");
                     }
-                    if (isEmptySummernote('#outcome')) {
+                    if (isEmptyEditor('#outcome')) {
                         errors.push("Outcome is required");
                     }
-                    if (isEmptySummernote('#requirements')) {
+                    if (isEmptyEditor('#requirements')) {
                         errors.push("Requirement is required");
                     }
 
@@ -402,7 +404,7 @@
                         errors.push("Courses is required");
                     }
 
-                    if (isEmptySummernote('#Payment_plan')) {
+                    if (isEmptyEditor('#Payment_plan')) {
                         errors.push("Program Costing Details is required");
                     }
 
@@ -420,6 +422,18 @@
                 });
 
 
+        }
+        function isEmptyEditor(id) {
+            if (
+                $(id).val() == '' ||
+                $(id).val() == '<p><br><p/>' ||
+                // $(id).summernote('isEmpty') ||
+                // $(id).summernote('code') == '<p><br><p/>' ||
+                $(id).next('.note-editor').find('.note-editing-area').find('.note-editable').children().first().html() == '<br>'
+            ) {
+                return true;
+            }
+            return false;
         }
 
         // Image Cropper Start
@@ -593,7 +607,7 @@
                 $('#image-editor-modal-1').modal('hide');
             });
 
-            $(document).on('click','.selectProgram',function(){
+        $(document).on('click','.selectProgram',function(){
             let id = $(this).attr('data-id');
             let base_url = $('#url').val();
             $.ajax({
@@ -605,21 +619,41 @@
                     dataType: "json",
                     success: function(response) {
                         if(response.status == 1){
-                        //  $('#ProgramTitle').val(response.data.programtitle);
-                         editorInstance.description.setData(response.data.discription);
-                         editorInstance.outcome.setData(response.data.outcome);
-                         editorInstance.requirements.setData(response.data.requirement);
-                         editorInstance.Payment_plan.setData(response.data.payment_plan);
+                            $("#searchForContent").val(response.data.programtitle);
+                            //  $('#ProgramTitle').val(response.data.programtitle);
+                            editorInstance.description.setData(response.data.discription);
+                            editorInstance.outcome.setData(response.data.outcome);
+                            editorInstance.requirements.setData(response.data.requirement);
+                            editorInstance.Payment_plan.setData(response.data.payment_plan);
                         }else{
-                            // $('#ProgramTitle').val('');  
-                         editorInstance.description.setData('');
-                         editorInstance.outcome.setData('');
-                         editorInstance.requirements.setData('');
-                         editorInstance.Payment_plan.setData('');
+                            // $('#ProgramTitle').val('');
+                            $("#searchForContent").val('');  
+                            editorInstance.description.setData('');
+                            editorInstance.outcome.setData('');
+                            editorInstance.requirements.setData('');
+                            editorInstance.Payment_plan.setData('');
                         }
                         $('.search_programs').html('');
                     }
                 });
+        });
+
+        $(document).on('click','.clear_area',function(){
+            var field_id = $(this).attr('data-field-id');
+            if(field_id != '' && field_id != undefined){
+                if(field_id == 'description'){
+                    editorInstance.description.setData('');
+                }
+                if(field_id == 'outcome'){
+                    editorInstance.outcome.setData('');
+                }
+                if(field_id == 'requirements'){
+                    editorInstance.requirements.setData('');
+                }
+                if(field_id == 'payment_plan'){
+                    editorInstance.Payment_plan.setData('');
+                }
+            }
         });
 
         });

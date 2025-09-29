@@ -263,6 +263,11 @@
                     @foreach ($carts as $cart)
                         @if (!empty($cart->course_id))
                             @php
+                                if (isset($cart->course->parent)) {
+                                    $course_title = $cart->course->parent->title;
+                                } else {
+                                    $course_title = $cart->course->title;
+                                }
                                 if ($cart->course_id) {
                                     if ($cart->course_id != 0) {
                                         if ($cart->course->discount_price > 0) {
@@ -301,14 +306,14 @@
                                     <div class="thumb">
                                         <img src="{{ $thumbnail }}" class="h-100" alt="">
                                     </div>
-                                    <span>{{ @$cart->course->parent->title }}
+                                    <span>{{ @$course_title }}
                                         {{ $type == 'certificate' ? '[' . __('certificate.Certificate') . ']' : '' }}</span>
                                 </div>
                                 <span class="order_prise f_w_500 font_16">
                                     {{ getPriceFormat($price) }}
                                 </span>
                             </div>
-                        @else
+                        @elseif (!empty($cart->program_id))
                             @php
                                 if ($cart->program_id) {
                                     if ($cart->program_id != 0) {
@@ -339,6 +344,23 @@
                                     </div>
                                     <span>{{ @$cart->program->programtitle }}
                                         {{ $type == 'certificate' ? '[' . __('certificate.Certificate') . ']' : '' }}</span>
+                                </div>
+                                <span class="order_prise f_w_500 font_16">
+                                    {{ getPriceFormat($price) }}
+                                </span>
+                            </div>
+                        @elseif (!empty($cart->product_id))
+                            @php
+                                $title = $cart->product->title ?? '';
+                                $price = $cart->price;
+                            @endphp
+                            <div class="single_ordered_product">
+                                <div class="product_name d-flex align-items-center">
+                                    <div class="thumb">
+                                        <img src="{{ getCourseImage(@$cart->product->files[0]->file_path ?? '') }}" class="h-100"
+                                            alt="">
+                                    </div>
+                                    <span>{{ @$title }}</span>
                                 </div>
                                 <span class="order_prise f_w_500 font_16">
                                     {{ getPriceFormat($price) }}

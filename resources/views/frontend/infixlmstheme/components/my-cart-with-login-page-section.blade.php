@@ -78,7 +78,7 @@
                                             <div class="f_w_400">{{ getPriceFormat($price) }}</div>
 
                                         </div>
-                                    @else
+                                    @elseif (!empty($cart->program_id))
                                         @php
                                             
                                             // if (isset($cart->bundle_course_id) && $cart->bundle_course_id!=0){
@@ -130,13 +130,54 @@
                                             <div class="f_w_400">{{ getPriceFormat($price) }}</div>
 
                                         </div>
+                                    @elseif (!empty($cart->product_id))
+                                        @php
+                                            
+                                            if ($cart->product->type == 1) {
+                                                $link = route('shop.product.detail', $cart->product_id);
+                                            } elseif ($cart->product->type == 2) {
+                                                $link = route('shop.book.detail', $cart->product_id);
+                                            } else {
+                                                $link = '';
+                                            }
+                                            
+                                            $thumbnail = $cart->product->files[0]->file_path ?? 'public/assets/product-Placeholder.png';
+                                            $title = $cart->product->title;
+                                            $price = $cart->price;
+                                        @endphp
+
+                                        <div class="single_cart">
+                                            <div class="product_name d-flex align-items-center">
+                                                <a href="{{ route('removeItem', [$cart->id]) }}">
+                                                    <div class="">
+
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                            height="16" viewBox="0 0 16 16">
+                                                            <path data-name="Path 174" d="M0,0H16V16H0Z"
+                                                                fill="none" />
+                                                            <path data-name="Path 175"
+                                                                d="M14.95,6l-1-1L9.975,8.973,6,5,5,6,8.973,9.975,5,13.948l1,1,3.973-3.973,3.973,3.973,1-1L10.977,9.975Z"
+                                                                transform="translate(-1.975 -1.975)"
+                                                                fill="var(--system_primery_color)" />
+                                                        </svg>
+                                                    </div>
+                                                </a>
+                                                <div class="thumb">
+                                                    <img src="{{ asset($thumbnail) }}" alt="">
+                                                </div>
+                                                <span>
+                                                    <a href="{{ $link }}">
+                                                        <h5>{{ $title }}</h5>
+                                                    </a>
+                                                </span>
+                                            </div>
+
+                                            <div class="f_w_400">{{ getPriceFormat($price) }}</div>
+
+                                        </div>
                                     @endif
                                 @endforeach
-
                             @endif
-
-
-
                         @endif
                     </div>
                     <div class="cart_table_wrapper mb-0">

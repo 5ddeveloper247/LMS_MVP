@@ -29,7 +29,7 @@ class FrontendHomeController extends Controller
 
     public function index()
     {
-
+        
         try {
 
             if (!\auth()->check()) {
@@ -88,6 +88,18 @@ class FrontendHomeController extends Controller
             $faqs = HomePageFaq::where('status', 1)->orderBy('order','desc')->take(10)->get();
 
             return view(theme('pages.index'), compact('random_program', 'blocks', 'latest_programs', 'latest_blogs', 'featured_blogs' , 'latest_course_reveiws', 'random_program', 'latest_courses','faqs','allPrograms','allCourses','testimonials'));
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function shop(Request $request)
+    {
+        
+        try {
+
+            return view(theme('pages.shop'), compact('request'));
 
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()]);

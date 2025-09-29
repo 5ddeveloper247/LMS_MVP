@@ -183,31 +183,31 @@
 
         /* signature */
         .signature {
-	border: 1px solid #ced4da;
-	height: 155px;
-	width: 100%;
-    overflow: hidden;
-}
+            border: 1px solid #ced4da;
+            height: 155px;
+            width: 100%;
+            overflow: hidden;
+        }
 
-#root {
-	height: 100%;
-	width: 100%;
-}
+        #root {
+            height: 100%;
+            width: 100%;
+        }
 
-canvas {
-	/* width: 100%; */
-	height: 100%;
-}
+        canvas {
+            /* width: 100%; */
+            height: 100%;
+        }
 
-.sign-btn {
-	position: absolute;
-	bottom: 1px;
-	right: 6px;
-}
+        .sign-btn {
+            position: absolute;
+            bottom: 1px;
+            right: 6px;
+        }
 
-.reset-btn,
-.save-btn {
-    background: var(--system_primery_color);
+        .reset-btn,
+        .save-btn {
+            background: var(--system_primery_color);
             border-radius: 5px;
             font-family: Source Sans Pro, sans-serif;
             font-size: 16px;
@@ -219,24 +219,24 @@ canvas {
             display: inline-block;
             line-height: 1;
             margin: 10px;
-}
-.reset-btn:hover,
-.save-btn:hover {
-    border-color: var(--system_primery_color);
-            background: transparent;
-    color: var(--system_primery_color) !important;
-}
-.reset-btn:focus,
-.save-btn:focus {
-    border-color: var(--system_primery_color);
-            background: transparent;
-    color: var(--system_primery_color) !important;
-}
-.date-btn{
-    border: 0px;
-    font-size: 12px;
-    background-color: #e9ecef;
-}
+        }
+        .reset-btn:hover,
+        .save-btn:hover {
+            border-color: var(--system_primery_color);
+                    background: transparent;
+            color: var(--system_primery_color) !important;
+        }
+        .reset-btn:focus,
+        .save-btn:focus {
+            border-color: var(--system_primery_color);
+                    background: transparent;
+            color: var(--system_primery_color) !important;
+        }
+        .date-btn{
+            border: 0px;
+            font-size: 12px;
+            background-color: #e9ecef;
+        }
         /* timeline */
         .timeline {
             display: flex;
@@ -315,8 +315,10 @@ canvas {
             <!-- Left side - Registration Form -->
             <div class="col-lg-7">
                 <h3 class="text-uppercase text-center text_reg">We are Merkaii Xcellence </h3>
-                <h6 class="text-center mb-4 text-capitalize heading-reg">welcome to Merkaii Xcellence <br><span
-                        class="font-weight-300">please fill the form below</span></h6>
+                <h6 class="text-center mb-4 text-capitalize heading-reg">welcome to Merkaii Xcellence <br>
+                    <span class="font-weight-300">please fill the form below</span>
+                </h6>
+                
                 <div class="timeline">
                     <div class="inside-line"></div>
 

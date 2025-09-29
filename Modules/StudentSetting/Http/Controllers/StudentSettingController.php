@@ -355,7 +355,7 @@ class StudentSettingController extends Controller
 
             DB::commit();
             Toastr::success('Operation successful', 'Success');
-            return redirect()->back();
+            return redirect()->route('regular_student_import');
         } catch (\Exception $e) {
             DB::rollBack();
 

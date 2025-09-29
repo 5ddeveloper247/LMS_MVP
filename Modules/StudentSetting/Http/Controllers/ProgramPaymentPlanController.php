@@ -119,7 +119,7 @@ class ProgramPaymentPlanController extends Controller
         foreach ($querys as $query) {
             $data[$query->id]["id"] = $query->id;
             $data[$query->id]["parent_id"] = $query->parent_id;
-            $data[$query->id]["programtitle"] = Program::find($query->parent_id)->programtitle;
+            $data[$query->id]["programtitle"] = @Program::find($query->parent_id)->programtitle ?? '';
             $data[$query->id]["amount"] = $query->amount;
             $data[$query->id]["planed_amount"] = $query->planed_amount;
             $data[$query->id]["sdate"] = $query->sdate;
@@ -137,9 +137,9 @@ class ProgramPaymentPlanController extends Controller
             $querys = $querys->where('parent_id', $request->program_id);
         }
         $querys = $querys->get();
-
+        
         $query = $this->getColectPaymentPlan($querys);
-
+       
         return Datatables::of($query)
             ->addIndexColumn()
             ->addColumn('amount', function ($query) {

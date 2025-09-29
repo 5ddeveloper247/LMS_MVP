@@ -11,7 +11,7 @@ class MyCartWithLoginPageSection extends Component
 
     public function render()
     {
-        $carts = Cart::where('user_id', Auth::id())->with(['course', 'course.user', 'course.children', 'program', 'program.user'])->get();
+        $carts = Cart::where('user_id', Auth::id())->with(['course', 'course.user', 'course.children', 'program', 'program.user', 'product.files'])->get();
         return view(theme('components.my-cart-with-login-page-section'), compact('carts'));
     }
 }
