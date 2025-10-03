@@ -177,31 +177,31 @@
 
         /* signature */
         .signature {
-	border: 1px solid #ced4da;
-	height: 155px;
-	width: 100%;
-    overflow: hidden;
-}
+            border: 1px solid #ced4da;
+            height: 155px;
+            width: 100%;
+            overflow: hidden;
+        }
 
-#root {
-	height: 100%;
-	width: 100%;
-}
+        #root {
+            height: 100%;
+            width: 100%;
+        }
 
-canvas {
-	/* width: 100%; */
-	height: 100%;
-}
+        canvas {
+            /* width: 100%; */
+            height: 100%;
+        }
 
-.sign-btn {
-	position: absolute;
-	bottom: 1px;
-	right: 6px;
-}
+        .sign-btn {
+            position: absolute;
+            bottom: 1px;
+            right: 6px;
+        }
 
-.reset-btn,
-.save-btn {
-    background: var(--system_primery_color);
+        .reset-btn,
+        .save-btn {
+            background: var(--system_primery_color);
             border-radius: 5px;
             font-family: Source Sans Pro, sans-serif;
             font-size: 16px;
@@ -213,24 +213,24 @@ canvas {
             display: inline-block;
             line-height: 1;
             margin: 10px;
-}
-.reset-btn:hover,
-.save-btn:hover {
-    border-color: var(--system_primery_color);
+        }
+        .reset-btn:hover,
+        .save-btn:hover {
+            border-color: var(--system_primery_color);
             background: transparent;
-    color: var(--system_primery_color) !important;
-}
-.reset-btn:focus,
-.save-btn:focus {
-    border-color: var(--system_primery_color);
-            background: transparent;
-    color: var(--system_primery_color) !important;
-}
-.date-btn{
-    border: 0px;
-    font-size: 12px;
-    background-color: #e9ecef;
-}
+            color: var(--system_primery_color) !important;
+        }
+        .reset-btn:focus,
+        .save-btn:focus {
+            border-color: var(--system_primery_color);
+                    background: transparent;
+            color: var(--system_primery_color) !important;
+        }
+        .date-btn{
+            border: 0px;
+            font-size: 12px;
+            background-color: #e9ecef;
+        }
         /* timeline */
         .timeline {
             display: flex;
@@ -318,6 +318,9 @@ canvas {
             }
         }
     </style>
+    @php
+        $redirectTo = session()->get('redirectTo');
+    @endphp
 
     <div class="container px-xl-5">
         <div class="row my-4 my-lg-5 px-xl-5">
@@ -430,11 +433,13 @@ canvas {
                         </div>
                     @endif
                     <div class="form-row">
-
-                        <div class="col-md-12 my-3">
-                            <h6 class="mt-5">$100 Fee Required</h6>
-                        </div>
-                        <div class="form-group col-md-6">
+                        
+                        @if((stripos($redirectTo, '/buyNow/') === false || stripos($redirectTo, '/addToCart/') === false) &&  stripos($redirectTo, 'shop') === false)
+                            <div class="col-md-12 mt-3">
+                                <h6 class="mt-5">$100 Fee Required</h6>
+                            </div>
+                        @endif
+                        <div class="form-group col-md-6 mt-3">
                             <div class="position-relative mt-4 @if ($errors->first('f_name')) is-invalid @endif">
                                 <input type="text" name="f_name"
                                     value="{{ (!empty($user) ? (isset(explode(' ', $user->name)[0]) ? explode(' ', $user->name)[0] : null) : null) ?? old('f_name') }}"
@@ -443,7 +448,7 @@ canvas {
                                 <i class="fa fa-user-o input-icon-outside"></i>
                             </div>
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-6 mt-3">
                             <div class="position-relative mt-4 @if ($errors->first('l_name')) is-invalid @endif">
                                 <input type="text" name="l_name"
                                     value="{{ (!empty($user) ? (isset(explode(' ', $user->name)[1]) ? explode(' ', $user->name)[1] : null) : null) ?? old('l_name') }}"

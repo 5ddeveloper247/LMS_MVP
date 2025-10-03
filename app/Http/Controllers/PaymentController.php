@@ -227,15 +227,32 @@ class PaymentController extends Controller
         if ($validator->fails()) {
             Toastr::error('Please fill all the required fields', trans('common.Failed'));
             return redirect()->back();
-
         }
 
         else{
             if(!$request->has('accept')){
-            Toastr::error('Terms & Conditions must be accepted.', 'Error');
-                  return redirect()->back();
+                Toastr::error('Terms & Conditions must be accepted.', 'Error');
+                return redirect()->back();
             }
 
+            // check if product is exist in cart then check available quantity then proceed
+            $cartsList = Cart::where('user_id', Auth::id())
+                        ->whereNotNull('product_id')
+                        ->selectRaw('product_id, COUNT(*) as quantity')
+                        ->groupBy('product_id')
+                        ->with('product')
+                        ->get();
+            
+            if(!empty($cartsList)){
+                foreach ($cartsList as $cart) {
+                    $availableInventory = $cart->product->total_inventory ?? 0;
+                    if ($cart->quantity > $availableInventory) {
+                        Toastr::error('Insufficient products in stock.', 'Error');
+                        return redirect()->back();
+                    }
+                }
+            }
+            
             $checkout_info = Checkout::where('user_id', Auth::user()->id)->latest()->first();
             session()->put('checkout_tracking', $checkout_info->tracking ?? '');
 
@@ -1241,7 +1258,12 @@ class PaymentController extends Controller
             $enroll->discount_amount = $discount_amount;
             $enroll->status = 1;
             $enroll->save();
-            
+
+            // minus product from product inventory count.
+            $currentInventory = $product->total_inventory;
+            $product->total_inventory = $currentInventory-1;
+            $product->save();
+
         } else {
 
             $bundleCheck = BundleCoursePlan::find($cart->bundle_course_id);

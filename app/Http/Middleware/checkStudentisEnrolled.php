@@ -31,36 +31,58 @@ class checkStudentisEnrolled
             session()->put('userSetting', UserSetting::where('user_id', Auth::user()->id)->first());
 
             if (!$user_setting_exists) {
-                  Toastr::error('Please Complete your Registration before buying this Course / Program', 'Error');
-                  return redirect()->to(route('register'));
-              }
+                Toastr::error('Please Complete your Registration before buying this Course / Program', 'Error');
+                
+                // logic in case of buy course or program
+                $currentUrl = $request->fullUrl();
+                if ((stripos($currentUrl, '/buyNow/') !== false || stripos($currentUrl, '/addToCart/') !== false) && 
+                    (stripos($currentUrl, 'quiz') !== false || stripos($currentUrl, 'shop') !== false || stripos($currentUrl, 'plan_id') !== false)) {
+                    session()->put('redirectTo', $currentUrl);
+                }
+                return redirect()->to(route('register'));
+            }
 
-              if (!$user_declaration_exists) {
-                  Toastr::error('Please Complete your Registration before buying this Course / Program', 'Error');
-                  return redirect()->to(route('register.3'));
-              }
+            if (!$user_declaration_exists) {
+                Toastr::error('Please Complete your Registration before buying this Course / Program', 'Error');
+                
+                // logic in case of buy course or program
+                $currentUrl = $request->fullUrl();
+                if ((stripos($currentUrl, '/buyNow/') !== false || stripos($currentUrl, '/addToCart/') !== false) && 
+                    (stripos($currentUrl, 'quiz') !== false || stripos($currentUrl, 'shop') !== false || stripos($currentUrl, 'plan_id') !== false)) {
+                    session()->put('redirectTo', $currentUrl);
+                }
+                return redirect()->to(route('register.3'));
+            }
 
             if(!$request->query('courseType')){
 
-              if (!$user_agreement_exists) {
-                  Toastr::error('To buy this program / course, you need to get enrolled to school by filling up the Enrolement Forms', 'Error');
-                  // Toastr::error('Please Complete Your Registration Process !', 'Error');
-                  return redirect()->to(route('register.3'));
-              }
+                if (!$user_agreement_exists) {
+                    Toastr::error('To buy this program / course, you need to get enrolled to school by filling up the Enrolement Forms', 'Error');
+                    // Toastr::error('Please Complete Your Registration Process !', 'Error');
+                    
+                    // logic in case of buy course or program
+                    $currentUrl = $request->fullUrl();
+                    if ((stripos($currentUrl, '/buyNow/') !== false || stripos($currentUrl, '/addToCart/') !== false) && 
+                        (stripos($currentUrl, 'quiz') !== false || stripos($currentUrl, 'shop') !== false || stripos($currentUrl, 'plan_id') !== false)) {
+                        session()->put('redirectTo', $currentUrl);
+                    }
+                    
+                    return redirect()->to(route('register.3'));
+                }
 
               
 
-              if (!$user_payment_exists) {
-                  Toastr::error('Please Make Your Payment First !', 'Error');
-                  return redirect()->to(route('register.pay'));
-              }
+                if (!$user_payment_exists) {
+                    Toastr::error('Please Make Your Payment First !', 'Error');
+                    return redirect()->to(route('register.pay'));
+                }
 
-              // if($user_agreement_exists){
-              //   if($user_agreement_exists->user_agreement_form == null){
-              //       Toastr::error('Please Upload Your Agreement Form', 'Error');
-              //     return redirect()->to(route('myProfile'));
-              //   }
-              // }
+                // if($user_agreement_exists){
+                //   if($user_agreement_exists->user_agreement_form == null){
+                //       Toastr::error('Please Upload Your Agreement Form', 'Error');
+                //     return redirect()->to(route('myProfile'));
+                //   }
+                // }
             }
         }
         return $next($request);

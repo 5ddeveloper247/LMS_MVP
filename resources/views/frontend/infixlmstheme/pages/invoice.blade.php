@@ -265,6 +265,7 @@ switch ($enroll->type) {
             @else
                 
                 @if (isset($enroll->courses) && count($enroll->courses))
+                
                     @foreach ($enroll->courses as $key => $item)
                         @if (!empty($item->program_id))
                             <tr>
@@ -366,6 +367,31 @@ switch ($enroll->type) {
                                 <td class="black_color">
                                     {{ getPriceFormat($item->purchase_price) }}
                                     @php $total = $total + $item->purchase_price @endphp
+                                </td>
+                            </tr>
+                        @endif
+                    @endforeach
+                @endif
+                {{--========================Products Details=========================--}}
+                @if (isset($enroll->orders) && count($enroll->orders))
+                
+                    @foreach ($enroll->orders as $key => $item)
+                        
+                        @if (!empty($item->product_id))
+                            <tr>
+                                <td class="black_color">
+                                    <span class="pl-3">
+                                        {{ ++$key }}
+                                    </span>
+                                </td>
+                                <td colspan="2">
+                                    <h5 class="black_color">
+                                        {{ @$item->product->title }}
+                                        <small></small>
+                                    </h5>
+                                </td>
+                                <td class="black_color">
+                                    {{ getPriceFormat($item->purchase_price) }}
                                 </td>
                             </tr>
                         @endif

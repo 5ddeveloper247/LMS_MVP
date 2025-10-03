@@ -330,7 +330,7 @@
                                             </div>
                                         </a>
                                         <div class="card-body course_content">
-                                            <a href="">
+                                            <a href="{{$detailUrl}}">
                                                 <h5 class="noBrake font-weight-bold" title="Network Security">{{ $product->title }}</h5>
                                             </a>
                                             <div class="rating_cart">
@@ -363,7 +363,6 @@
                                         {{ __('No Product Found') }}
                                     </h1>
                                 </div>
-
                             </div>   
                         @endif
                             

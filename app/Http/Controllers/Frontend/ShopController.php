@@ -6,10 +6,10 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Http\Request as HttpRequest;
+use Illuminate\Http\Request;
 use Modules\Shop\Entities\ShopProduct;
 use Modules\Payment\Entities\Cart;
+use Modules\Shop\Entities\ShopOrder;
 
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+
 
 class ShopController extends Controller
 {
@@ -86,7 +87,7 @@ class ShopController extends Controller
             // dd($product);
             if (!Auth::check()) {
                 Toastr::error('You must login', 'Error');
-                session(['redirectTo' => route($detailUrl, ['id' => $id])]);
+                session(['redirectTo' => route('shop.addToCart', ['id' => $id])]);
                 return \redirect()->route('login');
             }
            
@@ -178,7 +179,7 @@ class ShopController extends Controller
             if (Session::has('pre-registered-user')) {
                 if (!Auth::check()) {
                     // Toastr::error('You must register first', 'Error');
-                    Session::put('redirectTo', route($detailUrl, ['id' => $id]));
+                    Session::put('redirectTo', route('shop.buyNow', ['id' => $id]));
                     return redirect()->route('register');
                 }
             } else {
@@ -257,5 +258,71 @@ class ShopController extends Controller
             GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
         }
     }
-}
 
+    public function myOrders()
+    {
+        try {
+            if(session()->has('previous_url')){
+                session()->forget('previous_url');
+            }
+            return view(theme('pages.myOrders'));
+        } catch (\Exception $e) {
+            GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
+        }
+    }
+
+    public function myOrderDetail($id)
+    {
+        try {
+            
+            $orderDetail = ShopOrder::where('user_id', Auth::id())->where('id', $id)->with('product')->first();
+            
+            if($orderDetail){
+                return view(theme('pages.myOrderDetails'), compact('orderDetail'));
+            }
+
+            GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
+
+        } catch (\Exception $e) {
+            GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
+        }
+    }
+
+    public function cancelOrder(Request $request, $id)
+    {
+        try {
+            $order = ShopOrder::where('user_id', Auth::id())->where('id', $id)->first();
+            
+            if($order){
+                $order->status = 5; // 5:cancel status
+                $order->save();
+    
+                Toastr::success(trans('Order Cancelled Successfully...'), trans('common.Success'));
+                return redirect()->back();
+            }else{
+                return redirect()->back()->with('error', 'Something went wrong.');
+            }
+        } catch (\Exception $e) {
+            GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
+        }
+    }
+
+    public function orderRefundRequest(Request $request, $id)
+    {
+        try {
+            $order = ShopOrder::where('user_id', Auth::id())->where('id', $id)->first();
+            
+            if($order){
+                $order->payment_status = 2;  // 0:unpaid, 1:paid, 2:refund request, 3: refund confirmed, 4:refund cancelled
+                $order->save();
+    
+                Toastr::success(trans('Order refund request successfully send...'), trans('common.Success'));
+                return redirect()->back();
+            }else{
+                return redirect()->back()->with('error', 'Something went wrong.');
+            }
+        } catch (\Exception $e) {
+            GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
+        }
+    }
+}

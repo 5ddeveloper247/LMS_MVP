@@ -12,7 +12,7 @@
 
 @section('table')
     @php
-        $table_name = 'shop_products';
+        $table_name = 'shop_orders';
     @endphp
     {{ $table_name }}
 @stop
@@ -21,145 +21,211 @@
     {!! generateBreadcrumb() !!}
     <section class="admin-visitor-area up_st_admin_visitor student-details">
         <div class="container-fluid p-0">
-            <div class="row pt-0">
-                <div class="col-12">
-                    <ul class="nav nav-tabs no-bottom-border mt-sm-md-20 mb-10 ml-3" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#shop_orders" role="tab"
-                                data-toggle="tab">{{ __('Orders') }}</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="#shop_refund_requests" role="tab" data-toggle="tab"
-                                id="tutors">{{ __('Refund Requests') }}</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
             <div class="row">
-                
-            </div>
-            <div class="tab-content mt-4">
-                
-                {{-- Orders Listing --}}
-                <div role="tabpanel" class="tab-pane fade show active" id="shop_orders">
-                    <div class="row justify-content-center">
-                        <div class="col-12">
-                            <div class="box_header common_table_header">
-                                <div class="main-title d-md-flex">
-                                    <h3 class="mr-30 mb_xs_15px mb_sm_20px mb-0">{{ __('Orders') }}
-                                        {{ __('common.List') }}
-                                    </h3>
-                                </div>
+                <div class="col-12">
+                    <div class="section__title3 mb_40">
+                        <h3 class="custom_small_heading mb-0">{{ __('Order Details') }}</h3>
+                    </div>
+                </div>
+                <div class="col-12 mt-4">
+                    <div class="card">
+                        <div class="card-header d-flex align-items-center">  
+                            <div class="col-6">
+                                <a href="{{route('shop.orders')}}" style="color:#2ca6a4;">
+                                    <i class="fa fa-arrow-left"></i> Back to Orders
+                                </a>
+                            </div>
+                            <div class="col-6 text-right">
+                                
+                                @if ($orderDetail->status == 5 && $orderDetail->payment_status == 2)
+                                    <a type="button" class="btn btn-rounded btn-danger" 
+                                        onclick="changeOrderPaymentStatus({{ $orderDetail->id }}, 4);">Refund Cancel</a>
+                                    <a type="button" class="btn btn-rounded btn-warning" 
+                                        onclick="changeOrderPaymentStatus({{ $orderDetail->id }}, 3);">Refund Confirm</a>
+                                @elseif(in_array($orderDetail->status, [1,2,3]))
+                                    <a type="button" class="btn btn-rounded btn-danger" 
+                                        onclick="changeOrderStatus({{$orderDetail->id}}, 5)">Cancel</a>
+                                @endif
+
+                                @if ($orderDetail->status == 1)
+
+                                    <a type="button" class="btn btn-rounded btn-warning" 
+                                        onclick="changeOrderStatus({{$orderDetail->id}}, 2)">Order Confirm</a>
+                                
+                                @elseif($orderDetail->status == 2)
+                                
+                                    <a type="button" class="btn btn-rounded btn-warning" 
+                                        onclick="changeOrderStatus({{$orderDetail->id}}, 3)">Order Shipped</a>
+
+                                @elseif($orderDetail->status == 3)
+                            
+                                    <a type="button" class="btn btn-rounded btn-warning" 
+                                        onclick="changeOrderStatus({{$orderDetail->id}}, 4)">Order Delivered</a>
+                                
+                                @endif
                             </div>
                         </div>
-                        <div class="col-lg-12">
-                            <div class="QA_section QA_section_heading_custom check_box_table">
-                                <div class="QA_table">
-                                
-                                    <div class="">
-                                        <table id="lms_table" class="Crm_table_active3 table">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">{{ __('common.SL') }}</th>
-                                                    <th scope="col">{{ __('Order#') }}</th>
-                                                    <th scope="col">{{ __('Username') }}</th>
-                                                    <th scope="col">{{ __('Product Title') }}</th>
-                                                    <th scope="col">{{ __('Purchase Amount') }}</th>
-                                                    <th scope="col">{{ __('Discount') }}</th>
-                                                    <th scope="col">{{ __('common.Status') }}</th>
-                                                    <th scope="col">{{ __('Payment Status') }}</th>
-                                                    <th scope="col">{{ __('common.Action') }}</th>
-                                                </tr>
-                                            </thead>
+                        <div class="card-body">
+                            
+                            <div class="row mb-5">
+                                <div class="mt-4 col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <div> 
+                                        <strong>{{ $orderDetail->checkout->billing->first_name ?? ''}} {{ $orderDetail->checkout->billing->last_name ?? ''}}</strong>
+                                    </div>
+                                    <div>{{ $orderDetail->checkout->billing->email ?? $orderDetail->user->email}}</div>
+                                    <div>{{ $orderDetail->checkout->billing->phone ?? 'N/A'}}</div>
+                                    <div>{{ $orderDetail->checkout->billing->address1 ?? 'N/A'}}</div>
+                                    <div>{{ $orderDetail->checkout->billing->countryDetails->name ?? '' }}</div>
+                                </div>
+                                <div class="mt-4 col-xl-6 col-lg-6 col-md-12 col-sm-12 d-flex justify-content-lg-end justify-content-md-center justify-content-xs-start">
+                                    <div class="align-items-center">
+                                        <table>
                                             <tbody>
-
+                                                <tr>
+                                                    <td class="text-main text-bold"><strong>Order #</strong></td>
+                                                    <td class="text-right text-info text-bold"> Order#{{ $orderDetail->id}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-main text-bold"><strong>Order status</strong></td>
+                                                    <td class="text-right"><span class="badge badge-inline badge-info">{{$orderDetail->status_label}}</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-main text-bold"><strong>Order date</strong></td>
+                                                    <td class="text-right">{{ date('d M Y', strtotime($orderDetail->created_at)) }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-main text-bold"><strong>Total amount</strong></td>
+                                                    <td class="text-right">${{ number_format($orderDetail->purchase_price, 2)}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-main text-bold"><strong>Payment method</strong></td>
+                                                    <td class="text-right">{{strtoupper($orderDetail->checkout->payment_method ?? 'N/A')}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-main text-bold"><strong>Payment status</strong></td>
+                                                    <td class="text-right">{{strtoupper($orderDetail->payment_status_label ?? 'N/A')}}</td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Refund Requests --}}
-                <div role="tabpanel" class="tab-pane fade" id="shop_refund_requests">
-                    <div class="row justify-content-center">
-                        <div class="col-12">
-                            <div class="box_header common_table_header">
-                                <div class="main-title d-md-flex">
-                                    <h3 class="mr-30 mb_xs_15px mb_sm_20px mb-0">{{ __('Refund Request') }}
-                                        {{ __('common.List') }}
-                                    </h3>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th class="center">#</th>
+                                            <th>Product Name</th>
+                                            <th>Image</th>
+                                            <th>Sub-Title</th>
+                                            <th class="right">Price</th>
+                                            <th class="center">Discount</th>
+                                            <th class="right">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="center">1</td>
+                                            <td class="left strong">{{ $orderDetail->product->title ?? 'N/A' }}</td>
+                                            <td class="">
+                                                <img class="round-product-img" style="height:50px; width:50px;"
+                                                    src="{{isset($orderDetail->product->files[0]->file_path) ? url($orderDetail->product->files[0]->file_path) : url('public/assets/product-Placeholder.png')}}">
+                                            </td>
+                                            <td class="left">{{ $orderDetail->product->sub_title ?? 'N/A' }}</td>
+                                            <td class="right">${{ number_format($orderDetail->purchase_price + $orderDetail->discount_amount, 2) }}</td>
+                                            <td class="center">${{ number_format($orderDetail->discount_amount, 2) }}</td>
+                                            <td class="right">${{ number_format($orderDetail->purchase_price - $orderDetail->discount_amount, 2)}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4 col-sm-5"> </div>
+                                <div class="col-lg-4 col-sm-5 ml-auto">
+                                    <table class="table table-clear">
+                                        <tbody>
+                                            <tr>
+                                                <td class="text-left"><strong>Subtotal</strong></td>
+                                                <td class="text-right">${{ number_format($orderDetail->purchase_price + $orderDetail->discount_amount, 2) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-left"><strong>Discount:</strong></td>
+                                                <td class="text-right">${{ number_format($orderDetail->discount_amount, 2) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-left"><strong>Total</strong></td>
+                                                <td class="text-right"><strong>${{ number_format($orderDetail->purchase_price, 2) }}</strong></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-12">
-                            <div class="QA_section QA_section_heading_custom check_box_table">
-                                <div class="QA_table">
-                                
-                                    <div class="">
-                                        <table id="lms_table2" class="Crm_table_active3 table">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">{{ __('common.SL') }}</th>
-                                                    <th scope="col">{{ __('Order#') }}</th>
-                                                    <th scope="col">{{ __('Username') }}</th>
-                                                    <th scope="col">{{ __('Product Title') }}</th>
-                                                    <th scope="col">{{ __('Purchase Amount') }}</th>
-                                                    <th scope="col">{{ __('Discount') }}</th>
-                                                    <th scope="col">{{ __('common.Status') }}</th>
-                                                    <th scope="col">{{ __('Payment Status') }}</th>
-                                                    <th scope="col">{{ __('common.Action') }}</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
-
             </div>
+            
         </div>  
 
-        <!-- <div class="modal fade admin-query" id="deleteProduct">
+        <div class="modal fade admin-query" id="statusConfirmationModal">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <form action="{{ route('product.delete') }}" method="POST">
+                    <form action="{{ route('order.update_status') }}" method="POST">
                         @csrf
                         <div class="modal-header">
-                            <h4 class="modal-title">{{ __('common.Delete') }} {{ __('Product') }} </h4>
+                            <h4 class="modal-title">{{ __('Confirmation') }}</h4>
                             <button type="button" class="close" data-dismiss="modal"><i class="ti-close"></i></button>
                         </div>
 
                         <div class="modal-body">
                             <div class="text-center">
-
-                                <h4>{{ __('common.Are you sure to delete ?') }}</h4>
+                                <h4>{{ __('Are you sure you want to change order status ?') }}</h4>
                             </div>
-                            <input type="hidden" name="id" value="" id="productDeleteId">
+
+                            <input type="hidden" name="id" value="" class="orderId">
+                            <input type="hidden" name="order_status" value="" id="orderStatus">
 
                             <div class="d-flex justify-content-between mt-40">
                                 <button type="button" class="primary-btn tr-bg"
-                                    data-dismiss="modal">{{ __('common.Cancel') }}</button>
-                                <button class="primary-btn fix-gr-bg" type="submit">{{ __('common.Delete') }}</button>
+                                    data-dismiss="modal">{{ __('No') }}</button>
+                                <button class="primary-btn fix-gr-bg" type="submit">{{ __('Yes') }}</button>
 
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
-        </div> -->
+        </div>
 
-        
+        <div class="modal fade admin-query" id="paymentStatusConfirmationModal">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <form action="{{ route('order.update_payment_status') }}" method="POST">
+                        @csrf
+                        <div class="modal-header">
+                            <h4 class="modal-title">{{ __('Confirmation') }}</h4>
+                            <button type="button" class="close" data-dismiss="modal"><i class="ti-close"></i></button>
+                        </div>
 
-        
+                        <div class="modal-body">
+                            <div class="text-center">
+                                <h4 id="payment_status_msg"></h4>
+                            </div>
+
+                            <input type="hidden" name="id" value="" class="orderId">
+                            <input type="hidden" name="payment_status" value="" id="paymentStatus">
+
+                            <div class="d-flex justify-content-between mt-40">
+                                <button type="button" class="primary-btn tr-bg"
+                                    data-dismiss="modal">{{ __('No') }}</button>
+                                <button class="primary-btn fix-gr-bg" type="submit">{{ __('Yes') }}</button>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
     </section>
 @endsection
@@ -172,11 +238,26 @@
     
     <script>
 
-        // $(document).on("click", ".deleteProduct", function () {
-        //     let id = $(this).data("id");
-        //     $("#productDeleteId").val(id);
-        //     $("#deleteProduct").modal("show");
-        // });
+        function changeOrderStatus(id, status){
+            
+            $(".orderId").val(id);
+            $("#orderStatus").val(status);
+            $("#statusConfirmationModal").modal("show");
+        }
+
+        function changeOrderPaymentStatus(id, status){
+            
+            $(".orderId").val(id);
+            $("#paymentStatus").val(status);
+
+            if(status == 3){
+               $("#payment_status_msg").text('Are you sure you want to confirm refund request?'); 
+            }else if(status == 4){
+                $("#payment_status_msg").text('Are you sure you want to cancel refund request?'); 
+            }
+
+            $("#paymentStatusConfirmationModal").modal("show");
+        }
         
         // Orders Table
         let table = $('#lms_table').DataTable({

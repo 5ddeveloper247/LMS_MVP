@@ -21,7 +21,7 @@ class CreateShopOrdersTable extends Migration
             $table->float('purchase_price');
             $table->string('coupon')->nullable();
             $table->float('discount_amount')->default(0);
-            $table->boolean('status')->default(1);
+            $table->boolean('status')->default(1)->comment('1:placed, 2:confirmed, 3:shipped, 4:Delivered, 5:Cancelled');
             $table->timestamps();
         });
     }
