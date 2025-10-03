@@ -5,6 +5,7 @@
 
 <link rel="stylesheet" type="text/css" href="{{ asset('public/assets/slick/slick.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('public/assets/slick/slick-theme.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('public/assets/home.css') }}">
 <script src="https://kit.fontawesome.com/b98cad50b5.js" crossorigin="anonymous"></script>
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css'>
@@ -15,8 +16,9 @@
 <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-straight/css/uicons-solid-straight.css'>
 
 
-<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/4.5.6/css/ionicons.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="{{ asset('public/assets/owl.carousel.min.css') }}" />
 <link rel="stylesheet" href="{{ asset('public/assets/owl.theme.default.min.css') }}" />
@@ -40,3059 +42,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
 
 <style>
-    /* faqs about section */
-    @import url("https:://fonts.googleleapis.com/css2?family=Poppins&display=swap");
-    @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css");
-
-    * {
-        font-family: "Rubik"
-    }
-
-    .panel-about {
-        width: 100%;
-        border: 1px solid;
-        border-radius: 0.5rem 0.5rem 0 0;
-    }
-
-    .panel-about input {
-        position: absolute;
-        opacity: 0;
-        z-index: -1;
-    }
-
-    .panel-about .panel-about-content {
-        max-height: 0;
-        overflow: hidden;
-    }
-
-    .panel-about input:checked~.panel-about-content {
-        max-height: max-content;
-    }
-
-    .accordion {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-        border: none;
-        border-radius: 1rem;
-        max-height: 430px;
-        overflow: auto;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
-
-    .accordion::-webkit-scrollbar {
-        display: none;
-    }
-
-    .section-header {
-        width: 100%;
-        color: var(--system_secendory_color);
-    }
-
-    .panel-about-wrapper {
-        width: 100%;
-        height: auto;
-        padding: 0.5rem 0.5rem;
-        transition: background-color 0.25s ease-in;
-    }
-
-    .panel-about-wrapper:hover {
-        background-color: transparent;
-    }
-
-    .panel-about label {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        cursor: pointer;
-        font-size: 16px;
-        margin: 0px;
-    }
-
-    .panel-about_label::after {
-        content: "\276F";
-        width: 1em;
-        height: 1em;
-        text-align: center;
-        transform: rotate(90deg);
-        transition: all 0.5s;
-    }
-
-    .panel-about_label.rotate::after {
-        transform: rotate(270deg);
-    }
-
-    .panel-about_content.closed+.panel-about_label::after {
-        transform: rotate(0deg);
-    }
-
-    /* faqs aboutend */
-    /* animation */
-    section .animate {
-        opacity: 0;
-        transition: 2s;
-    }
-
-    section.show-animate .animate {
-        opacity: 1;
-    }
-
-    .sec-4.show-animate .animate {
-        animation: fadeInAnimation ease .1s;
-        animation-iteration-count: 1;
-        animation-fill-mode: forwards;
-    }
-
-    @keyframes fadeInAnimation {
-        0% {
-            opacity: 0;
-        }
-
-        100% {
-            opacity: 1;
-        }
-    }
-
-    .sec-8 .animate {
-        transform: scale(.5);
-    }
-
-    .sec-8.show-animate .animate {
-        transform: scale(1);
-    }
-
-    /* events and news new section */
-
-
-    /* newevents */
-    .rts-section-title {
-        font-weight: 600;
-        margin-bottom: 0;
-        line-height: 1.2;
-    }
-
-    .mb--25 {
-        margin-bottom: 25px !important;
-    }
-
-    .events-content .rts-counter {
-        counter-reset: rt-counter;
-    }
-
-    .events-content .single-event {
-        margin: 0;
-        padding: 45px 40px;
-        background: #F5F5FF;
-        display: flex;
-        gap: 20px;
-        align-items: center;
-        position: relative;
-        z-index: 1;
-        overflow: hidden;
-        transition: all 1s ease-in-out;
-
-    }
-
-    .events-content .single-event:hover {
-        background: var(--system_secendory_color);
-    }
-
-    .single-event {
-        display: flex;
-        align-items: center;
-        margin: 10px 0;
-        padding: 10px;
-        /* border: 1px solid #ccc; */
-        position: relative;
-    }
-
-    .single-event::before {
-        content: "";
-        position: absolute;
-        left: 170px;
-        top: 0;
-        bottom: 0;
-        width: 1px;
-        background-color: #ccc;
-    }
-
-    .events-content .single-event-counter {
-        padding-right: 20px;
-        position: relative;
-        width: 106px;
-    }
-
-    .events-content .single-event>* {
-        position: relative;
-        z-index: 10;
-    }
-
-    .events-content .single-event-counter .count-number {
-        font-size: 80px;
-        position: relative;
-        transition: all 0.4s ease;
-        font-weight: 600;
-    }
-
-    .rt-clip-text {
-        -webkit-text-fill-color: transparent;
-        -webkit-text-stroke-color: #DEDEDE;
-        -webkit-text-stroke: 1px;
-    }
-
-    .events-content .single-event-content .single-event-content-meta {
-        display: flex;
-        gap: 25px;
-        align-items: center;
-        color: #110c2d;
-        transition: all 0.4s ease;
-    }
-
-    .events-content .single-event:hover .single-event-content-meta {
-        color: #eee !important;
-    }
-
-    .events-content .single-event:hover .event-title {
-        color: #eee !important;
-    }
-
-    .events-content .single-event:hover .count-number {
-        color: #eee !important;
-    }
-
-    .events-content .single-event-counter .count-number::before {
-        content: counter(rt-counter, decimal-leading-zero);
-        counter-increment: rt-counter;
-    }
-
-    .events-content .single-event-content {
-        padding-left: 20px;
-    }
-
-    .events-content .single-event-content .single-event-content-meta .event-date,
-    .events-content .single-event-content .single-event-content-meta .event-time,
-    .events-content .single-event-content .single-event-content-meta .event-place {
-        display: flex;
-        gap: 5px;
-        align-items: center;
-    }
-
-    .events-content .single-event:nth-child(2n):hover::after {
-        opacity: 1;
-        top: 0;
-    }
-
-    .events-content .single-event:nth-child(2n) .single-event-counter .count-number {
-        color: #eee;
-    }
-
-    .events-content .single-event:nth-child(2n) .single-event-content-meta {
-        color: #eee;
-    }
-
-    .events-content .single-event:nth-child(2n) .event-title {
-        color: #eee;
-    }
-
-    .events-content .single-event::after {
-        position: absolute;
-        height: 100%;
-        width: 100%;
-        content: "";
-        left: 0;
-        top: 0;
-        top: -50%;
-        left: 0;
-        background: var(--system_secendory_color);
-        z-index: -1;
-        opacity: 0;
-        transition: all 0.4s ease;
-    }
-
-    .events-content .single-event:after .event-title {
-        color: #eee !important;
-    }
-
-    .events-content .single-event:after .count-number {
-        color: #eee !important;
-    }
-
-    .events-content .single-event:nth-child(2n):not(:hover)::after {
-        opacity: 1;
-        top: 0;
-    }
-
-    /*  */
-    .ml_span {
-        margin-left: -117px;
-    }
-
-    /* col-md-5 */
-    .events_wrapper {
-        position: relative;
-        overflow-x: hidden;
-    }
-
-    .events_wrapper .eventsIcon {
-        position: absolute;
-        top: 0;
-        height: 100%;
-        width: auto;
-        display: flex;
-        align-items: center;
-    }
-
-    .eventsIcon:first-child {
-        left: 0;
-        display: none;
-        background: linear-gradient(90deg, #fff 70%, transparent);
-    }
-
-    .eventsIcon:last-child {
-        right: 0;
-        justify-content: flex-end;
-        background: linear-gradient(-90deg, #fff 70%, transparent);
-    }
-
-    .eventsIcon i {
-        cursor: pointer;
-        font-size: 14px;
-        text-align: center;
-        border-radius: 10%;
-        background: #efedfb;
-        padding: 10
-    }
-
-    .eventsIcon:first-child i {
-        margin-left: 0px;
-    }
-
-    .eventsIcon:last-child i {
-        margin-right: 0px;
-    }
-
-    .news-events-tabs-section {
-        padding-left: 75px;
-    }
-
-    .news-events-navtabs {
-        display: flex;
-        justify-content: flex-start !important;
-        flex-wrap: nowrap !important;
-        overscroll-behavior: inherit;
-        overflow-x: scroll;
-        overflow-y: hidden;
-        scrollbar-width: none;
-        margin: 0 !important;
-        gap: 10px;
-    }
-
-    .rt-between {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .rts-border-bottom-2 {
-        border-bottom: 2px solid #ddd8f9;
-    }
-
-    .pb--25 {
-        padding-bottom: 25px !important;
-    }
-
-    .rts-section-title {
-        font-weight: 600;
-        margin-bottom: 0;
-        line-height: 1.2;
-    }
-
-    .rts-arrow {
-        color: var(--rt-primary);
-        font-weight: 600;
-        display: inline-block;
-    }
-
-    .rts-arrow span {
-        margin-left: 5px;
-    }
-
-    .pb--30 {
-        padding-bottom: 30px !important;
-    }
-
-    .news-events-tabs-section .news-events-tab .nav-item {
-        margin: 30px 0 0 0;
-    }
-
-    .news-events-tabs-section .news-events-tab .nav-item .nav-link.active {
-        background: var(--system_secendory_color);
-        color: #fff !important;
-    }
-
-    .news-events-tabs-section .news-events-tab .nav-item .nav-link:hover {
-        background: var(--system_secendory_color);
-        color: #fff !important;
-    }
-
-    .news-events-tabs-section .news-events-tab .nav-item .nav-link {
-        padding: 7px 15px;
-        border: 1px solid #ddd8f9;
-        border-radius: 0;
-        color: #110c2d;
-        font-size: 14px;
-        font-weight: 500;
-        white-space: nowrap;
-    }
-
-    .news-events-tabs-section .news-events-tab .tab-content {
-        -ms-overflow-style: none;
-        scrollbar-width: thin;
-        scrollbar-color: var(--system_secendory_color) #F1F1FF;
-    }
-
-    .news-events-tabs-section .news-events-tab .tab-content {
-        scrollbar-color: var(--system_secendory_color) #F1F1FF;
-        scrollbar-width: medium;
-    }
-
-    .news-events-tabs-section .news-events-tab .tab-content {
-        max-height: 500px;
-        overscroll-behavior: inherit;
-        overflow-y: auto;
-        margin-top: 15px;
-    }
-
-    .news-events-tabs-section .news-events-tab .notice-content-box .notice-content-overlay {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: #ffffff87;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .news-events-tabs-section .news-events-tab .notice-content-box {
-        position: relative;
-    }
-
-    .news-events-tabs-section .news-events-tab .single-notice {
-        border-bottom: 1px solid #ddd8f9;
-        padding: 25px 0;
-        margin-right: 10px;
-    }
-
-    .news-events-tabs-section .news-events-tab .single-notice-item {
-        display: flex;
-        gap: 20px;
-        align-items: center;
-    }
-
-    .news-events-tabs-section .news-events-tab .single-notice-item .notice-date {
-        font-size: 24px;
-        font-weight: 600;
-        color: #b2dfcc;
-    }
-
-    .news-events-tabs-section .news-events-tab .single-notice-item .notice-date span {
-        font-size: 16px;
-        font-weight: 500;
-        color: #737477;
-    }
-
-    .news-events-tabs-section .news-events-tab .single-notice-item .notice-content p a {
-        color: #737477;
-        transition: all 0.4s ease;
-    }
-
-    /*  stayintouch new-form*/
-
-    .outside,
-    select.outside,
-    [type=password].outside {
-        color: #555;
-        width: 100%;
-        font-size: 1rem;
-        line-height: normal;
-        border: 1px solid #ced4da;
-        border-top-left-radius: .25rem;
-        border-bottom-left-radius: .25rem;
-        box-sizing: border-box;
-        padding: .375rem 10px .375rem 45px !important;
-        position: relative;
-        z-index: 1;
-        height: calc(1.5em + .75rem + 2px);
-    }
-
-    :focus,
-    select:focus {
-        outline: 0 !important;
-        color: #555 !important;
-        border-color: #9e9e9e;
-        z-index: 2
-    }
-
-    :focus~.floating-label-outside input:not(:focus):valid~.floating-label-outside,
-    :focus~.floating-label-outside select:not(:focus):valid~.floating-label-outside,
-    select:focus~.floating-label-outside input:not(:focus):valid~.floating-label-outside,
-    select:focus~.floating-label-outside select:not(:focus):valid~.floating-label-outside {
-        top: 15px;
-        left: 40px;
-        font-size: 14px;
-        opacity: 1;
-        font-weight: 400
-    }
-
-    :focus~.floating-label-outside,
-    select:focus~.floating-label-outside,
-    :valid~.floating-label-outside,
-    select:valid~.floating-label-outside {
-        top: -10px;
-        opacity: 1;
-        font-size: 14px;
-        color: #727272;
-        background-color: #eee;
-        padding: 0px 5px;
-    }
-
-    :focus~.floating-label-outside,
-    :valid~.floating-label-outside,
-    select:focus~.floating-label-outside,
-    select:valid~.floating-label-outside {
-        left: 40px;
-    }
-
-    .form-control:focus {
-        box-shadow: none !important;
-        border-color: #ced4da !important;
-    }
-
-    .shadow_msg {
-        height: 100px !important;
-        max-width: 100%;
-        word-wrap: break-word;
-        color: #555;
-        width: 100%;
-        font-size: 12px;
-        line-height: normal;
-        border: 1px solid #ced4da;
-        border-top-left-radius: .25rem;
-        border-bottom-left-radius: .25rem;
-        box-sizing: border-box;
-        position: relative;
-        z-index: 1;
-    }
-
-    :focus~.floating-label-msg input:not(:focus):valid~.floating-label-msg,
-    :focus~.floating-label-msg select:not(:focus):valid~.floating-label-msg,
-    select:focus~.floating-label-msg input:not(:focus):valid~.floating-label-msg,
-    select:focus~.floating-label-msg select:not(:focus):valid~.floating-label-msg {
-        top: 15px;
-        left: 45px;
-        font-size: 15px;
-        opacity: 1;
-        font-weight: 400;
-    }
-
-    :focus~.floating-label-msg,
-    select:focus~.floating-label-msg,
-    :valid~.floating-label-msg,
-    select:valid~.floating-label-msg {
-        top: -10px;
-        opacity: 1;
-        font-size: 13px;
-        color: #727272;
-        background: #fff;
-        padding: 0px 5px;
-    }
-
-    :focus~.floating-label-msg,
-    :valid~.floating-label-msg,
-    select:focus~.floating-label-msg,
-    select:valid~.floating-label-msg {
-        left: 20px;
-    }
-
-    .floating-label-msg {
-        position: absolute;
-        pointer-events: none;
-        left: 12px;
-        top: 12px;
-        transition: .2s ease all;
-        color: #777;
-        font-weight: 500;
-        font-size: 10px;
-        letter-spacing: .5px;
-        z-index: 3;
-        text-transform: uppercase
-    }
-
-    .floating-label-outside {
-        position: absolute;
-        pointer-events: none;
-        left: 50px;
-        top: 12px;
-        transition: .2s ease all;
-        color: #777;
-        font-weight: 500;
-        font-size: 10px;
-        letter-spacing: .5px;
-        z-index: 3;
-        text-transform: uppercase;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-    }
-
-    .input-icon-outside {
-        position: absolute;
-        font-size: 1rem !important;
-        font-weight: 400 !important;
-        line-height: 1.5 !important;
-        top: 0.5px;
-        left: 0.5px;
-        z-index: 3;
-        color: #fff;
-        background: linear-gradient(0deg, var(--system_primery_color) 0%, var(--footer_background_color) 75%);
-        padding: .4rem .75rem;
-        display: flex !important;
-        align-items: center;
-        border-right: 1px solid #ced4da;
-        border-top-left-radius: .25rem;
-        border-bottom-left-radius: .25rem;
-    }
-
-    html {
-        overflow-x: hidden;
-        font-size: 16px;
-    }
-
-    .single-box-parent {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .single-box-child {
-        width: 100%;
-        max-width: 500px;
-        min-width: 500px;
-        background-color: #373737;
-    }
-
-    .work-wrap .text {
-        background: #ffffff;
-        height: 350px;
-    }
-
-
-    .owl-nav {
-        margin-top: -100px !important;
-    }
-
-    .owl-carousel .owl-nav .owl-next {
-        left: 12%;
-        margin-top: -125px;
-        margin-left: 400px;
-        position: relative;
-        font-size: 60px !important;
-        color: #eee !important;
-    }
-
-    .owl-carousel .owl-nav button.owl-prev {
-        z-index: 12 !important;
-        position: relative;
-        display: block;
-
-        font-size: 60px;
-        left: 63%;
-        font-size: 60px !important;
-        top: -37px;
-        color: #eee;
-    }
-
-    .owl-carousel .owl-nav .owl-prev span:before,
-    .owl-carousel .owl-nav .owl-next span:before {
-        font-size: 60px;
-        font-weight: bold;
-        color: #eee;
-    }
-
-    .second_section {
-
-        border: 1px solid rgb(255, 255, 255);
-        box-shadow: 0 3px 20px rgb(0 0 0 / 5%);
-    }
-
-    .second_section:hover {
-
-        border: 1px solid rgb(255, 255, 255);
-    }
-
-    .second_section i {
-        background: #fff0f0;
-        border-radius: 50%;
-        color: var(--system_primery_color);
-    }
-
-    .learn_more {
-        font-size: 16px;
-        border-bottom: 2px solid #373737;
-        color: #373737;
-    }
-
-    .learn_more:hover {
-        color: var(--system_primery_color);
-        border-bottom: 2px solid var(--system_primery_color);
-    }
-
-    body {
-        font-family: sans-serif;
-        font-style: normal;
-        font-weight: 400;
-    }
-
-    .blog {
-        background-color: #252525
-    }
-
-    .blog img {
-        /* height: 16.875rem;
-        width: 100%; */
-        transition: 500ms ease-in-out
-    }
-
-    .blog img:hover {
-        opacity: 0.5;
-    }
-
-    .lms_section_color {
-        color: var(--system_secondary_color);
-    }
-
-    .lms_container_color {
-        background-color: #eee;
-    }
-
-    .select2-container .select2-selection--single {
-        box-sizing: border-box;
-        cursor: pointer;
-        display: block;
-        height: 37px !important;
-        user-select: none;
-        -webkit-user-select: none;
-    }
-
-    .select2-container--default .select2-selection--single .select2-selection__rendered {
-        color: #444;
-        line-height: 36px !important;
-        font-size: 14px;
-    }
-
-    .select2-container--default .select2-selection--single .select2-selection__arrow {
-        height: 37px;
-        position: absolute;
-        top: 1px;
-        right: 1px;
-        width: 20px;
-    }
-
-    .btn_glo {
-        border-radius: 16px;
-        font-size: 12.5px;
-        font-weight: 700;
-        background-color: transparent;
-        border: 2px solid #eee !important;
-        position: relative;
-    }
-
-    .btn_glo:hover {
-        background-color: var(--system_primery_color) !important;
-        border: 2px solid var(--system_primery_color) !important;
-    }
-
-    .select2-container--default .select2-selection--single {
-        border: 1px solid #ced4da;
-    }
-
-    .vidicons {
-        width: 66px;
-        position: relative;
-        height: 66px;
-        background: #eee;
-        text-align: center;
-        border-radius: 50%;
-        top: 283px;
-        cursor: pointer;
-        transition: .5s;
-    }
-
-    .vidicons i {
-        color: red;
-        padding: 28px;
-        font-size: 17px;
-    }
-
-    .about_us {
-        height: auto;
-    }
-
-    .about_us_height {
-        height: auto;
-        overflow: hidden;
-    }
-
-    .about_us_p {
-        height: auto;
-
-    }
-
-    .about_us_p::-webkit-scrollbar {
-        display: none;
-    }
-
-    .about_us_image {
-        height: 100%;
-        object-fit: fill;
-        object-position: right;
-        border-radius: 20px;
-    }
-
-    .shadow_row {
-        height: auto;
-        justify-content: center;
-    }
-
-    .shadow_ist {
-        height: 490px;
-        border-radius: 20px;
-        justify-content: space-between;
-    }
-
-    .Faq-btn {
-        font-size: 12.5px;
-        background: transparent;
-        color: black;
-        font-weight: 700;
-        /* margin: 0px 0px 13px 0px; */
-        border: 1px solid black;
-        border-radius: 16px;
-        padding: 0.5rem 1.5rem;
-    }
-
-    .Faq-btn:hover {
-        /* background: #eee; */
-        color: var(--system_secendory_color);
-        border: 1px solid var(--system_secendory_color);
-    }
-
-    .vidicons:hover {
-        box-shadow: 0px 1px 15px 7px red;
-    }
-
-    .video-container {
-        position: relative;
-        width: 100%;
-        height: 490px;
-    }
-
-    .video-container video {
-        width: 100%;
-        height: 100%;
-        object-fit: fill;
-        border-radius: 20px;
-    }
-
-    .overlay-video {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        opacity: 1;
-        transition: opacity 0.5s ease;
-        border-radius: 20px;
-    }
-
-    .top-center {
-        top: 16%;
-        left: 50%;
-        transform: translate(-50%, 0%) !important;
-        white-space: nowrap;
-    }
-
-    .bottom-center {
-        bottom: 10%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-
-    .text-video-overlay {
-        position: absolute;
-        color: #eee;
-        opacity: 1;
-        transition: opacity 0.3s ease;
-        text-align: center;
-    }
-
-    .text-video-overlay h2 {
-        font-size: 1.9rem;
-    }
-
-    .video-controls {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: #eee;
-        padding: 25px;
-        border-radius: 12px;
-        opacity: 1;
-        transition: opacity 0.5s linear;
-    }
-
-    #playPauseBtn {
-        color: var(--system_primery_color);
-    }
-
-    .video-container:hover .overlay-video {
-        opacity: 1;
-    }
-
-    .video-container:hover .video-controls {
-        opacity: 1;
-    }
-
-    .video-container.video-playing .text-video-overlay,
-    .video-container.video-playing .video-controls,
-    .video-container.video-playing .overlay-video {
-        opacity: 1;
-    }
-
-
-    /* end of video css */
-
-    .owl-nav {
-        display: none !important;
-    }
-
-    .imgdata {
-        /* background: url("{{ asset('public/frontend/infixlmstheme/img/images/courses-4.jpg') }}"); */
-        background: url("{{ asset('public/frontend/infixlmstheme/img/images/demo_img.png') }}");
-        background-size: cover;
-        /* height: 402px; */
-    }
-
-    .owl-carousel .owl-dots {
-        display: none !important;
-    }
-
-    .small_section_bg_color {
-        background-color: #996699 !important;
-    }
-
-    .small_section_bg_color>h2 {
-        font-size: calc(2vw + 0.7rem);
-    }
-
-    .small_section_bg_color>h4 {
-        font-size: calc(1.5vw + 0.6rem);
-    }
-
-    .main_bannar {
-        background-image: url("{{ asset(HomeContents('slider_banner')) }}");
-        background-size: cover;
-        height: 510px;
-        position: relative;
-        padding-left: 30px;
-        /* min-height: 90vh; */
-    }
-
-    /* .old_row {
-        height: 510px;
-        overflow: hidden;
-    } */
-
-    .main_banner_2 {
-        height: 255px;
-        overflow: hidden;
-    }
-
-    .main_bannar::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        background-color: #0000007a;
-    }
-
-    .text-custom-height {
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 3;
-        overflow: hidden;
-    }
-
-    .main_bannar .main_banner-section>h1 {
-        font-weight: bold;
-        color: #eee;
-        position: relative;
-    }
-
-    .main_bannar .main_banner-section>p {
-        color: #eee;
-        position: relative;
-    }
-
-    .main_bannar>a {
-        position: relative;
-        border: 3px solid #eee;
-    }
-
-    .custom_section_color {
-        background-color: #eee !important;
-    }
-
-    .random_program_data_2 {
-        overflow: hidden;
-    }
-
-    .modal-lg,
-    .modal-xl {
-        max-width: 600px;
-    }
-
-    .paragraph_custom_height {
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 3;
-        overflow: hidden;
-    }
-
-    .select2-container .select2-selection--single {
-        height: 32px !important;
-
-    }
-
-    .select2-container--default .select2-selection--single .select2-selection__rendered {
-        color: #444;
-        line-height: 35px !important;
-    }
-
-    .select2-container--default .select2-selection--single .select2-selection__arrow {
-        height: 35px !important;
-
-    }
-
-    .theme_btn.small_btn {
-        margin-bottom: 11px;
-    }
-
-    .card-shadow {
-        min-height: 94vh;
-    }
-
-    /* shift from contact */
-    .mintban {
-        background-image: url("{{ asset('public/assets/Section9-.jpg') }}");
-        height: auto;
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
-    }
-
-    .flowdiv {
-        width: 100% !important;
-        padding: 5rem 0px;
-        margin: auto;
-        /* gap: 5px; */
-        justify-content: center;
-    }
-
-    .eltdf-eh-item-content {
-        height: 100%;
-        display: flex;
-        align-items: center;
-    }
-
-    .custom_form {
-        height: 615px;
-        border-radius: 20px;
-        overflow: hidden;
-    }
-
-    .dataflow {
-        height: 615px;
-        background-color: var(--system_secendory_color);
-        position: relative;
-        border-radius: 20px;
-        overflow: hidden;
-    }
-
-    .ankar_eltdf {
-        height: 615px;
-        overflow: hidden;
-        border-radius: 20px;
-        display: flex;
-        justify-content: center;
-    }
-
-    .imgcls {
-        min-width: 100%
-    }
-
-    .formdokana .eltdf-contact-form-7-widget .wpcf7-form-control.wpcf7-date,
-    .eltdf-contact-form-7-widget .wpcf7-form-control.wpcf7-number,
-    .eltdf-contact-form-7-widget .wpcf7-form-control.wpcf7-quiz,
-    .eltdf-contact-form-7-widget .wpcf7-form-control.wpcf7-select,
-    .eltdf-contact-form-7-widget .wpcf7-form-control.wpcf7-text,
-    .eltdf-contact-form-7-widget .wpcf7-form-control.wpcf7-textarea {
-        border: 0;
-        border-bottom: 1px solid #e1e1e1;
-        margin: 7px 0 20px;
-        padding: 7px 10px;
-        font-size: 15px;
-    }
-
-    .cta_service_info h2 {
-        font-weight: 700;
-        color: white;
-    }
-
-    .cta_service_info.txt h2 {
-        color: white;
-    }
-
-    .cta_service_info.txt p {
-        color: white;
-    }
-
-    .theme_btn {
-        background: var(--system_primery_color);
-        border-radius: 16px;
-        font-family: Source Sans Pro, sans-serif;
-        font-size: 16px;
-        color: #fff;
-        font-weight: 700;
-        border: 2px solid transparent;
-        text-transform: capitalize;
-        display: inline-block;
-        padding: 0.5rem 1.5rem;
-    }
-
-    .lia {
-        top: 50%;
-        transform: translateY(-50%);
-    }
-
-    /* new_section_hover */
-    .main_row {
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-    }
-
-    .for-left {
-        display: none;
-        visibility: hidden;
-    }
-
-    .overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgb(122 104 104 / 30%);
-    }
-
-    .prep_card {
-        height: 100%;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        background-color: #FDFCFC;
-        padding: 7px !important;
-        /* transition: all 0.3s ease; */
-        cursor: pointer;
-        border-radius: 6px;
-        border: 1px solid gainsboro;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        word-wrap: break-word;
-    }
-
-    .card-paddingx {
-        padding: 30 80px 0;
-    }
-
-    .prep_card-text {
-        margin: 0px !important;
-        text-wrap: nowrap;
-        overflow: hidden;
-    }
-
-    .prep_card-image {
-        position: relative;
-        object-fit: cover;
-        width: 100%;
-        height: 11rem;
-    }
-
-    .prep_card-title {
-        margin-top: 20px;
-    }
-
-    .widget-49-meeting-info {
-        position: absolute;
-        right: 0;
-    }
-
-    .widget-49-pro-title {
-        background-color: var(--system_primery_color);
-        color: white;
-        text-align: center;
-        padding: 5px;
-        font-size: 9px;
-        display: flex;
-        width: auto;
-        height: auto;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .image_card {
-        overflow: hidden !important;
-        border: 1px solid #E1DED9;
-        border-radius: .25rem;
-        /* transform: translateX(-245%); */
-        transition: all .5s ease-in;
-    }
-
-    .left-top-content {
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 100%;
-    }
-
-    .left-bottom-content {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-    }
-
-    .left-content {
-        color: #fff;
-        position: absolute;
-        bottom: 20px;
-        left: 20px;
-        z-index: 1;
-        width: 30rem;
-    }
-
-    #left-pro-title {
-        display: none;
-    }
-
-    .left-card-text {
-        font-size: 20px;
-        color: #fff;
-        font-weight: 500;
-    }
-
-    .learn-more,
-    .prep-paragraph {
-        color: #fff;
-    }
-
-    /* section2 */
-
-    .for-label {
-        display: block;
-        width: fit-content;
-        /* white-space: nowrap; */
-        padding-top: 1px;
-        padding-bottom: 1px;
-        padding-left: 6px;
-        text-align: left;
-        border-left: 3px solid;
-        position: relative;
-        z-index: 2;
-        text-decoration: none;
-        color: var(--system_secendory_color);
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
-
-    .for-label:hover {
-        border-bottom: 0px;
-        color: #fff;
-        border-left: 3px solid #365e88;
-    }
-
-    .learn-more:hover {
-        color: #fff
-    }
-
-    .for-label::after {
-        content: "";
-        height: 100%;
-        left: 0;
-        top: 0;
-        width: 0px;
-        position: absolute;
-        transition: all 0.3s ease 0s;
-        -webkit-transition: all 0.3s ease 0s;
-        z-index: -1;
-    }
-
-    .for-label:hover:after {
-        width: 100%;
-    }
-
-    .for-label:after {
-        background: #D3D3D3;
-    }
-
-    .for-border {
-        min-height: auto;
-        border: 0px;
-        border-left: 1px solid #D3D3D3;
-        padding-left: 20px;
-        /* min-width: 82%; */
-    }
-
-    .for-main-2nd {
-        display: flex;
-        flex-direction: column;
-        gap: 3rem;
-    }
-
-    .icons-style {
-        font-size: 2rem;
-        margin-right: 2rem;
-        color: cadetblue;
-    }
-
-    .icon-img {
-        height: 40px !important;
-        max-width: 13% !important;
-        width: 100%;
-    }
-
-    .section-margin-y {
-        margin: 60px auto;
-    }
-
-    .main_banner-section {
-        width: 29rem;
-    }
-
-    .for-affordability {
-        max-width: 40px !important;
-        height: 40px;
-        padding: 0px !important;
-    }
-
-    /* percentage section 3a */
-    .animation {
-        opacity: 0;
-        transform: translateX(-300px);
-        transition: all 0.7s ease-out;
-        transition-delay: 0.4s;
-
-    }
-
-    .scroll-animation {
-        opacity: 1;
-        transform: translateX(0);
-    }
-
-    .percent-video img {
-        clip-path: polygon(26% 0, 100% 0, 100% 100%, 0 100%);
-    }
-
-    .percent-h {
-        color: var(--system_secendory_color);
-        font-weight: 700;
-    }
-
-    .percent1 {
-        margin: 0 -132px 1.5rem 160px;
-    }
-
-    .percent2 {
-        margin: 0 -100px 1.5rem 104px;
-    }
-
-    .percent3 {
-        margin: 0 -63px 1.5rem 50px;
-    }
-
-    .percent4 {
-        margin: 0 -6px 1.5rem -8px;
-    }
-
-    .percent {
-        margin-right: 30px !important;
-        color: var(--system_primery_color);
-    }
-
-    /* features */
-    .content-features {
-        border-radius: 10px;
-        box-sizing: border-box;
-        background-size: cover;
-        background-position: center;
-        color: white;
-        width: 100%;
-        height: 490px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-        word-wrap: break-word;
-        background-image: url('{{ asset('/public/assets/Untitled design (40).png') }}');
-
-    }
-
-    .content-feature {
-        height: 490px;
-        overflow: auto;
-        scrollbar-width: none;
-    }
-
-    .content-features1 {
-        font-family: Mulish;
-        gap: 20px;
-        display: flex;
-        flex-direction: column;
-        overflow: auto;
-    }
-
-    .content-features2-h {
-        text-align: left;
-        color: #2F2F2F;
-    }
-
-    .content-feature1 h2,
-    .content-feature1 h5,
-    .content-feature1 p {
-        opacity: 1;
-        transition: opacity 0.5s ease-in all;
-        color: #000;
-    }
-
-    .content-feature1:hover h2,
-    .content-feature1:hover h5,
-    .content-feature1:hover p {
-        color: var(--system_secendory_color);
-    }
-
-    .content-feature1 {
-        opacity: 0;
-        transition: opacity 0.5s ease;
-    }
-
-    .in-view {
-        opacity: 1;
-    }
-
-    .content-features2-hh {
-        color: #000;
-    }
-
-    .content-features-h {
-        letter-spacing: 0em;
-        text-align: left;
-        color: white;
-    }
-
-    .content-features-p {
-        color: white;
-        height: 200px;
-        overflow: auto;
-        scrollbar-width: none;
-    }
-
-    .content-features-btn {
-        font-size: 12.5px;
-        font-weight: 700;
-        letter-spacing: 0em;
-        text-align: center;
-        border-radius: 16px;
-        color: #000;
-        border: none;
-        cursor: pointer;
-        border: 2px solid white;
-        padding: 0.5rem 1.5rem;
-    }
-
-    .content-features-btn:hover {
-        background-color: transparent;
-        color: white;
-    }
-
-    .custom-h {
-        font-size: 19px;
-    }
-
-    .hidden {
-        opacity: 0;
-        transition: all 1s;
-        filter: blur(1px);
-    }
-
-    .hidden-left {
-        transform: translateX(-100%);
-        animation-name: hidden-left;
-    }
-
-    .hidden-right {
-        transform: translateX(100%);
-    }
-
-    .show {
-        opacity: 1;
-        filter: blur(0);
-        transform: translateX(0);
-        transition: all 2s ease;
-    }
-
-    /* features end */
-    /* logos section */
-    .logos {
-        justify-content: space-between;
-        overflow: hidden;
-        flex-wrap: wrap;
-        min-width: 1330px;
-    }
-
-    .logos-img {
-        height: 80px;
-        width: 80px;
-    }
-
-    .logos-img8 {
-        height: 80px;
-        width: 100px;
-    }
-
-    .logos-img7 {
-        height: 80px;
-        width: 80px;
-    }
-
-    .logos-img2 {
-        height: 80px;
-        width: 80px;
-    }
-
-    .logos-img3 {
-        height: 80px;
-        width: 80px;
-    }
-
-    .logos-img4 {
-        height: 80px;
-        width: 80px;
-    }
-
-    .logos-img5 {
-        height: 75px;
-        width: 80px;
-    }
-
-    /* logos section end */
-    .about-img {
-        height: 100%;
-        /* width: 250px; */
-        scale: 1;
-        overflow: hidden;
-        border-radius: 20px;
-    }
-
-    .about-img:hover img {
-        scale: 1.2;
-        transition: all 2s;
-    }
-
-    .at_Merkaii {
-        font-size: 1.8rem;
-    }
-
-    .custom_border_radius {
-        border-radius: 40px !important;
-    }
-
-    .top-padd {
-        padding-top: 4rem;
-    }
-
-    .rounded-card {
-        border-radius: 25px !important;
-    }
-
-    .rounded-card-header {
-        border-radius: 25px !important;
-    }
-
-    .rounded-card-img {
-        border-top-left-radius: 25px !important;
-        border-top-right-radius: 25px !important;
-    }
-
-    .section-padding-y {
-        padding-top: 60px !important;
-        padding-bottom: 60px !important
-    }
-
-    .banner-img {
-        width: 100%;
-    }
-
-    .cus-padding {
-        padding-left: 70px;
-    }
-
-    .counter-section .counter_wrapper .single_counter h3 {
-        min-width: 115px !important;
-        margin-right: 0px !important;
-    }
-
-    .counter-padd {
-        justify-content: space-between;
-
-    }
-
-    .custom-slider-container {
-        position: relative;
-        width: 100%;
-        overflow: hidden;
-        border-radius: 10px;
-        transition: transform 0.5s ease;
-    }
-
-    .custom-slider {
-        display: flex;
-        width: 400% !important;
-        /* Total width is 4 times the width of a single custom-slide (4 slides in this example) */
-        transition: transform 0.3s ease;
-        /* Smooth transition for custom-slide movement */
-    }
-
-    .custom-slide {
-        flex: 0 0 25%;
-        /* Each custom-slide takes up 25% of the custom-slider width (4 slides per row) */
-        box-sizing: border-box;
-        padding: 0;
-        text-align: center;
-        position: relative;
-    }
-
-    .custom-slide img {
-        width: 100%;
-        height: 450px;
-        filter: brightness(70%);
-        border-radius: 10px;
-        transition: transform 0.9s ease;
-    }
-
-    .custom-slide:hover img {
-        transform: scale(1.1);
-        border-radius: 10px;
-    }
-
-    /* .custom-slide:hover h5 {
-        color:var(--system_secendory_color) !important;
-    }
-    .custom-slide:hover p {
-        color:var(--system_secendory_color) !important;
-    } */
-    /* Overlay styles */
-    .custom-slide .overlay {
-        position: absolute;
-        border-radius: 10px;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-    }
-
-    /* Text overlay styles */
-    .text-overlay {
-        position: absolute;
-        bottom: 0%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        color: white;
-        padding: 1.5rem 7.5rem
-    }
-
-    /* Text overlay styles */
-    .text-overlay p {
-        color: white;
-    }
-
-    .category_name {
-        /* color: var(--system_primery_color); */
-        color: #000;
-    }
-
-    .image-text {
-        color: white;
-    }
-
-    /* Date overlay styles */
-    .date-overlay {
-        position: absolute;
-        top: 30px;
-        left: 30px;
-        background-color: white;
-        padding: 5px 10px;
-        border-radius: 5px;
-        width: fit-content;
-    }
-
-    .image-date {
-        margin: 0;
-        color: black;
-        font-size: 12.5px;
-    }
-
-    button.prev,
-    button.next {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        background: rgba(255, 255, 255, 0.5);
-        border: none;
-        outline: none;
-        cursor: pointer;
-        font-size: 1.5em;
-        padding: 10px;
-        z-index: 1;
-        color: #000 !important;
-    }
-
-    button.prev {
-        left: 30px;
-    }
-
-    button.next {
-        right: 30px;
-    }
-
-    .category {
-        position: absolute;
-        font-size: 12.5px;
-        top: 30px;
-        right: 30px;
-        /* background: rgba(255, 255, 255, 0.5); */
-        background-color: white;
-        padding: 5px 10px;
-        border-radius: 5px;
-        width: fit-content;
-    }
-
-    /* Custom CSS for the card */
-    .custom-card {
-        position: relative;
-        overflow: hidden;
-        color: white;
-        border-radius: 10px !important;
-    }
-
-    .custom-card img {
-        filter: brightness(70%);
-        border-radius: 10px;
-        height: 450px;
-        transition: transform 0.6s ease;
-    }
-
-    .custom-card:hover img {
-        transform: scale(1.1);
-    }
-
-    .custom-card:hover h5 {
-        /* color: var(--system_secendory_color) !important; */
-        color: #fff
-    }
-
-    .custom-card .card-img-overlay {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        /* padding: 20px; */
-        transition: background-color 0.3s ease;
-        background-color: transparent;
-        width: 100%;
-        height: 100%;
-        box-sizing: border-box;
-        border-radius: 10px;
-        display: flex;
-        justify-content: center;
-    }
-
-    .custom-card h5 {
-        position: absolute;
-        text-align: center;
-        bottom: 0%;
-        /* left: 30px; */
-        color: white;
-        padding: 1.4rem 1.8rem;
-        margin-bottom: 0;
-        width: 100%
-    }
-
-    .custom-card:hover h5 {
-        background-color: #00000056;
-        backdrop-filter: blur(10px);
-    }
-
-    .card-date {
-        position: absolute;
-        top: 30px;
-        left: 30px;
-        font-size: 12.5px;
-    }
-
-    .card-date2 {
-        position: absolute;
-        top: 30px;
-        right: 30px;
-        font-size: 12.5px;
-    }
-
-    .card_date_heading {
-        background-color: white;
-        color: black;
-        padding: 5px 10px;
-        border-radius: 5px;
-
-    }
-
-    /* secondayr call to action by arsam  */
-    .online-learning {
-        position: relative;
-        /* Ensure relative positioning for absolute pseudo-element */
-        background-image: url('{{ asset('/public/assets/Section8-Transformation.jpg') }}');
-        color: white;
-        /* Set text color to white for better visibility */
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        z-index: 999;
-        height: 500px;
-    }
-
-    .online-learning::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: var(--footer_background_color);
-        opacity: 0.7;
-        /* Adjust opacity to your preference */
-        z-index: -1;
-        /* Ensure the pseudo-element is behind the content */
-    }
-
-    /* Custom CSS for the button */
-    .custom-button-call-to-action {
-        font-size: 12.5px;
-        font-weight: 700;
-        border: 2px solid white !important;
-        border-radius: 16px;
-        color: white !important;
-        background-color: transparent !important;
-        transition: all 0.3s ease;
-        padding: 0.5rem 1.5rem;
-        /* Smooth transition for hover effect */
-    }
-
-    .custom-button-call-to-action:hover {
-        font-size: 12.5px;
-        font-weight: 700;
-        background-color: white !important;
-        color: black !important;
-        border-color: white !important;
-    }
-
-    @media only screen and (max-width: 575px) {
-        .text-custom-height {
-            -webkit-line-clamp: 2 !important;
-        }
-
-        .for-main-2nd {
-            gap: 2rem !important;
-        }
-
-        .custom-card img {
-            height: 240px !important;
-        }
-
-        .about-img {
-            height: 250px !important;
-        }
-
-        .prep_card_height {
-            height: 100%;
-            width: 100%;
-        }
-
-        .prep_card-text {
-            font-size: 12px !important;
-        }
-
-        .left-content {
-            margin-bottom: 10px;
-            font-size: 12px;
-        }
-
-        .card-date {
-            left: 5px !important;
-            background-color: white !important;
-            color: black !important;
-            padding: 0px !important;
-            border-radius: 5px !important;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-            width: auto;
-        }
-
-        .card-date2 {
-            right: 5px !important;
-            background-color: white;
-            color: black;
-            border-radius: 5px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            width: 60px;
-            height: 20px;
-            line-height: 20px;
-        }
-
-        .card_date_heading {
-            padding: 5px !important;
-            background-color: transparent !important;
-
-        }
-    }
-
-    @media (min-width: 768px) {
-        .responsive-style-btn {
-            padding: 10px 0 !important;
-            display: flex !important;
-            justify-content: center;
-        }
-
-    }
-
-    @media only screen and (max-width: 767.5px) {
-        .for-main {
-            gap: 2rem !important;
-        }
-
-        .rts-section a {
-            font-size: 14px;
-        }
-
-        .event-date span {
-            font-size: 13px !important;
-        }
-
-        .video-container {
-            height: 450px !important;
-        }
-
-        .shadow_ist {
-            height: 450px !important;
-        }
-
-        .online-learning {
-            height: 400px !important;
-        }
-
-        .main_banner-section {
-            width: 18rem;
-        }
-
-        .cus-padding {
-            padding-left: 0px !important;
-        }
-
-        .date-overlay {
-            right: 10px !important;
-            left: auto;
-        }
-
-        .category {
-            left: 10px !important;
-        }
-
-        .card-date {
-            left: 5px !important;
-        }
-
-        .card-date2 {
-            right: 5px !important;
-        }
-
-        .card_date_heading {
-            padding: 5px !important;
-        }
-
-        .about-img {
-            height: 300px;
-        }
-
-        .content-features-btn {
-            padding: 4px 9px !important;
-        }
-
-        .custom-button-call-to-action {
-            padding: 4px 9px !important
-        }
-
-        .Faq-btn {
-            padding: 4px 9px !important;
-        }
-
-        .for-backcolor-row {
-            gap: 1.5rem;
-        }
-
-        .random_program_data_1 {
-            height: 270px;
-            overflow: hidden;
-        }
-
-        .custom-slide img {
-            height: 350px !important;
-        }
-
-        .custom-card img {
-            height: 260px !important;
-        }
-
-        .percent-video {
-            height: 390px !important;
-        }
-
-        .fa-lightbulb {
-            display: flex !important;
-            justify-content: center;
-        }
-
-        .at_Merkaii,
-        .at_Merkaii span {
-            text-align: center;
-        }
-
-        .ml_span {
-            margin: 0px !important;
-        }
-
-        .main_bannar {
-            height: 400px !important;
-        }
-
-        .main_banner_2 {
-            height: 200px !important;
-        }
-
-        .percent-h,
-        .for-label1,
-        .heading-responsive-style,
-        .content-features2-hh,
-        .card-title,
-        .rts-section-title,
-        .event-title,
-        .rts-section-title {
-            font-size: 16px !important;
-        }
-
-        .cta_service_info h2,
-        .section-header,
-        .text-video-overlay h2,
-        .custom_small_heading,
-        .content-features-h,
-        .content-features2-h,
-        .text-video-overlay h2 {
-            font-size: 18px !important;
-        }
-
-        button.prev {
-            left: 5px !important;
-        }
-
-        button.next {
-            right: 5px !important;
-        }
-
-        .about_us {
-            height: auto;
-        }
-
-        .top-center {
-            left: 20% !important;
-            transform: translate(-13%, -0%) !important;
-            white-space: normal !important;
-        }
-
-        .single-event::before {
-            left: 85px !important;
-        }
-
-        .events-content .single-event {
-            padding: 35px 10px !important;
-        }
-
-        .events-content .single-event-counter .count-number {
-            font-size: 50px !important;
-        }
-
-        .events-content .single-event-content {
-            padding-left: 5px !important;
-        }
-
-        .news-events-tabs-section {
-            padding-left: 0px !important;
-        }
-
-        .percent1 {
-            margin: 0 0px 1.5rem 0px !important;
-        }
-
-        .percent2 {
-            margin: 0 0px 1.5rem 0px !important;
-        }
-
-        .percent3 {
-            margin: 0 0px 1.5rem 0px !important;
-        }
-
-        .percent4 {
-            margin: 0 0px 1.5rem 0px !important;
-        }
-
-        .content-features {
-            height: 375px !important;
-        }
-
-        .content-feature {
-            height: auto !important;
-        }
-
-        .map-main-div {
-            height: 400px !important;
-            width: 100% !important;
-        }
-
-        .section-margin-y {
-            margin: 20px auto !important;
-        }
-
-        .left-s-h-cls {
-            height: 200px !important;
-        }
-
-        .reviews {
-            text-align: center !important;
-        }
-
-        .for-bold {
-            font-size: 25px;
-        }
-
-        .hero-section-main-heading {
-            font-size: 20px !important;
-        }
-
-        .flowdiv {
-            padding: 3rem 0px !important;
-        }
-    }
-
-    @media only screen and (min-width:768px) and (max-width: 991.98px) {
-        .about-img {
-            max-height: 330px !important;
-        }
-
-        .percent-video {
-            max-height: 520px !important;
-        }
-
-        .percent1 {
-            margin: 0 0px 1.5rem 160px !important;
-        }
-
-        .percent2 {
-            margin: 0 0px 1.5rem 104px !important;
-
-        }
-
-        .percent3 {
-            margin: 0 0px 1.5rem 50px !important;
-        }
-
-        .percent4 {
-            margin: 0 0px 1.5rem -8px !important;
-        }
-    }
-
-    @media only screen and (min-width: 768px) and (max-width: 1023px) {
-
-        .content-features-btn,
-        .custom-button-call-to-action,
-        .Faq-btn {
-            font-size: 14px !important;
-            padding: .2rem .6rem !important;
-        }
-
-        .video-container {
-            height: 550px !important;
-        }
-
-        .shadow_ist {
-            height: 550px !important;
-        }
-
-        .percent1 {
-            margin: 0 -103px 1.5rem 160px;
-        }
-
-        .about_us_image {
-            object-fit: cover !important;
-            object-position: top !important;
-        }
-
-        .online-learning {
-            height: 500px !important;
-        }
-
-        .card-date {
-            left: 5px !important;
-        }
-
-        .card-date2 {
-            right: 5px !important;
-
-        }
-
-        .card_date_heading {
-            padding: 5px !important;
-        }
-
-        .custom-slide img {
-            height: 390px !important;
-        }
-
-        .custom-card img {
-            height: 390px !important;
-        }
-
-        .heading-responsive-style {
-            font-size: 18px !important;
-        }
-
-        .at_Merkaii,
-        .at_Merkaii span {
-            text-align: center;
-            white-space: nowrap;
-        }
-
-        .ml_span {
-            margin: 0px !important
-        }
-
-        .fa-lightbulb {
-            display: flex !important;
-            justify-content: center;
-        }
-
-        .text-video-overlay h2,
-        .content-features2-h,
-        .section-header,
-        .custom_small_heading,
-        .custom_heading_1,
-        .content-features-h,
-        .cta_service_info h2 {
-            font-size: 1.5rem !important;
-        }
-
-        .about_us {
-            height: auto;
-        }
-
-        .top-center {
-            /* top: 16%;
-            left: 2% !important;
-            transform: translate(0%, 0%) !important;
-            white-space: normal !important; */
-
-        }
-
-        .news-events-tabs-section {
-            padding-left: 0px !important;
-        }
-
-        .main_banner-section {
-            width: 23rem;
-        }
-
-        .hero-section-main-heading {
-            font-size: 30px !important;
-        }
-
-        .cus-padding {
-            padding-left: 25px !important;
-        }
-
-        #program_title {
-            font-size: 15px !important;
-        }
-
-
-    }
-
-    @media only screen and (min-width: 1024px) and (max-width: 1279px) {
-
-        .about_us_img2,
-        .about_us_img1 {
-            height: 450px;
-        }
-
-        /* .video-container {
-            height: 500px !important;
-        } */
-
-        /* .shadow_ist {
-            height: 500px !important;
-        } */
-
-        .card-date {
-            left: 10px !important;
-        }
-
-        .card-date2 {
-            right: 10px !important;
-        }
-
-        .about_us {
-            height: auto !important;
-        }
-
-        .main_banner-section {
-            width: 24rem !important;
-        }
-
-        .hero-section-main-heading {
-            font-size: 35px !important;
-        }
-
-        .left-content {
-            width: 28rem;
-        }
-
-        .card-shadow {
-            min-height: 95vh;
-        }
-
-        .percent1 {
-            margin: 0 -103px 1.5rem 160px;
-        }
-
-        .percent2 {
-            margin: 0 -77px 1.5rem 104px;
-        }
-
-        .percent3 {
-            margin: 0 -53px 1.5rem 50px;
-        }
-
-        .text-video-overlay h2,
-        .section-header,
-        .custom_small_heading,
-        .custom_heading_1,
-        .content-features-h {
-            font-size: 1.6rem !important;
-        }
-
-        .custom_small {
-            font-size: 1.2rem !important
-        }
-    }
-
-    @media only screen and (min-width: 1281px) {
-        .text-video-overlay h2 {
-            font-size: 2rem !important;
-        }
-
-        .prep_card-image {
-            height: 15rem;
-        }
-
-        .main_banner-section {
-            width: 40rem;
-        }
-    }
-
-    @media only screen and (min-width: 1350px) {
-        .main_bannar {
-            height: 630px !important;
-        }
-
-        .shadow_ist {
-            height: 630px !important;
-        }
-
-        .video-container {
-            height: 630px !important;
-        }
-
-        .main_banner_2 {
-            height: 315px !important;
-
-        }
-
-        .cta_area {
-            height: 600px !important;
-        }
-
-        .card-shadow {
-            min-height: 95vh;
-        }
-
-        .shadow_msg {
-            height: 5rem !important;
-        }
-
-        .select2-container--default .select2-selection--single .select2-selection__rendered {
-            font-size: 18px;
-        }
-
-        .select2-container .select2-selection--single {
-            height: 2.4rem !important;
-        }
-
-        .form_sm {
-            height: 2.4rem !important;
-        }
-
-    }
-
-    @media only screen and (min-width: 1440px) {
-        .main-content-feature {
-            height: 790px !important;
-            overflow: hidden;
-        }
-
-        .content-features {
-            height: 790px !important;
-        }
-
-        .content-feature {
-            height: 790px !important;
-        }
-
-        .accordion {
-            max-height: 520px !important;
-        }
-
-        .logos {
-            min-width: 100rem !important;
-        }
-
-        /* .percent-video {
-            padding: 0px 25px 0px 0px !important;
-        } */
-
-        .select2-container--default .select2-selection--single .select2-selection__rendered {
-            font-size: 18px;
-        }
-
-        .select2-container .select2-selection--single {
-            height: 2.3rem !important;
-        }
-
-        .form_sm {
-            height: 2.3rem !important;
-        }
-
-        .video {
-            height: 610px;
-        }
-    }
-
-    @media only screen and (min-width: 1530px) {
-        .online-learning {
-            height: 630px !important;
-        }
-
-        .flowdiv {
-            padding: 5rem 3rem !important;
-        }
-
-        .content-feature1 {
-            margin: 30px 0px;
-            display: flex;
-            flex-direction: column;
-        }
-    }
-
-    @media only screen and (min-width: 1560px) {
-        .select2-container--default .select2-selection--single .select2-selection__rendered {
-            font-size: 19px;
-        }
-
-        .select2-container .select2-selection--single {
-            height: 2.7rem !important;
-        }
-
-        .form_sm {
-            height: 2.8rem !important;
-        }
-
-        .percent4 {
-            margin: 0 -8px 1.5rem -8px !important;
-        }
-    }
-
-    @media screen and (width < 1650px) {
-
-        #program_subtitle {
-            font-size: 18px !important;
-        }
-
-        .random_program_data_2 {
-            font-size: 20px !important;
-
-        }
-
-    }
-
-    @media only screen and (min-width: 1650px) {
-
-        .custom_form {
-            height: 660px !important;
-        }
-
-        .dataflow {
-            height: 660px !important;
-        }
-
-        .ankar_eltdf {
-            height: 660px !important;
-        }
-
-        .video-container {
-            height: 755px !important;
-        }
-
-        .shadow_ist {
-            height: 755px !important;
-        }
-
-        .main_bannar {
-            height: 820px !important;
-        }
-
-        .main_banner_2 {
-            height: 410px !important;
-        }
-
-        .cta_area {
-            height: 800px !important;
-        }
-
-        .online-learning {
-            height: 800px !important;
-        }
-
-        .custom-slide img {
-            height: 600px !important;
-        }
-
-        .custom-card img {
-            height: 600px !important;
-        }
-
-        .logos {
-            min-width: 125rem !important;
-        }
-
-        .percent1 {
-            margin-top: 110px !important;
-        }
-
-        .percent4 {
-            margin-bottom: 110px !important;
-        }
-
-        .prep_card-image {
-            height: 13rem;
-        }
-
-        .left-content {
-            width: 45rem;
-        }
-
-        .select2-container--default .select2-selection--single .select2-selection__rendered {
-            font-size: 19px;
-        }
-
-        .select2-container .select2-selection--single {
-            height: 2.7rem !important;
-        }
-
-        .form_sm {
-            height: 2.8rem !important;
-        }
-
-        .icon-img {
-            max-width: 7% !important;
-        }
-
-        .for-label {
-            font-size: 18px;
-        }
-
-        .widget-49-pro-title {
-            font-size: 14px;
-        }
-    }
-
-    @media only screen and (min-width: 1800px) {
-        .accordion {
-            max-height: 720px !important;
-        }
-
-        .flowdiv {
-            padding: 5rem 3.5rem !important;
-        }
-
-        .card-date {
-            font-size: 18px !important;
-        }
-
-        .card-date2 {
-            font-size: 18px !important;
-        }
-
-        .image-date {
-            font-size: 18px !important;
-        }
-
-        .category {
-            font-size: 18px !important;
-        }
-
-        .ml_span {
-            margin-left: -270px;
-        }
-
-        .Faq-btn,
-        .content-features-btn {
-            font-size: 18px;
-            border-radius: 20px !important;
-        }
-
-        .btn_glo {
-            border-radius: 20px;
-            font-size: 18px;
-        }
-
-        .text-video-overlay {
-            padding: 40px 0px;
-        }
-
-        .video-controls {
-            padding: 25px 35px;
-        }
-
-        .fa-play {
-            font-size: 30px !important;
-        }
-
-        .custom-button-call-to-action {
-            font-size: 18px !important;
-            border-radius: 20px !important;
-        }
-
-        .custom-button-call-to-action:hover {
-            font-size: 18px !important;
-        }
-
-        .faqs-row {
-            padding: 0px 20px !important;
-        }
-
-        .about-img {
-            /* height: 760px !important; */
-        }
-
-        .logo-text {
-            font-size: 25px;
-        }
-
-        .logos-img {
-            height: 120px;
-            width: 120px;
-        }
-
-        .logos-img2 {
-            height: 120px;
-            width: 120px;
-        }
-
-        .logos-img3 {
-            height: 128px;
-            width: 128px;
-        }
-
-        .logos-img4 {
-            height: 115px;
-            width: 128px;
-        }
-
-
-        .logos-img5 {
-            height: 120px;
-            width: 120px;
-        }
-
-        .logos-img6 {
-            height: 100px;
-            width: 128px;
-        }
-
-        .logos-img7 {
-            height: 120px;
-            width: 120px;
-        }
-
-        .logos-img8 {
-            height: 120px;
-            width: 120px;
-        }
-
-        .card-shadow {
-            min-height: 79vh;
-        }
-
-        .percent-video {
-            padding: 0px 20px 0px 0px !important;
-        }
-
-        .percent_wrapper {
-            padding: 157px 0;
-        }
-
-        .percent-row {
-            padding: 0px 38px !important;
-        }
-
-        .percent {
-            font-size: 60px;
-        }
-
-        .percent1 {
-            margin: 0 -166px 1.5rem 230px;
-        }
-
-        .percent2 {
-            margin: 0 -127px 1.5rem 155px;
-        }
-
-        .percent3 {
-            margin: 0 -83px 1.5rem 85px;
-        }
-
-        .percent4 {
-            margin: 0 -39px 1.5rem 0px;
-        }
-
-        .percent-padd {
-            padding: 134px 0 !important;
-        }
-
-        .content-features-p {
-            font-size: 20px;
-        }
-
-        .main_banner-section {
-            width: 45rem !important;
-        }
-
-        .video {
-            height: 835px;
-        }
-
-        .panel-about label {
-            font-size: 20px;
-        }
-
-        .prep_card {
-            height: 300px;
-        }
-
-        .prep_card-image {
-            height: 16rem;
-        }
-
-        .select2-container--default .select2-selection--single .select2-selection__rendered {
-            font-size: 19px;
-        }
-
-        .select2-container .select2-selection--single {
-            height: 2.7rem !important;
-        }
-
-        .form_sm {
-            height: 2.8rem !important;
-        }
-
-        .shadow_msg {
-            height: 8rem !important;
-        }
-
-        .content-features {
-            min-width: 580px !important;
-            max-width: 580px !important;
-            margin-right: 45px;
-        }
-
-
-
-    }
-
-    .new-intro-video {
-        object-fit: cover;
-    }
-
-    /* Apply object-fit: contain for screens smaller than 600px */
-    @media (max-width: 600px) {
-        .new-intro-video {
-            object-fit: contain;
-        }
-    }
-
-    @media only screen and (min-width: 2560px) {
-
-        .custom_heading_1 {
-            font-size: 35px;
-        }
-
-        .custom_paragraph {
-            font-size: 25px;
-        }
-
-        .p-shadow {
-            font-size: 20px;
-        }
-
-        .select2-container--default .select2-selection--single .select2-selection__rendered {
-            font-size: 22px;
-
-        }
-
-        .select2-container .select2-selection--single {
-            height: 3.5rem !important;
-        }
-
-        .form_sm {
-            height: 3.5rem !important;
-        }
-    }
-
-    .sec-10 {
-        background-image: url('https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQG_5mZnAqphmsXMZhlDB39ZjVkQnBcIN1mry6hrczAuOn56h-1');
-        background-position: center;
-        background-size: cover;
-        background-repeat: no-repeat;
-    }
-
-    .home_bg {
-        position: relative;
-    }
-
-    .home_bg::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: #2CA6A4;
-        height: 650px;
-        width: 650px;
-        border-radius: 50%;
-    }
-
-    @media (max-width: 1400px) {
-        .home_bg::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #2CA6A4;
-            height: 350px;
-            width: 350px;
-            border-radius: 50%;
-        }
-    }
-
-    /* .bg_text::after {
-        content: "NCLEX® & NURSING SCHOOL";
-        position: absolute;
-        bottom: 0;
-        left: 15%;
-        font-size: clamp(2rem, 5vw, 7rem);
-        font-weight: 800;
-        color: #0000000a;
-    } */
-
-    .need_to_learn {
-        padding-top: 4rem;
-        padding-bottom: 4rem;
-        background-image: url('https://merkaiixcelprep.com/public/images/photo-1579684385127-1ef15d508118-min.jpg');
-        background-position: center;
-        background-size: cover;
-        position: relative;
-    }
-
-    .need_to_learn::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 100%;
-        background-color: rgba(0, 0, 255, 0.515);
-    }
-
-    .custom-slide:hover .text-overlay {
-        background-color: #00000053 !important;
-        backdrop-filter: blur(10px) !important;
-        color: #fff !important;
-        transition: all ease .4s
-    }
-
-    .custom-shape-divider-bottom-1756293429 {
-        position: absolute;
-        bottom: -1px;
-        left: 0;
-        z-index: 999;
-        width: 100%;
-        overflow: hidden;
-        line-height: 0;
-        transform: rotate(180deg);
-    }
-
-    .custom-shape-divider-bottom-1756293429 svg {
-        position: relative;
-        display: block;
-        width: calc(100% + 1.3px);
-        height: 150px;
-    }
-
-    .custom-shape-divider-bottom-1756293429 .shape-fill {
-        fill: #1E3A5F;
-    }
-
-    .anim-hero {
-        animation: float 3s ease-in-out infinite;
-    }
-
-    @keyframes float {
-        0% {
-            transform: translatey(0px);
-        }
-
-        50% {
-            transform: translatey(-20px);
-        }
-
-        100% {
-            transform: translatey(0px);
-        }
-    }
-
-    .home_bg {
-        height: 100%
-    }
-
-    @media (max-width: 768px) {
-        .home_bg {
-            height: auto;
-            margin-top: 2rem
-        }
-
-        .custom-shape-divider-bottom-1756293429 svg {
-            position: relative;
-            display: block;
-            width: calc(100% + 1.3px);
-            height: 100px;
-        }
-    }
-
-    @media (max-width: 1600px) {
-        .hero_img {
-            width: 65%;
-        }
-    }
-
-    .rounded {
-        border-radius: 8px !important;
-    }
-
-    .gap-1 {
-        gap: .75rem !important;
-    }
-
-    .gap-2 {
-        gap: 1rem !important;
-    }
-
-    .gap-3 {
-        gap: 1.2rem !important;
-    }
-
-    .gap-4 {
-        gap: 1.5rem !important;
-    }
-
-    .navy-text {
-        color: #1E3A5F !important;
-    }
-
-    .container-fluid {
-        max-width: 1600px !important;
-    }
-
     .heading-icon {
         background-color: #a6f0ec59;
         color: #1E3A5F;
@@ -3117,12 +66,7 @@
         transition: all 0.3s ease;
         border-radius: 10px;
         padding: 15px 20px !important;
-    }
 
-    @media min-width(1500px) {
-        .anim-btn button {
-            font-size: 16px
-        }
     }
 
     .anim-btn button:hover {
@@ -3131,56 +75,304 @@
         transition: all 0.3s ease;  
     }
 
-
-    .benefits {
-        background-color: #F2F4F6;
-
-        h2 {
-            color: white;
+    @media (max-width: 1200px) {
+        .anim-btn {
+            font-size: 11px !important;
         }
+    }
+
+
+    .benefit-grid {
+        background: radial-gradient(circle,rgba(60, 105, 164, 1) 0%, rgba(30, 58, 95, 1) 60%);
+        border-radius: 8px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     }
     
     .benefit-card {
-        padding: 20px;
-        border-radius: 12px;
-        display: flex;
-        gap: 14px;
-        align-items: center;
-        flex-direction: column;
-        border: 2px solid #CFAF6E;
-        box-shadow: rgb(0 0 0 / 0%) 0px 2px 4px, rgb(250 255 35 / 0%) 0px 7px 13px -3px, rgb(182 178 10) 0px -3px 0px inset;
-        background-color: #1E3A5F;
-
         h3 {
-            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            font-size: clamp(16px, 2.5vw, 20px) !important;
+            font-weight: 600 !important;
+            font-family: "Inter";
+            color: #fff;
         }
     }
 
     h2 {
         font-size: clamp(1.3rem, 4vw, 2.5rem) !important;
-        font-family: "Rubik" !important
+        font-family: "Rubik" !important;
+        font-weight: 600 !important;
     }
 
+    @media (max-width: 1250px) {
+        h2 {
+            font-size: clamp(1.3rem, 2.5vw, 2rem) !important;
+        }
+    }
+
+    .rubik {
+        font-family: "Rubik" !important;
+    }
+
+    .testimonial-section .testimonial-top .card, .testimonial-bottom .card {
+        background-image: url('{{ asset('public/assets/review.png') }}');
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 16.7rem;
+        width: 39rem;
+        border: none !important;
+        flex-shrink: 0;
+    }
+
+    .testimonial-top {
+        display: flex;
+        gap: 1rem;
+        animation: slideLeft 30s linear infinite; 
+    }
+
+    .testimonial-bottom {
+        display: flex;
+        gap: 1rem;
+        animation: slideRight 30s linear infinite; 
+    }
+
+    @keyframes slideLeft {
+        from {
+            transform: translateX(0%);
+        }
+        to {
+            transform: translateX(-100%);
+        }
+    }
+
+    @keyframes slideRight {
+        from {
+            transform: translateX(-100%);
+        }
+        to {
+            transform: translateX(0%);
+        }
+    }
+
+    @media (max-width: 767px) {
+        .testimonial-bottom, .testimonial-top {
+            animation-duration: 10s
+        }
+
+        @keyframes slideLeft {
+        from {
+            transform: translateX(0%);
+        }
+        to {
+            transform: translateX(-600%);
+        }
+    }
+
+    @keyframes slideRight {
+        from {
+            transform: translateX(-600%);
+        }
+        to {
+            transform: translateX(0%);
+        }
+    }
+    } 
+
+    /* =============SUCCESS-METRICS=============== */
+    .success-metrics .card{
+        background-color: var(--system_primery_color);
+        border-radius: 14px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        position: relative !important;
+        border: none !important;
+        overflow: hidden;
+    }
+
+    .success-metrics .card::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0%;
+        transform: translate(-50%, -50%);
+        height: 600px;
+        width: 80%;
+        background: linear-gradient(198deg, rgba(255, 255, 255, 1) 0%, rgba(47, 50, 144, 1) 100%);
+        opacity: 0.2;
+        z-index: 100;
+        transform-origin: center;
+        transform: rotate(-55deg);
+    }
+
+    .success-grid {
+        display: grid;
+        gap: 60px;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+
+        .num {
+            font-weight: 600 !important;
+            font-size: clamp(30px, 4vw, 50px) !important;
+            font-family: "Inter" !important;
+        }
+
+        h2 {
+            font-weight: 500 !important;
+            font-family: "Inter" !important;
+        }
+
+        h6 {
+            font-weight: 600 !important;
+            font-family: "Inter" !important;
+        }
+    }
+
+    @media (max-width: 1600px) {
+        .success-grid {
+            display: grid;
+            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        }
+    }
+
+    @media (max-width: 1240px) {
+        .success-grid {
+            display: grid;
+            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        }
+    }
+    
+    @media (max-width: 992px) {
+        .success-grid {
+            display: grid;
+            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            text-align: center
+        }
+    }
+
+
+    /* =============INSTRUCTOR-SECTION=============== */
+    .instructor-section .card{
+        background-color: var(--system_primery_color);
+        border-radius: 14px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        position: relative !important;
+        border: none !important;
+    }
+
+    .instructor-section .card::before {
+        content: '';
+        position: absolute;
+        top: 16%;
+        left: 19%;
+        height: 150px;
+        width: 18%;
+        background: linear-gradient(198deg, rgba(255, 255, 255, 1) 0%, rgba(47, 50, 144, 1) 100%);
+        opacity: 0.2;
+        z-index: 100;
+        transform: rotate(-55deg);
+        pointer-events: none
+    }
+
+    .instructor-section .card::after {
+        content: '';
+        position: absolute;
+        top: 30%;
+        right: 19%;
+        height: 150px;
+        width: 35%;
+        background: linear-gradient(198deg, rgba(255, 255, 255, 1) 0%, rgba(47, 50, 144, 1) 100%);
+        opacity: 0.2;
+        z-index: 100;
+        transform: rotate(-55deg);
+     pointer-events: none;
+    }
+
+
+    /* =============Course-Section=============== */
+    .course-section .card{
+        border-radius: 14px;
+        box-shadow: rgba(0, 0, 0, 0.061) 0px 3px 20px;
+        position: relative !important;
+        border: none !important;
+    }
+
+    .course-section .nav-link {
+        font-weight: 600 !important;
+        font-size: clamp(14px, 2vw, 16px) !important;
+        font-family: "Inter" !important;
+        color: #1E3A5F !important;
+        border-radius: 50px
+    }
+
+    .course-section .nav-link.active {
+        font-weight: 600 !important;
+        font-size: clamp(14px, 2vw, 16px) !important;
+        font-family: "Inter" !important;
+        background-color: var(--system_primery_color) !important;
+        color: #fff !important;
+        border-radius: 50px
+    }
+
+    .comparison-table {
+        background-color: #fff;
+        color: var(--system_primery_color) !important;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .comparison-table th, .comparison-table td {
+        padding: 1rem;
+        vertical-align: middle;
+        color: var(--system_primery_color) !important;
+        border: none !important
+    }
+    /* Mobile card view */
+    @media (max-width: 768px) {
+        .comparison-table thead {
+            display: none;
+        }
+        .comparison-table tr {
+            display: block;
+            margin-bottom: 1rem;
+            background: #fff;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        .comparison-table td {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .comparison-table td:last-child {
+            border-bottom: none;
+        }
+        .comparison-table td::before {
+            content: attr(data-label);
+            font-weight: 600;
+            margin-right: 10px;
+        }
+    }
 </style>
 
 
 @section('mainContent')
     {{-- MainBanner --}}
-    <section class="sec-1 show-animate position-relative" style="background: linear-gradient(180deg, #2CA6A4, transparent); height: 90vh;">
-        <img src="https://html.rrdevs.net/edcare/assets/img/shapes/hero-shape-11.png" width="250"
+    <section class="sec-1 show-animate position-relative" style="background: linear-gradient(180deg, #2CA6A4, transparent); height: fit-content;">
+        <img src="https://html.rrdevs.net/edcare/assets/img/shapes/hero-shape-11.png" width="300"
             style="position: absolute; left: 0; top: 0;" alt="">
-        <div class="container-fluid px-0 g-0 h-100">
-            <div class="row bg_text position-relative flex-column justify-content-between flex-md-row align-items-center px-3 px-sm-5 h-100 pt-5 pt-md-0">
+
+        <div class="container-fluid px-0 g-0 h-100 mb-4">
+            <div class="row bg_text position-relative justify-content-between align-items-center px-3 px-sm-5 h-100 pt-5 pt-md-0 mb-4">
 
                 <div class="col-md-6 mb-4 mb-md-0">
-                    <h6 class="sub-heading d-flex align-items-center gap-1 bg-white p-2 mb-4" style="border-radius: 50px; width: fit-content; padding-right: 22px !important;">
+                    <h6 class="d-flex align-items-center gap-1 bg-white p-2 mb-4" style="border-radius: 50px; width: fit-content; padding-right: 22px !important;">
                         <span class="heading-icon">
                             <i class="fa-sharp fa-solid fa-bolt"></i>
-                        </span>Welcome to Online Education
+                        </span>Welcome to the Merkaii Xcellence Prep
                     </h6>
 
                     <h1 class="hero-section-main-heading mb-3 navy-text"
-                        style="font-weight: 600; font-size: clamp(1.6rem, 4vw, 3rem) !important">
+                        style="font-weight: 600; font-size: clamp(1.6rem, 4vw, 5rem) !important; line-height: 100%;">
                         {{-- {{@$homeContent->slider_title}} --}}
                         Pass The NCLEX® On Your First Attempt
                     </h1>
@@ -3213,332 +405,346 @@
                     @endif
 
                     <div class="d-flex align-items-center gap-2 anim-btn border-0">
-                        <button style="background-color: var(--system_primery_color)" class="py-2 px-4 text-white">Start Your Free NCLEX® Prep Trial</button>
-                        <button style="background-color: var(--system_primery_color)" class="py-2 px-4 text-white">Learn How It Works</button>
+                        <button style="background-color: var(--system_primery_color); border-radius: 50px;" class="py-2 px-4 text-white">Start Your Free NCLEX® Prep Trial</button>
+                        <button style="background-color: var(--system_primery_color); border-radius: 50px;" class="py-2 px-4 text-white">Learn How It Works</button>
                     </div>
                 </div>
 
                 <div class="col-md-6 home_bg overflow-hidden">
-                    <div class="d-flex align-items-center justify-content-end flex-column position-relative h-100"
+                    <div class="d-flex align-items-center justify-content-center position-relative h-100"
                         style="z-index: 99;">
-                        <img class="hero_img" src="{{ asset($homeContent->slider_banner) }}" width="80%" alt="">
-                        <div class="anim-hero bg-white py-2 px-4 d-none flex-column align-items-center d-lg-flex"
-                            style="position: absolute; top: 5%; left: 15%; border: 1px solid #2CA6A4; border-radius: 8px;">
-                            <div class="d-flex align-items-center justify-content-center "
-                                style="background: #2CA6A4; height: 60px; width: 60px; border-radius: 50px">
-                                <i class="fa-solid fa-graduation-cap text-white" style="font-size: 1.5rem"></i>
-                            </div>
-                            <h5 class="text-dark mt-2 mb-0" style="font-weight: 700">59k</h5>
-                            <span style="font-weight: 600">Total Students</span>
+                        {{-- <img class="hero_img" src="{{ asset($homeContent->slider_banner) }}" width="80%" alt=""> --}}
+                        <img src="{{ asset('public/assets/hero-banner.png') }}" width="100%" alt="">
+                        <div class="anim-hero d-none flex-column align-items-center d-lg-flex"
+                            style="position: absolute; top: 30%; left: 0%;">
+                            <img src="{{ asset('public/assets/badge-1.png') }}" width="160px" alt="Live Classes" class="benefit-icon-img">
                         </div>
 
-                        <div class="anim-hero bg-white py-2 px-3 d-flex gap-2 justify-content-between align-items-center"
-                            style="position: absolute; bottom: 20%; right: 0%; border: 1px solid #2CA6A4; border-radius: 8px;">
-                            <div class="d-flex align-items-center justify-content-center "
-                                style="background: #2CA6A4; height: 60px; width: 60px; border-radius: 50px">
-                                <i class="fa-solid fa-graduation-cap text-white" style="font-size: 1.5rem"></i>
-                            </div>
-                            <div>
-                                <h5 class="text-dark mt-2 mb-0" style="font-weight: 700">59k</h5>
-                                <span style="font-weight: 600">Total Students</span>
-                            </div>
+                        <div class="anim-hero d-flex gap-2 justify-content-between align-items-center"
+                            style="position: absolute; top: 10%; right: 10%;">
+                            <img src="{{ asset('public/assets/badge-2.png') }}" style="width: clamp(100px, 20vw, 160px)" alt="Live Classes" class="benefit-icon-img">
                         </div>
                     </div>
                 </div>
             </div>
 
-            <x-featured-program-plan />
+            <img style="position: absolute; right: 0; bottom: 0;" class="d-none d-lg-block" src="{{ asset('public/assets/r-lines.png') }}" width="350px" alt="Live Classes" class="benefit-icon-img">
 
-            {{-- <div class="row mb-3">
-                <div class="col-md-8 px-md-0 hero-section-h-responsive">
-                    <div class="main_bannar d-flex align-items-start justify-content-center flex-column py-5 pl-sm-5 pl-3">
-
-                        <div class="main_banner-section cus-padding">
-
-                            <h1 class="hero-section-main-heading">
-                                PASS YOUR EXAMS - BECOME A LICENSED HEALTHCARE PROFESSIONAL
-                            </h1>
-                            <p class="mt-4 hero-section-p mb-5"> <span class="font-weight-bold">Adult Learners, </span>
-                                discover the ultimate roadmap for selecting preparatory courses to conquer exams such as the
-                                Nursing School, <span class="font-weight-bold"> NCLEX, CPT, CPhT, CPC, CMA </span> and
-                                various general licensures.
-
-                            </p>
-
-                            @guest
-                                <a href="{{ url('/register') }}" class="btn_glo read_more text-white px-4 py-2">
-                                    Enroll Now
-                                </a>
-
-                            @endguest
-                        </div>
-                    </div> 
-                </div>
-
-                <div class="col-md-4 old_row">
-                    <div class="row" id="random_programs" @if (!isset($random_program)) style="height:100%" @endif>
-                        @if (isset($random_program))
-                            <div class="col-6 px-0 main_banner_2">
-                                <div class="first_div random_program_data_1 height-card">
-                                    <img id="program_icon" src="{{ $random_program->icon }}"
-                                        class="w-100 h-100 imgcls img-fluid height-card">
-                                </div>
-                            </div>
-                            <div class="col-6 small_section_bg_color main_banner_2 pl-0 pl-xl-2">
-                                <div class="first_div height-card d-flex justify-content-center h-100">
-                                    <a href="{{ route('programs.detail', ['id' => $random_program->id]) }}"
-                                        class="d-flex flex-column h-100 justify-content-center">
-                                        <h5 class="font-weight-bold px-2 px-xl-4 text-white" id="program_title">
-                                            {{ $random_program->programtitle }}
-                                        </h5>
-                                        <h5 class="font-weight-bold px-2 px-xl-4 text-white text-custom-height"
-                                            id="program_subtitle">
-                                            {{ $random_program->subtitle }}
-                                        </h5>
-                                        <p class="px-2 px-xl-4 text-white text-custom-height" style="margin-bottom:0.5rem"
-                                            id="program_desc">
-
-                                            @php
-                                                $program_description = strip_tags($random_program->discription);
-                                            @endphp
-                                            @if (Str::length($program_description) > 100)
-                                                {{ Str::limit($program_description, 100, '...') }}
-                                            @else
-                                                {{ $program_description }}
-                                            @endif
-                                        </p>
-                                        <h5 class="px-2 px-xl-4 pt-2 text-white" id="program_cost">
-                                            ${{ $random_program->currentProgramPlan[0]->amount }}
-                                        </h5>
-                                    </a>
-                                </div>
-                            </div>
-                        @endif
-                        <div
-                            class="col-6 @if (!isset($random_program)) col-md-12 order-md-2 @endif random_program_data_2 height-card main_banner_2">
-                            <div
-                                class="d-flex flex-column h-100 justify-content-center py-3 py-md-0 pl-md-2 pl-4 text-center align-items-center">
-                                <h5 class="font-weight-bold custom_heading_2 heading-responsive-style mb-4"
-                                    @if (!isset($random_program)) style="font-size:1.8rem" @endif>
-                                    Accelerate Your Future
-                                    <br>
-                                    Learn New Things
-                                    <br>
-                                    Get New skills,
-                                    <br> JOIN US !
-                                </h5>
-                                <a class="theme_btn small_btn mt-2 text-center responsive-style-btn"
-                                    href="{{ url('/prep-courses') }}">View
-                                    Courses</a>
-                            </div>
-                        </div>
-                        <div
-                            class="col-6 @if (!isset($random_program)) col-md-12 order-md-1 @endif height-card random_program_data_1 px-0 main_banner_2">
-                            
-                            <img src="{{ asset('/public/assets/lms/homepage-leftimg.png') }}" alt=""
-                                class="w-100 h-100 imgcls img-fluid" style="object-fit: cover;">
-                        </div>
-                    </div>
-
-
-                </div>
-            </div> --}}
-            {{-- banner imagadd 2ndsection --}}
-            {{-- <section class="d-flex justify-content-center align-items-center custom-padding">
-            <div class="banner-img">
-                <img src="{{ asset('/public/uploads/images/footerimg/WE ARE HERE TO LISTEN (2).png') }}"
-                    class="h-100 w-100">
-                <div>
-        </section> --}}
-            {{-- 3rdsection --}}
-            {{-- features section --}}
-        </div>
-        <div class="custom-shape-divider-bottom-1756293429">
-            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                <path
-                    d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
-                    class="shape-fill"></path>
-            </svg>
+            {{-- <x-featured-program-plan /> --}}
         </div>
     </section>
 
-
+    {{-- Benefits --}}
     <section class="benefits">
-        <div class="container-fluid py-5">
-            <h2 class="text-center">Why Choose Our Program?</h2>
-            <div class="benefit-grid row">
-                <div class="col-md-3">
-                    <div class="benefit-card h-100">
+        <div class="container-fluid py-5 px-3 px-sm-5">
+            <div class="benefit-grid row px-3 py-5">
+                <div class="col-lg-3 col-6">
+                    <div class="benefit-card d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2 h-100">
                         <div class="benefit-icon">
-                            <img src="{{ asset('public/assets/live_classes.png') }}" width="90px" alt="Live Classes" class="benefit-icon-img">
+                            <img src="{{ asset('public/assets/live_class.png') }}" width="60" alt="Live Classes" class="benefit-icon-img">
                         </div>
                         <h3>Live, Interactive Classes</h3>
                     </div>
                 </div>
 
-                <div class="col-md-3">
-                    <div class="benefit-card h-100">
+                <div class="col-lg-3 col-6">
+                    <div class="benefit-card d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2 h-100">
                         <div class="benefit-icon">
-                            <img src="{{ asset('public/assets/live_classes.png') }}" width="90px" alt="Live Classes" class="benefit-icon-img">
+                            <img src="{{ asset('public/assets/onDemand.png') }}" width="60" alt="Live Classes" class="benefit-icon-img">
                         </div>
-                        <h3>On-Demand Content</h3>
+                        <h3>On‑demand content for busy schedules</h3>
                     </div>
                 </div>
 
-                <div class="col-md-3">
-                    <div class="benefit-card h-100">
+                <div class="col-lg-3 col-6">
+                    <div class="benefit-card d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2 h-100">
                         <div class="benefit-icon">
-                            <img src="{{ asset('public/assets/live_classes.png') }}" width="90px" alt="Live Classes" class="benefit-icon-img">
+                            <img src="{{ asset('public/assets/expert.png') }}" width="60" alt="Live Classes" class="benefit-icon-img">
                         </div>
                         <h3>Expert Nurse Educators</h3>
                     </div>
                 </div>
 
-                <div class="col-md-3">
-                    <div class="benefit-card h-100">
+                <div class="col-lg-3 col-6">
+                    <div class="benefit-card d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2 h-100">
                         <div class="benefit-icon">
-                            <img src="{{ asset('public/assets/live_classes.png') }}" width="90px" alt="Live Classes" class="benefit-icon-img">
+                            <img src="{{ asset('public/assets/pass_rate.png') }}" width="70" alt="Live Classes" class="benefit-icon-img">
                         </div>
                         <h3>Pass-Rate Guarantee</h3>
                     </div>
                 </div>
+            </div> 
+        </div>
+    </section>
+
+    {{-- Testimonials Section --}}
+    <section class="testimonial-section">
+        <div class="text-center">
+            <h2>Trusted by Thousands of Nurses</h2>
+            <p class="opacity-75 inter">We’re proud to help aspiring nurses succeed every day. Here’s what they’re saying.</p>
+        </div>
+
+        <div class="testimonial-top mt-4">
+            @for ($i = 0; $i < 20; $i++)
+                <div class="card">
+                    <div class="card-body px-5 pt-5 pb-4 d-flex align-items-end">
+                        <div class="d-flex flex-column">
+                            <!-- Quote SVG -->
+                            <svg class="mb-3" width="25" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5.68 6.38C..." fill="#FF6B6B"/>
+                            </svg>
+                            
+                            <div>
+                                <small>
+                                    Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. 
+                                    Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.
+                                </small>
+                                <!-- Closing Quote -->
+                                <svg class="mt-3" style="rotate:180deg" width="25" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M5.68 6.38C..." fill="#FF6B6B"/>
+                                </svg>
+                            </div>
+
+                            <div class="mt-3">
+                                <h6 class="fw-bold">Cornelius B</h6>
+                                <small class="text-muted">Professional Nurse</small>
+                            </div>
+                        </div>
+
+                        <img src="{{ asset('public/assets/review-img.png') }}" width="200" alt="Reviewer">
+                    </div>
+                </div>
+            @endfor
+        </div>
+
+        <div class="testimonial-bottom mt-4">
+            @for ($i = 0; $i < 20; $i++)
+                <div class="card">
+                    <div class="card-body px-5 pt-5 pb-4 d-flex align-items-end">
+                        <div class="d-flex flex-column">
+                            <!-- Quote SVG -->
+                            <svg class="mb-3" width="25" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5.68 6.38C..." fill="#FF6B6B"/>
+                            </svg>
+                            
+                            <div>
+                                <small>
+                                    Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. 
+                                    Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.
+                                </small>
+                                <!-- Closing Quote -->
+                                <svg class="mt-3" style="rotate:180deg" width="25" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M5.68 6.38C..." fill="#FF6B6B"/>
+                                </svg>
+                            </div>
+
+                            <div class="mt-3">
+                                <h6 class="fw-bold">Cornelius B</h6>
+                                <small class="text-muted">Professional Nurse</small>
+                            </div>
+                        </div>
+
+                        <img src="{{ asset('public/assets/review-img.png') }}" width="200" alt="Reviewer">
+                    </div>
+                </div>
+            @endfor
+        </div>
+    </section>
+
+    {{-- Success-Metrics --}}
+    <section class="success-metrics">
+        <div class="container-fluid py-5 px-3 px-sm-5">
+            <div class="card py-5 px-4 px-md-5">
+                <h2 class="text-center text-white mb-4">Success Metrics</h2>
+
+                <div class="success-grid">
+                    <div>
+                        <h1 class="num mb-2 text-white fw-bold">95%</h1>
+                        <h6 class="mb-0 text-white">Pass Rate</h6>
+                    </div>
+
+                    <div>
+                        <h1 class="num mb-2 text-white fw-bold">12K+</h1>
+                        <h6 class="mb-0 text-white">Nurses Helped</h6>
+                    </div>
+
+                    <div>
+                        <h1 class="num mb-2 text-white fw-bold">500+</h1>
+                        <h6 class="mb-0 text-white">Stories Shared</h6>
+                    </div>
+
+                    <div>
+                        <h1 class="num mb-2 text-white fw-bold">6-8</h1>
+                        <h6 class="mb-0 text-white">Weeks Avg Time</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <img src="{{ asset('public/assets/partners.png') }}" width="100%" alt="">
+    </section>
+
+    {{-- Instructor-Section --}}
+    <section class="instructor-section">
+        <div class="container-fluid py-5 px-3 px-sm-5 mt-5">
+            <div class="card px-4 px-md-5">
+                <div class="row align-items-center justify-content-between">
+                    <div class="col-md-4">
+                        <img src="{{ asset('public/assets/instructor.png') }}" style="margin-top: -4rem" width="100%" alt="">
+                    </div>
+                    <div class="col-md-8 col-xl-6 py-4">
+                        <h2 class="rubik text-white">Guidance from Real Nursing Experts</h2>
+                        <p style="font-weight: 100" class="text-white rubik">Meet Maria, your lead instructor and dedicated guide. With years of nursing and teaching experience, she’s here to support, motivate, and help you succeed every step of the way.</p>
+
+                        <h5 style="font-weight: 400" class="mt-4 text-white rubik">Maria T. , Lead Instructor</h5>
+                        
+                        <a href="{{ route('instructors') }}">
+                            <button style="background-color: var(--footer_text_hover_color); border: none; color: #fff; border-radius: 50px;" class="py-2 px-4 text-white mt-3">Meet the Team</button>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    {{-- <section class="sec-2">
-        <div class="container p-lg-5 p-3">
-            <div class="row px-xl-5 main-content-feature align-items-center">
-                <div class="col-md-5 px-md-0">
-                    <div class="content-features p-lg-5 px-4 py-4">
-                        <div class="content-features1 px-md-2">
-                            <h2 class="content-features-h font-weight-bold">TUTOR & MENTOR</h2>
-                            <h6 class="text-capitalize">Don't Just Study for the NCLEX-RN, Excel With It!</h6>
-                            <p class="content-features-p">Elevate your nursing education with Merkaii Xcellence Prep's
-                                personalized tutoring and mentorship. Achieve your academic goals, conquer Nursing School
-                                Courses and Exams, NCLEX- RN & PN, HESI, TEAS, ATI, other Healthcare Exams and unlock a
-                                fulfilling nursing career.</p>
-                            <a href="{{ route('instructors') }}#instructors-custom-heading" ><button class="content-features-btn mt-lg-3">Let's get started today!</button></a>
-                        </div>
-                    </div>
-                </div>
-                <div id="content-container" class="col-md-7 content-feature mt-4 mt-md-0 d-flex flex-column justify-content-xl-center">
-                    <div class="row content-features2 px-md-4 px-3">
-                        <div class="col-lg-6 col-12 px-2 content-feature1 hidden hidden-left">
-                            <h2 class="content-features2-h font-weight-bold">01</h2>
-                            <h5 class="content-features2-hh font-weight-bold">Ignite Your Nursing Passion
-                            </h5>
-                            <p class="content-features2-p">Our expert tutors go beyond textbooks, to empowering you to reach your full potential. </p>
-                        </div>
-                        <div class="col-lg-6 col-12 px-2 content-feature1 hidden hidden-right">
-                            <h2 class="content-features2-h font-weight-bold">02</h2>
-                            <h5 class="content-features2-hh font-weight-bold">Conquer Test Anxiety
-                            </h5>
-                            <p class="content-features2-p">Overcome exam fear with our proven strategies. Ace the NCLEX-RN & PN.</p>
 
-                        </div>
-                    </div>
+    {{-- Courses-Section --}}
+    <section class="course-section" style="background-color: #F7F7F7">
+        <div class="container-fluid py-5 px-3 px-sm-5">
 
-                    <div class="row content-features2 px-md-4 px-3">
-                        <div class="col-lg-6 col-12 content-feature1 px-2 hidden hidden-left">
-                            <h2 class="content-features2-h font-weight-bold">03
-                            </h2>
-                            <h5 class="content-features2-hh font-weight-bold">Lost in Nursing Prep?
-                            </h5>
-                            <p class="content-features2-p">Find your path with our personalized tutoring. Conquer nursing courses and NCLEX exams with confidence.</p>
-                        </div>
-                        <div class="col-lg-6 col-12 content-feature1 px-2 hidden hidden-right">
-                            <h2 class="content-features2-h font-weight-bold">04
-                            </h2>
-                           
-                            <h5 class=" content-features2-hh font-weight-bold">Struggling in Nursing School?
-                            </h5>
-                            <p class="content-features2-p">We'll pinpoint your weaknesses, master the content, boost your understanding, and guide you to success.</p>
-                        </div>
-
-                    </div>
-
-                    <div class="row content-features2 px-md-4 px-3">
-
-                        <div class="col-lg-6 col-12 content-feature1 px-2 hidden hidden-left">
-
-                            <h2 class="content-features2-h font-weight-bold">05
-                            </h2>
-                            <h5 class="content-features2-hh font-weight-bold">Break Through Exam Barriers
-                            </h5>
-                            <p class="content-features2-p">Overcome HESI, TEAS, & ATI challenges. Achieve your healthcare career goals. </p>
-                        </div>
-
-                        <div class="col-lg-6 col-12 content-feature1 px-2 hidden hidden-right">
-                            <h2 class="content-features2-h font-weight-bold">06
-                            </h2>
-                            <h5 class="content-features2-hh font-weight-bold">Navigating Nursing School?
-                            </h5>
-                            <p class="content-features2-p"> Let our mentors be your guide. Master nursing complexities and personal growth.</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="text-center">
+                <h2>Courses & Pricing Overview</h2>
+                <p class="opacity-75 inter">Find the program that best fits your goals, schedule, and support needs.</p>
             </div>
-        </div>
 
-    </section> --}}
+            <ul class="nav nav-pills mb-3 d-flex align-items-center justify-content-center mt-3 mb-4" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="pills-cards-tab" data-bs-toggle="pill" data-bs-target="#pills-cards" type="button" role="tab" aria-controls="pills-cards" aria-selected="true">Courses</button>
+                </li>
 
-    {{-- features end --}}
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="pills-table-comparison-tab" data-bs-toggle="pill" data-bs-target="#pills-table-comparison" type="button" role="tab" aria-controls="pills-table-comparison" aria-selected="false">Courses Comparison</button>
+                </li>
+            </ul>
 
-    {{-- component-call sec-3 --}}
-    {{-- @elseif($block->id == 4) --}}
-
-    {{-- @if ($homeContent->show_instructor_section == 1)
-        <x-home-page-instructor-section :homeContent="$homeContent" />
-    @endif --}}
-
-    <section class="sec-3">
-        <div class="d-flex justify-content-center">
-            <div class="row justify-content-center h-100 w-100 cta_area-row">
-                <div class="col-lg-6 d-flex flex-column justify-content-center mx-auto cta_area-row1 w-100 px-0"
-                    style="background-color: antiquewhite">
-                    <div class="py-md-5 py-3 section__title text-white text-start px-3 px-lg-5 mx-0 cta_area_section"
-                        id="section__title">
-                        <h2 class="custom_small_heading large_title text-dark mb-lg-4 mb-2 font-weight-bold">
-                            Ace Your NCLEX with Free Weekly Study Sessions
-                            {{-- {{ @$homeContent->instructor_title }} --}}
-                        </h2>
-                        <p class="custom_small large_title text-dark mb-lg-4 mb-2">
-                            Join our exclusive Adult Learners community of nursing students.<br>
-                            Boost your exam prep with FREE WEEKLY NCLEX review sessions on Teams.<br>
-                            Gain valuable insights, tips, and support from experienced instructors.<br> <br>
-                            Subscribe to our Email List now to secure your spot.<br>
-                            Don't miss out on this golden opportunity to boost your exam confidence.<br>
-                        </p>
-                        <div class="container-subscription mt-5 mb-2 mx-0">
-                            <form action="{{ route('subscribe') }}" class="form" method="POST">
-                                @csrf
-                                <input type="email" class="sub_email" name="email" style="">
-                                <button type="submit" class="subscribe_newsleter" style=" "><i
-                                        class="fas fa-envelope" style="color: #ffffff;"></i> SUBSCRIBE</button>
-                            </form>
-
-                        </div>
-                        {{-- <p class="mb-lg-4 mb-2 text-white ">
-                            {{ @$homeContent->instructor_sub_title }}
-                        </p> --}}
-                        {{-- <a href="{{ url('pre-registration') }}" class="theme_btn mt-2 cta_btn py-2 px-4 ">
-                        Create Your Account
-                        {{ __('frontend.Find Our Instructor') }}
-                        </a> --}}
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-cards" role="tabpanel" aria-labelledby="pills-cards-tab" tabindex="0">
+                    <div class="row">
+                        @for ($i = 0; $i < 3; $i++)
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="card border-0 rounded-3 w-100">
+        
+                                    <div class="card-body rubik">
+                                        <!-- Image with badge -->
+                                        <div class="position-relative">
+                                            <img src="{{ asset('public/assets/course-img.png') }}" class="card-img-top" alt="Course Instructors">
+                                            <span style="position: absolute; top: 10px; right: 10px; border-radius: 6px;" class="py-2 px-3 d-flex align-items-center gap-1 bg-white text-dark m-2">
+                                                <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <g clip-path="url(#clip0_2032_122)">
+                                                    <circle cx="8" cy="8.5" r="7.25" stroke="#413C69" stroke-width="1.5"/>
+                                                    <path d="M8 4.94434V9.06787L10.6667 10.2777" stroke="#413C69" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </g>
+                                                    <defs>
+                                                    <clipPath id="clip0_2032_122">
+                                                    <rect width="16" height="16" fill="white" transform="translate(0 0.5)"/>
+                                                    </clipPath>
+                                                    </defs>
+                                                </svg>
+                                                8 weeks
+                                            </span>
+                                        </div>
+        
+                                        <!-- Top meta -->
+                                        <div class="d-flex justify-content-between my-2">
+                                            <span class="text-success fw-bold">Course 01</span>
+                                            <span style="color: #CA8804">coaching</span>
+                                        </div>
+                                    
+                                        <!-- Title & Subtitle -->
+                                        <h5 style="font-weight: 600" class="card-title rubik fw-bold text-dark d-flex align-items-center justify-content-between">
+                                            Live Prep Course
+                                            <svg width="24" height="28" viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M7 21L17 11M17 11H7M17 11V21" stroke="#101828" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>                                    
+                                        </h5>
+                                        <p class="card-text text-muted small mb-3">
+                                            Structured live sessions led by expert instructors
+                                        </p>
+                                    
+                                        <!-- Features -->
+                                        <ul class="list-unstyled small mb-4 d-flex flex-wrap justify-content-between">
+                                            <li class="mb-1 d-flex align-items-center gap-1">
+                                                <img src="{{ asset('public/assets/point.png') }}" width="25" alt="Course Instructors">
+                                                Diagnostic assessment
+                                            </li>
+                                            <li class="mb-1 d-flex align-items-center gap-1">
+                                                <img src="{{ asset('public/assets/point.png') }}" width="25" alt="Course Instructors">
+                                                Diagnostic assessment
+                                            </li>
+                                            <li class="mb-1 d-flex align-items-center gap-1">
+                                                <img src="{{ asset('public/assets/point.png') }}" width="25" alt="Course Instructors">
+                                                Diagnostic assessment
+                                            </li>
+                                        </ul>
+                                    
+                                        <!-- Footer -->
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <a href="{{ route('instructors') }}">
+                                                <button style="background-color: var(--system_primery_color); border: none; color: #fff; border-radius: 50px;" class="py-2 px-4 text-white mt-3">Enroll Now</button>
+                                            </a>
+                                            <h2 style="color: var(--system_secendory_color); font-weight: 700 !important; font-family: 'Inter' !important;" class="mb-0">$499</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endfor
                     </div>
                 </div>
 
-                <div class="col-lg-6 px-0">
-                    <img src="{{ asset(@$homeContent->instructor_banner) }}" width="100%" height="100%"
-                        style="object-fit-cover" alt="">
+                <div class="tab-pane fade" id="pills-table-comparison" role="tabpanel" aria-labelledby="pills-table-comparison-tab" tabindex="0">
+                    <div class="table-responsive bg-white p-2 p-md-4" style="border-radius: 8px">
+                        <table class="table comparison-table">
+                          <thead>
+                            <tr>
+                              <th>Course</th>
+                              <th>Duration</th>
+                              <th>Format</th>
+                              <th>Price</th>
+                              <th>Key Feature</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td data-label="Course">Live Prep Courses</td>
+                              <td data-label="Duration">8–12 weeks</td>
+                              <td data-label="Format">Live interactive classes</td>
+                              <td data-label="Price">From $499</td>
+                              <td data-label="Key Feature">Small groups + real-time instructor Q&amp;A</td>
+                            </tr>
+                            <tr>
+                              <td data-label="Course">On-Demand Prep</td>
+                              <td data-label="Duration">Self-paced</td>
+                              <td data-label="Format">Pre-recorded lessons</td>
+                              <td data-label="Price">From $299</td>
+                              <td data-label="Key Feature">Flexible access + practice quizzes</td>
+                            </tr>
+                            <tr>
+                              <td data-label="Course">Remedial Program</td>
+                              <td data-label="Duration">Flexible</td>
+                              <td data-label="Format">Personalized 1-on-1 coaching</td>
+                              <td data-label="Price">From $599</td>
+                              <td data-label="Key Feature">Tailored study plan + feedback</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                 </div>
             </div>
         </div>
     </section>
 
-    @if (count($latest_programs) > 0 || count($latest_courses) > 0)
-        {{-- Custom Slider by Arsam --}}
+
+    {{-- @if (count($latest_programs) > 0 || count($latest_courses) > 0)
         <section class="sec-4">
             <div class="container px-lg-5 pt-lg-5 pt-3">
                 <div class="row text-center main_row mb-md-4 mb-3 px-2 px-md-0">
@@ -3577,7 +783,6 @@
                                                         {{ $thisprogram->programtitle }}
                                                     </h5>
                                                 </a>
-                                                {{-- <br> --}}
                                                 <p class="text-white">
                                                     @php
                                                         $description = str_replace(
@@ -3726,8 +931,7 @@
                                     <div class="card custom-card">
                                         <img src="{{ getCourseImage($first_course->thumbnail) }}" class="card-img"
                                             alt="...">
-                                        {{-- <img src="https://demoapus2.com/edumy/wp-content/uploads/elementor/thumbs/301242-pe3njtkqt5gexzmb6f3gua5ab17rzk5a1ccdwchmj0.jpg"
-                                    class="card-img" alt="..."> --}}
+
                                         <a href="{{ !empty($first_course->parent_id) ? courseDetailsUrl(@$first_course->parent->id, @$first_course->type, @$first_course->parent->slug) . '?courseType=' . $first_course->type : courseDetailsUrl(@$first_course->id, @$first_course->type, @$first_course->slug) }}"
                                             class="card-img-overlay">
                                             <h5 class="card-title font-weight-bold">
@@ -3776,12 +980,62 @@
                 </div>
             </div>
         </section>
-        {{-- Custom Slider End --}}
-    @endif
+    @endif --}}
 
-    {{-- percent section --}}
-    <section class="sec-5 percent-section">
-        {{-- <div class=""> --}}
+
+    <section style="background-image: url('{{ asset('public/assets/resources.png') }}'); background-size: 100%; background-repeat: no-repeat;">
+        <div class="container-fluid py-5 px-3 px-sm-5">
+            <div class="row justify-content-between">
+                <div class="col-md-6">
+                    <div class="text-start">
+                        <h2>Learn & Grow With Us</h2>
+                        <p class="opacity-75 inter">
+                            Access free study tips, expert guides, webinars, and blog posts — all designed
+                            to support your learning journey. Plus, unlock your free Study Resource Kit
+                            when you join our community.
+                        </p>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6 mb-4">
+                            <div class="p-3" style="backdrop-filter: blur(3px); border: 1px solid var(--system_secendory_color); border-radius: 6px">
+                                <h5 style="font-weight: 600; font-size: 20px" class="text-dark rubik">Mind Mapping</h5>
+                                <p style="font-size: 14px; font-weight: 600; line-height: 1.5" class="inter">Transform complex subjects into easy-to-follow visual maps. This technique helps you connect ideas and recall them more effectively.</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="p-3" style="backdrop-filter: blur(3px); border: 1px solid var(--system_secendory_color); border-radius: 6px">
+                                <h5 style="font-weight: 600; font-size: 20px" class="text-dark rubik">Mind Mapping</h5>
+                                <p style="font-size: 14px; font-weight: 600; line-height: 1.5" class="inter">Transform complex subjects into easy-to-follow visual maps. This technique helps you connect ideas and recall them more effectively.</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="p-3" style="backdrop-filter: blur(3px); border: 1px solid var(--system_secendory_color); border-radius: 6px">
+                                <h5 style="font-weight: 600; font-size: 20px" class="text-dark rubik">Mind Mapping</h5>
+                                <p style="font-size: 14px; font-weight: 600; line-height: 1.5" class="inter">Transform complex subjects into easy-to-follow visual maps. This technique helps you connect ideas and recall them more effectively.</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="p-3" style="backdrop-filter: blur(3px); border: 1px solid var(--system_secendory_color); border-radius: 6px">
+                                <h5 style="font-weight: 600; font-size: 20px" class="text-dark rubik">Mind Mapping</h5>
+                                <p style="font-size: 14px; font-weight: 600; line-height: 1.5" class="inter">Transform complex subjects into easy-to-follow visual maps. This technique helps you connect ideas and recall them more effectively.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-5">
+                    <img src="{{ asset('public/assets/comunity-right.png') }}" width="100%" alt="">
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    {{-- <section class="sec-5 percent-section">
         <div class="container px-lg-5 py-lg-5 py-4">
             <div class="row percent-row px-xl-5">
                 <div class="col-lg-6 d-flex flex-column counter-padd px-md-0 ">
@@ -4183,11 +1437,10 @@
                 </div>
 
             </div>
-            {{-- </div> --}}
         </div>
-    </section>
+    </section> --}}
 
-    <div class="custom_section_color mb-md-5 mb-4">
+    {{-- <div class="custom_section_color mb-md-5 mb-4">
         <div class="container py-5">
             <div class="row py-5 justify-content-between" style="gap: 20px">
                 <div class="col-xl-5">
@@ -4326,270 +1579,13 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    {{-- sec-6 about-page-section"testimonial" --}}
-    <x-about-page-students-work />
-
-    {{-- Map aboutus --}}
-
-    {{-- <section class="sec-7">
-        <div class="container p-lg-5 py-3">
-            <div class="row about_us px-xl-5 justify-content-between">
-                <div
-                    class="col-md-6 col-xl-5 about_us_height d-flex justify-content-center align-items-center mb-3 mb-md-0">
-                    <div class="about_us_p">
-                        <i class="fa-regular fa-lightbulb fa-2x " style="color: var(--system_primery_color);"></i>
-                        <h2 class="custom_small_heading font-weight-bold mb-4 at_Merkaii">AT Merkaii Xcellence</h2>
-                        <h2 class="custom_small_heading font-weight-bold mb-4 at_Merkaii">WE ARE ADULT LEARNER-CENTRIC <br>
-                            <span class="d-flex justify-content-center ml_span">and</span>EDUCATION IS FOR
-                            EVERYONE
-                        </h2>
-                        <p class="mb-4 custom_paragraph">
-                            At Merkaii Xcellence, we believe education is the key to unlocking potential, and that's why we
-                            offer a variety of prep courses designed to fit diverse student body and learning styles. We
-                            offer accessible learning pathways to fuel your passion for healthcare, regardless of
-                            background, experience, or location. Merkaii Xcellence fosters a vibrant and supportive global
-                            community where <span class="font-weight-bold">everyone can learn, grow, and achieve
-                                their healthcare goals.</span>
-                        </p>
-                        <a href="{{ route('about') }}" class="learn_more font-weight-bold">Know More</a>
-                    </div>
-                </div>
-
-                <div class="col-md-6 col-xl-7 d-flex flex-md-column flex-lg-row justify-content-center about-image-main"
-                    style="gap: 1rem">
-                    <div class="col-6 col-md-11 col-lg-6 p-0 about-img about_us_img1 shadow">
-
-                        <img src="{{ asset('public/assets/Untitled-1.png') }}" class="w-100 about_us_image">
-
-                    </div>
-                    <div class="col-6 col-md-11 col-lg-6 p-md-0 pl-0 about-img about_us_img2 shadow">
-
-                        <img src="{{ asset('public/assets/About-Section7.jpg') }}" class=" w-100 about_us_image">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> --}}
-    {{-- aboutus end --}}
-    {{-- after-about-section --}}
-
-    {{-- <section class="px-5 d-none">
-        <div class="container">
-            <div class="row mx-lg-2" style="overflow: hidden">
-                <h2 class="col-12 text-center mb-5 font-weight-bold">Our Trusted Education Partners</h2>
-                <div class=" row logos mx-4 swiper">
-                    <div class="swiper-wrapper d-flex">
-                        <a href="" class="swiper-slide text-dark">
-                            <div class="col d-flex flex-column align-items-center my-2 px-0 "> <img
-                                    src="{{ asset('/public/uploads/images/footerimg/cie.png') }}" class="logos-img">
-                                <span class="logo-text text-center">CIE </span>
-                            </div>
-                        </a>
-                        <a href="" class="swiper-slide text-dark">
-                            <div class="col d-flex flex-column  align-items-center my-2 px-0 swiper-slide"><img
-                                    src="{{ asset('/public/uploads/images/footerimg/falbon.png') }}" class="logos-img2">
-                                <span class="logo-text text-center"> FLBON </span>
-                            </div>
-                        </a>
-                        <a href="" class="swiper-slide text-dark">
-                            <div class="col d-flex flex-column  align-items-center my-2 px-0 swiper-slide"><img
-                                    src="{{ asset('/public/uploads/images/footerimg/fapsc.png') }}" class="logos-img3">
-                                <span class="logo-text text-center"> FAPSC </span>
-                            </div>
-                        </a>
-                        <a href="" class="swiper-slide text-dark">
-                            <div class="col d-flex flex-column  align-items-center my-2 px-0 swiper-slide"><img
-                                    src="{{ asset('/public/uploads/images/footerimg/miltery.png') }}"
-                                    class="logos-img4"><span class="logo-text text-center"> Military Spouse</span>
-                            </div>
-                        </a>
-                        <a href="" class="swiper-slide text-dark">
-                            <div class="col d-flex flex-column  align-items-center my-2 px-0 swiper-slide"><img
-                                    src="{{ asset('/public/uploads/images/footerimg/career.png') }}"
-                                    class="logos-img5"><span class="logo-text text-center"> Career Source </span>
-                            </div>
-                        </a>
-                        <a href="" class="swiper-slide text-dark">
-                            <div class="col d-flex flex-column  align-items-center my-2 px-0 swiper-slide"><img
-                                    src="{{ asset('/public/uploads/images/footerimg/post.png') }}" class="logos-img">
-                                <span class="logo-text text-center">Post 9/11 GI Bill </span>
-                            </div>
-                        </a>
-                        <a href="" class="swiper-slide text-dark">
-                            <div class="col d-flex flex-column  align-items-center my-2 px-0 swiper-slide"><img
-                                    src="{{ asset('/public/uploads/images/footerimg/national.png') }}"
-                                    class="logos-img7"> <span class="logo-text text-center">National Healthcare
-                                    Association </span></div>
-                        </a>
-                        <a href="" class="swiper-slide text-dark">
-                            <div class="col d-flex flex-column  align-items-center my-2 px-0 swiper-slide"><img
-                                    src="{{ asset('/public/uploads/images/footerimg/lakeland1.png') }}"
-                                    class="logos-img8"><span class="logo-text text-center"> Lakeland General
-                                    Hospital</span></div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> --}}
-
-    <!-- call to action added by arsam  -->
-
-    {{-- <section class="sec-8 online-learning d-flex align-items-center justify-content-center my-3">
-        <div class="hidden hidden-left px-2">
-            <h2 class="custom_small_heading text-white text-center font-weight-bold mb-md-4 mb-2">ADULT-LEARNER'S SUCCESS
-            </h2>
-            <h3 class="custom_small_heading text-white text-center font-weight-bold text-capitalize">Start your
-                transformation with a
-                single click.
-                <br>
-                LIMITED SEATS AVAILABLE!
-            </h3>
-            <p class="text-white text-center my-md-4 my-2">Prepare for Licensure: <a
-                    href="{{ url('pre-registration') }}"><span class="font-weight-bold text-white">Apply Now
-                    </span></a> Merkaii Xcellence Healthcare Remedial Program and Prep Courses</p>
-            <div class="d-flex justify-content-center mt-2">
-                <a href="{{ url('contact#contact-form-ankar') }}"><button class="custom-button-call-to-action">Contact
-                        Admission Specialist</button></a>
-            </div>
-        </div>
-    </section> --}}
+    </div> --}}
 
     <!-- section-3b -->
-    <section class="sec-9 py-5"
+    {{-- <section class="sec-9 py-5"
         style="background: linear-gradient(rgba(35, 7, 77, 0.8), rgba(35, 7, 77, 0.8)), url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=1600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fG1lZGljYWx8ZW58MHx8MHx8fDA%3D'); background-size: cover; background-position: center; color: white;">
         <div class="container for-backcolor-container p-lg-5 py-5">
             <div class="row align-items-center justify-content-left px-xl-5 for-backcolor-row py-5">
-                {{-- <div class="col-lg-4 col-sm-12 for-main px-lg-2 mb-sm-3 mb-md-0">
-                    <div>
-                        <label class="for-label">WHY JOIN MERKAII XCELLENCE PREP</label>
-                        <h2 class="custom_small_heading for-bold font-weight-bold">FLORIDA BOARD OF NURSING REMEDIAL
-                            PROGRAM
-                        </h2>
-                        <h6>Struggling to Pass the NCLEX-RN After 3 Attempts? </h6>
-                        <p class="for-para custom_paragraph mb-2">Taking the NCLEX-RN can be challenging, but it doesn't
-                            have to be an insurmountable obstacle. Don't Give Up! Merkaii’s Florida Board of Nursing
-                            approved remedial course provides the personalized support and targeted strategies you need to
-                            succeed. With our help, you'll be well on your way to achieving your nursing career goals and
-                            licensure. Become the Registered Nurse You Were Meant to Be.</p>
-                        <a href="{{ url('pre-registration') }}"
-                            class="d-flex justify-content-center justify-content-sm-start"><button
-                                class="theme_btn font-weight-bold mt-md-4 mt-sm-3 text-center">Register today and unlock
-                                <br>your potential!</button>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-8 for-main-2nd mt-md-4 mt-lg-0">
-                    <div class="row for-main">
-                        <div class="col-md-6">
-                            <div class="row for-element justify-content-center">
-
-                                <div class="col-2 for-affordability">
-                                    <img src="{{ asset('public/assets/remedial/nclex_program.png') }}"
-                                        class="h-100 w-100" style="object-fit: fill">
-                                </div>
-                                <div class="col-9 for-border ml-4">
-
-                                    <h5 class="for-label1 font-weight-bold">Tired of NCLEX retakes? </h5>
-                                    <p class="for-para custom_paragraph pr-2">Our program is your roadmap and escape route
-                                        to successful RN career. </p>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 for-main">
-                            <div class="row for-element justify-content-center">
-
-                                <div class="col-2 for-affordability">
-                                    <img src="{{ asset('public/assets/remedial/care-confidence2.png') }}"
-                                        class="h-100 w-100" style="object-fit: fill">
-                                </div>
-                                <div class="col-9 for-border ml-4">
-                                    <h5 class="for-label1 font-weight-bold">Feeling Defeated by NCLEX? </h5>
-                                    <p class="for-para custom_paragraph pr-2">Our live-virtual Instructor-led program
-                                        transforms test anxiety into patient care confidence. </p>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-
-                    <div class="row for-main">
-                        <div class="col-md-6">
-                            <div class="row for-element justify-content-center">
-
-                                <div class="col-2 for-affordability">
-                                    <img src="{{ asset('public/assets/remedial/dream-job.png') }}" class="h-100 w-100"
-                                        style="object-fit: fill">
-                                </div>
-                                <div class="col-9 for-border ml-4">
-                                    <h5 class="for-label1 font-weight-bold">NCLEX Blocking Your Dream Job?</h5>
-                                    <p class="for-para custom_paragraph pr-2">Our Florida Board-approved program delivers
-                                        results and fast-tracks your nursing career.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="row for-element justify-content-center">
-
-                                <div class="col-2 for-affordability">
-                                    <img src="{{ asset('public/assets/remedial/gain-knowledge.png') }}"
-                                        class="h-100 w-100" style="object-fit: fill">
-                                </div>
-                                <div class="col-9 for-border ml-4">
-
-                                    <h5 class="for-label1 font-weight-bold">Conquer NCLEX Anxiety </h5>
-                                    <p class="for-para custom_paragraph pr-2">Our supportive program empowers you to gain
-                                        the knowledge and skills to pass with confidence. </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row for-main">
-                        <div class="col-md-6">
-                            <div class="row for-element justify-content-center">
-
-                                <div class="col-2 for-affordability">
-                                    <img src="{{ asset('public/assets/remedial/strong-knowledge.png') }}"
-                                        class="h-100 w-100" style="object-fit: fill">
-                                </div>
-                                <div class="col-9 for-border ml-4">
-
-                                    <h5 class="for-label1 font-weight-bold">NCLEX-RN Proving Tough?
-                                    </h5>
-                                    <p class="for-para custom_paragraph pr-2">Our Florida Board-approved program pinpoints
-                                        your weak spots and builds your strong nursing knowledge.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="row for-element justify-content-center">
-
-                                <div class="col-2 for-affordability">
-                                    <img src="{{ asset('public/assets/remedial/ncxlex-code.png') }}" alt=""
-                                        class="h-100 w-100" style="object-fit: fill;">
-                                </div>
-                                <div class="col-9 for-border ml-4">
-                                    <h5 class="for-label1 font-weight-bold">Crack the NCLEX code
-                                    </h5>
-                                    <p class="for-para custom_paragraph pr-2">Our Florida Board-approved program provides
-                                        clarity and confidence for exam success.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div> --}}
                 <div class="col-lg-6">
                     <div class="row">
                         <div class="col-6 d-flex align-items-center flex-column">
@@ -4645,17 +1641,14 @@
                 </div>
             </div>
         </div>
-
-    </section>
+    </section> --}}
     <!-- section2 end -->
 
 
     @if (!empty($blocks))
         @foreach ($blocks as $block)
             @if ($block->id == 1)
-                {{--
-    <x-home-page-banner :homeContent="$homeContent" /> --}}
-                {{-- Courses --}}
+
             @elseif($block->id == 3)
                 @if ($homeContent->show_category_section == 1)
                     <div class="custom_section_backround_color section-padding-y d-none">
@@ -4668,466 +1661,6 @@
                         </div>
                     </div>
 
-
-                    <!-- new_section_add -->
-                    {{-- <section class="bg-light card-paddingx d-none">
-                            @if (isset($latest_courses))
-                                <div class="container">
-                                    <div class="row text-center mb-4 main_row">
-                                        <h2 class="font-weight-bold">Gain the Edge in Nursing School & Beyond</h2>
-                                        <p class="custom_paragraph">Our comprehensive Prep Courses equip Adult-Learners to
-                                            gain knowledge, sharpen skills, learn effective strategies and ace the NCLEX®
-                                            you need to thrive.</p>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-7 card_height left-s-h-cls image_card p-2">
-                                            <div class="prep_card left-card h-100 w-100" id="left-card">
-                                                <div class="overlay h-100"></div>
-                                                <div class="left-top-content">
-                                                    <div class="widget-49-meeting-info" id="left-title-info"></div>
-                                                    <div id="left-pro-title"></div>
-                                                </div>
-                                                <!-- left image start  -->
-                                                <div class="left-content">
-                                                    <p class="left-card-text font-weight-bolder mb-4 custom_paragraph"></p>
-
-                                                    <div class="for-left"></div>
-                                                </div>
-                                                <!-- left image end  -->
-                                            </div>
-                                        </div>
-                                        <!-- 1 -->
-
-                                        @php
-                                            $counter = 1;
-                                        @endphp
-
-
-                                        <div class="col-md-5 pr-md-0" id="right-cards">
-                                            <div class="row">
-                                                <div class="col-md-6 col-6 h-auto mb-2 mt-md-0 mt-2 prep_card_height px-2">
-                                                    <div class="prep_card" onmouseover="copyCardDataToLeftCard(this)">
-                                                        <img class="prep_card-image"
-                                                            src="{{ $latest_courses[0]->thumbnail }}" />
-                                                        <div class="widget-49-meeting-info pr-2">
-                                                            <span class="widget-49-pro-title">PRO-0111</span>
-                                                        </div>
-                                                        <div class="container px-0">
-                                                            <p class="prep_card-text custom_paragraph">
-                                                                {{ !empty($latest_courses[0]->parent_id) ? $latest_courses[0]->parent->title : $latest_courses[0]->title }}
-                                                            </p>
-                                                            <div class="for-left">
-                                                                <p class="prep-paragraph custom_paragraph">
-                                                                    @php
-                                                                        $requirements = str_replace(
-                                                                            '&nbsp;',
-                                                                            ' ',
-                                                                            htmlspecialchars_decode(
-                                                                                strip_tags(
-                                                                                    !empty(
-                                                                                        $latest_courses[0]->parent_id
-                                                                                    )
-                                                                                        ? $latest_courses[0]->parent
-                                                                                            ->requirements
-                                                                                        : $latest_courses[0]
-                                                                                            ->requirements,
-                                                                                ),
-                                                                            ),
-                                                                        );
-                                                                    @endphp
-                                                                    @if (Str::length($requirements) > 120)
-                                                                        {{ Str::limit($requirements, 120, '...') }}
-                                                                    @else
-                                                                        {{ $requirements }}
-                                                                    @endif
-                                                                </p>
-                                                                <a href="{{ !empty($latest_courses[0]->parent_id) ? courseDetailsUrl(@$latest_courses[0]->parent->id, @$latest_courses[0]->type, @$latest_courses[0]->parent->slug) . '?courseType=' . $latest_courses[0]->type : courseDetailsUrl(@$latest_courses[0]->id, @$latest_courses[0]->type, @$latest_courses[0]->slug) }}"
-                                                                    class="learn-more mr-2">Learn more</a><i
-                                                                    class="fa fa-long-arrow-right"></i>
-                                                                <div class="d-flex justify-content-between pt-2">
-                                                                    <small>
-                                                                        <i class="fa fa-book-open">
-                                                                            @if ($latest_courses[0]->type == 1)
-                                                                                {{ __('Course') }}
-                                                                            @elseif($latest_courses[0]->type == 2)
-                                                                                {{ __('Big Quiz') }}
-                                                                            @elseif($latest_courses[0]->type == 4)
-                                                                                {{ __('Full Course') }}
-                                                                            @elseif($latest_courses[0]->type == 5)
-                                                                                {{ __('Prep-Course (On-Demand)') }}
-                                                                            @elseif($latest_courses[0]->type == 6)
-                                                                                {{ __('Prep-Course (Live)') }}
-                                                                            @elseif($latest_courses[0]->type == 8)
-                                                                                {{ __('Repeat Course') }}
-                                                                            @endif
-                                                                        </i>
-
-                                                                    </small>
-
-                                                                    <!-- <small>
-                                                                                                                                                                                                                                                                                                                                                                                        <i class="fas fa-clock"></i>
-
-                                                                                                                                                                                                                                                                                                                                                                                    </small> -->
-
-                                                                    <small style="padding-right: 4px" class="">
-                                                                        <i class="fa fa-dollar">
-                                                                            {{ number_format($latest_courses[0]->price, 0) }}
-                                                                        </i>
-
-                                                                    </small>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
-                                                <!-- 2 -->
-                                                <div
-                                                    class="col-md-6 col-6 h-auto  mb-2 mt-md-0 mt-2 prep_card_height px-2">
-                                                    <div class="prep_card" onmouseover="copyCardDataToLeftCard(this)">
-                                                        <img class="prep_card-image"
-                                                            src="{{ $latest_courses[1]->thumbnail }}" />
-                                                        <div class="widget-49-meeting-info pr-2">
-                                                            <span class="widget-49-pro-title">PRO-0222</span>
-                                                        </div>
-                                                        <div class="container px-0">
-                                                            <p class="prep_card-text custom_paragraph">
-                                                                {{ !empty($latest_courses[1]->parent_id) ? $latest_courses[1]->parent->title : $latest_courses[1]->title }}
-                                                            </p>
-                                                            <div class="for-left">
-                                                                <p class="prep-paragraph custom_paragraph">
-                                                                    @php
-                                                                        $requirements = str_replace(
-                                                                            '&nbsp;',
-                                                                            ' ',
-                                                                            htmlspecialchars_decode(
-                                                                                strip_tags(
-                                                                                    !empty(
-                                                                                        $latest_courses[1]->parent_id
-                                                                                    )
-                                                                                        ? $latest_courses[1]->parent
-                                                                                            ->requirements
-                                                                                        : $latest_courses[1]
-                                                                                            ->requirements,
-                                                                                ),
-                                                                            ),
-                                                                        );
-                                                                    @endphp
-                                                                    @if (Str::length($requirements) > 120)
-                                                                        {{ Str::limit($requirements, 120, '...') }}
-                                                                    @else
-                                                                        {{ $requirements }}
-                                                                    @endif
-                                                                </p>
-                                                                <a href="{{ !empty($latest_courses[1]->parent_id) ? courseDetailsUrl(@$latest_courses[1]->parent->id, @$latest_courses[1]->type, @$latest_courses[1]->parent->slug) . '?courseType=' . $latest_courses[1]->type : courseDetailsUrl(@$latest_courses[1]->id, @$latest_courses[1]->type, @$latest_courses[1]->slug) }}"
-                                                                    class="learn-more mr-2">Learn more</a><i
-                                                                    class="fa fa-long-arrow-right"></i>
-                                                                <div class="d-flex justify-content-between pt-2">
-                                                                    <small>
-                                                                        <i class="fa fa-book-open">
-                                                                            @if ($latest_courses[1]->type == 1)
-                                                                                {{ __('Course') }}
-                                                                            @elseif($latest_courses[1]->type == 2)
-                                                                                {{ __('Big Quiz') }}
-                                                                            @elseif($latest_courses[1]->type == 4)
-                                                                                {{ __('Full Course') }}
-                                                                            @elseif($latest_courses[1]->type == 5)
-                                                                                {{ __('Prep-Course (On-Demand)') }}
-                                                                            @elseif($latest_courses[1]->type == 6)
-                                                                                {{ __('Prep-Course (Live)') }}
-                                                                            @elseif($latest_courses[1]->type == 8)
-                                                                                {{ __('Repeat Course') }}
-                                                                            @endif
-                                                                        </i>
-
-                                                                    </small>
-
-                                                                    
-
-                                                                    <small style="padding-right: 4px" class="">
-                                                                        <i class="fa fa-dollar">
-                                                                            {{ number_format($latest_courses[1]->price, 0) }}
-                                                                        </i>
-
-                                                                    </small>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- 3 -->
-                                                <div class="col-md-6 col-6 h-auto  mt-2 prep_card_height px-2">
-                                                    <div class="prep_card" onmouseover="copyCardDataToLeftCard(this)">
-                                                        <img class="prep_card-image"
-                                                            src="{{ $latest_courses[2]->thumbnail }}" />
-                                                        <div class="widget-49-meeting-info pr-2">
-                                                            <span class="widget-49-pro-title">PRO-0333</span>
-                                                        </div>
-                                                        <div class="container px-0">
-                                                            <p class="prep_card-text custom_paragraph">
-                                                                {{ !empty($latest_courses[2]->parent_id) ? $latest_courses[2]->parent->title : $latest_courses[2]->title }}
-                                                            </p>
-                                                            <!-- Container for .for-left content -->
-                                                            <div class="for-left">
-                                                                <p class="prep-paragraph custom_paragraph">
-                                                                    @php
-                                                                        $requirements = str_replace(
-                                                                            '&nbsp;',
-                                                                            ' ',
-                                                                            htmlspecialchars_decode(
-                                                                                strip_tags(
-                                                                                    !empty(
-                                                                                        $latest_courses[2]->parent_id
-                                                                                    )
-                                                                                        ? $latest_courses[2]->parent
-                                                                                            ->requirements
-                                                                                        : $latest_courses[2]
-                                                                                            ->requirements,
-                                                                                ),
-                                                                            ),
-                                                                        );
-                                                                    @endphp
-                                                                    @if (Str::length($requirements) > 120)
-                                                                        {{ Str::limit($requirements, 120, '...') }}
-                                                                    @else
-                                                                        {{ $requirements }}
-                                                                    @endif
-                                                                </p>
-                                                                <a href="{{ !empty($latest_courses[2]->parent_id) ? courseDetailsUrl(@$latest_courses[2]->parent->id, @$latest_courses[2]->type, @$latest_courses[2]->parent->slug) . '?courseType=' . $latest_courses[2]->type : courseDetailsUrl(@$latest_courses[2]->id, @$latest_courses[2]->type, @$latest_courses[2]->slug) }}"
-                                                                    class="learn-more mr-2">Learn more</a><i
-                                                                    class="fa fa-long-arrow-right"></i>
-                                                                <div class="d-flex justify-content-between pt-2">
-                                                                    <small>
-                                                                        <i class="fa fa-book-open">
-                                                                            @if ($latest_courses[2]->type == 1)
-                                                                                {{ __('Course') }}
-                                                                            @elseif($latest_courses[2]->type == 2)
-                                                                                {{ __('Big Quiz') }}
-                                                                            @elseif($latest_courses[2]->type == 4)
-                                                                                {{ __('Full Course') }}
-                                                                            @elseif($latest_courses[2]->type == 5)
-                                                                                {{ __('Prep-Course (On-Demand)') }}
-                                                                            @elseif($latest_courses[2]->type == 6)
-                                                                                {{ __('Prep-Course (Live)') }}
-                                                                            @elseif($latest_courses[2]->type == 8)
-                                                                                {{ __('Repeat Course') }}
-                                                                            @endif
-                                                                        </i>
-
-                                                                    </small>
-
-                                                                    
-
-                                                                    <small style="padding-right: 4px" class="">
-                                                                        <i class="fa fa-dollar">
-                                                                            {{ number_format($latest_courses[2]->price, 0) }}
-                                                                        </i>
-
-                                                                    </small>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- 4 -->
-                                                <div class="col-md-6 col-6 h-auto mt-2 prep_card_height px-2">
-                                                    <div class="prep_card" onmouseover="copyCardDataToLeftCard(this)">
-                                                        <img class="prep_card-image"
-                                                            src="{{ $latest_courses[3]->thumbnail }}" />
-                                                        <div class="widget-49-meeting-info pr-2">
-                                                            <span class="widget-49-pro-title">PRO-0444</span>
-                                                        </div>
-                                                        <div class="container px-0">
-                                                            <p class="prep_card-text custom_paragraph">
-                                                                {{ !empty($latest_courses[3]->parent_id) ? $latest_courses[3]->parent->title : $latest_courses[3]->title }}
-                                                            </p>
-                                                            <!-- Container for .for-left content -->
-                                                            <div class="for-left">
-                                                                <p class="prep-paragraph custom_paragraph"
-                                                                    style="display: block;">
-                                                                    @php
-                                                                        $requirements = str_replace(
-                                                                            '&nbsp;',
-                                                                            ' ',
-                                                                            htmlspecialchars_decode(
-                                                                                strip_tags(
-                                                                                    !empty(
-                                                                                        $latest_courses[3]->parent_id
-                                                                                    )
-                                                                                        ? $latest_courses[3]->parent
-                                                                                            ->requirements
-                                                                                        : $latest_courses[3]
-                                                                                            ->requirements,
-                                                                                ),
-                                                                            ),
-                                                                        );
-                                                                    @endphp
-                                                                    @if (Str::length($requirements) > 120)
-                                                                        {{ Str::limit($requirements, 120, '...') }}
-                                                                    @else
-                                                                        {{ $requirements }}
-                                                                    @endif
-                                                                </p>
-                                                                <a href="{{ !empty($latest_courses[3]->parent_id) ? courseDetailsUrl(@$latest_courses[3]->parent->id, @$latest_courses[3]->type, @$latest_courses[3]->parent->slug) . '?courseType=' . $latest_courses[3]->type : courseDetailsUrl(@$latest_courses[3]->id, @$latest_courses[3]->type, @$latest_courses[3]->slug) }}"
-                                                                    class="learn-more mr-2">Learn more</a><i
-                                                                    class="fa fa-long-arrow-right"></i>
-                                                                <div class="d-flex justify-content-between pt-2">
-                                                                    <small>
-                                                                        <i class="fa fa-book-open">
-                                                                            @if ($latest_courses[3]->type == 1)
-                                                                                {{ __('Course') }}
-                                                                            @elseif($latest_courses[3]->type == 2)
-                                                                                {{ __('Big Quiz') }}
-                                                                            @elseif($latest_courses[3]->type == 4)
-                                                                                {{ __('Full Course') }}
-                                                                            @elseif($latest_courses[3]->type == 5)
-                                                                                {{ __('Prep-Course (On-Demand)') }}
-                                                                            @elseif($latest_courses[3]->type == 6)
-                                                                                {{ __('Prep-Course (Live)') }}
-                                                                            @elseif($latest_courses[3]->type == 8)
-                                                                                {{ __('Repeat Course') }}
-                                                                            @endif
-                                                                        </i>
-
-                                                                    </small>
-
-                                                                    
-
-                                                                    <small style="padding-right: 4px" class="">
-                                                                        <i class="fa fa-dollar">
-                                                                            {{ number_format($latest_courses[3]->price, 0) }}
-                                                                        </i>
-
-                                                                    </small>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- end4 -->
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @else
-                                <div class="col-lg-12">
-                                    <div
-                                        class="Nocouse_wizged d-flex align-items-center justify-content-center text-center">
-                                        <div class="thumb">
-                                            <img style="width: 50px"
-                                                src="{{ asset('public/frontend/infixlmstheme') }}/img/not-found.png"
-                                                alt="">
-                                        </div>
-                                        <h1>
-                                            {{ __('No Course Found') }}
-                                        </h1>
-                                    </div>
-                                </div>
-                            @endif
-                        </section> --}}
-                    <!-- new_section_hover_end -->
-
-                    {{-- <div class="section-margin-y container g-0">
-                            <div class="row g-0 mx-md-4 px-1">
-                                <div class="col-md-12 text-center">
-                                    <h2 class="font-weight-bold custom_heading_1">Healthcare Programs Options</h2>
-                                    <p class="pb-3 custom_paragraph">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem exerc
-                                        <br>
-                                        voluptatibus neque et obcaecati asperiores! Praesentium magnam error veritatis
-                                        adipisicing elit. Dolorem exerc
-                                    </p>
-                                </div>
-
-                                @if (isset($latest_programs))
-                                @php
-                                    $counter = 1;
-                                @endphp
-                                @foreach ($latest_programs as $latest_program)
-                                 <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12 d-flex my-2 px-2"
-                                    data-aos-delay="{{ $counter * 500 }}" data-aos="fade-down">
-                                    <div class="card rounded-card shadow">
-                                        <div class="card-header rounded-card-header p-0 mw h-auto">
-                                            <a href="{{ route('programs.detail', [$latest_program->id]) }}">
-                                                <img src="{{ getCourseImage($latest_program->icon) }}"
-                                                    class="img-fluid img-cover w-100 h-auto rounded-card-img"></a>
-                                        </div>
-                                        <div class="card-body d-flex flex-column p-3">
-                                            <h5 class="font-weight-bold">
-                                                <a {{ route('programs.detail', [$latest_program->id]) }}>
-                                                    {{ $latest_program->programtitle }}</a>
-                                            </h5>
-                                            <div class="paragraph_custom_height mt-auto pb-2">
-                                                <p>
-                                                    @php
-                                                        $description = str_replace(
-                                                            '&nbsp;',
-                                                            ' ',
-                                                            htmlspecialchars_decode(
-                                                                strip_tags(
-                                                                    $latest_program->discription,
-                                                                ),
-                                                            ),
-                                                        );
-                                                    @endphp
-                                                    @if (Str::length($description) > 120)
-                                                        {{ Str::limit($description, 120, '...') }}
-                                                    @else
-                                                        {{ $description }}
-                                                        @endif
-                                                </p>
-                                            </div>
-                                            <div class="d-flex justify-content-between pt-2">
-                                                <small>
-                                                    <i class="fa fa-book-open"></i>
-                                                    {{ count(json_decode($latest_program->allcourses)) }}
-                                                    Courses
-                                                </small>
-
-                                                <small>
-                                                    <i class="fas fa-clock"></i>
-                                                    {{ $latest_program->duration }} weeks
-                                                </small>
-
-                                                <small class="">
-                                                    <i class="fa fa-dollar"></i>
-                                                    {{ $latest_program->currentProgramPlan[0]->amount }}
-                                                </small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                @php
-                                    $counter++;
-                                @endphp
-    @endforeach
-    @endif
-                                                                                                                                                                                                                                                                                                                                                        @if (count($latest_programs) == 0)
-    <div class="col-lg-12">
-            <div class="Nocouse_wizged d-flex align-items-center justify-content-center text-center">
-            <div class="thumb">
-            <img style="width: 50px" src="{{ asset('public/frontend/infixlmstheme') }}/img/not-found.png"
-            alt="">
-            </div>
-            <h1>
-            {{ __('No Program Found') }}
-            </h1>
-            </div>
-            </div>
-            @endif
-            </div>
-            </div> --}}
-                    <!-- <section>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <div class="row">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <div class="col-md-12">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <img src="{{ asset('public/frontend/infixlmstheme/img/images/WE_ARE_HERE_TO_LISTEN.png') }}"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    alt="" class="img-fluid w-100">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </section> -->
-                    {{-- How to Buy --}}
-                    {{-- hide from all screen --}}
                     <div class="section-margin-y container d-none">
                         <div class="row mx-md-4">
                             <div class="col-md-12 mb-4">
@@ -5278,292 +1811,20 @@
                     </div>
                 @endif
 
-                <!-- new slider -->
-
-                {{-- @include(theme('pages.reviews')) --}}
-
-
-                {{-- Learning More --}}
-                {{-- @elseif($block->id == 4)
-                    @if ($homeContent->show_instructor_section == 1)
-                        <x-home-page-instructor-section :homeContent="$homeContent" />
-                    @endif --}}
-
-
-
-
-                {{-- <section class="custom_section_color py-5">
-        <div class="container" style="padding-top: 60px;">
-            <div class="row mx-md-4">
-                <div class="col-md-12">
-                    <div class="mt-4 pb-2 text-center">
-                        <h2 class="custom_heading_1 font-weight-bold">
-                            What Our happy Students Say
-                        </h2>
-                        <p class="custom_paragraph">
-                            The world’s largest selection of courses choose from 130,000 online video
-                            courses
-                            <br>with
-                            new additions published every month
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="swiper">
-            <div class="swiper-wrapper">
-                @foreach ($latest_course_reveiws as $course_reveiw)
-                <!-- 1 -->
-                <div class="swiper-slide" style="">
-                    <div class="card card-review p-3">
-                        <div class="row content d-flex justify-content-between">
-
-                            <div class="col-md-4 image">
-                                <img src="{{ asset($course_reveiw->user->image) }}"
-                                    alt="{{ $course_reveiw->user->name }}" class="rounded-circle img-fluid">
-                            </div>
-                            <div class="col-md-8 heading d-flex flex-column justify-content-center">{{
-                                $course_reveiw->user->name }}
-                                <div class="text-warning">
-                                    @php
-                                    $main_stars = $course_reveiw->star;
-                                    $stars = intval($course_reveiw->star);
-                                    @endphp
-                                    @for ($i = 0; $i < $stars; $i++) <i class="fas fa-star"></i>
-                                        @endfor
-                                        @if ($main_stars > $stars)
-                                        <i class="fas fa-star-half"></i>
-                                        @endif
-                                </div>
-                            </div>
-                        </div>
-                        <div class="paragraph font-italic">
-                            {{ $course_reveiw->comment }}
-                        </div>
-
-                    </div>
-                </div>
-                @endforeach
-            </div>
-        </div>
-    </section> --}}
-
-
-                {{-- <section class="custom_section_color">
-        <div class="container" style="padding-top: 60px; padding-bottom: 60px;">
-            <div class="row mx-md-4">
-                <div class="col-md-12">
-                    <div class="mt-4 pb-2 text-center">
-                        <h2 class="custom_heading_1 font-weight-bold">
-                            What Our happy Students Say
-                        </h2>
-                        <p>
-                            The world’s largest selection of courses choose from 130,000 online video
-                            courses
-                            <br>with
-                            new additions published every month
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="row mx-md-4 justify-content-center pb-5 pt-2">
-
-                @foreach ($latest_course_reveiws as $course_reveiw)
-                <div class="col-md-4">
-                    <div class="zakana" style="">
-                        <div class="p-3">
-                            <div class="card rounded-card p-3 shadow">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <img src="{{ asset($course_reveiw->user->image) }}"
-                                            class="rounded-circle img-fluid mx-auto"
-                                            style="width: 77px; height: 77px;" />
-                                    </div>
-                                    <div class="reviews col-md-8 d-flex flex-column justify-content-center">
-                                        <p class="font-weight-bold">{{ $course_reveiw->user->name }}</p>
-                                        <div class="text-warning">
-                                            @php
-                                            $main_stars = $course_reveiw->star;
-                                            $stars = intval($course_reveiw->star);
-                                            @endphp
-                                            @for ($i = 0; $i < $stars; $i++) <i class="fas fa-star"></i>
-                                                @endfor
-                                                @if ($main_stars > $stars)
-                                                <i class="fas fa-star-half"></i>
-                                                @endif
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 font-italic mt-3">
-                                        <p>"{!! $course_reveiw->comment !!}"</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-            </div>
-        </div>
-    </section> --}}
+                
             @elseif($block->id == 8)
-                @if ($homeContent->show_testimonial_section == 1)
-                    {{--
-    <x-home-page-testimonial-section :homeContent="$homeContent" /> --}}
+                {{-- @if ($homeContent->show_testimonial_section == 1)
+                    
                 @endif
-                {{-- <div class="row p-2" style="background: rgb(240 246 251);">
-        <div class="col-md-12">
-            <div class="ourprogram mt-4 pb-2 text-center">
-                <h1 class="custom_heading_1 font-weight-bold">
-                    What Our Student Have To <br> Say</h1>
-                <p style="font-size:19px;">
-                    The world’s largest selection of courses choose from 130,000 online video courses
-                    <br>with
-                    new additions published every month
-                </p>
-            </div>
-        </div>
-    </div> --}}
-                {{-- <div class="row zakana m-0 py-4" style="background: rgb(240 246 251); justify-content: space-around; ">
-        @foreach ($latest_course_reveiws as $course_reveiw)
-        <div class="col-md-12">
-            <div class="row m-0 p-4">
-                <div class="col-md-12 col-sm-6 bg-white" style="border-radius: 7px;">
-                    <div class="row p-5">
-                        <div class="col-md-2">
-                            <div class="image mt-2">
-                                <img src="{{ asset($course_reveiw->user->image) }}"
-                                    style="width: 77px; height: 77px; border-radius: 50%;" />
-                            </div>
-                        </div>
-                        <div class="col-md-10">
-                            <div class="para m-3 mt-3 px-3">
-                                <p style="font-weight: bold;">{{ $course_reveiw->user->name }}</p>
-                                @php
-                                $main_stars = $course_reveiw->star;
-                                $stars = intval($course_reveiw->star);
-                                @endphp
-                                @for ($i = 0; $i < $stars; $i++) <i class="fas fa-star"></i>
-                                    @endfor
-                                    @if ($main_stars > $stars)
-                                    <i class="fas fa-star-half"></i>
-                                    @endif
-                            </div>
-                        </div>
-                        <div class="col-md-12 mt-3">
-                            <p>
-                                {!! $course_reveiw->comment !!}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        @endforeach --}}
-                {{-- <div class="col-md-12"> --}}
-                {{-- <div class="row m-0 p-4"> --}}
-                {{-- <div class="col-md-12 bg-white" style="border-radius: 7px;"> --}}
-                {{-- <div class="row p-5"> --}}
-                {{-- <div class="col-md-2"> --}}
-                {{-- <div class="image mt-2"> --}}
-                {{-- <img src="{{ asset('public/assets/c2.jpg') }}" --}} {{--
-                                    style="width: 77px; height: 77px; border-radius: 50%;" /> --}}
-                {{-- </div> --}}
-                {{-- </div> --}}
-                {{-- <div class="col-md-10"> --}}
-                {{-- <div class="para m-3 mt-3 px-3"> --}}
-                {{-- <p style="font-weight: bold;">Lorem Ipsum</p> --}}
-                {{-- <p style="color: #373737;">Writer</p> --}}
-                {{-- <i class="fa-sharp fa-solid fa-star"></i><i --}} {{--
-                                    class="fa-sharp fa-solid d fa-star"></i><i --}} {{--
-                                    class="fa-sharp fa-solid d fa-star"></i><i --}} {{--
-                                    class="fa-sharp fa-solid d fa-star"></i><i --}}
-                {{--
-                                    class="fa-sharp fa-solid d fa-star"></i> --}}
-                {{-- </div> --}}
-                {{-- </div> --}}
-                {{-- <div class="col-md-12 mt-3"> --}}
-                {{-- <p> --}}
-                {{-- “Lorem Ipsum is simply dummy text of the printing and --}}
-                {{-- typesetting industry. Lorem Ipsum has been the industry's --}}
-                {{-- standard dummy text ever since the 1500s, when an unknown --}}
-                {{-- printer took a galley of type and scrambled it to make a type --}}
-                {{-- specimen book” --}}
-                {{-- </p> --}}
-                {{-- </div> --}}
-                {{-- </div> --}}
-                {{-- </div> --}}
-                {{-- </div> --}}
-                {{-- </div> --}}
 
-
-                {{--
-    </div> --}}
-
-
-                {{-- FAQS section --}}
                 <section class="sec-10">
                     <div class="container py-5">
                         <div class="row faqs-row px-xl-5">
-                            {{-- <div class="col-sm-7 shadow_row video-h-cls p-0">
-                            <div class="video-container">
-                                <video id="myVideo" class="h-100 w-100" style="object-fit: cover">
-                                    <source src="{{ asset('/public/uploads/images/footerimg/ezgif-2-78802b2d5b.mp4') }}">
-                                </video>
-                                <div class="overlay-video"></div>
-                                <div class="text-video-overlay" style="top: 0">
-
-                                    <div class="d-flex text-center overlay-heading">
-                                      <h2 class="font-weight-bold text-white">The Greatest Minds don't <br>Crumble Under Pressure<br> They Use it to Rise Higher</h2>
-                                    </div>
-                                  </div>
-                                <div class="text-video-overlay" >
-
-                                  <div class="d-flex text-center overlay-heading1">
-                                    <h2 class="font-weight-bold text-white">Take a Tour of Merkaii Xcellence</h2>
-                                  </div>
-                                </div>
-                                <div class="video-controls">
-                                    <button onclick="togglePlayPause()" style="border: none">
-                                        <i id="playPauseBtn" class="fa fa-play"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div> --}}
-                            {{-- <div class="col-lg-8 col-md-12 shadow_row video-h-cls pr-2 mt-lg-0 mt-4">
-                                <div class="video-container">
-                                    <video id="myVideo" class="new-intro-video w-100">
-                                        <source
-                                            src="{{ asset('/public/uploads/images/footerimg/new-intro-video-com.mp4') }}">
-                                    </video>
-                                    <div class="overlay-video"></div>
-                                    <div class="text-video-overlay top-center">
-                                        <div class="d-flex justify-content-md-center text-md-center overlay-heading">
-                                            <h2 class="font-weight-bold text-white text-md-center">The Greatest Minds don't
-                                                Crumble Under
-                                                Pressure<br> They Use it to Rise Higher</h2>
-                                        </div>
-                                    </div>
-                                    <div class="text-video-overlay bottom-center">
-                                        <div class="d-flex justify-content-md-center text-md-center overlay-heading1">
-                                            <h2 class="font-weight-bold text-white text-md-center">Take a Tour of Merkaii
-                                                Xcellence</h2>
-                                        </div>
-                                    </div>
-                                    <div class="video-controls">
-                                        <button onclick="togglePlayPause()" style="border: none">
-                                            <i id="playPauseBtn" class="fa fa-play"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div> --}}
-
                             <div class="col-12 col-md-12 mt-4 mt-lg-0 px-md-3">
                                 <div class="d-flex flex-column align-items-center text-center">
                                     <h2 class="section-header font-weight-bold m-0 p-3">ASK US
                                         ANYTHING: FAQs</h2>
                                     <div class="accordion p-sm-3 p-2">
-                                        <!-- panel-about1 -->
                                         <div class="row align-items-start justify-content-center">
                                             @foreach ($faqs as $faq)
                                                 <div class="panel-about col-md-5" style="margin: 1rem">
@@ -5604,52 +1865,6 @@
 
                             <div class="col-md-3 col-sm-6 col-12 custom_section_color shadow_row custom_paragraph d-none"
                                 style="padding: 1rem">
-                                {{-- <form method="POST" action="{{ route('contactMsgSubmit') }}" class="fe mx-4 mt-1">
-                                <h2 class="custom_heading_1 font-weight-bold my-2 form_h1">Stay in Touch!</h2>
-                                @csrf
-                                <label for="name" class="form-label">Your Name</label>
-                                <input type="text" name="name" class="form-control form_sm mb-2" placeholder="">
-                                <label for="" class="form-label">Email Address</label>
-                                <input type="email" name="email" class="form-control form_sm mb-2" placeholder="">
-                                <label for="" class="form-label">Phone #</label>
-                                <input type="text" name="phone" class="form-control form_sm mb-2" placeholder="">
-                                <label for="" class="form-label">Zip Code</label>
-                                <input type="text" name="zip" class="form-control form_sm mb-2" placeholder="">
-                                <label for="" class="form-label">Select Program</label>
-                                <select id="program" name="program" class="form-control form_sm mb-2"
-                                    style="width: 100%" required>
-                                    <option value="" selected>Select Program</option>
-                                    <option value="REMEDIAL-RN(176 Hours)">REMEDIAL-RN(176 Hours)</option>
-                                    <option value="Refresher-RM(Endorsement & inactive License)">
-                                        Refresher-RM(Endorsement & inactive License)
-                                    </option>
-                                    <option value="NCLEX Refresher(Prep)">NCLEX Refresher(Prep)</option>
-                                    <option value="CNA Exam Prep(Skills Testing)">CNA Exam Prep(Skills
-                                        Testing)
-                                    </option>
-                                    <option value="Clinical-Proctor">Clinical-Proctor</option>
-                                </select>
-                                <label for="year" class="form-label mt-2">High School Grade Year</label>
-                                <select id="years" name="year"
-                                    class="form-control form_sm w-100 mb-2"style="width: 100%" required>
-                                    <option value="" selected>Select Year</option>
-                                    @php
-                                        $years = range(date('Y'), 1950);
-                                    @endphp
-                                    @forelse ($years as $year)
-                                        <option value="{{ $year }}">{{ $year }}</option>
-                                    @empty
-                                        <option value="">No Year Found</option>
-                                    @endforelse
-                                </select>
-                                <label for="message" class="form-label mt-2">Message</label>
-                                <textarea name="message" class="form-control form_sm shadow_msg" rows="4" aria-required="true"
-                                    aria-invalid="false" placeholder="" required style="resize: none"></textarea>
-                                <div class="col-md-12 my-2 text-center">
-                                    <button type="submit" class="theme_btn small_btn4">Submit</button>
-                                </div>
-                            </form> --}}
-                                {{-- new form --}}
                                 <form>
                                     <h2 class="custom_heading_1 font-weight-bold my-2 form_h1">Stay in Touch!</h2>
                                     <div class="form-row mt-3">
@@ -5800,7 +2015,6 @@
                     </div>
                 </section>
 
-                {{-- stayin touchend --}}
                 @if (count($latest_blogs) > 0)
                     <section class="sec-11">
                         <div class="container px-lg-5 py-3">
@@ -5815,7 +2029,6 @@
                                         <p>Connect and Engage for all news and events from the desk of ThaRakii </p>
                                     </div>
                                 </div>
-                                {{-- new section --}}
                                 @if (count($featured_blogs) > 0)
                                     <div class="col-lg-7 px-lg-0 mb-4 mb-lg-0">
                                         <div class="rts-event-section">
@@ -5839,10 +2052,6 @@
                                                                         <span><i class="fa fa-clock"></i></span>
                                                                         <span>{{ Carbon\Carbon::parse($thisblog->created_at)->format('h:i a') }}</span>
                                                                     </div>
-                                                                    {{-- <div class="event-place">
-                                <span><i class="fa fa-location-dot"></i></span>
-                                <span>Yarra Park, UK</span>
-                            </div> --}}
                                                                 </div>
                                                             </a>
                                                         </li>
@@ -5892,14 +2101,10 @@
                                                             </li>
                                                         @endif
                                                     @endforeach
-                                                    {{-- <li class="nav-item" role="presentation">
-                                                <a class="nav-link" data-toggle="pill" href="#Admission">Admission</a>
-                                            </li> --}}
                                                 </ul>
                                                 <div class="eventsIcon"><i id="right"
                                                         class="fa-solid fa-angle-right"></i></div>
                                             </div>
-                                            {{-- fortabs --}}
                                             <div class="tab-content">
                                                 <div id="home" class="tab-pane active">
                                                     <ul class="list-unstyled notice-content-box" id="blogs_ul">
@@ -5929,103 +2134,10 @@
                                     </div>
                                 </div>
 
-                                {{-- section tabssss --}}
-
-
                             </div>
                         </div>
                     </section>
-                @endif
-                <!-- <div class="row m-0 mt-5 shadow">
-                                                                                                                                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-12 bg-dark">
-                                                                                                                                <div class="text-white">
-                                                                                                                                <h2 class="custom_heading_1 font-weight-bold my-4 text-white">About Us</h2>
-                                                                                                                                <p class="my-3 text-justify text-white">
-                                                                                                                                MCOH is an inclusive and equitable enviroment that provides educational
-                                                                                                                                oppturities for anyone seeking update their skill being a new career path and
-                                                                                                                                enhance professional Skills </p>
-                                                                                                                                <div class="mb-4 text-white">
-                                                                                                                                <p class="locaton py-1 text-white">
-                                                                                                                                    <i class="fi fi-rs-marker"></i>
-                                                                                                                                    501 S. Florida Avenue<br>
-                                                                                                                                    <span class="ml-4">Lakeland, FL 33801</span>
-                                                                                                                                </p>
-                                                                                                                                <p class="call py-1 text-white">
-                                                                                                                                    <i class="fi fi-br-phone-call"></i>
-                                                                                                                                    863-250-8764 | 347-525-1736
-                                                                                                                                </p>
-                                                                                                                                <p class="time py-1 text-white">
-                                                                                                                                    <i class="fi fi-rs-clock-three"></i>
-                                                                                                                                    Mon - Thur: 8:30 AM - 7:00 PM
-                                                                                                                                </p>
-                                                                                                                                </div>
-                                                                                                                                </div>
-                                                                                                                                </div>
-                                                                                                                                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-12 custom_section_color p-0">
-                                                                                                                                <form method="POST" action="{{ route('contactMsgSubmit') }}" class="fe mx-4 mt-2">
-                                                                                                                                <h2 class="custom_heading_1 font-weight-bold my-4">Stay in Touch!</h2>
-                                                                                                                                @csrf
-                                                                                                                                <label for="name" class="form-label">Your Name</label>
-                                                                                                                                <input type="text" name="name" class="form-control form_sm mb-2"
-                                                                                                                                placeholder="">
-                                                                                                                                <label for="" class="form-label">Email Address</label>
-                                                                                                                                <input type="email" name="email" class="form-control form_sm mb-2"
-                                                                                                                                placeholder="">
-                                                                                                                                <label for="" class="form-label">Phone #</label>
-                                                                                                                                <input type="text" name="phone" class="form-control form_sm mb-2"
-                                                                                                                                placeholder="">
-                                                                                                                                <label for="" class="form-label">Zip Code</label>
-                                                                                                                                <input type="text" name="zip" class="form-control form_sm mb-2"
-                                                                                                                                placeholder="">
-                                                                                                                                <label for="" class="form-label">Select Program</label>
-                                                                                                                                <select id="program" name="program" class="form-control form_sm mb-2" required>
-                                                                                                                                <option value="" selected>Select Program</option>
-                                                                                                                                <option value="REMEDIAL-RN(176 Hours)">REMEDIAL-RN(176 Hours)</option>
-                                                                                                                                <option value="Refresher-RM(Endorsement & inactive License)">
-                                                                                                                                    Refresher-RM(Endorsement & inactive License)
-                                                                                                                                </option>
-                                                                                                                                <option value="NCLEX Refresher(Prep)">NCLEX Refresher(Prep)</option>
-                                                                                                                                <option value="CNA Exam Prep(Skills Testing)">CNA Exam Prep(Skills
-                                                                                                                                    Testing)
-                                                                                                                                </option>
-                                                                                                                                <option value="Clinical-Proctor">Clinical-Proctor</option>
-                                                                                                                                </select>
-                                                                                                                                <label for="year" class="form-label mt-2">High School Grade Year</label>
-                                                                                                                                <select id="years" name="year" class="form-control form_sm w-100 mb-2"
-                                                                                                                                required>
-                                                                                                                                <option value="" selected>Select Year</option>
-                                                                                                                                @php
-                                                                                                                                    $years = range(
-                                                                                                                                        date(
-                                                                                                                                            'Y',
-                                                                                                                                        ),
-                                                                                                                                        1950,
-                                                                                                                                    );
-                                                                                                                                @endphp
-                                                                                                                                @forelse ($years as $year)
-    <option value="{{ $year }}">{{ $year }}</option>
-    @empty
-                                                                                                                                <option value="">No Year Found</option>
-    @endforelse
-                                                                                                                                    </select>
-                                                                                                                                    <label for="message" class="form-label mt-2">Message</label>
-                                                                                                                                    <textarea name="message" class="form-control form_sm" rows="4" aria-required="true" aria-invalid="false"
-                                                                                                                                        placeholder="" required style="resize: none"></textarea>
-                                                                                                                                    <div class="col-md-12 my-3 text-center">
-                                                                                                                                        <button type="submit" class="theme_btn small_btn4">Submit</button>
-                                                                                                                                    </div>
-                                                                                                                                </form>
-                                                                                                                                </div>
-                                                                                                                                <div class="col-xl-6 col-lg-6 col-md-6 d-none d-lg-block d-md-block p-0">
-
-                                                                                                                                <div class="video1" onclick="homeVideo()">
-                                                                                                                                    <div class="vidicons m-auto">
-                                                                                                                                        <i class="fa-solid fa-play"></i>
-                                                                                                                                    </div>
-                                                                                                                                </div>
-                                                                                                                                </div>
-                                                                                                                                </div>
-                                                                                                                                -->
+                @endif --}}
 
 
                 <div class="modal fade" id="video_image" tabindex="-1" role="dialog"
@@ -6054,42 +2166,12 @@
                         </div>
                     </div>
                 </div>
-                </div>
-
 
                 <!-- new section -->
-                <section class="sec-12 pb-3" id="stay-in-touch">
+                {{-- <section class="sec-12 pb-3" id="stay-in-touch">
                     <div class="container-fluid mintban px-lg-5 my-lg-5 my-4">
                         <div class="container mintban_row d-flex justify-content-center">
-                            {{-- <div class="col-md-12 mb-5">
-            <div class="row "> --}}
                             <div class="row flowdiv ">
-                                {{-- <div class="row m-0" style=""> --}}
-                                {{-- <div class="col-lg-4 col-md-6 my-3 my-lg-0 ankar flowdiv-ele">
-
-                                    <div class="dataflow p-2 text-white d-flex justify-content-center align-items-center">
-                                        <div class="eltdf-eh-item-content eltdf-eh-custom-5500 py-3 py-md-0 px-sm-4 px-2">
-                                            <div class="cta_service_info txt py-3">
-                                                <h2 class="custom_small_heading mb-4">Become a MCInstructor | Tutor</h2>
-                                                <p class="mb-4"> Make a difference in the lives of future generations:
-                                                    Merkaii Xcellence seeks
-                                                    passionate
-                                                    educators. Our students come from a variety of backgrounds, and so can
-                                                    you. Share
-                                                    your expertise, be it industry knowledge, academic prowess, or
-                                                    real-world
-                                                    experience.
-                                                </p>
-                                                <a href="{{ url('/instructors') }}"
-                                                    class="theme_btn small_btn py-2 px-4">MC
-                                                    Instructor</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> --}}
-                                <!-- <div class="col-sm-6 ankar col-md-6 p-0" >
-                                                                                                                                                                                             </div> -->
-                                {{-- form-add --}}
                                 <div class="col-lg-4 col-md-6 my-3 my-lg-0 flowdiv-ele d-flex align-items-center">
                                     <form method="POST" action="{{ route('contactMsgSubmit') }}"
                                         class="w-100 custom_section_color shadow_row custom_paragraph custom_form mb-0 py-3 py-md-0 px-sm-4 px-2"
@@ -6181,7 +2263,6 @@
                                                                 {{ $yr }}</option>
                                                         @endfor
                                                     </select>
-                                                    {{-- <input type="date" class="outside" name="year" id="contactYr"/> --}}
                                                     <span class="floating-label-outside">High School Grade Year</span>
                                                     <i class="fa fa-graduation-cap input-icon-outside"></i>
                                                 </div>
@@ -6213,7 +2294,6 @@
                                     </form>
                                 </div>
 
-                                {{-- form-end --}}
                                 <div class="col-lg-4 col-md-6 flowdiv-ele my-3 my-lg-0">
                                     <div class="eltdf-eh-item eltdf-background-arrow-left changeborder ankar_eltdf p-2"
                                         style="background: var(--footer_background_color); height:800px;">
@@ -6242,36 +2322,26 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{-- </div> --}}
                             </div>
                         </div>
-                        {{--
-        </div> --}}
-                        {{-- </div> --}}
                     </div>
-                </section>
-
-
-
+                </section> --}}
 
                 @include(theme('partials._custom_footer'))
+
             @elseif($block->id == 16)
-                {{-- @if ($homeContent->show_how_to_buy == 1)
-<x-home-page-how-to-buy :homeContent="$homeContent" />
-@endif --}}
+
             @elseif($block->id == 17)
-                {{-- @if ($homeContent->show_home_page_faq == 1)
-<x-home-page-faq :homeContent="$homeContent" />
-@endif --}}
+                
             @endif
         @endforeach
     @endif
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key={{ Settings('gmap_key') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    {{-- <script src="path/to/swiper.min.js"></script> --}}
-    {{-- <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> --}}
-    {{-- for scroll --}}
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
     <script>
         $('.blog-tag').on('click', function() {
             var tag = $(this).attr('data-tag');
@@ -6344,24 +2414,16 @@
             });
         });
 
-        // AOS.init({
-        //     duration: 1000,
-        // });
-
         $(document).ready(function() {
             $('#years').select2();
             $('#program').select2();
 
-            // var first_div = $('.first_div');
-            // var second_div = $('.second_div');
-            // var random_program = $('#random_programs');
+            
             var url = '{{ route('getRandomProgram') }}';
             var random_program_data = '';
-            // setInterval(() => {
             $.ajax({
                 type: "GET",
                 url: url,
-                // data: "null",
                 dataType: "json",
                 success: function(response) {
                     if (!response.status == true) {
@@ -6385,9 +2447,6 @@
         });
     </script>
 
-    {{-- <script src="{{ asset('public/assets/popper.js') }}"></script>
-<script src="{{ asset('public/assets/owl.carousel.min.js') }}"></script> --}}
-    {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> --}}
     <script src="{{ asset('public/assets/slick/slick.js') }}" type="text/javascript" charset="utf-8"></script>
 
     <script>
@@ -6431,138 +2490,8 @@
         }
     </script>
 
-    <script>
-        // $('.zakana').slick({
-        //     lazyLoad: 'ondemand',
-        //     slidesToShow: 2,
-        //     slidesToScroll: 1,
-        //     infinite: true,
-        //     autoplay: true,
-        //     autoplaySpeed: 2000,
-        //     // dots: false,
-        //     // prevArrow: false,
-        //     // nextArrow: false
-        //     arrows: true,
-
-        //     responsive: [{
-        //             breakpoint: 992,
-        //             settings: {
-        //                 arrows: false,
-        //                 centerMode: true,
-        //                 // centerPadding: '40px',
-        //                 slidesToShow: 1
-        //             }
-        //         },
-        //         {
-        //             breakpoint: 768,
-        //             settings: {
-        //                 arrows: true,
-        //                 centerMode: true,
-        //                 // centerPadding: '40px',
-        //                 slidesToShow: 1
-        //             }
-        //         },
-        //         {
-        //             breakpoint: 576,
-        //             settings: {
-        //                 arrows: true,
-        //                 // centerMode: true,
-        //                 // centerPadding: '40px',
-        //                 slidesToShow: 1
-        //             }
-        //         },
-        //         {
-        //             breakpoint: 480,
-        //             settings: {
-        //                 arrows: true,
-        //                 // centerMode: true,
-        //                 // centerPadding: '40px',
-        //                 slidesToShow: 1
-        //             }
-        //         },
-        //         {
-        //             breakpoint: 320,
-        //             settings: {
-        //                 arrows: true,
-        //                 // centerMode: true,
-        //                 // centerPadding: '40px',
-        //                 slidesToShow: 1
-        //             }
-        //         }
-        //     ]
-        // });
-    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-    <script>
-        (function($) {
-            "use strict";
 
-            var fullHeight = function() {
-                $(".js-fullheight").css("height", $(window).height());
-                $(window).resize(function() {
-                    $(".js-fullheight").css("height", $(window).height());
-                });
-            };
-            fullHeight();
-
-            var carousel = function() {
-
-                $(".owl-carousel").owlCarousel({
-                    loop: true,
-                    autoplay: true,
-                    autoplayTimeout: 4000,
-                    // navigation : true,
-
-                    margin: 30,
-                    animateOut: "fadeOut",
-                    animateIn: "fadeIn",
-                    nav: true,
-                    dots: false,
-                    // autoplayHoverPause: false,
-                    items: 1,
-                    // navText: [
-                    //   "<p><small>Prev</small><span class='ion-ios-arrow-round-back'></span></p>",
-                    //   "<p><small>Next</small><span class='ion-ios-arrow-round-forward'></span></p>",
-                    // ],
-
-                    // responsive: {
-                    //   0: {
-                    //     items: 1,
-                    //   },
-                    //   600: {
-                    //     items: 1,
-                    //   },
-                    //   1000: {
-                    //     items: 1,
-                    //   },
-                    // },
-                });
-            };
-            carousel();
-        })(jQuery);
-        // jQuery(document).ready(function($) {
-        // $('.owl-carousel').find('.owl-nav').removeClass('disabled');
-        //     $('.owl-carousel').on('changed.owl.carousel', function(event) {
-        //         $(this).find('.owl-nav').removeClass('disabled');
-        //     });
-        // });
-
-
-        //         $(document).ready(function(){
-        //     $(window).scroll(function(){
-        //         $(".custom_form").css( "transform": "translateY(-100%)",
-        //             "opacity": 0).animate({
-        //             transform: 'translateY(0)'
-        //         }, 500);
-        //         $(".dataflow").css("transform", "translateY(-100%)").animate({
-        //             transform: 'translateY(0)'
-        //         }, 500);
-        //         $(".ankar_eltdf").css("transform", "translateY(-100%)").animate({
-        //             transform: 'translateY(0)'
-        //         }, 500);
-        //     });
-        // });
-    </script>
     <script>
         $(document).ready(function() {
             const slideWidth = $(".custom-slide").outerWidth();
@@ -6621,6 +2550,7 @@
             });
         });
     </script>
+
     {{-- //   scroll our partner --}}
     <script>
         var swiper = new Swiper('.swiper', {
@@ -6637,85 +2567,7 @@
             },
 
         });
-        // var video = document.getElementById("myVideo");
-        // var playPauseBtn = document.getElementById("playPauseBtn");
-        // var videoContainer = document.querySelector(".video-container");
-        // var overlay = document.querySelector(".overlay-video");
-        // var textOverlays = document.querySelectorAll(".text-video-overlay");
-        // var videoControls = document.querySelector(".video-controls");
-
-        // function togglePlayPause() {
-        //     if (video.paused) {
-        //         video.play();
-        //         playPauseBtn.querySelector("i").classList.remove("fa-play");
-        //         playPauseBtn.querySelector("i").classList.add("fa-pause");
-        //         hideOverlay();
-        //         hideTextAndButton();
-        //         videoContainer.classList.add("video-playing");
-        //     } else {
-        //         video.pause();
-        //         playPauseBtn.querySelector("i").classList.remove("fa-pause");
-        //         playPauseBtn.querySelector("i").classList.add("fa-play");
-        //         showTextAndButton();
-        //         videoContainer.classList.remove("video-playing");
-        //     }
-        // }
-
-        // document.body.addEventListener("mouseenter", function(event) {
-        //     if (videoContainer.contains(event.target) && event.target !== playPauseBtn) {
-        //         showOverlay();
-        //         showTextAndButton();
-        //     }
-        // });
-
-        // videoContainer.addEventListener("mouseenter", function(event) {
-        //     togglePlayPause();
-        // });
-
-        // playPauseBtn.addEventListener("mouseenter", function(event) {
-        //     togglePlayPause();
-        // });
-
-        // function hideOverlay() {
-        //     overlay.style.opacity = "0";
-        // }
-
-        // function showOverlay() {
-        //     overlay.style.opacity = "1";
-        // }
-
-        // function hideTextAndButton() {
-        //     playPauseBtn.style.opacity = "1";
-        //     textOverlays.forEach(function(overlay) {
-        //         overlay.style.opacity = "0";
-        //     });
-        //     videoControls.style.opacity = "0";
-        // }
-
-        // function showTextAndButton() {
-        //     playPauseBtn.style.opacity = "1";
-        //     textOverlays.forEach(function(overlay) {
-        //         overlay.style.opacity = "1";
-        //     });
-        //     videoControls.style.opacity = "1";
-        // }
-
-        // video.addEventListener("click", function() {
-        //     if (video.paused) {
-        //         togglePlayPause();
-        //     } else {
-        //         showTextAndButton();
-        //     }
-        // });
-
-        // video.addEventListener("play", function() {
-        //     hideOverlay();
-        //     hideTextAndButton();
-        // });
-        // video.addEventListener("pause", function() {
-        //     showTextAndButton();
-        //     showOverlay();
-        // });
+        
         // Reference existing elements
         var video = document.getElementById("myVideo");
         var playPauseBtn = document.getElementById("playPauseBtn");
@@ -6780,6 +2632,7 @@
             }
         });
     </script>
+
     <script>
         function toggleAccordion(id) {
             var content = document.getElementById('collapse_' + id);
@@ -6804,6 +2657,7 @@
             }
         }
     </script>
+
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
     <script>
@@ -6821,6 +2675,7 @@
             })
         }
     </script>
+
     {{-- sec-1 --}}
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -6855,6 +2710,7 @@
             });
         });
     </script>
+
     {{-- sec-2 --}}
     <script>
         const observer = new IntersectionObserver((entries) => {
@@ -6897,6 +2753,7 @@
             });
         });
     </script>
+
     {{-- sec-3 --}}
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -6935,7 +2792,9 @@
                 }, "-=0.5"); // Animate the subscription container
         });
     </script>
+
     {{-- sec-4 --}}
+
     {{-- sec-5 --}}
     <script>
         function handleScroll() {
@@ -6961,6 +2820,7 @@
         }
         handleScroll();
     </script>
+
     {{-- sec-7 --}}
     <script>
         function handleScroll() {
@@ -6987,6 +2847,7 @@
         }
         handleScroll();
     </script>
+
     {{-- sec-9 --}}
     <script>
         function handleScroll() {
@@ -7012,6 +2873,7 @@
         }
         handleScroll();
     </script>
+
     {{-- sec-12 --}}
     <script>
         function handleScroll() {
@@ -7048,7 +2910,6 @@
         }
         handleScroll();
     </script>
-
 
     <script>
         $(document).ready(function() {
@@ -7092,6 +2953,7 @@
             $(window).on("resize", handleEventsIcons); // Check on resize as well
         });
     </script>
+
     </body>
 
 @endsection

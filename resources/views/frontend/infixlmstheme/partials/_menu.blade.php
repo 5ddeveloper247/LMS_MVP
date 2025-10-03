@@ -1,6 +1,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
 
 <div class="aoraeditor-skip aoraeditor-header">
 
@@ -18,7 +18,8 @@
 
         .login_btn a {
             font-size: 12.5px;
-            font-weight: 600;
+            font-weight: 300;
+            font-family: "Inter";
             color: #eee;
             background-color: var(--system_primery_color);
             margin-left: 10px !important;
@@ -59,7 +60,7 @@
 
         #mobile-menu li a {
             color: #fff !important;
-            font-family: "Rubik" !important;
+            font-family: "Inter" !important;
             font-weight: 400 !important;
             font-size: 12px !important;
             margin-right: 9px !important;
@@ -67,8 +68,12 @@
 
         #mobile-menu li a.active {
             color: var(--system_primery_color) !important;
-            font-family: "Rubik" !important;
-            font-weight: 600 !important;
+            font-family: "Inter" !important;
+            font-weight: 800 !important;
+        }
+
+        .inter {
+            font-family: "Inter"
         }
 
         /* small screen searchbar */
@@ -130,7 +135,7 @@
         @media only screen and (max-width: 768px) {
             .login_btn {
                 display: flex;
-                font-family: Jost, sans-serif;
+                font-family: "Inter";
                 margin: 0px 0px 0px 18px;
                 font-weight: 500;
                 width: fit-content;
@@ -223,7 +228,7 @@
 
             .login_btn {
                 display: flex;
-                font-family: Jost, sans-serif;
+                font-family: "Inter";
                 margin: 0px 0px 0px 18px;
                 font-weight: 500;
                 width: fit-content;
@@ -276,8 +281,8 @@
             }
 
             #mobile-menu li a {
-                font-size: 18px !important;
-                margin-right: 18px !important;
+                font-size: 16px !important;
+                margin-right: 16px !important;
             }
         }
 
@@ -306,12 +311,12 @@
             <div class="container-fluid px-0 py-0">
                 <div class="row">
                     <!-- <div class="col-12"> -->
-                    <div class="col-md-3 col-4 px-0">
+                    <div class="col-md-2 col-4 px-0">
                         <!-- header__left__start  -->
                         <div class="d-flex align-items-center pl-4">
                             <div class="logo_img ">
                                 <a href="{{ url('/') }}">
-                                    <img class="image_size p-1" src="{{ getLogoImage(Settings('logo')) }}"
+                                    <img class="image_size p-1" style="filter: drop-shadow(0px 4px 4px #000000);" src="{{ getLogoImage(Settings('logo')) }}"
                                         alt="{{ Settings('site_name') }}">
                                 </a>
                             </div>
@@ -426,7 +431,7 @@
 
                     <!-- main_menu_start  -->
                     <div
-                        class="col-md-9 col-sm-1 d-sm-flex justify-content-end main_menu d-none category_box_iner px-0 pl-lg-0 pr-lg-3 py-0">
+                        class="col-md-10 col-sm-1 d-sm-flex justify-content-end main_menu d-none category_box_iner px-0 pl-lg-0 pr-lg-3 py-0">
                         <nav class="navbar navbar-expand-md pl-0 mb-0">
                             <button class="navbar-toggler" type="button" data-toggle="collapse"
                                 data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
@@ -599,10 +604,10 @@
                                         @endforeach
                                         @guest
                                             <div class="login_btn text-center d-lg-none d-flex">
-                                                <a href="{{ url('login') }}"
+                                                <a class="inter" href="{{ url('login') }}"
                                                     class="text-white">{{ __('LogIn To Portal') }}
                                                 </a>
-                                                <a href="{{ url('pre-registration') }}" class="text-white"
+                                                <a class="inter" href="{{ url('pre-registration') }}" class="text-white"
                                                     style="gap: 5px;">{{ __('Apply Now') }}
                                                 </a>
                                             </div>

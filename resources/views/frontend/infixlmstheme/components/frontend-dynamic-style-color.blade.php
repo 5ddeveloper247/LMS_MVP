@@ -24,7 +24,7 @@
         :root {
             --system_primery_color: #1E3A5F;
             --system_secendory_color: #2CA6A4;
-            --footer_background_color: #238987;
+            --footer_background_color: #1E3A5F;
             --footer_headline_color: #ffffff;
             --footer_text_color: #5B5C6E;
             --footer_text_hover_color: #FF6B6B;

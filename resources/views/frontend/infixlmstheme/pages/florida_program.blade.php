@@ -1038,21 +1038,135 @@
         background-size: cover;
         position: relative;
     }
+
+    .col-lg-6 {
+        margin: 0 !important
+    }
+
+
+    /* ===============BANNER============== */
+    .breadcrumb_area {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100% !important;
+        text-align: center;
+    }
+
+    .breadcrumb_area:before {
+        display: none
+    }
+
+    .breadcrumb_area:after {
+        content: "";
+        position: absolute;
+        top: 0; 
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: #2ca6a49d !important;
+    }
+
+    .breadcam_wrap {
+        padding: 0 !important;
+        position: relative;
+        z-index: 99
+    }
+
+    .breadcam_wrap h1, .breadcam_wrap p {
+        text-shadow: 1px 0px 5px #737373;
+    }
+
+    h1, h2 {
+        font-family: "Inter" !important;
+        font-weight: 600 !important;
+    }
+
+    h2 {
+        font-size: clamp(1.3rem, 4vw, 2.5rem) !important;
+        font-family: "Rubik" !important;
+        font-weight: 600 !important;
+    }
+
+    p, a {
+        font-family: "Rubik" !important;
+    }
+
+    .breadcrumb_area a {
+        border-radius: 50px !important;
+        font-weight: 400 !important
+    }
+
+    li {
+        font-family: "Inter" !important;
+        font-size: clamp(14px, 1.5vw, 18px) !important;
+        font-weight: 500
+    }
 </style>
 @section('mainContent')
-    <div class="container-fluid px-0">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12 px-0">
+            <div class="col-md-12 px-0 inter">
                 @php
                     $banner_title = 'New Page';
                     $banner_image = 'public/frontend/infixlmstheme/img/images/courses-4.jpg';
                     $btn_title = auth()->check() ? '' : 'Sell With Us';
-                    $sub_title = 'FLORIDA BOARD OF NURSING REMEDIATION';
+                    $sub_title = 'YOUR COMEBACK STARTS HERE';
                 @endphp
                 <x-breadcrumb :title="$banner_title" :btntitle="$btn_title" :sub_title="$sub_title" :btnclass="'hit openModal'" />
             </div>
         </div>
-        <div class="container px-lg-5 teach_offer">
+
+        {{-- =============== FLORIDA BOARD OF NURSING REMEDIATION ================= --}}
+        <section style="background-image: url('{{ asset('public/assets/program-bg.png') }}'); background-size: 100%; background-repeat: no-repeat;">
+            <div class="container px-lg-5 py-5">
+                <div class="row justify-content-between py-5 px-xl-5 px-3">
+                    <div data-aos="fade-left" class="col-md-6">
+                        <div class="text-start">
+                            <h2>Why This Program</h2>
+                            <p class="text-muted inter">
+                                Access free study tips, expert guides, webinars, and blog posts — all designed
+                                to support your learning journey. Plus, unlock your free Study Resource Kit
+                                when you join our community.
+                            </p>
+                        </div>
+
+                        <ul class="mt-3">
+                            <li class="mb-4">
+                                <img src="https://cdn-icons-png.flaticon.com/128/10096/10096560.png" width="25" alt="">
+                                Florida BON-Approved Program 
+                            </li>
+
+                            <li class="mb-4">
+                                <img src="https://cdn-icons-png.flaticon.com/128/10096/10096560.png" width="25" alt="">
+                                For students who failed 3x or more 
+                            </li>
+
+                            <li class="mb-4">
+                                <img src="https://cdn-icons-png.flaticon.com/128/10096/10096560.png" width="25" alt="">
+                                NCLEX-RN and NCLEX-PN coverage
+                            </li>
+
+                            <li class="mb-4">
+                                <img src="https://cdn-icons-png.flaticon.com/128/10096/10096560.png" width="25" alt="">
+                                Online and Hybrid Options
+                            </li>
+
+                            <li class="mb-4">
+                                <img src="https://cdn-icons-png.flaticon.com/128/10096/10096560.png" width="25" alt="">
+                                Personal tutor & remediation mentor
+                            </li>
+                        </ul>
+                    </div>
+    
+                    <div data-aos="fade-right" class="col-md-6 col-lg-5 text-end">
+                        <img src="{{ asset('public/assets/comunity-right.png') }}" width="90%" alt="">
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        {{-- <div class="container px-lg-5 teach_offer">
             <div class="row py-md-5 pt-md-0 pt-3 px-xl-5 px-3">
                 <div class="col-md-12 text-center">
                     <h2 class="font-weight-bold custom_small_heading mb-md-5 mb-3 text-capitalize"> FLORIDA BOARD OF NURSING
@@ -1112,11 +1226,7 @@
                     </div>
                 </div>
                 <div data-aos="fade-right" class="col-md-6 col-12 px-md-2 teach_offer1">
-                    <div class="pb-4 pb-md-0"> {{-- custom_height_1 --}}
-                        <!-- <img src="{{ asset('public/assets/Teach1.jpg') }}" class="h-100 w-100" style=" border-radius: 25px;"> -->
-                        {{-- <img src="{{ asset('/public/uploads/images/footerimg/transformyourncleximg.jpeg') }}"
-                            class="h-100 w-100 object-fit-cover" style=" border-radius: 25px;"> --}}
-
+                    <div class="pb-4 pb-md-0">
                         <div class="row h-100">
                             <div class="col-6">
                                 <img src="https://merkaiixcelprep.com/public/uploads/images/footerimg/fantasticopportunityimg.jpeg"
@@ -1132,8 +1242,7 @@
                     </div>
                 </div>
             </div>
-            <!-- _____________________________________________________________________________________________________ -->
-        </div>
+        </div> --}}
 
         <!-- ______________________________________________________________________________  -->
 
