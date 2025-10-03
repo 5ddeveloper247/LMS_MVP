@@ -12,6 +12,7 @@ use Modules\CourseSetting\Entities\Package;
 use Modules\SystemSetting\Entities\TutorHiring;
 use Rennokki\QueryCache\Traits\QueryCacheable;
 use Modules\CourseSetting\Entities\CourseEnrolled;
+use Modules\Shop\Entities\ShopOrder;
 
 class Checkout extends Model
 {
@@ -73,5 +74,10 @@ class Checkout extends Model
     public function billing()
     {
         return $this->belongsTo(BillingDetails::class, 'billing_detail_id');
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(ShopOrder::class, 'tracking', 'tracking');
     }
 }

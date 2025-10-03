@@ -15,55 +15,19 @@
                             <p class="course-span">{{ $product->sub_title }}</p>
                             <p class="course-span" style="color: #ff6700;"><small>{{ $product->total_inventory > 0 ? 'In-Stock' : 'Out of Stock' }}</small></p>
 
-                            <!-- <div class="details_content">
-                                <h5 class="small_heading course-span f_w_700" style="color: #1770B5;">{{ __('frontend.Reviews') }}
-                                </h5>
-                                <div class="rating_star d-flex align-items-md-center flex-column flex-md-row">
-                                    <div class="stars course-span d-flex">
-                                        @php
-                                            $stars = 5;
-                                        @endphp
-                                        @for ($i = 0; $i < $stars; $i++)
-                                            <i class="fas fa-star"></i>
-                                        @endfor
-                                    </div>
-                                    <p class="course-span px-md-3">4
-                                        (5 {{ __('frontend.Rating') }})</p>
-                                </div>
-                            </div> -->
                         </div>
 
                         <div class="col-lg-6 col-md-4 d-flex align-items-end justify-content-end">
 
                             <div class="sidebar__title text-right">
                                 <h2 class="custom_small_heading font-weight-bold custom_heading_1 mb-0" style="color: #ff6700;">
-                                    
                                     {{ getPriceFormat($product->total_amount - $product->total_discount) }}
                                 </h2>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- <div class="col-lg-3 col-md-4 col-sm-5 py-3 py-sm-0">
-                    {{-- new card_1 starts --}}
-                    {{-- this one needs t be fixed --}}
-                    <div class="custom_section_color img_round course_tab px-2 pt-2"style="background-color: #eee;">
-                        <div class="custom_section_color rounded_section p-2 img_round" style="height: auto;">
-                            <h5 class="font-weight-bold custom_heading_1 small_heading">This Product includes:</h5>
-                            
-
-                            <span class="program-span"><i class="fa-clock-o fas"></i>&nbsp;&nbsp; {{ __('frontend.Duration') }} | 1 Week</span>
-                            <br class="mt-2">
-                            <span class="program-span"><i class="fas fa-user"></i>&nbsp;&nbsp; Enrolled | 10 Students</span>
-                            <br class="mt-2">
-                            <span class="program-span"><i class="fas fa-bars-staggered"></i>&nbsp;&nbsp; Chapters | 0 </span>
-                            <br class="mt-2">
-                            <span class="program-span"><i class="fas fa-bars-staggered"></i>&nbsp;&nbsp; Lessons | 10 </span>
-                            <br class="mt-2">
-                            <span class="program-span"><i class="fas fa-bars-staggered"></i>&nbsp;&nbsp; Quiz | 20 </span>
-                        </div>
-                    </div>
-                </div> -->
+                
             </div>
         </div>
         <!-- firstend -->
@@ -227,17 +191,19 @@
                      
                     {{-- new card_2 ends  --}}
 
-
-
                     <div class="">
-                    
                         <div class="sidebar__widget p-2 p-sm-0">
+                            @if ($product->total_inventory > 0)
+                                <a href="{{ route('shop.addToCart', [@$product->id]) }}"
+                                    class="d-block mb_10 small_btn theme_btn text-center mt-2 mt-sm-0">{{ __('common.Add To Cart') }}</a>
+                                
+                                <a href="{{ route('shop.buyNow', [@$product->id]) }}" 
+                                    class="d-block mb_10 small_btn theme_btn text-center ">{{ __('common.Buy Now') }}</a>
+                            @else
+                                <a href="javascript:;"
+                                    class="d-block mb_10 small_btn theme_btn text-center mt-2 mt-sm-0">{{ __('Out of Stock') }}</a>
+                            @endif
                             
-                            <a href="{{ route('shop.addToCart', [@$product->id]) }}"
-                                class="d-block mb_10 small_btn theme_btn text-center mt-2 mt-sm-0">{{ __('common.Add To Cart') }}</a>
-                            
-                            <a href="{{ route('shop.buyNow', [@$product->id]) }}" 
-                                class="d-block mb_10 small_btn theme_btn text-center ">{{ __('common.Buy Now') }}</a>
                         </div>
                     
                     </div>

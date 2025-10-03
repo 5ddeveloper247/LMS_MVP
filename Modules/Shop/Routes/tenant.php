@@ -20,4 +20,12 @@ Route::group(['prefix' => 'admin/shop', 'middleware' => ['auth', 'admin']], func
     Route::get('product/edit/{id}', 'ProductController@edit')->name('product.edit');
     Route::post('product/destroy', 'ProductController@destroy')->name('product.delete');
     Route::post('product/file/destroy', 'ProductController@destroyFile')->name('product.file.delete');
+
+    Route::get('orders', 'ShopController@index')->name('shop.orders');
+    Route::get('order/getAllOrders', 'ShopController@getAllOrdersData')->name('order.getAll');
+    Route::get('order/getAllRefundRequest', 'ShopController@getAllRefundRequestData')->name('order.getAllRefundReq');
+    Route::get('order/view/{id}', 'ShopController@viewOrderDetail')->name('order.view');
+    Route::post('order/changeStatus', 'ShopController@changeOrderStatus')->name('order.update_status');
+    Route::post('order/changePaymentStatus', 'ShopController@changeOrderPaymentStatus')->name('order.update_payment_status');
+
 });

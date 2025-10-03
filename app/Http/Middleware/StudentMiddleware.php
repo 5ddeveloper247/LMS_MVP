@@ -51,7 +51,7 @@ class StudentMiddleware
                   return redirect()->to(route('register'));
               }
 
-            if (!$user_agreement_exists) {
+            if (!$user_agreement_exists && Auth::user()->is_shopping_user == false) {
                   Toastr::error('Please complete your Registration !', 'Error');
                   return redirect()->to(route('register.declaration'));
               }

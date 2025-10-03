@@ -222,7 +222,6 @@
     @php
         $get_all_product_url = route('product.getAll');
         $get_all_book_url = route('book.getAll');
-        $individual_tutor_url = route('getAllIndividualTutorsData');
     @endphp
     
     <script>

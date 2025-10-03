@@ -23,7 +23,7 @@ class MyInvoicePageSection extends Component
         if (Auth::user()->role_id != 1) {
             $enroll =  $enroll->where('user_id', Auth::user()->id);
         }
-        $enroll = $enroll->with('courses', 'billing', 'user', 'user.userCountry', 'courses.course', 'courses.program', 'tutorHirings', 'tutorHirings.instructor', 'studentIstallment.program', 'studentIstallment.plan')->first();
+        $enroll = $enroll->with('courses', 'billing', 'user', 'user.userCountry', 'courses.course', 'courses.program', 'tutorHirings', 'tutorHirings.instructor', 'studentIstallment.program', 'studentIstallment.plan','orders.product')->first();
         if (!$enroll) {
             abort(404);
         }

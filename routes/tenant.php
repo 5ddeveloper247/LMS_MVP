@@ -252,7 +252,10 @@ Route::group(['namespace' => 'Frontend', 'middleware' => ['student']], function 
     Route::get('my-leaderboard', 'StudentController@leaderboard')->name('my-leaderboard');
     Route::get('my-skill', 'StudentSkillController@mySkill')->name('mySkill');
 
-    Route::get('my-orders', 'StudentController@myDashboard')->name('myOrders');
+    Route::get('my-orders', 'ShopController@myOrders')->name('myOrders');
+    Route::get('my-orders/detail/{id}', 'ShopController@myOrderDetail')->name('myOrder.detail');
+    Route::post('my-orders/cancelOrder/{id}', 'ShopController@cancelOrder')->name('myOrderCancel');
+    Route::post('my-orders/refundRequestOrder/{id}', 'ShopController@orderRefundRequest')->name('myOrderRefundReq');
 });
 Route::group(['middleware' => ['student']], function () {
     Route::get('my-notification-setup', 'NotificationController@myNotificationSetup')->name('myNotificationSetup');

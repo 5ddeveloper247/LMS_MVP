@@ -44,6 +44,14 @@ class PreRegistrationController extends Controller{
     //     'email' => $request->email,
     //     'password' => Hash::make($request->password),
     // ]);
+
+    $redirectTo = session()->get('redirectTo');
+    if ((stripos($redirectTo, '/buyNow/') !== false || stripos($redirectTo, '/addToCart/') !== false) &&  stripos($redirectTo, 'shop') !== false) {
+        $isShoppingUser = true;   
+    }else{
+        $isShoppingUser = false;
+    }
+
     $data = [
         'name' => $request->name ?? null,
         'phone' => $request->phone ?? null,
@@ -73,6 +81,7 @@ class PreRegistrationController extends Controller{
         'institute_name' => null,
         'domain' => null,
         'level' => '',
+        'is_shopping_user' => $isShoppingUser,
     ];
 
     $newuser = $this->userRepository->create($data);

@@ -510,12 +510,12 @@ class RegisterController extends Controller
 
     public function RegisterDeclarationCreate(Request $request){
         // dd($request);
-      $rules = [
-        'declare_date' => 'required|date|after_or_equal:today',
-        'student_name' => 'required',
-        // 'student_signature' => 'required'
-      ];
-      $this->validate($request, $rules, validationMessage($rules));
+        $rules = [
+            'declare_date' => 'required|date|after_or_equal:today',
+            'student_name' => 'required',
+            // 'student_signature' => 'required'
+        ];
+        $this->validate($request, $rules, validationMessage($rules));
 
         $user_setting_exists = UserSetting::where('user_id', Auth::user()->id)->exists();
         if (!$user_setting_exists) {
@@ -523,45 +523,44 @@ class RegisterController extends Controller
             return redirect()->to(route('register'));
         }
 
-      if($request->hasFile('signature-img')){
-       $file = $request->file('signature-img');
-       $filename = $request->student_name.'_'.$request->user_id.'.'.$file->clientExtension();
-       $file_path = 'public/register3-signatures/' . $filename;
-       $file->move(public_path('register3-signatures'), $filename);
-      }
-      $userDeclaration = UserDeclaration::where('user_id', $request->user_id);
+        if($request->hasFile('signature-img')){
+            $file = $request->file('signature-img');
+            $filename = $request->student_name.'_'.$request->user_id.'.'.$file->clientExtension();
+            $file_path = 'public/register3-signatures/' . $filename;
+            $file->move(public_path('register3-signatures'), $filename);
+        }
+        $userDeclaration = UserDeclaration::where('user_id', $request->user_id);
 
-      if (!$userDeclaration->count()) {
-          $userDeclaration = new UserDeclaration;
-      } else {
-          $userDeclaration = $userDeclaration->first();
-      }
-      $userDeclaration->declare_date = $request->input('declare_date');
-      $userDeclaration->student_name = $request->input('student_name');
-      $userDeclaration->student_signature = $file_path;
-      $userDeclaration->user_id = $request->user_id;
-      $userDeclaration->save();
-      session()->put('enrollment_declaration', $request->input());
-    //   if(session()->has('previous_url')){
-    //         $previous_url = session()->get('previous_url');
-    //         session()->forget('previous_url');
-    //         return redirect()->to($previous_url);
-    //     }
+        if (!$userDeclaration->count()) {
+            $userDeclaration = new UserDeclaration;
+        } else {
+            $userDeclaration = $userDeclaration->first();
+        }
+        $userDeclaration->declare_date = $request->input('declare_date');
+        $userDeclaration->student_name = $request->input('student_name');
+        $userDeclaration->student_signature = $file_path;
+        $userDeclaration->user_id = $request->user_id;
+        $userDeclaration->save();
+
+        User::where('id', Auth::id())->update(['is_shopping_user' => false]);
+      
+        session()->put('enrollment_declaration', $request->input());
+    
         $redirectTo = \session('redirectTo') ?  \session('redirectTo') : '';
-        // dd($redirectTo);
-        // if ((stripos($redirectTo, '/buyNow/') !== false || stripos($redirectTo, '/addtocart/') !== false) && 
-        //     (stripos($redirectTo, '/quiz') === false)
-        // ) {
-        //     // $goto = \session('redirectTo') ?  \session('redirectTo') : route('studentDashboard');
-        //     Toastr::success('Pre Registration Successfull. You need to Enroll yourself to buy programs', 'Success');
-        //     session()->forget('redirectTo');
-        //     return $redirectTo ? redirect()->to($redirectTo) : redirect()->to(route('studentDashboard'));
-        // }
-
+        
         if ((stripos($redirectTo, '/buyNow/') !== false || stripos($redirectTo, '/addToCart/') !== false) && 
             stripos($redirectTo, 'quiz') !== false) {
             
             Toastr::success('Pre Registration Successfull. You need to Enroll yourself to buy course', 'Success');
+            session()->forget('redirectTo');
+            return $redirectTo ? redirect()->to($redirectTo) : redirect()->to(route("studentDashboard"));
+        }
+
+        // in case of product buy student
+        if ((stripos($redirectTo, '/buyNow/') !== false || stripos($redirectTo, '/addToCart/') !== false) && 
+            stripos($redirectTo, 'shop') !== false) {
+            
+            Toastr::success('Pre Registration Successfull. Now you can proceed with buying product.', 'Success');
             session()->forget('redirectTo');
             return $redirectTo ? redirect()->to($redirectTo) : redirect()->to(route("studentDashboard"));
         }
@@ -843,7 +842,7 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
-        // dd($request);
+        
         if (isModuleActive('LmsSaasMD')) {
             ini_set('max_execution_time', 10000);
         }
@@ -906,6 +905,14 @@ class RegisterController extends Controller
             unlink(asset($coverletter_file));
             Toastr::error('Some Sever Error', 'Error');
             return redirect()->back();
+        }
+
+        // when user come from shop then redirect to product and proceed to checkout or detail page
+        $redirectTo = session()->get('redirectTo');
+        if ((stripos($redirectTo, '/buyNow/') !== false || stripos($redirectTo, '/addToCart/') !== false) &&  stripos($redirectTo, 'shop') !== false) {
+            Toastr::success('Pre Registration Successfull. Now you can proceed with buying product.', 'Success');
+            session()->forget('redirectTo');
+            return $redirectTo ? redirect()->to($redirectTo) : redirect()->to(route("studentDashboard"));     
         }
 
         session()->put(['user' => $user]);
