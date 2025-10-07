@@ -23,7 +23,7 @@
 
 
 <section class="mt-5">
-    <div class="container-fluid py-5 px-3 px-sm-5">
+    <div class="container-fluid py-5 px-3 px-sm-5" style="max-width: 1650px !important;">
         <div class="row align-items-center" style="background: #F8F6F9; border-radius: 20px">
             <!-- Right Content Section -->
             <div class="col-lg-7 py-4 px-5">
@@ -71,7 +71,7 @@
 
 
 <footer class="footer py-4">
-    <div class="container-fluid pt-5 px-3 px-sm-5">
+    <div class="container-fluid pt-5 px-3 px-sm-5" style="max-width: 1650px !important;">
         <div class="row mb-5">
             <div class="float-lg-right d-flex flex-wrap align-items-center w-100 justify-content-between footerbox1"
                 style="gap: 14px">
@@ -144,17 +144,17 @@
 
     <div style="height: 1px; width: 100%; background-color: #ffffff43;"></div>
 
-    <div class="container-fluid pt-5 px-3 px-sm-5">
+    <div class="container-fluid pt-5 px-3 px-sm-5" style="max-width: 1650px !important;">
         <div class="row text-white">
             <div class="col-lg-3">
-                <div class="d-flex align-items-center mb-3">
+                <div class="d-flex align-items-center mb-3 gap-1">
                     <div class=" ">
                         <a href="{{ url('/') }}">
                             <img class="image_size" style="filter: drop-shadow(0px 4px 4px #000000);" src="{{ getLogoImage(Settings('logo')) }}"
                                 alt="{{ Settings('site_name') }}">
                         </a>
                     </div>
-                    <h5 class="text-white fw-bold inter">Merkaii Xcellence Prep</h5>
+                    <h5 class="text-white fw-bold inter mb-0">Merkaii Xcellence Prep</h5>
                 </div>
 
                 <p class="text-white inter" style="font-size: 16px !important; line-height: 1.3;">
@@ -203,8 +203,8 @@
     </div>
 </footer>
 
-<div class="col-md-12 py-3" style="background-color: #0F2C53">
-    <div class="container-fluid px-3 px-sm-5 d-flex flex-column flex-md-row align-items-center justify-content-between">
+<div class="col-md-12 py-3" style="background-color: #0F2C53;">
+    <div style="max-width: 1650px !important" class="container-fluid px-3 px-sm-5 d-flex flex-column flex-md-row align-items-center justify-content-between">
         <div>
             <span style="" class="fs-responsive text-white">
                 {{ function_exists('footerSettings') ? strip_tags(footerSettings('footer_copy_right')) : '' }}

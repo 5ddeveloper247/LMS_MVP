@@ -308,7 +308,7 @@
             </a>
         </div>
         <div id="sticky-header" class="header_area py-0 px-0" style="background-color: #2CA6A4">
-            <div class="container-fluid px-0 py-0">
+            <div class="container-fluid px-0 py-0" style="max-width: 1650px !important;">
                 <div class="row">
                     <!-- <div class="col-12"> -->
                     <div class="col-md-2 col-4 px-0">

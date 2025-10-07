@@ -18,7 +18,9 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+<link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+    rel="stylesheet">
 
 <link rel="stylesheet" href="{{ asset('public/assets/owl.carousel.min.css') }}" />
 <link rel="stylesheet" href="{{ asset('public/assets/owl.theme.default.min.css') }}" />
@@ -72,7 +74,7 @@
     .anim-btn button:hover {
         background-color: #1e3a5f61 !important;
         border: 1px solid #1E3A5F !important;
-        transition: all 0.3s ease;  
+        transition: all 0.3s ease;
     }
 
     @media (max-width: 1200px) {
@@ -83,11 +85,11 @@
 
 
     .benefit-grid {
-        background: radial-gradient(circle,rgba(60, 105, 164, 1) 0%, rgba(30, 58, 95, 1) 60%);
+        background: radial-gradient(circle, rgba(60, 105, 164, 1) 0%, rgba(30, 58, 95, 1) 60%);
         border-radius: 8px;
         box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     }
-    
+
     .benefit-card {
         h3 {
             font-size: clamp(16px, 2.5vw, 20px) !important;
@@ -113,7 +115,8 @@
         font-family: "Rubik" !important;
     }
 
-    .testimonial-section .testimonial-top .card, .testimonial-bottom .card {
+    .testimonial-section .testimonial-top .card,
+    .testimonial-bottom .card {
         background-image: url('{{ asset('public/assets/review.png') }}');
         background-size: cover;
         background-repeat: no-repeat;
@@ -126,19 +129,20 @@
     .testimonial-top {
         display: flex;
         gap: 1rem;
-        animation: slideLeft 30s linear infinite; 
+        animation: slideLeft 30s linear infinite;
     }
 
     .testimonial-bottom {
         display: flex;
         gap: 1rem;
-        animation: slideRight 30s linear infinite; 
+        animation: slideRight 30s linear infinite;
     }
 
     @keyframes slideLeft {
         from {
             transform: translateX(0%);
         }
+
         to {
             transform: translateX(-100%);
         }
@@ -148,37 +152,42 @@
         from {
             transform: translateX(-100%);
         }
+
         to {
             transform: translateX(0%);
         }
     }
 
     @media (max-width: 767px) {
-        .testimonial-bottom, .testimonial-top {
+
+        .testimonial-bottom,
+        .testimonial-top {
             animation-duration: 10s
         }
 
         @keyframes slideLeft {
-        from {
-            transform: translateX(0%);
-        }
-        to {
-            transform: translateX(-600%);
-        }
-    }
+            from {
+                transform: translateX(0%);
+            }
 
-    @keyframes slideRight {
-        from {
-            transform: translateX(-600%);
+            to {
+                transform: translateX(-600%);
+            }
         }
-        to {
-            transform: translateX(0%);
+
+        @keyframes slideRight {
+            from {
+                transform: translateX(-600%);
+            }
+
+            to {
+                transform: translateX(0%);
+            }
         }
     }
-    } 
 
     /* =============SUCCESS-METRICS=============== */
-    .success-metrics .card{
+    .success-metrics .card {
         background-color: var(--system_primery_color);
         border-radius: 14px;
         box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -239,7 +248,7 @@
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
         }
     }
-    
+
     @media (max-width: 992px) {
         .success-grid {
             display: grid;
@@ -251,7 +260,7 @@
 
 
     /* =============INSTRUCTOR-SECTION=============== */
-    .instructor-section .card{
+    .instructor-section .card {
         background-color: var(--system_primery_color);
         border-radius: 14px;
         box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -284,12 +293,12 @@
         opacity: 0.2;
         z-index: 100;
         transform: rotate(-55deg);
-     pointer-events: none;
+        pointer-events: none;
     }
 
 
     /* =============Course-Section=============== */
-    .course-section .card{
+    .course-section .card {
         border-radius: 14px;
         box-shadow: rgba(0, 0, 0, 0.061) 0px 3px 20px;
         position: relative !important;
@@ -319,17 +328,21 @@
         border-radius: 8px;
         overflow: hidden;
     }
-    .comparison-table th, .comparison-table td {
+
+    .comparison-table th,
+    .comparison-table td {
         padding: 1rem;
         vertical-align: middle;
         color: var(--system_primery_color) !important;
         border: none !important
     }
+
     /* Mobile card view */
     @media (max-width: 768px) {
         .comparison-table thead {
             display: none;
         }
+
         .comparison-table tr {
             display: block;
             margin-bottom: 1rem;
@@ -337,15 +350,18 @@
             border-radius: 8px;
             padding: 1rem;
         }
+
         .comparison-table td {
             display: flex;
             justify-content: space-between;
             padding: 0.5rem 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
+
         .comparison-table td:last-child {
             border-bottom: none;
         }
+
         .comparison-table td::before {
             content: attr(data-label);
             font-weight: 600;
@@ -357,15 +373,18 @@
 
 @section('mainContent')
     {{-- MainBanner --}}
-    <section class="sec-1 show-animate position-relative" style="background: linear-gradient(180deg, #2CA6A4, transparent); height: fit-content;">
+    <section class="sec-1 show-animate position-relative"
+        style="background: linear-gradient(180deg, #2CA6A4, transparent); height: fit-content;">
         <img src="https://html.rrdevs.net/edcare/assets/img/shapes/hero-shape-11.png" width="300"
             style="position: absolute; left: 0; top: 0;" alt="">
 
         <div class="container-fluid px-0 g-0 h-100 mb-4">
-            <div class="row bg_text position-relative justify-content-between align-items-center px-3 px-sm-5 h-100 pt-5 pt-md-0 mb-4">
+            <div
+                class="row bg_text position-relative justify-content-between align-items-center px-3 px-sm-5 h-100 pt-5 pt-md-0 mb-4">
 
                 <div class="col-md-6 mb-4 mb-md-0">
-                    <h6 class="d-flex align-items-center gap-1 bg-white p-2 mb-4" style="border-radius: 50px; width: fit-content; padding-right: 22px !important;">
+                    <h6 class="d-flex align-items-center gap-1 bg-white p-2 mb-4"
+                        style="border-radius: 50px; width: fit-content; padding-right: 22px !important;">
                         <span class="heading-icon">
                             <i class="fa-sharp fa-solid fa-bolt"></i>
                         </span>Welcome to the Merkaii Xcellence Prep
@@ -388,13 +407,14 @@
                     @if (@$homeContent->show_banner_search_box == 1)
                         <form action="{{ route('search') }}" class="mb-4 mt-3" id="search_form">
                             <div style="max-width: 530px !important;" class="d-none d-sm-flex position-relative">
-                                <input type="text" style="border-radius: 50px; height: 50px;" class="form-control search_courses" name="query"
-                                    placeholder="Search" onfocus="this.placeholder = ''"
-                                    onblur="this.placeholder = 'Search'">
+                                <input type="text" style="border-radius: 50px; height: 50px;"
+                                    class="form-control search_courses" name="query" placeholder="Search"
+                                    onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'">
 
                                 <div class="input-group-prepend">
-                                    <button class="btn px-4" style="background-color: #1E3A5F; color: #fff; border-radius: 50px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);" type="submit"
-                                        id="button-addon1"><i class="ti-search"></i>
+                                    <button class="btn px-4"
+                                        style="background-color: #1E3A5F; color: #fff; border-radius: 50px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);"
+                                        type="submit" id="button-addon1"><i class="ti-search"></i>
                                         Search
                                     </button>
                                 </div>
@@ -405,8 +425,10 @@
                     @endif
 
                     <div class="d-flex align-items-center gap-2 anim-btn border-0">
-                        <button style="background-color: var(--system_primery_color); border-radius: 50px;" class="py-2 px-4 text-white">Start Your Free NCLEX® Prep Trial</button>
-                        <button style="background-color: var(--system_primery_color); border-radius: 50px;" class="py-2 px-4 text-white">Learn How It Works</button>
+                        <button style="background-color: var(--system_primery_color); border-radius: 50px;"
+                            class="py-2 px-4 text-white">Start Your Free NCLEX® Prep Trial</button>
+                        <button style="background-color: var(--system_primery_color); border-radius: 50px;"
+                            class="py-2 px-4 text-white">Learn How It Works</button>
                     </div>
                 </div>
 
@@ -417,18 +439,21 @@
                         <img src="{{ asset('public/assets/hero-banner.png') }}" width="100%" alt="">
                         <div class="anim-hero d-none flex-column align-items-center d-lg-flex"
                             style="position: absolute; top: 30%; left: 0%;">
-                            <img src="{{ asset('public/assets/badge-1.png') }}" width="160px" alt="Live Classes" class="benefit-icon-img">
+                            <img src="{{ asset('public/assets/badge-1.png') }}" width="160px" alt="Live Classes"
+                                class="benefit-icon-img">
                         </div>
 
                         <div class="anim-hero d-flex gap-2 justify-content-between align-items-center"
                             style="position: absolute; top: 10%; right: 10%;">
-                            <img src="{{ asset('public/assets/badge-2.png') }}" style="width: clamp(100px, 20vw, 160px)" alt="Live Classes" class="benefit-icon-img">
+                            <img src="{{ asset('public/assets/badge-2.png') }}" style="width: clamp(100px, 20vw, 160px)"
+                                alt="Live Classes" class="benefit-icon-img">
                         </div>
                     </div>
                 </div>
             </div>
 
-            <img style="position: absolute; right: 0; bottom: 0;" class="d-none d-lg-block" src="{{ asset('public/assets/r-lines.png') }}" width="350px" alt="Live Classes" class="benefit-icon-img">
+            <img style="position: absolute; right: 0; bottom: 0;" class="d-none d-lg-block"
+                src="{{ asset('public/assets/r-lines.png') }}" width="350px" alt="Live Classes" class="benefit-icon-img">
 
             {{-- <x-featured-program-plan /> --}}
         </div>
@@ -439,41 +464,49 @@
         <div class="container-fluid py-5 px-3 px-sm-5">
             <div class="benefit-grid row px-3 py-5">
                 <div class="col-lg-3 col-6">
-                    <div class="benefit-card d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2 h-100">
+                    <div
+                        class="benefit-card d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2 h-100">
                         <div class="benefit-icon">
-                            <img src="{{ asset('public/assets/live_class.png') }}" width="60" alt="Live Classes" class="benefit-icon-img">
+                            <img src="{{ asset('public/assets/live_class.png') }}" width="60" alt="Live Classes"
+                                class="benefit-icon-img">
                         </div>
                         <h3>Live, Interactive Classes</h3>
                     </div>
                 </div>
 
                 <div class="col-lg-3 col-6">
-                    <div class="benefit-card d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2 h-100">
+                    <div
+                        class="benefit-card d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2 h-100">
                         <div class="benefit-icon">
-                            <img src="{{ asset('public/assets/onDemand.png') }}" width="60" alt="Live Classes" class="benefit-icon-img">
+                            <img src="{{ asset('public/assets/onDemand.png') }}" width="60" alt="Live Classes"
+                                class="benefit-icon-img">
                         </div>
                         <h3>On‑demand content for busy schedules</h3>
                     </div>
                 </div>
 
                 <div class="col-lg-3 col-6">
-                    <div class="benefit-card d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2 h-100">
+                    <div
+                        class="benefit-card d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2 h-100">
                         <div class="benefit-icon">
-                            <img src="{{ asset('public/assets/expert.png') }}" width="60" alt="Live Classes" class="benefit-icon-img">
+                            <img src="{{ asset('public/assets/expert.png') }}" width="60" alt="Live Classes"
+                                class="benefit-icon-img">
                         </div>
                         <h3>Expert Nurse Educators</h3>
                     </div>
                 </div>
 
                 <div class="col-lg-3 col-6">
-                    <div class="benefit-card d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2 h-100">
+                    <div
+                        class="benefit-card d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2 h-100">
                         <div class="benefit-icon">
-                            <img src="{{ asset('public/assets/pass_rate.png') }}" width="70" alt="Live Classes" class="benefit-icon-img">
+                            <img src="{{ asset('public/assets/pass_rate.png') }}" width="70" alt="Live Classes"
+                                class="benefit-icon-img">
                         </div>
                         <h3>Pass-Rate Guarantee</h3>
                     </div>
                 </div>
-            </div> 
+            </div>
         </div>
     </section>
 
@@ -481,7 +514,8 @@
     <section class="testimonial-section">
         <div class="text-center">
             <h2>Trusted by Thousands of Nurses</h2>
-            <p class="opacity-75 inter">We’re proud to help aspiring nurses succeed every day. Here’s what they’re saying.</p>
+            <p class="opacity-75 inter">We’re proud to help aspiring nurses succeed every day. Here’s what they’re saying.
+            </p>
         </div>
 
         <div class="testimonial-top mt-4">
@@ -490,18 +524,21 @@
                     <div class="card-body px-5 pt-5 pb-4 d-flex align-items-end">
                         <div class="d-flex flex-column">
                             <!-- Quote SVG -->
-                            <svg class="mb-3" width="25" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M5.68 6.38C..." fill="#FF6B6B"/>
+                            <svg class="mb-3" width="25" height="16" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5.68 6.38C..." fill="#FF6B6B" />
                             </svg>
-                            
+
                             <div>
                                 <small>
-                                    Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. 
-                                    Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.
+                                    Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.
+                                    Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt
+                                    nostrud amet.
                                 </small>
                                 <!-- Closing Quote -->
-                                <svg class="mt-3" style="rotate:180deg" width="25" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M5.68 6.38C..." fill="#FF6B6B"/>
+                                <svg class="mt-3" style="rotate:180deg" width="25" height="16" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M5.68 6.38C..." fill="#FF6B6B" />
                                 </svg>
                             </div>
 
@@ -523,18 +560,21 @@
                     <div class="card-body px-5 pt-5 pb-4 d-flex align-items-end">
                         <div class="d-flex flex-column">
                             <!-- Quote SVG -->
-                            <svg class="mb-3" width="25" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M5.68 6.38C..." fill="#FF6B6B"/>
+                            <svg class="mb-3" width="25" height="16" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5.68 6.38C..." fill="#FF6B6B" />
                             </svg>
-                            
+
                             <div>
                                 <small>
-                                    Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. 
-                                    Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.
+                                    Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.
+                                    Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt
+                                    nostrud amet.
                                 </small>
                                 <!-- Closing Quote -->
-                                <svg class="mt-3" style="rotate:180deg" width="25" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M5.68 6.38C..." fill="#FF6B6B"/>
+                                <svg class="mt-3" style="rotate:180deg" width="25" height="16" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M5.68 6.38C..." fill="#FF6B6B" />
                                 </svg>
                             </div>
 
@@ -590,16 +630,21 @@
             <div class="card px-4 px-md-5">
                 <div class="row align-items-center justify-content-between">
                     <div class="col-md-4">
-                        <img src="{{ asset('public/assets/instructor.png') }}" style="margin-top: -4rem" width="100%" alt="">
+                        <img src="{{ asset('public/assets/instructor.png') }}" style="margin-top: -4rem" width="100%"
+                            alt="">
                     </div>
                     <div class="col-md-8 col-xl-6 py-4">
                         <h2 class="rubik text-white">Guidance from Real Nursing Experts</h2>
-                        <p style="font-weight: 100" class="text-white rubik">Meet Maria, your lead instructor and dedicated guide. With years of nursing and teaching experience, she’s here to support, motivate, and help you succeed every step of the way.</p>
+                        <p style="font-weight: 100" class="text-white rubik">Meet Maria, your lead instructor and
+                            dedicated guide. With years of nursing and teaching experience, she’s here to support, motivate,
+                            and help you succeed every step of the way.</p>
 
                         <h5 style="font-weight: 400" class="mt-4 text-white rubik">Maria T. , Lead Instructor</h5>
-                        
+
                         <a href="{{ route('instructors') }}">
-                            <button style="background-color: var(--footer_text_hover_color); border: none; color: #fff; border-radius: 50px;" class="py-2 px-4 text-white mt-3">Meet the Team</button>
+                            <button
+                                style="background-color: var(--footer_text_hover_color); border: none; color: #fff; border-radius: 50px;"
+                                class="py-2 px-4 text-white mt-3">Meet the Team</button>
                         </a>
                     </div>
                 </div>
@@ -617,82 +662,104 @@
                 <p class="opacity-75 inter">Find the program that best fits your goals, schedule, and support needs.</p>
             </div>
 
-            <ul class="nav nav-pills mb-3 d-flex align-items-center justify-content-center mt-3 mb-4" id="pills-tab" role="tablist">
+            <ul class="nav nav-pills mb-3 d-flex align-items-center justify-content-center mt-3 mb-4" id="pills-tab"
+                role="tablist">
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link active" id="pills-cards-tab" data-bs-toggle="pill" data-bs-target="#pills-cards" type="button" role="tab" aria-controls="pills-cards" aria-selected="true">Courses</button>
+                    <button class="nav-link active" id="pills-cards-tab" data-bs-toggle="pill"
+                        data-bs-target="#pills-cards" type="button" role="tab" aria-controls="pills-cards"
+                        aria-selected="true">Courses</button>
                 </li>
 
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="pills-table-comparison-tab" data-bs-toggle="pill" data-bs-target="#pills-table-comparison" type="button" role="tab" aria-controls="pills-table-comparison" aria-selected="false">Courses Comparison</button>
+                    <button class="nav-link" id="pills-table-comparison-tab" data-bs-toggle="pill"
+                        data-bs-target="#pills-table-comparison" type="button" role="tab"
+                        aria-controls="pills-table-comparison" aria-selected="false">Courses Comparison</button>
                 </li>
             </ul>
 
             <div class="tab-content" id="pills-tabContent">
-                <div class="tab-pane fade show active" id="pills-cards" role="tabpanel" aria-labelledby="pills-cards-tab" tabindex="0">
+                <div class="tab-pane fade show active" id="pills-cards" role="tabpanel"
+                    aria-labelledby="pills-cards-tab" tabindex="0">
                     <div class="row">
                         @for ($i = 0; $i < 3; $i++)
                             <div class="col-md-6 col-lg-4 mb-3">
                                 <div class="card border-0 rounded-3 w-100">
-        
+
                                     <div class="card-body rubik">
                                         <!-- Image with badge -->
                                         <div class="position-relative">
-                                            <img src="{{ asset('public/assets/course-img.png') }}" class="card-img-top" alt="Course Instructors">
-                                            <span style="position: absolute; top: 10px; right: 10px; border-radius: 6px;" class="py-2 px-3 d-flex align-items-center gap-1 bg-white text-dark m-2">
-                                                <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <img src="{{ asset('public/assets/course-img.png') }}" class="card-img-top"
+                                                alt="Course Instructors">
+                                            <span style="position: absolute; top: 10px; right: 10px; border-radius: 6px;"
+                                                class="py-2 px-3 d-flex align-items-center gap-1 bg-white text-dark m-2">
+                                                <svg width="16" height="17" viewBox="0 0 16 17" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
                                                     <g clip-path="url(#clip0_2032_122)">
-                                                    <circle cx="8" cy="8.5" r="7.25" stroke="#413C69" stroke-width="1.5"/>
-                                                    <path d="M8 4.94434V9.06787L10.6667 10.2777" stroke="#413C69" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <circle cx="8" cy="8.5" r="7.25" stroke="#413C69"
+                                                            stroke-width="1.5" />
+                                                        <path d="M8 4.94434V9.06787L10.6667 10.2777" stroke="#413C69"
+                                                            stroke-width="1.5" stroke-miterlimit="10"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
                                                     </g>
                                                     <defs>
-                                                    <clipPath id="clip0_2032_122">
-                                                    <rect width="16" height="16" fill="white" transform="translate(0 0.5)"/>
-                                                    </clipPath>
+                                                        <clipPath id="clip0_2032_122">
+                                                            <rect width="16" height="16" fill="white"
+                                                                transform="translate(0 0.5)" />
+                                                        </clipPath>
                                                     </defs>
                                                 </svg>
                                                 8 weeks
                                             </span>
                                         </div>
-        
+
                                         <!-- Top meta -->
                                         <div class="d-flex justify-content-between my-2">
                                             <span class="text-success fw-bold">Course 01</span>
                                             <span style="color: #CA8804">coaching</span>
                                         </div>
-                                    
+
                                         <!-- Title & Subtitle -->
-                                        <h5 style="font-weight: 600" class="card-title rubik fw-bold text-dark d-flex align-items-center justify-content-between">
+                                        <h5 style="font-weight: 600"
+                                            class="card-title rubik fw-bold text-dark d-flex align-items-center justify-content-between">
                                             Live Prep Course
-                                            <svg width="24" height="28" viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M7 21L17 11M17 11H7M17 11V21" stroke="#101828" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                            </svg>                                    
+                                            <svg width="24" height="28" viewBox="0 0 24 28" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M7 21L17 11M17 11H7M17 11V21" stroke="#101828" stroke-width="2"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
                                         </h5>
                                         <p class="card-text text-muted small mb-3">
                                             Structured live sessions led by expert instructors
                                         </p>
-                                    
+
                                         <!-- Features -->
                                         <ul class="list-unstyled small mb-4 d-flex flex-wrap justify-content-between">
                                             <li class="mb-1 d-flex align-items-center gap-1">
-                                                <img src="{{ asset('public/assets/point.png') }}" width="25" alt="Course Instructors">
+                                                <img src="{{ asset('public/assets/point.png') }}" width="25"
+                                                    alt="Course Instructors">
                                                 Diagnostic assessment
                                             </li>
                                             <li class="mb-1 d-flex align-items-center gap-1">
-                                                <img src="{{ asset('public/assets/point.png') }}" width="25" alt="Course Instructors">
+                                                <img src="{{ asset('public/assets/point.png') }}" width="25"
+                                                    alt="Course Instructors">
                                                 Diagnostic assessment
                                             </li>
                                             <li class="mb-1 d-flex align-items-center gap-1">
-                                                <img src="{{ asset('public/assets/point.png') }}" width="25" alt="Course Instructors">
+                                                <img src="{{ asset('public/assets/point.png') }}" width="25"
+                                                    alt="Course Instructors">
                                                 Diagnostic assessment
                                             </li>
                                         </ul>
-                                    
+
                                         <!-- Footer -->
                                         <div class="d-flex justify-content-between align-items-center">
                                             <a href="{{ route('instructors') }}">
-                                                <button style="background-color: var(--system_primery_color); border: none; color: #fff; border-radius: 50px;" class="py-2 px-4 text-white mt-3">Enroll Now</button>
+                                                <button
+                                                    style="background-color: var(--system_primery_color); border: none; color: #fff; border-radius: 50px;"
+                                                    class="py-2 px-4 text-white mt-3">Enroll Now</button>
                                             </a>
-                                            <h2 style="color: var(--system_secendory_color); font-weight: 700 !important; font-family: 'Inter' !important;" class="mb-0">$499</h2>
+                                            <h2 style="color: var(--system_secendory_color); font-weight: 700 !important; font-family: 'Inter' !important;"
+                                                class="mb-0">$499</h2>
                                         </div>
                                     </div>
                                 </div>
@@ -701,43 +768,44 @@
                     </div>
                 </div>
 
-                <div class="tab-pane fade" id="pills-table-comparison" role="tabpanel" aria-labelledby="pills-table-comparison-tab" tabindex="0">
+                <div class="tab-pane fade" id="pills-table-comparison" role="tabpanel"
+                    aria-labelledby="pills-table-comparison-tab" tabindex="0">
                     <div class="table-responsive bg-white p-2 p-md-4" style="border-radius: 8px">
                         <table class="table comparison-table">
-                          <thead>
-                            <tr>
-                              <th>Course</th>
-                              <th>Duration</th>
-                              <th>Format</th>
-                              <th>Price</th>
-                              <th>Key Feature</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td data-label="Course">Live Prep Courses</td>
-                              <td data-label="Duration">8–12 weeks</td>
-                              <td data-label="Format">Live interactive classes</td>
-                              <td data-label="Price">From $499</td>
-                              <td data-label="Key Feature">Small groups + real-time instructor Q&amp;A</td>
-                            </tr>
-                            <tr>
-                              <td data-label="Course">On-Demand Prep</td>
-                              <td data-label="Duration">Self-paced</td>
-                              <td data-label="Format">Pre-recorded lessons</td>
-                              <td data-label="Price">From $299</td>
-                              <td data-label="Key Feature">Flexible access + practice quizzes</td>
-                            </tr>
-                            <tr>
-                              <td data-label="Course">Remedial Program</td>
-                              <td data-label="Duration">Flexible</td>
-                              <td data-label="Format">Personalized 1-on-1 coaching</td>
-                              <td data-label="Price">From $599</td>
-                              <td data-label="Key Feature">Tailored study plan + feedback</td>
-                            </tr>
-                          </tbody>
+                            <thead>
+                                <tr>
+                                    <th>Course</th>
+                                    <th>Duration</th>
+                                    <th>Format</th>
+                                    <th>Price</th>
+                                    <th>Key Feature</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td data-label="Course">Live Prep Courses</td>
+                                    <td data-label="Duration">8–12 weeks</td>
+                                    <td data-label="Format">Live interactive classes</td>
+                                    <td data-label="Price">From $499</td>
+                                    <td data-label="Key Feature">Small groups + real-time instructor Q&amp;A</td>
+                                </tr>
+                                <tr>
+                                    <td data-label="Course">On-Demand Prep</td>
+                                    <td data-label="Duration">Self-paced</td>
+                                    <td data-label="Format">Pre-recorded lessons</td>
+                                    <td data-label="Price">From $299</td>
+                                    <td data-label="Key Feature">Flexible access + practice quizzes</td>
+                                </tr>
+                                <tr>
+                                    <td data-label="Course">Remedial Program</td>
+                                    <td data-label="Duration">Flexible</td>
+                                    <td data-label="Format">Personalized 1-on-1 coaching</td>
+                                    <td data-label="Price">From $599</td>
+                                    <td data-label="Key Feature">Tailored study plan + feedback</td>
+                                </tr>
+                            </tbody>
                         </table>
-                      </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -983,7 +1051,8 @@
     @endif --}}
 
 
-    <section style="background-image: url('{{ asset('public/assets/resources.png') }}'); background-size: 100%; background-repeat: no-repeat;">
+    <section
+        style="background-image: url('{{ asset('public/assets/resources.png') }}'); background-size: 100%; background-repeat: no-repeat;">
         <div class="container-fluid py-5 px-3 px-sm-5">
             <div class="row justify-content-between">
                 <div class="col-md-6">
@@ -998,30 +1067,42 @@
 
                     <div class="row mt-4">
                         <div class="col-md-6 mb-4">
-                            <div class="p-3" style="backdrop-filter: blur(3px); border: 1px solid var(--system_secendory_color); border-radius: 6px">
+                            <div class="p-3"
+                                style="backdrop-filter: blur(3px); border: 1px solid var(--system_secendory_color); border-radius: 6px">
                                 <h5 style="font-weight: 600; font-size: 20px" class="text-dark rubik">Mind Mapping</h5>
-                                <p style="font-size: 14px; font-weight: 600; line-height: 1.5" class="inter">Transform complex subjects into easy-to-follow visual maps. This technique helps you connect ideas and recall them more effectively.</p>
+                                <p style="font-size: 14px; font-weight: 600; line-height: 1.5" class="inter">Transform
+                                    complex subjects into easy-to-follow visual maps. This technique helps you connect ideas
+                                    and recall them more effectively.</p>
                             </div>
                         </div>
 
                         <div class="col-md-6 mb-4">
-                            <div class="p-3" style="backdrop-filter: blur(3px); border: 1px solid var(--system_secendory_color); border-radius: 6px">
+                            <div class="p-3"
+                                style="backdrop-filter: blur(3px); border: 1px solid var(--system_secendory_color); border-radius: 6px">
                                 <h5 style="font-weight: 600; font-size: 20px" class="text-dark rubik">Mind Mapping</h5>
-                                <p style="font-size: 14px; font-weight: 600; line-height: 1.5" class="inter">Transform complex subjects into easy-to-follow visual maps. This technique helps you connect ideas and recall them more effectively.</p>
+                                <p style="font-size: 14px; font-weight: 600; line-height: 1.5" class="inter">Transform
+                                    complex subjects into easy-to-follow visual maps. This technique helps you connect ideas
+                                    and recall them more effectively.</p>
                             </div>
                         </div>
 
                         <div class="col-md-6 mb-4">
-                            <div class="p-3" style="backdrop-filter: blur(3px); border: 1px solid var(--system_secendory_color); border-radius: 6px">
+                            <div class="p-3"
+                                style="backdrop-filter: blur(3px); border: 1px solid var(--system_secendory_color); border-radius: 6px">
                                 <h5 style="font-weight: 600; font-size: 20px" class="text-dark rubik">Mind Mapping</h5>
-                                <p style="font-size: 14px; font-weight: 600; line-height: 1.5" class="inter">Transform complex subjects into easy-to-follow visual maps. This technique helps you connect ideas and recall them more effectively.</p>
+                                <p style="font-size: 14px; font-weight: 600; line-height: 1.5" class="inter">Transform
+                                    complex subjects into easy-to-follow visual maps. This technique helps you connect ideas
+                                    and recall them more effectively.</p>
                             </div>
                         </div>
 
                         <div class="col-md-6 mb-4">
-                            <div class="p-3" style="backdrop-filter: blur(3px); border: 1px solid var(--system_secendory_color); border-radius: 6px">
+                            <div class="p-3"
+                                style="backdrop-filter: blur(3px); border: 1px solid var(--system_secendory_color); border-radius: 6px">
                                 <h5 style="font-weight: 600; font-size: 20px" class="text-dark rubik">Mind Mapping</h5>
-                                <p style="font-size: 14px; font-weight: 600; line-height: 1.5" class="inter">Transform complex subjects into easy-to-follow visual maps. This technique helps you connect ideas and recall them more effectively.</p>
+                                <p style="font-size: 14px; font-weight: 600; line-height: 1.5" class="inter">Transform
+                                    complex subjects into easy-to-follow visual maps. This technique helps you connect ideas
+                                    and recall them more effectively.</p>
                             </div>
                         </div>
                     </div>
@@ -1648,7 +1729,6 @@
     @if (!empty($blocks))
         @foreach ($blocks as $block)
             @if ($block->id == 1)
-
             @elseif($block->id == 3)
                 @if ($homeContent->show_category_section == 1)
                     <div class="custom_section_backround_color section-padding-y d-none">
@@ -1810,8 +1890,6 @@
                         </div>
                     </div>
                 @endif
-
-                
             @elseif($block->id == 8)
                 {{-- @if ($homeContent->show_testimonial_section == 1)
                     
@@ -2328,11 +2406,9 @@
                 </section> --}}
 
                 @include(theme('partials._custom_footer'))
-
             @elseif($block->id == 16)
 
             @elseif($block->id == 17)
-                
             @endif
         @endforeach
     @endif
@@ -2383,29 +2459,29 @@
                             ];
                             html = html +
                                 '<li class="single-notice">\
-                                                                                                                                                                                    <div class="single-notice-item">\
-                                                                                                                                                                                        <div class="notice-date">\
-                                                                                                                                                                                            ' +
+                                                                                                                                                                                        <div class="single-notice-item">\
+                                                                                                                                                                                            <div class="notice-date">\
+                                                                                                                                                                                                ' +
                                 day +
                                 '<br>\
-                                                                                                                                                                                            <span>' +
+                                                                                                                                                                                                <span>' +
                                 monthDay[
                                     month] +
                                 '</span>\
-                                                                                                                                                                                        </div>\
-                                                                                                                                                                                        <div class="notice-content">\
-                                                                                                                                                                                            <p>\
-                                                                                                                                                                                                <a href="' +
+                                                                                                                                                                                            </div>\
+                                                                                                                                                                                            <div class="notice-content">\
+                                                                                                                                                                                                <p>\
+                                                                                                                                                                                                    <a href="' +
                                 blog_url +
                                 '">' +
                                 row
                                 .title
                                 .en +
                                 '</a>\
-                                                                                                                                                                                            </p>\
+                                                                                                                                                                                                </p>\
+                                                                                                                                                                                            </div>\
                                                                                                                                                                                         </div>\
-                                                                                                                                                                                    </div>\
-                                                                                                                                                                                </li>';
+                                                                                                                                                                                    </li>';
                         });
                         $('#blogs_ul').html(html);
                     }
@@ -2418,7 +2494,7 @@
             $('#years').select2();
             $('#program').select2();
 
-            
+
             var url = '{{ route('getRandomProgram') }}';
             var random_program_data = '';
             $.ajax({
@@ -2567,7 +2643,7 @@
             },
 
         });
-        
+
         // Reference existing elements
         var video = document.getElementById("myVideo");
         var playPauseBtn = document.getElementById("playPauseBtn");
