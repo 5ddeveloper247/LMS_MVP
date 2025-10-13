@@ -349,7 +349,8 @@
         border-radius: 15px !important
     }
 
-    .serve-left, .serve-right {
+    .serve-left,
+    .serve-right {
         background-color: #EFECE3;
         backdrop-filter: blur(15px);
         border-radius: 10px;
@@ -370,22 +371,189 @@
     .w-break {
         word-break: break-all
     }
+
+    .breadcrumb_area {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100% !important;
+        text-align: center;
+    }
+
+    .breadcrumb_area:before {
+        display: none
+    }
+
+    .breadcrumb_area:after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: #2ca6a49d !important;
+    }
+
+    .breadcam_wrap {
+        padding: 0 !important;
+        position: relative;
+        z-index: 99
+    }
+
+    .breadcam_wrap h1,
+    .breadcam_wrap p {
+        text-shadow: 1px 0px 5px #737373;
+    }
+
+    .theme_btn {
+        border-radius: 50px !important;
+        font-weight: 600 !important
+    }
+
+    h1,
+    h2 {
+        font-family: "Inter" !important;
+        font-weight: 600 !important;
+    }
+
+    h2 {
+        font-size: clamp(1.3rem, 4vw, 2.5rem) !important;
+        font-family: "Rubik" !important;
+        font-weight: 600 !important;
+    }
+
+    * {
+        font-family: "Rubik" !important
+    }
+
+    section .container {
+        max-width: 1700px !important
+    }
+
+    .benefit-grid {
+        background: radial-gradient(circle, rgba(60, 105, 164, 1) 0%, rgba(30, 58, 95, 1) 60%);
+        border-radius: 8px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
+
+    .benefit-card {
+        h3 {
+            font-size: clamp(16px, 2.5vw, 20px) !important;
+            font-weight: 600 !important;
+            font-family: "Inter";
+            color: #fff;
+        }
+    }
+
+    .accordion-button {
+        background-color: transparent !important;
+        color: #000 !important;
+        box-shadow: none !important;
+        border: none !important;
+        font-weight: 600 !important;
+        font-size: clamp(14px, 2vw, 20px) !important
+    }
+
+    .accordion-button:focus {
+        box-shadow: none !important;
+    }
+
+    .accordion-item {
+        border-radius: 15px !important;
+        border: none !important;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        padding: 1rem !important
+    }
+
+    .testimonial-section .testimonial-top .card,
+    .testimonial-bottom .card {
+        background-image: url('{{ asset('public/assets/review.png') }}');
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 16.7rem;
+        width: 39rem;
+        border: none !important;
+        flex-shrink: 0;
+    }
+
+    .testimonial-top {
+        display: flex;
+        gap: 1rem;
+        animation: slideLeft 30s linear infinite;
+    }
+
+    .testimonial-bottom {
+        display: flex;
+        gap: 1rem;
+        animation: slideRight 30s linear infinite;
+    }
+
+    @keyframes slideLeft {
+        from {
+            transform: translateX(0%);
+        }
+
+        to {
+            transform: translateX(-100%);
+        }
+    }
+
+    @keyframes slideRight {
+        from {
+            transform: translateX(-100%);
+        }
+
+        to {
+            transform: translateX(0%);
+        }
+    }
+
+    @media (max-width: 767px) {
+
+        .testimonial-bottom,
+        .testimonial-top {
+            animation-duration: 10s
+        }
+
+        @keyframes slideLeft {
+            from {
+                transform: translateX(0%);
+            }
+
+            to {
+                transform: translateX(-600%);
+            }
+        }
+
+        @keyframes slideRight {
+            from {
+                transform: translateX(-600%);
+            }
+
+            to {
+                transform: translateX(0%);
+            }
+        }
+    }
+
+    .sec-6 {
+        display: none !important
+    }
 </style>
 
 
-<div class="px-md-5 py-5" style="background-color: #F6F4EE">
-    <div class="container px-xl-5 px-lg-4 px-3">
+<section class="px-md-5 py-5" style="background-color: #F6F4EE">
+    <div class="container">
         <div class="img-con service_cta_row d-grid" style="height: fit-content !important">
             <div class="single_cta_service">
                 {{-- <img class="rounded-5 object-fit-cover" src="{{ asset('/public/assets/lms/newabout-slider4.png') }}"
                     height="350"> --}}
-                <img class="rounded-5 object-fit-cover"
-                    src="{{asset('public/assets/about-tile-1.jpg')}}"
-                    height="450" width="100%">
-                <h3 class="fw-bold mt-3 mb-2">Our Mission</h3>
+                <img class="rounded-5 object-fit-cover" src="{{ asset('public/assets/about-tile-1.jpg') }}" height="450"
+                    width="100%">
+                <h5 style="font-weight: 500" class="mt-3 mb-2">Our Mission</h5>
                 <p>
-                    To empower aspiring healthcare students from all backgrounds, 
-                    especially marginalized communities, through outstanding education and dedicated support, 
+                    To empower aspiring healthcare students from all backgrounds,
+                    especially marginalized communities, through outstanding education and dedicated support,
                     unlocking their potential for lasting success in healthcare.
                 </p>
             </div>
@@ -393,252 +561,249 @@
             <div class="mid-img single_cta_service">
                 {{-- <img class="rounded-5 object-fit-cover" src="{{ asset('/public/assets/lms/newabout-slider4.png') }}"
                     height="350"> --}}
-                <img class="rounded-5 object-fit-cover"
-                    src="{{asset('public/assets/about-tile-2.jpg')}}"
+                <img class="rounded-5 object-fit-cover" src="{{ asset('public/assets/about-tile-2.jpg') }}"
                     height="450" width="100%">
-                <h3 class="fw-bold mt-3 mb-2">Our Vision</h3>
+                <h5 style="font-weight: 500" class="mt-3 mb-2">Our Vision</h5>
                 <p>
-                    To be the leading catalyst in creating equitable opportunities in healthcare education, 
-                    fostering a generation of skilled and diverse professionals who elevate patient care and transform communities.
+                    To be the leading catalyst in creating equitable opportunities in healthcare education,
+                    fostering a generation of skilled and diverse professionals who elevate patient care and transform
+                    communities.
                 </p>
             </div>
 
             <div class="single_cta_service">
                 {{-- <img class="rounded-5 object-fit-cover" src="{{ asset('/public/assets/lms/newabout-slider4.png') }}"
                     height="350"> --}}
-                <img class="rounded-5 object-fit-cover"
-                    src="{{asset('public/assets/about-tile-3.jpg')}}"
+                <img class="rounded-5 object-fit-cover" src="{{ asset('public/assets/about-tile-3.jpg') }}"
                     height="450" width="100%">
-                <h3 class="fw-bold mt-3 mb-2">Our Core Values</h3>
+                <h5 style="font-weight: 500" class="mt-3 mb-2">Our Core Values</h5>
                 <p>
-                    We place our students at the heart of everything we do, 
-                    as we are committed to the highest standards in educational content, 
-                    instruction, and support services. 
-                    We also embrace forward-thinking approaches as we foster an 
+                    We place our students at the heart of everything we do,
+                    as we are committed to the highest standards in educational content,
+                    instruction, and support services.
+                    We also embrace forward-thinking approaches as we foster an
                     encouraging and inclusive environment.
                 </p>
             </div>
         </div>
 
-        <div>
-            <div class="row g-0 gap-4 justify-content-between mt-5">
-                <div class="col-md-2">
-                    <h2 class="fw-bold">Our Story</h2>
-                </div>
-                <div class="col-md">
-                    <p class="w-break">
-                        I was struggling in nursing school; the grades were very bad; I wanted to quit. There were two
-                        determined instructors who kept encouraging me on days when I would cry because I couldn’t grasp
-                        the subject content to stay on the course. I was successful on my NCLEX exam, and I am
-                        determined to help others who have the same experience. In 2015 after 3 years in the profession
-                        I set out with a simple yet profound goal: to create a student- centered environment that
-                        provides meaningful support to foster success in healthcare education.
+
+        <div class="row py-5 px-3 px-lg-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 p-4 border-0" data-aos="fade-right"
+                    style="border-radius: 10px; box-shadow: 0px 4px 10px 0px #00000026;">
+                    <h5>Our Story</h5>
+                    <p>
+                        Nursing school was tough. I almost gave up, but two amazing instructors kept me motivated. Their
+                        support
+                        inspired me to create a place where students find the same encouragement to succeed.
                     </p>
                 </div>
             </div>
 
-            <div class="row py-5 g-0 gap-4 justify-content-between">
-                <div class="col-md-2">
-                    <h2 class="fw-bold">Our “Aha!” Moment</h2>
-                </div>
-                <div class="col-md">
-                    <p class="w-break">
-                        Our pivotal moment came when we realized the profound impact personalized education has on family and friends’ outcomes. Witnessing this we embarked on opening our services to others and observing students transform from struggling learners into confident, competent nursing professionals. This has become our cornerstone approach in offering tailored education and one-on-one support.
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 p-4 border-0" data-aos="fade-up"
+                    style="border-radius: 10px; box-shadow: 0px 4px 10px 0px #00000026;">
+                    <h5>Our “Aha!” Moment</h5>
+                    <p>
+                        After passing the NCLEX, I realized many students face similar struggles. This sparked the idea
+                        to build
+                        a support system that empowers learners to overcome challenges with confidence.
                     </p>
                 </div>
             </div>
 
-            <div class="row g-0 gap-4 justify-content-between">
-                <div class="col-md-2">
-                    <h2 class="fw-bold">Evolution & Transformation</h2>
-                </div>
-                <div class="col-md">
-                    <p class="w-break">
-                        From our humble beginnings, we've grown from a small family and friends tutoring service in the basement into a comprehensive education hub, offering specialized review courses, personalized tutoring, and in-depth exam reviews. We've embraced new teaching methodologies, integrated cutting-edge technology, and expanded our curriculum to cover the diverse and dynamic field of healthcare.
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 p-4 border-0" data-aos="fade-left"
+                    style="border-radius: 10px; box-shadow: 0px 4px 10px 0px #00000026;">
+                    <h5>Evolution & Transformation</h5>
+                    <p>
+                        Since 2015, we’ve grown from a single idea into a thriving community. Through dedication and
+                        innovation,
+                        we’ve transformed how students experience healthcare education.
                     </p>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 
-<div class="py-5" style="background-color: var(--teal)">
-    <div class="container px-md-5 py-4">
-        <div class="row align-items-start gy-4 gx-0">
-            <div class="col-md-6 col-lg-3 d-flex align-items-center gap-2">
-                <div>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 14 14">
-                    <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
-                        <path
-                            d="M6.35.5h6.302c.469 0 .849.38.849.849v6.778c0 .47-.38.85-.849.85H7.5M3.149 4.001a1.75 1.75 0 1 0 0-3.501a1.75 1.75 0 0 0 0 3.501" />
-                        <path
-                            d="M9 5.527C9 4.96 8.54 4.5 7.973 4.5H3.149v0A2.65 2.65 0 0 0 .5 7.149V9.5h1.135l.379 4h2.27l.872-6.945h2.817C8.54 6.555 9 6.095 9 5.527" />
-                    </g>
-                </svg>
-                </div>
 
-                <div>
-                    <h5 class="mb-1 fw-semibold text-white">Student-Centric</h5>
-                    <span class="light-text">Our students are at the heart of everything we do. Their success is our success.</span>
+<section class="benefits">
+    <div class="container py-5 px-3 px-sm-5">
+        <div class="benefit-grid row px-3 px-lg-5 py-5">
+            <div class="col-lg-3 col-6" data-aos="fade-up">
+                <div
+                    class="benefit-card d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2 h-100">
+                    <div class="benefit-icon">
+                        <img src="{{ asset('public/assets/live_class.png') }}" width="60" alt="Live Classes"
+                            class="benefit-icon-img">
+                    </div>
+                    <h3>Live, Interactive Classes</h3>
                 </div>
             </div>
 
-            <div class="col-md-6 col-lg-3 d-flex align-items-center gap-2">
-                <div>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 14 14">
-                    <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
-                        <path
-                            d="M6.35.5h6.302c.469 0 .849.38.849.849v6.778c0 .47-.38.85-.849.85H7.5M3.149 4.001a1.75 1.75 0 1 0 0-3.501a1.75 1.75 0 0 0 0 3.501" />
-                        <path
-                            d="M9 5.527C9 4.96 8.54 4.5 7.973 4.5H3.149v0A2.65 2.65 0 0 0 .5 7.149V9.5h1.135l.379 4h2.27l.872-6.945h2.817C8.54 6.555 9 6.095 9 5.527" />
-                    </g>
-                </svg>
-                </div>
-
-                <div>
-                    <h5 class="mb-1 fw-semibold text-white">Excellence</h5>
-                    <span class="light-text">In all aspects of our educational offerings, ensuring high quality, comprehensive, and relevant content.</span>
+            <div class="col-lg-3 col-6" data-aos="fade-up">
+                <div
+                    class="benefit-card d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2 h-100">
+                    <div class="benefit-icon">
+                        <img src="{{ asset('public/assets/onDemand.png') }}" width="60" alt="Live Classes"
+                            class="benefit-icon-img">
+                    </div>
+                    <h3>On‑demand content for busy schedules</h3>
                 </div>
             </div>
 
-            <div class="col-md-6 col-lg-3 d-flex align-items-center gap-2">
-                <div>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 14 14">
-                    <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
-                        <path
-                            d="M6.35.5h6.302c.469 0 .849.38.849.849v6.778c0 .47-.38.85-.849.85H7.5M3.149 4.001a1.75 1.75 0 1 0 0-3.501a1.75 1.75 0 0 0 0 3.501" />
-                        <path
-                            d="M9 5.527C9 4.96 8.54 4.5 7.973 4.5H3.149v0A2.65 2.65 0 0 0 .5 7.149V9.5h1.135l.379 4h2.27l.872-6.945h2.817C8.54 6.555 9 6.095 9 5.527" />
-                    </g>
-                </svg>
-                </div>
-
-                <div>
-                    <h5 class="mb-1 fw-semibold text-white">Innovation:</h5>
-                    <span class="light-text">We embrace innovative teaching methods and technologies to enhance learning and keep pace with the evolving healthcare landscape</span>
+            <div class="col-lg-3 col-6" data-aos="fade-up">
+                <div
+                    class="benefit-card d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2 h-100">
+                    <div class="benefit-icon">
+                        <img src="{{ asset('public/assets/expert.png') }}" width="60" alt="Live Classes"
+                            class="benefit-icon-img">
+                    </div>
+                    <h3>Expert Nurse Educators</h3>
                 </div>
             </div>
 
-            <div class="col-md-6 col-lg-3 d-flex align-items-center gap-2">
-                <div>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 14 14">
-                    <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
-                        <path
-                            d="M6.35.5h6.302c.469 0 .849.38.849.849v6.778c0 .47-.38.85-.849.85H7.5M3.149 4.001a1.75 1.75 0 1 0 0-3.501a1.75 1.75 0 0 0 0 3.501" />
-                        <path
-                            d="M9 5.527C9 4.96 8.54 4.5 7.973 4.5H3.149v0A2.65 2.65 0 0 0 .5 7.149V9.5h1.135l.379 4h2.27l.872-6.945h2.817C8.54 6.555 9 6.095 9 5.527" />
-                    </g>
-                </svg>
-                </div>
-
-                <div>
-                    <h5 class="mb-1 fw-semibold text-white">Support</h5>
-                    <span class="light-text">We provide unwavering support, understanding that each student’s journey is unique and deserves personalized attention.</span>
+            <div class="col-lg-3 col-6" data-aos="fade-up">
+                <div
+                    class="benefit-card d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2 h-100">
+                    <div class="benefit-icon">
+                        <img src="{{ asset('public/assets/pass_rate.png') }}" width="70" alt="Live Classes"
+                            class="benefit-icon-img">
+                    </div>
+                    <h3>Pass-Rate Guarantee</h3>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 
-<div class="py-4">
-    <div class="container px-xl-5 px-lg-4 px-3 py-5">
-        <h2 class="fw-bold text-center mb-2">The Merkaii Xcel Values</h2>
-        <p class="mb-4 text-center">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eaque doloribus voluptate laudantium tempora, itaque optio.</p>
-        <div class="row gy-4">
-            <div class="col-md-6">
-                <div class="value p-3">
-                    <h5 class="fw-bold d-flex align-items-center justify-content-between pointer"
-                        data-bs-toggle="collapse" data-bs-target="#Student-Centric" aria-expanded="false"
-                        aria-controls="Student-Centric">
-                        Student-Centric: <i class="fa-solid fa-chevron-down"></i>
-                    </h5>
-                    <div class="collapse" id="Student-Centric">
-                        <p>Our students are at the heart of everything we do. Their success is our success.</p>
+
+<section class="container px-lg-5 pt-5">
+    <div class="py-5 px-xl-5 px-3">
+        <h2 class="text-center mb-4">The Merkaii Xcellence Values</h2>
+
+        <div class="accordion row" id="globalfaq">
+            <div class="col-lg-6" data-aos="fade-up">
+                <div class="accordion-item mb-3">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button inter" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#globalfaq1" aria-expanded="true" aria-controls="globalfaq1">
+                            The Merkaii Xcel Value
+                        </button>
+                    </h2>
+                    <div id="globalfaq1" class="accordion-collapse collapse" data-bs-parent="#globalfaq">
+                        <div class="accordion-body inter">
+                            Our students are at the heart of everything we do. Their success is our success.
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-6">
-                <div class="value p-3">
-                    <h5 class="fw-bold d-flex align-items-center justify-content-between pointer"
-                        data-bs-toggle="collapse" data-bs-target="#Excellence" aria-expanded="false"
-                        aria-controls="Excellence">
-                        Excellence: <i class="fa-solid fa-chevron-down"></i>
-                    </h5>
-                    <div class="collapse" id="Excellence">
-                        <p>In all aspects of our educational offerings, ensuring high quality, comprehensive, and relevant
-                        content.</p>
+            <div class="col-lg-6" data-aos="fade-up">
+                <div class="accordion-item mb-3">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed inter" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#globalfaq2" aria-expanded="false" aria-controls="globalfaq2">
+                            Excellence
+                        </button>
+                    </h2>
+                    <div id="globalfaq2" class="accordion-collapse collapse" data-bs-parent="#globalfaq">
+                        <div class="accordion-body inter">
+                            In all aspects of our educational offerings, ensuring high quality, comprehensive, and
+                            relevant
+                            content.
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-6">
-                <div class="value p-3">
-                    <h5 class="fw-bold d-flex align-items-center justify-content-between pointer"
-                        data-bs-toggle="collapse" data-bs-target="#Innovation" aria-expanded="false"
-                        aria-controls="Innovation">
-                        Innovation: <i class="fa-solid fa-chevron-down"></i>
-                    </h5>
-                    <div class="collapse" id="Innovation">
-                        <p>We embrace innovative teaching methods and technologies to enhance learning and keep pace with
-                        the evolving healthcare landscape.</p>
+            <div class="col-lg-6" data-aos="fade-up">
+                <div class="accordion-item mb-3">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed inter" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#globalfaq3" aria-expanded="false" aria-controls="globalfaq3">
+                            Innovation
+                        </button>
+                    </h2>
+                    <div id="globalfaq3" class="accordion-collapse collapse" data-bs-parent="#globalfaq">
+                        <div class="accordion-body inter">
+                            We embrace innovative teaching methods and technologies to enhance learning and keep pace
+                            with
+                            the evolving healthcare landscape.
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-6">
-                <div class="value p-3">
-                    <h5 class="fw-bold d-flex align-items-center justify-content-between pointer"
-                        data-bs-toggle="collapse" data-bs-target="#Support" aria-expanded="false"
-                        aria-controls="Support">
-                        Support: <i class="fa-solid fa-chevron-down"></i>
-                    </h5>
-                    <div class="collapse" id="Support">
-                        <p>We provide unwavering support, understanding that each student’s journey is unique and deserves
-                        personalized attention.</p>
+            <div class="col-lg-6" data-aos="fade-up">
+                <div class="accordion-item mb-3">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed inter" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#globalfaq4" aria-expanded="false" aria-controls="globalfaq4">
+                            Support
+                        </button>
+                    </h2>
+                    <div id="globalfaq4" class="accordion-collapse collapse" data-bs-parent="#globalfaq">
+                        <div class="accordion-body inter">
+                            We provide unwavering support, understanding that each student’s journey is unique and
+                            deserves
+                            personalized attention.
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-6">
-                <div class="value p-3">
-                    <h5 class="fw-bold d-flex align-items-center justify-content-between pointer"
-                        data-bs-toggle="collapse" data-bs-target="#Integrity" aria-expanded="false"
-                        aria-controls="Integrity">
-                        Integrity: <i class="fa-solid fa-chevron-down"></i>
-                    </h5>
-                    <div class="collapse" id="Integrity">
-                        <p>We uphold the highest standards of integrity, fostering a trustworthy and respectful learning
-                        environment.</p>
+            <div class="col-lg-6" data-aos="fade-up">
+                <div class="accordion-item mb-3">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed inter" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#globalfaq5" aria-expanded="false" aria-controls="globalfaq5">
+                            Integrity
+                        </button>
+                    </h2>
+                    <div id="globalfaq5" class="accordion-collapse collapse" data-bs-parent="#globalfaq">
+                        <div class="accordion-body inter">
+                            We uphold the highest standards of integrity, fostering a trustworthy and respectful
+                            learning
+                            environment.
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-6">
-                <div class="value p-3">
-                    <h5 class="fw-bold d-flex align-items-center justify-content-between pointer"
-                        data-bs-toggle="collapse" data-bs-target="#Well-Being" aria-expanded="false"
-                        aria-controls="Well-Being">
-                        Teacher Well-Being: <i class="fa-solid fa-chevron-down"></i>
-                    </h5>
-                    <div class="collapse" id="Well-Being">
-                        <p>We believe happy teachers are the foundation of successful students. We take exceptional care of
-                        our educators, so they can focus totally on their goals, bringing passion and dedication to
-                        every lesson.</p>
+            <div class="col-lg-6" data-aos="fade-up">
+                <div class="accordion-item mb-3">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed inter" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#globalfaq6" aria-expanded="false" aria-controls="globalfaq6">
+                            Teacher Well-Being
+                        </button>
+                    </h2>
+                    <div id="globalfaq6" class="accordion-collapse collapse" data-bs-parent="#globalfaq">
+                        <div class="accordion-body inter">
+                            We believe happy teachers are the foundation of successful students. We take exceptional
+                            care
+                            of
+                            our educators, so they can focus totally on their goals, bringing passion and dedication to
+                            every lesson.
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 
-<div style="background-color: #F6F4EE">
-    <div class="container px-xl-5 px-lg-4 px-3 py-5">
-        <div class="row">
+
+<section style="background-color: #F6F4EE">
+    <div class="container px-lg-5 px-3 py-5">
+        <div class="row px-lg-5">
             <div class="col-md-3 col-lg-4 col-xl-6">
-                <h2 class="fw-bold">Who We Serve</h2>
+                <h2 class="fw-bold" data-aos="fade-right">Who We Serve</h2>
             </div>
-            <div class="col-md-9 col-lg-8 col-xl-6">
+            <div class="col-md-9 col-lg-8 col-xl-6" data-aos="fade-left">
                 <p>
                     Merkaii Xcel Prep serves a diverse group of aspiring healthcare professionals, from nursing students
                     to other allied healthcare. Our students come from various backgrounds, united by their dedication
@@ -653,17 +818,21 @@
         </div>
 
         <div class="row px-3 gap-3 gap-lg-5 pt-4">
-            <div class="col-md-12 col-lg-4 col-xl-6 serve-left p-5 d-flex flex-column justify-content-between">
+            <div data-aos="fade-right"
+                class="col-md-12 col-lg-4 col-xl-6 serve-left p-5 d-flex flex-column justify-content-between">
                 <span class="py-1 px-2 bg-warning rounded-2" style="width: fit-content">Improves retention</span>
-                <h1 class="fw-bold" style="font-size: clamp(4rem, 10vw, 8rem) !important">96<small class="fs-2">%</small></h1>
+                <h1 class="fw-bold" style="font-size: clamp(4rem, 10vw, 8rem) !important">96<small
+                        class="fs-2">%</small></h1>
                 <p>of our students successfully graduate and begin their career development.</p>
             </div>
-            <div class="col-md-12 col-lg col-xl serve-right p-5 d-flex flex-column justify-content-between">
+
+            <div data-aos="fade-left"
+                class="col-md-12 col-lg col-xl serve-right p-5 d-flex flex-column justify-content-between">
                 <h3 class="fw-semibold">What do you need to bring?</h3>
                 <p>A phone with an Internet connection, and we recommend that you bring a charger.</p>
                 <div class="d-flex align-items-center gap-3">
                     <img src="https://wp.themepure.net/acadia/wp-content/uploads/2024/08/mission-mesg.png.webp"
-                    style="width: 50% !important" alt="">
+                        style="width: 50% !important" alt="">
                     <div class="d-flex flex-column gap-2">
                         <span class="py-2 px-3 msg-text1">Hello</span>
                         <span class="py-2 px-3 msg-text2">Ready for my first assignment!</span>
@@ -672,4 +841,88 @@
             </div>
         </div>
     </div>
-</div>
+</section>
+
+
+{{-- Testimonials Section --}}
+<section class="testimonial-section py-5">
+    <div class="text-center">
+        <h2 data-aos="fade-up">Trusted by Thousands of Nurses</h2>
+        <p class="opacity-75 inter" data-aos="fade-up">
+            We’re proud to help aspiring nurses succeed every day. Here’s what they’re saying.
+        </p>
+    </div>
+
+    <div class="testimonial-top mt-4">
+        @for ($i = 0; $i < 20; $i++)
+            <div class="card" data-aos="fade-up">
+                <div class="card-body px-5 pt-5 pb-4 d-flex align-items-end">
+                    <div class="d-flex flex-column">
+                        <!-- Quote SVG -->
+                        <svg class="mb-3" width="25" height="16" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5.68 6.38C..." fill="#FF6B6B" />
+                        </svg>
+
+                        <div>
+                            <small>
+                                Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.
+                                Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt
+                                nostrud amet.
+                            </small>
+                            <!-- Closing Quote -->
+                            <svg class="mt-3" style="rotate:180deg" width="25" height="16" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5.68 6.38C..." fill="#FF6B6B" />
+                            </svg>
+                        </div>
+
+                        <div class="mt-3">
+                            <h6 class="fw-bold">Cornelius B</h6>
+                            <small class="text-muted">Professional Nurse</small>
+                        </div>
+                    </div>
+
+                    <img src="{{ asset('public/assets/review-img.png') }}" width="200" alt="Reviewer">
+                </div>
+            </div>
+        @endfor
+    </div>
+
+    <div class="testimonial-bottom
+    mt-4" data-aos="fade-up">
+        @for ($i = 0; $i < 20; $i++)
+            <div class="card">
+                <div class="card-body px-5 pt-5 pb-4 d-flex align-items-end">
+                    <div class="d-flex flex-column">
+                        <!-- Quote SVG -->
+                        <svg class="mb-3" width="25" height="16" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5.68 6.38C..." fill="#FF6B6B" />
+                        </svg>
+
+                        <div>
+                            <small>
+                                Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.
+                                Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt
+                                nostrud amet.
+                            </small>
+                            <!-- Closing Quote -->
+                            <svg class="mt-3" style="rotate:180deg" width="25" height="16" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5.68 6.38C..." fill="#FF6B6B" />
+                            </svg>
+                        </div>
+
+                        <div class="mt-3">
+                            <h6 class="fw-bold">Cornelius B</h6>
+                            <small class="text-muted">Professional Nurse</small>
+                        </div>
+                    </div>
+
+                    <img src="{{ asset('public/assets/review-img.png') }}" width="200" alt="Reviewer">
+                </div>
+            </div>
+        @endfor
+    </div>
+</section>

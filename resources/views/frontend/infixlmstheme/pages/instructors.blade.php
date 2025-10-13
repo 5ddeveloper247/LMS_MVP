@@ -12,6 +12,13 @@
     <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css" />
     <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css" />
     <script src="https://kit.fontawesome.com/b98cad50b5.js" crossorigin="anonymous"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css'>
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css" />
+
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-regular-straight/css/uicons-regular-straight.css'>
+
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-straight/css/uicons-solid-straight.css'>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         .modal {
@@ -83,12 +90,6 @@
             margin: 60px auto !important;
         }
 
-        /* .form_label {
-                                                        width: -webkit-fill-available;
-                                                        text-overflow: ellipsis;
-                                                        overflow: hidden;
-                                                        white-space: nowrap;
-                                                    } */
 
         label span {
             color: red !important;
@@ -128,12 +129,6 @@
             background: rgba(3, 3, 3, 0.7) !important;
         }
 
-        /* .right-divv {
-                                                    max-height: 56vh !important;
-                                                    overflow-y: auto;
-                                                    scrollbar-width: none;
-
-                                                } */
 
         .instructor-image {
             height: 310px;
@@ -197,7 +192,7 @@
             gap: 30px;
         }
 
-        @media (min-width: 1800px) {
+        @media (min-width: 1600px) {
             .grid_container {
                 display: grid;
                 grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -208,31 +203,117 @@
         .fw-bold {
             font-weight: 600;
         }
+
+
+        .heading-icon {
+            background-color: #a6f0ec59;
+            color: #1E3A5F;
+            height: 30px;
+            width: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50px;
+            font-size: 16px;
+        }
+
+        * {
+            font-family: 'Rubik' !important
+        }
+
+        h1 {
+            color: var(--system_primery_color) !important
+        }
+
+        h2 {
+            font-size: clamp(1.3rem, 4vw, 2.5rem) !important;
+            font-family: "Rubik" !important;
+            font-weight: 600 !important;
+        }
+
+        @media (max-width: 1250px) {
+            h2 {
+                font-size: clamp(1.3rem, 2.5vw, 2rem) !important;
+            }
+        }
+
+        .rubik {
+            font-family: "Rubik" !important;
+        }
+
+        section .container {
+            max-width: 1700px !important
+        }
+
+        .left-portion {
+            padding-left: 7vw !important
+        }
+
+        @media (min-width: 1800px) {
+            .left-portion {
+                padding-left: 11vw !important
+            }
+        }
+
+        .instructor-section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 65%;
+            background: linear-gradient(0deg, #1E3A5F 0%, #285898 100%);
+        }
+
+        .slider-wrapper {
+            overflow: hidden;
+            width: 100%;
+            position: relative;
+        }
+
+        .card-container {
+            display: flex;
+            gap: 60px;
+            animation: slideLeft 15s linear infinite alternate-reverse;
+            will-change: transform;
+        }
+
+        @keyframes slideLeft {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        @media (max-width: 767px) {
+            .card-container {
+                animation-duration: 6s;
+            }
+        }
+
+        .sub .text-dark {
+            color: #fff !important
+        }
+
+        .sub strong {
+            font-weight: 400 !important
+        }
+
+        .prep-card {
+            background-image: url('{{ asset('public/assets/i-bottom.png') }}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
     </style>
     {{-- @endsection --}}
 @section('mainContent')
     <div>
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-md-12 px-0">
-                {{-- <div class="breadcrumb_area position-relative">
-                        <div class="w-100 h-100 position-absolute bottom-0 left-0">
-                            <img alt="Banner Image" class="w-100 h-100 img-cover"
-                                src="{{ asset('public/frontend/infixlmstheme/img/images/Teacher Explaining.jpg') }}">
-                            </div>
-                            <div class="col-lg-9 offset-1">
-                                <div class="breadcam_wrap">&nbsp;
-                                    <h1 class="text-white custom-heading">Instructors</h1>
-                                    @if (!auth()->check())
-                                    <button
-                                        class="btn_responsive font-weight-bold hit ml-1 bg-transparent px-2 px-md-3 py-2 text-white openModal">
-                                        Become
-                                        an
-                                        Instructor
-                                    </button>
-                                    @endif
-                                </div>
-                            </div>
-                        </div> --}}
                 @php
                     $banner_title = 'Instructors';
                     $banner_image = 'public/frontend/infixlmstheme/img/images/Teacher Explaining.jpg';
@@ -240,109 +321,251 @@
                 @endphp
                 <x-breadcrumb :banner="$banner_image" :title="$banner_title" :btntitle="$btn_title" :btnclass="'openModal'" />
             </div>
-        </div>
+        </div> --}}
 
 
-        <!-- Main heading Section  -->
-        <div class="container py-5">
-            <div class="row py-5">
-                <div class="col-md-6 col-12 d-flex align-items-center mb-5 mb-md-0 pe-md-5"
-                    style="text-align: end; padding: 0 3rem 0 0;" data-aos="fade-left" data-aos-delay="500">
-                    <div class="pt-3 pt-md-0">
-                        <div class="text-end"> {{-- previous class for responsive custom_height_2 --}}
-                            <h5 class="mb-3">Get Started</h5>
-                            <div class="d-flex justify-content-end">
-                                <h2 class="position-relative custom_small_heading font-weight-bold text-end mb-4"
-                                    style="width: fit-content">
-                                    <span class="text-dark">Why Join</span> <br> Merkaii Xcellence Prep?
-                                    <svg class="position-absolute d-none d-md-block" style="left: 0%; bottom: -52px;"
-                                        width="150" height="60" viewBox="0 0 150 20"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M0,0 Q75,-30 140,0" stroke="#FFC107" stroke-width="4" fill="transparent"
-                                            stroke-linecap="round" />
-                                    </svg>
-                                </h2>
-                            </div>
-                            <p>
-                                You will have the opportunity to:
-                                Our teachers, like our students, come from diverse communities fostering a strong community
-                                support.
-                            </p>
-                            {{-- <p class="text-end shadow-p right-divv mb-lg-4 mb-2">
-                                    <span class="font-weight-bold">As a faculty member at Merkaii Xcellence Prep, you will have the opportunity to:</span>
-                                    <br>
-                                    <span class="font-weight-bold">Shape the Future of Healthcare:</span> You will play a vital role in educating the next generation of medical professionals who will define the future of healthcare.
-                                    <br>
-                                    <span class="font-weight-bold">Work with a Collaborative and Passionate Team:</span> Our faculty is comprised of experienced and dedicated educators who are passionate about sharing their knowledge and expertise.
-                                    <br>
-                                    <span class="font-weight-bold">Be at the Forefront of Medical Education:</span> We are constantly innovating and developing new teaching methods to ensure our students receive the best possible education.
-                                    <br>
-                                    <span class="font-weight-bold">Enjoy a Supportive and Rewarding Work Environment:</span> We value our faculty and provide them with the support and resources they need to succeed.
-                                    <br>
-                                    <span class="font-weight-bold">Teacher Well-Being:</span> We believe that happy teachers are the foundation of successful students. By taking exceptional care of our educators, we ensure they can focus wholeheartedly on their goals, bringing passion and dedication to every lesson.
-                                </p> --}}
+        {{-- MainBanner --}}
+        <section class="sec-1 show-animate position-relative"
+            style="background: linear-gradient(180deg, #2CA6A4 0%, #B7E1E0 100%); height: fit-content;">
+            <img src="https://html.rrdevs.net/edcare/assets/img/shapes/hero-shape-11.png" width="300"
+                style="position: absolute; left: 0; top: 0;" alt="">
+
+            <div class="container h-100">
+                <div
+                    class="row bg_text position-relative justify-content-between align-items-center px-3 px-sm-5 h-100 pt-5 pt-md-0">
+
+                    <div class="col-md-6 mb-4 mb-md-0">
+                        <h1 class="hero-section-main-heading mb-3 navy-text"
+                            style="font-weight: 600; font-size: clamp(1.6rem, 4vw, 5rem) !important; line-height: 100%;">
+                            {{-- {{@$homeContent->slider_title}} --}}
+                            Meet Your Tutors & Remediation Coaches
+                        </h1>
+
+                        <p class="mb-4 hero-section-p">
+                            Failed the NCLEX? You're not alone—and you’re not out. Our Florida Board-Approved Remedial
+                            Program is built to help you rise again.
+                        </p>
+
+                        {{-- <p class="hero-section mb-1">
+                            {{@$homeContent->slider_text}}
+                        </p> --}}
+
+
+                        <div class="d-flex align-items-center gap-2 anim-btn border-0">
+                            <button style="background-color: var(--system_primery_color); border-radius: 50px;"
+                                class="py-2 px-4 text-white">
+                                Apply Now
+                            </button>
+
+                            <button style="background-color: var(--system_primery_color); border-radius: 50px;"
+                                class="py-2 px-4 text-white">
+                                Speak to an advisor
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 home_bg overflow-hidden">
+                        <div class="d-flex align-items-center justify-content-center position-relative h-100"
+                            style="z-index: 99;">
+                            {{-- <img class="hero_img" src="{{ asset($homeContent->slider_banner) }}" width="80%" alt=""> --}}
+                            <img src="{{ asset('public/assets/tutor_shape.svg') }}" width="80%" alt="">
+                            <img src="{{ asset('public/assets/i.png') }}" width="100%"
+                                style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -40%); max-width: 540px"
+                                alt="">
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6 col-12" data-aos="fade-right">
-                    {{-- <div class="custom_height_1">
-                        <img src="{{ asset('public/assets/Instructor 1.jpg') }}" height="250" class="w-100">
-                    </div> --}}
+                <img style="position: absolute; right: 0; bottom: 0;" class="d-none d-lg-block"
+                    src="{{ asset('public/assets/r-lines.png') }}" width="350px" alt="Live Classes"
+                    class="benefit-icon-img">
+            </div>
 
-                    <div class="row h-100">
-                        <div class="col-6">
-                            <img src="https://merkaiixcelprep.com/public/uploads/images/footerimg/fantasticopportunityimg.jpeg" height="550" width="100%" style="border-radius: 8px; object-fit: cover; margin-top: -3rem;">
-                        </div>
-    
-                        <div class="col-6">
-                            <img src="https://merkaiixcelprep.com/public/uploads/images/footerimg/astutorimg.jpeg" height="550" width="100%" style="border-radius: 8px; object-fit: cover;">
-                        </div>
-    
-                        <div class="position-absolute" style="right: 0; top: -20%; z-index: -1;">
-                            <img src="https://demo2.pavothemes.com/edudeme/wp-content/uploads/2024/10/slider-3-decore-1.png" alt="">
-                        </div>
-    
-                        <div class="position-absolute" style="left: 0; bottom: -10%; z-index: -1;">
-                            <img src="https://demo2.pavothemes.com/edudeme/wp-content/uploads/2024/10/slider-3-decore-2.png" alt="">
-                        </div>
+            <div class="py-5 px-4 position-relative"
+                style="
+                    background-image: url('{{ asset('public/assets/i-bottom.png') }}');
+                    background-size: cover;
+                    background-repeat: no-repeat;
+                    background-position: center;
+                ">
+                <div style="gap: 40px; max-width: 800px; margin: 0 auto"
+                    class="d-flex align-items-center justify-content-between w-100">
+                    <div
+                        style="background-color: var(--footer_text_hover_color); border-radius: 100px; height: 130px; width: 130px; position: absolute; top: -20px; right: -20px; ">
+                    </div>
+                    <div>
+                        <h2 style="font-weight: 800; font-size: clamp(35px, 5vw, 50px) !important" class="text-white">
+                            150+
+                        </h2>
+                        <small class="text-white">Total Courses</small>
+                    </div>
+                    <hr
+                        style="rotate: 90deg; rotate: 90deg;
+                            background-color: #ffffff70;
+                            height: 1px;
+                            width: 90px;">
+                    <div>
+                        <h2 style="font-weight: 800; font-size: clamp(35px, 5vw, 50px) !important" class="text-white">
+                            250
+                        </h2>
+                        <small class="text-white">Total Instructor</small>
+                    </div>
+                    <hr
+                        style="rotate: 90deg; rotate: 90deg;
+                            background-color: #ffffff70;
+                            height: 1px;
+                            width: 90px;">
+                    <div>
+                        <h2 style="font-weight: 800; font-size: clamp(35px, 5vw, 50px) !important" class="text-white">
+                            35K+
+                        </h2>
+                        <small class="text-white">Total Students</small>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="py-5" style="background-color: #fffaf4;">
-            <div class="container py-4">
-                <div class="d-flex justify-content-center">
-                    <h2 class="position-relative custom_small_heading font-weight-bold text-end mb-4"
-                        style="width: fit-content">
-                        <span class="text-dark">Interactive Online</span> Tutoring
-                        <svg class="position-absolute d-none d-md-block" style="right: 0%; bottom: -52px;" width="150"
-                            height="60" viewBox="0 0 150 20" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M0,0 Q75,-30 140,0" stroke="#FFC107" stroke-width="4" fill="transparent"
-                                stroke-linecap="round" />
-                        </svg>
-                    </h2>
+        <section>
+            <div class="row align-items-center">
+                <div class="col-lg-6 left-portion py-5" data-aos="fade-right">
+                    <span style="color: var(--footer_text_hover_color)">Get Started</span>
+                    <h2>Why Join Merkaii Xcelellence Prep</h2>
+                    <p>You will have the opportunity to: Our teachers, like our students, come from diverse communities
+                        fostering a strong community support.</p>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="h-100 p-3" style="box-shadow: 0px 4px 4px 0px #0000001A; border-radius: 6px">
+                                <h6>Florida BON Approved</h6>
+                                <small>Our program meets Florida BON standards, ensuring your coursework, clinical
+                                    hours,
+                                    and coaching are fully recognized, trusted, and professionally guided.</small>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="h-100 p-3" style="box-shadow: 0px 4px 4px 0px #0000001A; border-radius: 6px">
+                                <h6>Personalized Coaching Support</h6>
+                                <small>Receive tailored one-on-one mentorship with weekly check-ins, personalized study
+                                    plans, and constant guidance to help you master NCLEX confidently.</small>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="h-100 p-3" style="box-shadow: 0px 4px 4px 0px #0000001A; border-radius: 6px">
+                                <h6>Proven Student Success</h6>
+                                <small>Thousands of students have passed after multiple failed attempts by using our
+                                    structured remediation approach and supportive, experienced nursing mentors.</small>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="h-100 p-3" style="box-shadow: 0px 4px 4px 0px #0000001A; border-radius: 6px">
+                                <h6>Flexible Learning Options</h6>
+                                <small>Choose between online or hybrid formats that adapt to your schedule, making it
+                                    easier to balance study, practice, and real-life responsibilities.</small>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="grid_container mt-4">
-                    <div class="d-flex flex-column align-items-center bg-white text-center px-3 pb-5"
-                        style="border-radius: 8px">
+                <div class="col-lg-6" data-aos="fade-left">
+                    <img src="{{ asset('public/assets/join-m.png') }}" style="max-height: 700px; object-fit: cover"
+                        width="100%" alt="">
+                </div>
+            </div>
+        </section>
+
+        <section class="instructor-section position-relative">
+            <div class="py-5 position-relative" style="z-index: 10">
+                <div class="slider-wrapper py-5">
+                    <h2 class="mb-5 text-center text-white px-3" data-aos="fade-up">Meet Our Expert Instructors</h2>
+                    <div class="card-container align-items-center" data-aos="fade-up">
+                        {{-- Original set --}}
+                        @for ($i = 0; $i < 10; $i++)
+                            <div class="card border-0" style="min-width: 325px; border-radius: 10px">
+                                <div class="position-relative">
+                                    <img src="https://images.unsplash.com/photo-1544168190-79c17527004f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW5zdHJ1Y3RvcnxlbnwwfHwwfHx8MA%3D%3D"
+                                        width="100%" height="320" style="object-fit: cover" alt="">
+                                    <span class="p-1 text-white"
+                                        style="background-color: var(--footer_text_hover_color); position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); border-radius: 3px">
+                                        $40/hr
+                                    </span>
+                                </div>
+
+                                <div class="p-4" style="background-color: var(--system_primery_color)">
+                                    <h4 class="text-center text-white" style="text-transform: uppercase">Nathan Allen</h4>
+
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <span class="text-white">Total Hours</span>
+                                        <span class="text-white">3 hours</span>
+                                    </div>
+
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span class="text-white">Tutor</span>
+                                        <span class="text-white">Gen-ED</span>
+                                    </div>
+                                </div>
+                            </div>
+                        @endfor
+
+                        {{-- Duplicate set for seamless scroll --}}
+                        @for ($i = 0; $i < 10; $i++)
+                            <div class="card border-0" style="min-width: 325px; border-radius: 10px">
+                                <div class="position-relative">
+                                    <img src="https://images.unsplash.com/photo-1544168190-79c17527004f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW5zdHJ1Y3RvcnxlbnwwfHwwfHx8MA%3D%3D"
+                                        width="100%" height="320" style="object-fit: cover" alt="">
+                                    <span class="p-1 text-white"
+                                        style="background-color: var(--footer_text_hover_color); position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); border-radius: 3px">
+                                        $40/hr
+                                    </span>
+                                </div>
+
+                                <div class="p-4" style="background-color: var(--system_primery_color)">
+                                    <h4 class="text-center text-white" style="text-transform: uppercase">Nathan Allen</h4>
+
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <span class="text-white">Total Hours</span>
+                                        <span class="text-white">3 hours</span>
+                                    </div>
+
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span class="text-white">Tutor</span>
+                                        <span class="text-white">Gen-ED</span>
+                                    </div>
+                                </div>
+                            </div>
+                        @endfor
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="py-5" style="background-color: #F7F7F7;">
+            <div class="container py-4">
+                <h2 class="fw-bold text-center" data-aos="fade-up">
+                    Interactive Online Tutoring
+                </h2>
+
+                <div class="grid_container px-3 px-sm-4" style="margin-top: 4rem">
+                    <div data-aos="fade-up" class="d-flex flex-column align-items-center bg-white text-center px-4 pb-5"
+                        style="border-radius: 30px">
                         <div class="d-flex align-items-center justify-content-center"
                             style="height: 80px;
                                     width: 80px;
                                     border-radius: 50px;
                                     background-color: #fff;
                                     margin-top: -3rem;
-                                    border: 10px solid #fff9f1;">
+                                    border: 10px solid #F7F7F7;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 64 64">
-                                <path fill="currentColor"
+                                <path fill="#FF6B6B"
                                     d="M40.067 20.573c0 4.557-3.699 8.25-8.26 8.25c-4.556 0-8.249-3.694-8.249-8.25s3.693-8.25 8.249-8.25c4.561 0 8.26 3.694 8.26 8.25" />
-                                <path fill="currentColor"
+                                <path fill="#FF6B6B"
                                     d="M31.82.524c-3.818 0-9.151 1.522-13.014 5.385l4.588 8.359a10.7 10.7 0 0 1 8.426-4.09c3.459 0 6.537 1.634 8.498 4.175l4.5-8.636C41.475 2.064 35.48.525 31.82.525zm3.4 6.138h-2.136v2.134h-2.566V6.662h-2.136V4.097h2.136V1.954h2.566v2.143h2.136zM20.966 43.651h2.113l-3.018 10.344h23.581l-3.004-10.344h2.115l3.023 10.344h6.939l-4.736-15.672c-.74-2.587-3.984-7.142-9.582-7.28l-12.87-.011c-5.725.028-9.037 4.672-9.786 7.29l-4.828 15.672h7.037zM.947 57.293h61.73v5.873H.947z" />
                             </svg>
                         </div>
-                        <h5 class="fw-bold mt-4 mb-2">
+                        <h5 class="fw-bold my-4 text-dark">
                             Diverse Staff to Shape Future
                         </h5>
                         <p class="mb-0">
@@ -351,21 +574,21 @@
                         </p>
                     </div>
 
-                    <div class="d-flex flex-column align-items-center bg-white text-center px-3 pb-5"
-                        style="border-radius: 8px">
+                    <div data-aos="fade-up" class="d-flex flex-column align-items-center bg-white text-center px-4 pb-5"
+                        style="border-radius: 30px">
                         <div class="d-flex align-items-center justify-content-center"
                             style="height: 80px;
                                     width: 80px;
                                     border-radius: 50px;
                                     background-color: #fff;
                                     margin-top: -3rem;
-                                    border: 10px solid #fff9f1;">
+                                    border: 10px solid #F7F7F7;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-                                <path fill="currentColor"
-                                    d="M6 21v-1H4v1a7 7 0 0 0 7 7h3v-2h-3a5 5 0 0 1-5-5m18-10v1h2v-1a7 7 0 0 0-7-7h-3v2h3a5 5 0 0 1 5 5m-13 0H5a3 3 0 0 0-3 3v2h2v-2a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2h2v-2a3 3 0 0 0-3-3m-3-1a4 4 0 1 0-4-4a4 4 0 0 0 4 4m0-6a2 2 0 1 1-2 2a2 2 0 0 1 2-2m19 21h-6a3 3 0 0 0-3 3v2h2v-2a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2h2v-2a3 3 0 0 0-3-3m-7-5a4 4 0 1 0 4-4a4 4 0 0 0-4 4m6 0a2 2 0 1 1-2-2a2 2 0 0 1 2 2" />
+                                <path fill="#FF6B6B"
+                                    d="M6 21v-1H4v1a7 7 0 0 0 7 7h3v-2h-3a5 5 0 0 1-5-5m18-10v1h2v-1a7 7 0 0 0-7-7h-3v2h3a5 5 0 0 1 5 5m-13 0h6a3 3 0 0 0-3 3v2h2v-2a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2h2v-2a3 3 0 0 0-3-3m-3-1a4 4 0 1 0-4-4a4 4 0 0 0 4 4m0-6a2 2 0 1 1-2 2a2 2 0 0 1 2-2m19 21h-6a3 3 0 0 0-3 3v2h2v-2a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2h2v-2a3 3 0 0 0-3-3m-7-5a4 4 0 1 0 4-4a4 4 0 0 0-4 4m6 0a2 2 0 1 1-2-2a2 2 0 0 1 2 2" />
                             </svg>
                         </div>
-                        <h5 class="fw-bold mt-4 mb-2">
+                        <h5 class="fw-bold my-4 text-dark">
                             Collaborative and Passionate Team
                         </h5>
                         <p class="mb-0">
@@ -374,24 +597,24 @@
                         </p>
                     </div>
 
-                    <div class="d-flex flex-column align-items-center bg-white text-center px-3 pb-5"
-                        style="border-radius: 8px">
+                    <div data-aos="fade-up" class="d-flex flex-column align-items-center bg-white text-center px-4 pb-5"
+                        style="border-radius: 30px">
                         <div class="d-flex align-items-center justify-content-center"
                             style="height: 80px;
                                     width: 80px;
                                     border-radius: 50px;
                                     background-color: #fff;
                                     margin-top: -3rem;
-                                    border: 10px solid #fff9f1;">
+                                    border: 10px solid #F7F7F7;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24">
-                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                <path fill="none" stroke="#FF6B6B" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="1.5"
                                     d="M11 2C6.582 2 3 5.545 3 9.919c0 1.493.417 2.89 1.143 4.081M17 5h-2c-.943 0-1.414 0-1.707.293S13 6.057 13 7v2c0 .943 0 1.414.293 1.707S14.057 11 15 11h2c.943 0 1.414 0 1.707-.293S19 9.943 19 9V7c0-.943 0-1.414-.293-1.707S17.943 5 17 5m-2.5 6v2m3-2v2m-3-10v2m3-2v2M13 6.5h-2m2 3h-2m10-3h-2m2 3h-2M6.383 17.098c-.092-.276-.138-.415-.133-.527a.6.6 0 0 1 .382-.53c.104-.041.25-.041.54-.041h7.656c.291 0 .436 0 .54.04a.6.6 0 0 1 .382.531c.005.112-.041.25-.133.527c-.17.511-.255.767-.386.974a2 2 0 0 1-1.2.869c-.238.059-.506.059-1.043.059H9.012c-.537 0-.806 0-1.043-.06a2 2 0 0 1-1.2-.868c-.131-.207-.216-.463-.386-.974M14 19l-.13.647c-.14.707-.211 1.06-.37 1.34a2 2 0 0 1-1.113.912C12.082 22 11.72 22 11 22s-1.082 0-1.387-.1a2 2 0 0 1-1.113-.913c-.159-.28-.23-.633-.37-1.34L8 19"
-                                    color="currentColor" />
+                                    color="#FF6B6B" />
                             </svg>
                         </div>
 
-                        <h5 class="fw-bold mt-4 mb-2">
+                        <h5 class="fw-bold my-4 text-dark">
                             Forefront of Innovation
                         </h5>
                         <p class="mb-0">
@@ -400,22 +623,22 @@
                         </p>
                     </div>
 
-                    <div class="d-flex flex-column align-items-center bg-white text-center px-3 pb-5"
-                        style="border-radius: 8px">
+                    <div data-aos="fade-up" class="d-flex flex-column align-items-center bg-white text-center px-4 pb-5"
+                        style="border-radius: 30px">
                         <div class="d-flex align-items-center justify-content-center"
                             style="height: 80px;
                                     width: 80px;
                                     border-radius: 50px;
                                     background-color: #fff;
                                     margin-top: -3rem;
-                                    border: 10px solid #fff9f1;">
+                                    border: 10px solid #F7F7F7;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 16 16">
-                                <path fill="currentColor"
+                                <path fill="#FF6B6B"
                                     d="M8 12a1.5 1.5 0 0 1-1.474-1.22a5 5 0 0 1-2.474-1.712a5 5 0 1 1 8.924-3.567c.027.275-.2.499-.476.499s-.497-.225-.53-.499a4 4 0 1 0-5.285 4.278A1.5 1.5 0 1 1 8 12m-4-1.5v-.027a6 6 0 0 1-.748-.805A1.5 1.5 0 0 0 3 10.5v.5c0 1.971 1.86 4 5 4s5-2.029 5-4v-.5A1.5 1.5 0 0 0 11.5 9H10c.219.29.375.63.45 1h1.05a.5.5 0 0 1 .5.5v.5c0 1.438-1.432 3-4 3s-4-1.562-4-3zM8 8a2.5 2.5 0 0 0-1.572.556A2.99 2.99 0 0 1 5 6a3 3 0 1 1 4.572 2.556A2.5 2.5 0 0 0 8 8M6 6a2 2 0 1 0 4 0a2 2 0 0 0-4 0" />
                             </svg>
                         </div>
 
-                        <h5 class="fw-bold mt-4 mb-2">
+                        <h5 class="fw-bold my-4 text-dark">
                             Continuous Support in a Rewarding Environment
                         </h5>
                         <p class="mb-0">
@@ -425,61 +648,137 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
+        <section>
+            <div class="container py-5">
+                <div class="row px-3 px-sm-4 py-5">
+                    @if (getRawHomeContents($home_content, 'instructor_tile1_title', 'en') != '')
+                        <div class="col-lg-6" data-aos="fade-right" style="min-height: 18rem">
+                            <div class="card h-100 d-flex flex-column flex-md-row align-items-center justify-content-between prep-card position-relative"
+                                style="border-radius: 18px;">
+                                <div class="d-flex flex-column p-5" style="gap: 15px; min-width: 60%">
+                                    <p class="text-white sub">{!! getRawHomeContents($home_content, 'instructor_tile1_title', 'en') !!}</p>
 
-        <div class="py-5">
-            <div class="container d-flex flex-column flex-xl-row gap-4 justify-content-between" style="gap: 20px">
-                @if(getRawHomeContents($home_content,'instructor_tile1_title','en') != '')
-                <div class="d-flex flex-column flex-md-row align-items-start gap-4 justify-content-between px-5 pt-5 w-100" style="border-radius: 8px; background-color: #dbb8db">
-                    <div class="pb-5 w-100">
-                        <h2 class="position-relative custom_small_heading font-weight-bold text-end mb-5"
-                            style="width: fit-content">
-                            {!! getRawHomeContents($home_content,'instructor_tile1_title','en') !!}
-                            <svg class="position-absolute d-none d-md-block" style="right: 5%; bottom: -52px;"
-                                width="150" height="60" viewBox="0 0 150 20" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M0,0 Q75,-30 140,0" stroke="#FFC107" stroke-width="4" fill="transparent"
-                                    stroke-linecap="round" />
-                            </svg>
-                        </h2>
-                        <p class="mb-2">{!! getRawHomeContents($home_content,'instructor_tile1_text','en') !!}</p>
-                        <a href="{{getRawHomeContents($home_content,'instructor_tile1_btnlink','en')}}">
-                        <button class="py-2 px-4 mt-3" style="background-color: #bf75bf; border-radius: 7px;">
-                            {{getRawHomeContents($home_content,'instructor_tile1_btntext','en')}}
-                        </button>
-                        </a>
-                    </div>
+                                    <p style="font-weight: 600" class="text-white">{!! getRawHomeContents($home_content, 'instructor_tile1_text', 'en') !!}</p>
 
-                    <img src="{{asset(getRawHomeContents($home_content,'instructor_tile1_image','en'))}}" style="padding-top:4rem"
-                        width="100%" height="100%" alt="">
+                                    <a href="{{ getRawHomeContents($home_content, 'instructor_tile1_btnlink', 'en') }}"
+                                        class="text-white d-flex align-items-center justify-space-between"
+                                        style="background-color: #2FC7A1; border-radius: 50px; padding-left: 18px; padding-right: 0; width: fit-content; gap: 10px">
+                                        {{ getRawHomeContents($home_content, 'instructor_tile1_btntext', 'en') }}
+                                        <svg width="42" height="42" viewBox="0 0 42 42" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <rect width="42" height="42" rx="21" fill="#35D7AE" />
+                                            <path d="M23.5 14.2402L28.5 20.2402L23.5 26.2402" stroke="white"
+                                                stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path d="M13.5 20.2402H28.5" stroke="white" stroke-width="1.5"
+                                                stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </a>
+                                </div>
+
+                                <div>
+                                    <img src="{{ asset(getRawHomeContents($home_content, 'instructor_tile1_image', 'en')) }}"
+                                        width="100%" height="100%" style="object-fit: cover" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+                    @if (getRawHomeContents($home_content, 'instructor_tile2_title', 'en') != '')
+                        <div class="col-lg-6" data-aos="fade-left" style="min-height: 18rem">
+                            <div class="card h-100 d-flex flex-column flex-md-row align-items-center justify-content-between position-relative"
+                                style="border-radius: 18px; background-color: #2FC7A1">
+                                <div class="d-flex flex-column p-5" style="gap: 15px; min-width: 60%">
+                                    <p class="text-white sub">{!! getRawHomeContents($home_content, 'instructor_tile2_title', 'en') !!}</p>
+
+                                    <p style="font-weight: 600" class="text-white">{!! getRawHomeContents($home_content, 'instructor_tile2_text', 'en') !!}</p>
+
+                                    <a href="{{ getRawHomeContents($home_content, 'instructor_tile2_btnlink', 'en') }}"
+                                        class="text-white d-flex align-items-center justify-space-between"
+                                        style="background-color: #17254E; border-radius: 50px; padding-left: 18px; padding-right: 0; width: fit-content; gap: 10px">
+                                        {{ getRawHomeContents($home_content, 'instructor_tile2_btntext', 'en') }}
+                                        <svg width="42" height="42" viewBox="0 0 42 42" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <rect width="42" height="42" rx="21" fill="#35D7AE" />
+                                            <path d="M23.5 14.2402L28.5 20.2402L23.5 26.2402" stroke="white"
+                                                stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path d="M13.5 20.2402H28.5" stroke="white" stroke-width="1.5"
+                                                stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </a>
+                                </div>
+
+                                <div>
+                                    <img src="{{ asset(getRawHomeContents($home_content, 'instructor_tile2_image', 'en')) }}"
+                                        width="100%" height="100%" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 </div>
-                @endif
-                @if(getRawHomeContents($home_content,'instructor_tile2_title','en') != '')
-                <div class="d-flex flex-column flex-md-row align-items-start gap-4 justify-content-between px-5 pt-5 w-100" style="border-radius: 8px; background-color: rgb(255, 234, 195)">
-                    <div class="pb-5 w-100">
-                        <h2 class="position-relative custom_small_heading font-weight-bold text-end mb-5"
-                            style="width: fit-content">
-                            {!! getRawHomeContents($home_content,'instructor_tile2_title','en') !!}
-                            <svg class="position-absolute d-none d-md-block" style="right: 5%; bottom: -52px;"
-                                width="150" height="60" viewBox="0 0 150 20" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M0,0 Q75,-30 140,0" stroke="#FFC107" stroke-width="4" fill="transparent"
-                                    stroke-linecap="round" />
-                            </svg>
-                        </h2>
-                        <p class="mb-2">{!! getRawHomeContents($home_content,'instructor_tile2_text','en') !!}</p>
-                        <a href="{{getRawHomeContents($home_content,'instructor_tile2_btnlink','en')}}">
-                            <button class="py-2 px-4 mt-3" style="background-color: rgb(229, 185, 102); border-radius: 7px;">
-                                {{getRawHomeContents($home_content,'instructor_tile2_btntext','en')}}
-                            </button>
-                        </a>
-                    </div>
-
-                    <img src="{{asset(getRawHomeContents($home_content,'instructor_tile2_image','en'))}}" style="padding-top:4rem"
-                        width="100%" height="100%" alt="">
-                </div>
-                @endif
             </div>
-        </div>
+        </section>
+
+        <section style="background-color: #FAF8FB">
+            <div class="container py-5">
+                <div class="row py-5 px-sm-5 align-items-center justify-content-between">
+                    <div class="col-lg-7" data-aos="fade-right">
+                        <span style="color: var(--footer_text_hover_color)">Get Started</span>
+                        <h2>Who we are Looking for ?</h2>
+                        <p class="mb-4">If you are a highly motivated and experienced educator who is passionate about
+                            making a
+                            difference in the future of healthcare education, we encourage you to apply.Merkaii Xcel Prep
+                            offers a competitive salary and benefits package, as well as the opportunity to work in a
+                            rewarding student and staff-centered environment.</p>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="h-100 p-3" style="box-shadow: 0px 4px 4px 0px #0000001A; border-radius: 6px">
+                                    <h6>Passionate Educators</h6>
+                                    <small>We are seeking educators who are passionate about their field and dedicated to
+                                        helping students succeed.</small>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <div class="h-100 p-3" style="box-shadow: 0px 4px 4px 0px #0000001A; border-radius: 6px">
+                                    <h6>Strong Communication Skills</h6>
+                                    <small>The ability to communicate complex medical concepts clearly and concisely is
+                                        essential.</small>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <div class="h-100 p-3" style="box-shadow: 0px 4px 4px 0px #0000001A; border-radius: 6px">
+                                    <h6>Clinical Expertise</h6>
+                                    <small>We value educators with a strong foundation in clinical healthcare skills</small>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <div class="h-100 p-3" style="box-shadow: 0px 4px 4px 0px #0000001A; border-radius: 6px">
+                                    <h6>Commitment to Collaboration</h6>
+                                    <small>We are looking for team players who are excited to collaborate with colleagues to
+                                        create a dynamic learning environment</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="theme_btn py-2 px-4">
+                            Become an Instructor
+                        </button>
+                    </div>
+
+                    <div class="col-lg-5 d-flex justify-content-center" data-aos="fade-left">
+                        <img src="{{ asset('public/assets/looking-right.png') }}"
+                            style="max-height: 700px; max-width: 90%; object-fit: cover" width="100%" alt="">
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- profile slidder -->
 
@@ -570,170 +869,6 @@
                 @endforelse
                 <div class="col-md-12 {{ count($instructors) ? 'd-block' : 'd-none' }}">
                     {{ $instructors->links() }}
-                </div>
-            </div>
-        </div>
-
-        <!-- becomeInsructor section  -->
-        <div class="custom_section_color mb-md-5 mb-4">
-            <div class="container py-5">
-                <div class="row py-5 justify-content-between" style="gap: 20px">
-                    <div class="col-lg-5 px-0" data-aos="fade-left">
-                        <div class="position-relative d-flex justify-content-end h-100">
-                            <div class="bg-white py-2 px-3 d-flex gap-2 justify-content-between align-items-center"
-                                style="position: absolute; top: 5%; right: -10%; border: 1px solid orange; border-radius: 8px;">
-                                <div class="d-flex align-items-center justify-content-center "
-                                    style="background: orange; height: 60px; width: 60px; border-radius: 50px">
-                                    <i class="fa-solid fa-graduation-cap text-white" style="font-size: 1.5rem"></i>
-                                </div>
-                                <div>
-                                    <h5 class="text-dark mt-2 mb-0" style="font-weight: 700">59k</h5>
-                                    <span style="font-weight: 600">Total Students</span>
-                                </div>
-                            </div>
-
-                            <img src="{{ asset('public/assets/Instructor2.jpg') }}" height="700" width="80%"
-                                style="border-radius: 10px; object-fit: cover;">
-
-                            <div class="position-absolute bg-white" style="bottom: -10%; left: 0px; border-radius: 10px;">
-                                <img src="{{ asset('public/assets/Instructor2.jpg') }}" height="150" width="250"
-                                    style="object-fit: cover" class="p-3" alt="">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg p-lg-4 pt-2 pb-4 px-3 d-flex align-items-center">
-                        <div class="custom-l-padd pl-sm-5 p-2 custom_height_instructor" data-aos="fade-right">
-                            <h2
-                                class="custom_small_heading font-weight-bold text-capitalize d-flex-flex-column justify-content-center mb-3">
-                                Who we are looking for
-                            </h2>
-                            <p class="mb-4">
-                                If you are a highly motivated and experienced educator who is passionate about making a
-                                difference in the future of healthcare education, we encourage you to apply.
-                                <br>
-                                Merkaii Xcel Prep offers a competitive salary and benefits package, as well as the
-                                opportunity to work in a rewarding student and staff-centered environment.
-                            </p>
-
-                            <div class="row">
-                                <div class="col-12 col-xl-6 mb-4 d-flex align-items-start gap-2">
-                                    <div>
-                                        <div class="bg-white d-flex align-items-center justify-content-center"
-                                            style="height: 50px; width: 50px; border-radius: 50%;">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
-                                                viewBox="0 0 32 32">
-                                                <path fill="currentColor"
-                                                    d="M26 30h-2v-3a5.006 5.006 0 0 0-5-5h-6a5.006 5.006 0 0 0-5 5v3H6v-3a7.01 7.01 0 0 1 7-7h6a7.01 7.01 0 0 1 7 7zM5 6a1 1 0 0 0-1 1v9h2V7a1 1 0 0 0-1-1" />
-                                                <path fill="currentColor"
-                                                    d="M4 2v2h5v7a7 7 0 0 0 14 0V4h5V2Zm7 2h10v3H11Zm5 12a5 5 0 0 1-5-5V9h10v2a5 5 0 0 1-5 5" />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <h6 class="fw-bold" style="font-size: 1.3rem">Passionate Educators</h6>
-                                        <p>We are seeking educators who are passionate about their field and dedicated to
-                                            helping students succeed.</p>
-                                    </div>
-                                </div>
-
-                                <div class="col-12 col-xl-6 mb-4 d-flex align-items-start gap-2">
-                                    <div>
-                                        <div class="bg-white d-flex align-items-center justify-content-center"
-                                            style="height: 50px; width: 50px; border-radius: 50%;">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
-                                                viewBox="0 0 24 24">
-                                                <path fill="currentColor"
-                                                    d="M12 4.5a8.5 8.5 0 0 0-6.016 14.505a.75.75 0 0 1-1.061 1.06A9.97 9.97 0 0 1 2 13C2 7.477 6.477 3 12 3s10 4.477 10 10a9.97 9.97 0 0 1-2.923 7.065a.75.75 0 0 1-1.061-1.06A8.5 8.5 0 0 0 12 4.5M12 8a5 5 0 0 0-3.534 8.537a.75.75 0 0 1-1.06 1.061a6.5 6.5 0 1 1 9.188 0a.75.75 0 0 1-1.06-1.06A5 5 0 0 0 12 8m0 2.5a2.5 2.5 0 1 0 0 5a2.5 2.5 0 0 0 0-5M11 13a1 1 0 1 1 2 0a1 1 0 0 1-2 0" />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <h6 class="fw-bold" style="font-size: 1.3rem">Strong Communication Skills</h6>
-                                        <p>The ability to communicate complex medical concepts clearly and concisely is
-                                            essential.</p>
-                                    </div>
-                                </div>
-
-                                <div class="col-12 col-xl-6 mb-4 d-flex align-items-start gap-2">
-                                    <div>
-                                        <div class="bg-white d-flex align-items-center justify-content-center"
-                                            style="height: 50px; width: 50px; border-radius: 50%;">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
-                                                viewBox="0 0 48 48">
-                                                <g fill="currentColor">
-                                                    <path
-                                                        d="M19 15v3h-3v2h3v3h2v-3h3v-2h-3v-3zm-2 11a1 1 0 1 0 0 2h14a1 1 0 1 0 0-2zm-1 6a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H17a1 1 0 0 1-1-1m1 4a1 1 0 1 0 0 2h14a1 1 0 1 0 0-2z" />
-                                                    <path fill-rule="evenodd"
-                                                        d="M17 7a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3h4a3 3 0 0 1 3 3v31a3 3 0 0 1-3 3H13a3 3 0 0 1-3-3V10a3 3 0 0 1 3-3zm11 5a3 3 0 0 0 3-3h4a1 1 0 0 1 1 1v31a1 1 0 0 1-1 1H13a1 1 0 0 1-1-1V10a1 1 0 0 1 1-1h4a3 3 0 0 0 3 3zm-8-6a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1z"
-                                                        clip-rule="evenodd" />
-                                                </g>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <h6 class="fw-bold" style="font-size: 1.3rem">Clinical Expertise</h6>
-                                        <p>We value educators with a strong foundation in clinical healthcare skills</p>
-                                    </div>
-                                </div>
-
-                                <div class="col-12 col-xl-6 mb-4 d-flex align-items-start gap-2">
-                                    <div>
-                                        <div class="bg-white d-flex align-items-center justify-content-center"
-                                            style="height: 50px; width: 50px; border-radius: 50%;">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
-                                                viewBox="0 0 14 14">
-                                                <path fill="none" stroke="currentColor" stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    d="M4.194 8.094a1.86 1.86 0 1 0 0-3.719a1.86 1.86 0 0 0 0 3.719M.523 13.479A3.7 3.7 0 0 1 1 11.704a3.71 3.71 0 0 1 3.195-1.868c1.31.003 2.55.727 3.195 1.868a3.7 3.7 0 0 1 .477 1.774m2.02-12.095v-.82m2.799 1.827l.671-.471m-6.271.471l-.672-.471m5.506 3.139a2.055 2.055 0 0 0-2.077-2.042a2.055 2.055 0 0 0-1.99 2.127a2.07 2.07 0 0 0 1.126 1.73v1a.227.227 0 0 0 .226.22h1.361a.227.227 0 0 0 .227-.22V6.855a2.07 2.07 0 0 0 1.128-1.797Z" />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <h6 class="fw-bold" style="font-size: 1.3rem">Commitment to Collaboration</h6>
-                                        <p>We are looking for team players who are excited to collaborate with colleagues
-                                            to create a dynamic learning environment</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {{-- <p class="mb-2"><span class="font-weight-bold">Passionate Educators:</span> We are seeking
-                                educators
-                                who are passionate about
-                                their field and dedicated to helping students succeed.</p>
-                            <p class="mb-2"><span class="font-weight-bold">Strong Communication Skills:</span> The
-                                ability
-                                to
-                                communicate complex medical
-                                concepts clearly and concisely is essential.</p>
-                            <p class="mb-2"><span class="font-weight-bold">Clinical Expertise:</span> We value educators
-                                with a
-                                strong foundation in clinical
-                                healthcare skills.</p>
-                            <p class="mb-2"><span class="font-weight-bold">Commitment to Collaboration:</span> We are
-                                looking
-                                for
-                                team players who are
-                                excited to collaborate with colleagues to create a dynamic learning
-                                environment.</p>
-                            <br>
-                            <p class="mb-2">If you are a highly motivated and experienced educator who is passionate
-                                about
-                                making a difference in the future of healthcare education, we encourage you to
-                                apply. Merkaii Xcellence Prep offers a competitive salary and benefits package, as
-                                well as the opportunity to work in a rewarding student and staff-centered
-                                environment.</p> --}}
-                            @if (!auth()->check())
-                                <button
-                                    class="border-purple text-purple font-weight-bold hit btn_responsive mt-3 px-2 px-md-3 py-2 openModal"
-                                    style="width: fit-content;">
-                                    Become
-                                    an
-                                    Instructor
-                                </button>
-                            @endif
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -1087,6 +1222,8 @@
             </div>
         </div>
     </div>
+
+
     @include(theme('partials._custom_footer'))
     {{-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> --}}

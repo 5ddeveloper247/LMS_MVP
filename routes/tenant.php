@@ -52,6 +52,8 @@ Route::group(['namespace' => 'Frontend'], function () {
     Route::get('/our-nursing', 'FrontendHomeController@ourNursing')->name('ourNursing');
     
     Route::get('/shop', 'ShopController@index')->name('shop.index');
+    Route::get('/shop/products', 'ShopController@products')->name('shop.products');
+    Route::get('/shop/books', 'ShopController@books')->name('shop.books');
     Route::get('/shop/product/detail/{id}', 'ShopController@productDetail')->name('shop.product.detail');
     Route::get('/shop/book/detail/{id}', 'ShopController@bookDetail')->name('shop.book.detail');
     Route::get('/shop/addToCart/{id}', 'ShopController@addToCartShop')->name('shop.addToCart');

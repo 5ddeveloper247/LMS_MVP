@@ -84,12 +84,12 @@
         }
 
         /* .form_label {
-            width: -webkit-fill-available;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-        } */
-        
+                width: -webkit-fill-available;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            } */
+
         label span {
             color: red !important;
             display: inline !important;
@@ -115,7 +115,7 @@
             padding-right: 60px;
         }
 
-   
+
         .custom-padd {
             padding-left: 60px;
         }
@@ -134,9 +134,10 @@
             scrollbar-width: none;
 
         }
-        .instructor-image{
+
+        .instructor-image {
             height: 310px;
-             object-fit:cover;
+            object-fit: cover;
         }
 
         @media only screen and (min-width: 501px) and (max-width: 767px) {
@@ -153,10 +154,11 @@
         }
 
         @media only screen and (min-width: 1800px) {
-            .instructor-image{
-            height: 420px !important;
-             object-fit:cover;
-        }
+            .instructor-image {
+                height: 420px !important;
+                object-fit: cover;
+            }
+
             .thumb-height {
                 height: 400px !important;
                 object-fit: cover;
@@ -213,46 +215,51 @@
                     <div class="custom_height_1 mx-lg-5">
                         <img src="{{ asset('public/assets/Instructor 1.jpg') }}" class="w-100 h-100">
                     </div>
-                   
+
                 </div>
 
                 <div class=" d-flex align-items-center col-md-6 col-12 px-lg-5 px-3" data-aos="fade-left"
                     data-aos-delay="500">
                     <div class="pl-lg-5 pl-md-3 pt-3 pt-md-0">
                         <div class="custom_height_2">
-                        <h2 class="custom_small_heading mt-2 mt-lg-0 font-weight-bold mb-lg-4 mb-2">
-                            Why Join Merkaii Xcellence Prep?
-                        </h2>
-                        <p class="text-justify shadow-p right-divv mb-lg-4 mb-2">
-                            As a faculty member at Merkaii Xcellence Prep, you will have the opportunity to:
-                        </p>
-                        <p class="mb-2"><span class="font-weight-bold">Shape the Future of Healthcare:</span> You will play a vital role in educating the 
-                            next generation of medical professionals who will define the future of 
-                            healthcare.
-                        </p>
-                        <p class="mb-2"><span class="font-weight-bold">Work with a Collaborative and Passionate Team:</span> Our faculty is 
-                            comprised of experienced and dedicated educators who are passionate about 
-                            sharing their knowledge and expertise.
-                        </p>
-                        <p class="mb-2"><span class="font-weight-bold">Be at the Forefront of Medical Education:</span> We are constantly innovating 
-                            and developing new teaching methods to ensure our students receive the best
-                            possible education.
-                        </p>
-                        <p class="mb-2"><span class="font-weight-bold mb-2">Enjoy a Supportive and Rewarding Work Environment:</span> We value our 
-                            faculty and provide them with the support and resources they need to 
-                            succeed.
-                        </p>
-                        <p class="mb-2"><span class="font-weight-bold mb-2">Teacher Well-Being:</span> We believe that happy teachers are the foundation of 
-                            successful students. By taking exceptional care of our educators, we ensure 
-                            they can focus wholeheartedly on their goals, bringing passion and dedication 
-                            to every lesson.
-                        </p>
+                            <h2 class="custom_small_heading mt-2 mt-lg-0 font-weight-bold mb-lg-4 mb-2">
+                                Why Join Merkaii Xcellence Prep?
+                            </h2>
+                            <p class="text-justify shadow-p right-divv mb-lg-4 mb-2">
+                                As a faculty member at Merkaii Xcellence Prep, you will have the opportunity to:
+                            </p>
+                            <p class="mb-2"><span class="font-weight-bold">Shape the Future of Healthcare:</span> You will
+                                play a vital role in educating the
+                                next generation of medical professionals who will define the future of
+                                healthcare.
+                            </p>
+                            <p class="mb-2"><span class="font-weight-bold">Work with a Collaborative and Passionate
+                                    Team:</span> Our faculty is
+                                comprised of experienced and dedicated educators who are passionate about
+                                sharing their knowledge and expertise.
+                            </p>
+                            <p class="mb-2"><span class="font-weight-bold">Be at the Forefront of Medical
+                                    Education:</span> We are constantly innovating
+                                and developing new teaching methods to ensure our students receive the best
+                                possible education.
+                            </p>
+                            <p class="mb-2"><span class="font-weight-bold mb-2">Enjoy a Supportive and Rewarding Work
+                                    Environment:</span> We value our
+                                faculty and provide them with the support and resources they need to
+                                succeed.
+                            </p>
+                            <p class="mb-2"><span class="font-weight-bold mb-2">Teacher Well-Being:</span> We believe that
+                                happy teachers are the foundation of
+                                successful students. By taking exceptional care of our educators, we ensure
+                                they can focus wholeheartedly on their goals, bringing passion and dedication
+                                to every lesson.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        </div>
-        
+
         <!-- profile slidder -->
 
 
@@ -340,27 +347,33 @@
         <div class="row custom_section_color mb-md-5 mb-4">
             <div class="col-md-6 p-lg-4 pt-2 pb-4 px-3 d-flex align-items-center">
                 <div class="custom-l-padd pl-sm-5 p-2 custom_height_instructor" data-aos="fade-right">
-                    <h2 class="custom_small_heading font-weight-bold text-capitalize d-flex-flex-column justify-content-center mb-md-4 mb-3">
+                    <h2
+                        class="custom_small_heading font-weight-bold text-capitalize d-flex-flex-column justify-content-center mb-md-4 mb-3">
                         Who we are looking for
                     </h2>
-                    <p class="mb-2"><span class="font-weight-bold">Passionate Educators:</span> We are seeking educators who are passionate about 
+                    <p class="mb-2"><span class="font-weight-bold">Passionate Educators:</span> We are seeking educators
+                        who are passionate about
                         their field and dedicated to helping students succeed.</p>
-                    <p class="mb-2"><span class="font-weight-bold">Strong Communication Skills:</span> The ability to communicate complex medical
-                            concepts clearly and concisely is essential.</p>
-                    <p class="mb-2"><span class="font-weight-bold">Clinical Expertise:</span> We value educators with a strong foundation in clinical 
-                                healthcare skills.</p>
-                    <p class="mb-2"><span class="font-weight-bold">Commitment to Collaboration:</span> We are looking for team players who are 
-                                    excited to collaborate with colleagues to create a dynamic learning 
-                                    environment.</p>
+                    <p class="mb-2"><span class="font-weight-bold">Strong Communication Skills:</span> The ability to
+                        communicate complex medical
+                        concepts clearly and concisely is essential.</p>
+                    <p class="mb-2"><span class="font-weight-bold">Clinical Expertise:</span> We value educators with a
+                        strong foundation in clinical
+                        healthcare skills.</p>
+                    <p class="mb-2"><span class="font-weight-bold">Commitment to Collaboration:</span> We are looking for
+                        team players who are
+                        excited to collaborate with colleagues to create a dynamic learning
+                        environment.</p>
                     <br>
-                    <p class="mb-2">If you are a highly motivated and experienced educator who is passionate about 
-                        making a difference in the future of healthcare education, we encourage you to 
-                        apply. Merkaii Xcellence Prep offers a competitive salary and benefits package, as 
-                        well as the opportunity to work in a rewarding student and staff-centered 
+                    <p class="mb-2">If you are a highly motivated and experienced educator who is passionate about
+                        making a difference in the future of healthcare education, we encourage you to
+                        apply. Merkaii Xcellence Prep offers a competitive salary and benefits package, as
+                        well as the opportunity to work in a rewarding student and staff-centered
                         environment.</p>
                     @if (!auth()->check())
                         <button
-                            class="border-purple text-purple font-weight-bold hit btn_responsive mt-3 px-2 px-md-3 py-2 openModal" style="width: fit-content;">
+                            class="border-purple text-purple font-weight-bold hit btn_responsive mt-3 px-2 px-md-3 py-2 openModal"
+                            style="width: fit-content;">
                             Become
                             an
                             Instructor
@@ -400,7 +413,8 @@
                                         </h2>
                                     </div>
                                     <div class="col-lg-4 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2 form_label">What position are you applying?<span>*</span></label>
+                                        <label class="mb-0 mt-2 form_label">What position are you
+                                            applying?<span>*</span></label>
                                         <select name="instructor_position_id"
                                             class="form-select text_small form-control @if ($errors->first('instructor_position_id')) is-invalid @endif"
                                             aria-label="Default select example" required>
@@ -413,7 +427,8 @@
                                         </select>
                                     </div>
                                     <div class="col-lg-4 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2 form_label">How did you hear about us ?<span>*</span></label>
+                                        <label class="mb-0 mt-2 form_label">How did you hear about us
+                                            ?<span>*</span></label>
                                         <select name="instructor_hear_id"
                                             class="form-select text_small form-control @if ($errors->first('instructor_hear_id')) is-invalid @endif"
                                             aria-label="Default select example" required>
@@ -510,13 +525,12 @@
                                     </div>
                                     <div class="col-lg-3 col-sm-4 form_content">
                                         <label class="mb-0 mt-2 form_label">Work</label>
-                                        <textarea name="work" class="text_small form-control @if ($errors->first('work')) is-invalid @endif"
-                                            >{{ old('work') }}</textarea>
+                                        <textarea name="work" class="text_small form-control @if ($errors->first('work')) is-invalid @endif">{{ old('work') }}</textarea>
                                     </div>
                                     <div class="col-lg-9 col-sm-8 form_content">
                                         <label class="mb-0 mt-2 form_label">Address<span>*</span></label>
                                         <textarea name="address" class="text_small form-control @if ($errors->first('address')) is-invalid @endif"
-                                            required >{{ old('address') }}</textarea>
+                                            required>{{ old('address') }}</textarea>
                                     </div>
                                     <div class="col-md-12">
                                         <h2 class="custom_small_heading my-3 text-center">
@@ -675,7 +689,8 @@
                                                 value="{{ old('date_employer_end') }}">
                                         </div>
                                     </div>
-                                    <div class="col-lg-2 col-sm-5 d-flex justify-content-center align-items-center mt-3 gap-2">
+                                    <div
+                                        class="col-lg-2 col-sm-5 d-flex justify-content-center align-items-center mt-3 gap-2">
                                         <input class="@if ($errors->first('currently_employed')) is-invalid @endif"
                                             type="checkbox" id="postion" name="currently_employed"
                                             {{ old('currently_employed') ? 'checked' : '' }}>
@@ -705,8 +720,7 @@
                                     <div class="col-md-12 form_content">
                                         <label class="mb-0 mt-2 form_label">Address<span>*</span></label>
                                         <textarea name="employer_address"
-                                            class="text_small form-control @if ($errors->first('employer_address')) is-invalid @endif"
-                                            required>{{ old('employer_address') }}</textarea>
+                                            class="text_small form-control @if ($errors->first('employer_address')) is-invalid @endif" required>{{ old('employer_address') }}</textarea>
                                     </div>
                                     <div class="col-md-auto ml-auto mt-3">
                                         <button type="button"

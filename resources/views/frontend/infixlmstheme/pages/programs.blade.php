@@ -202,13 +202,96 @@
             gap: 30px;
         }
     }
+
+
+    /* ===============BANNER================ */
+    .breadcrumb_area {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100% !important;
+        text-align: center;
+    }
+
+    .breadcrumb_area:before {
+        display: none
+    }
+
+    .breadcrumb_area:after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: #2ca6a49d !important;
+    }
+
+    .breadcam_wrap {
+        padding: 0 !important;
+        position: relative;
+        z-index: 99
+    }
+
+    .breadcam_wrap h1,
+    .breadcam_wrap p {
+        text-shadow: 1px 0px 5px #737373;
+    }
+
+    .theme_btn {
+        border-radius: 50px !important;
+        font-weight: 600 !important
+    }
+
+    h1,
+    h2 {
+        font-family: "Inter" !important;
+        font-weight: 600 !important;
+    }
+
+    h2 {
+        font-size: clamp(1.3rem, 4vw, 2.5rem) !important;
+        font-family: "Rubik" !important;
+        font-weight: 600 !important;
+    }
+
+    p,
+    a {
+        font-family: "Rubik" !important;
+    }
+
+    .breadcrumb_area a {
+        border-radius: 50px !important;
+        font-weight: 400 !important
+    }
+
+    li {
+        font-family: "Inter" !important;
+        font-size: clamp(14px, 1.5vw, 18px) !important;
+        font-weight: 500
+    }
+
+    .course-work {
+        box-shadow: 0px 4px 10px 0px #0000001A !important;
+    }
 </style>
 
 @section('mainContent')
     <div class="container-fluid px-0">
         <div class="row">
-            <div class="col-md-12 px-0">
-                {{-- <div class="breadcrumb_area position-relative">
+            <div class="col-md-12 px-0 inter">
+                @php
+                    $banner_title = 'Unlock Your Potential – Start Learning Today';
+                    $banner_image = 'public/frontend/infixlmstheme/img/images/courses-4.jpg';
+                    $btn_title = auth()->check() ? '' : 'Sell With Us';
+                    $sub_title =
+                        'Our prep course is designed for students who need a second chance at success. With expert coaching, Florida BON approval, and a proven step-by-step curriculum, you’ll gain the knowledge, confidence, and hands-on practice to pass the NCLEX and move forward in your nursing career.';
+                @endphp
+                <x-breadcrumb :title="$banner_title" :btntitle="$btn_title" :sub_title="$sub_title" :btnclass="'hit openModal'" />
+            </div>
+
+            {{-- <div class="col-md-12 px-0">
+                <div class="breadcrumb_area position-relative">
                     <div class="w-100 h-100 position-absolute bottom-0 left-0">
                         <img alt="Banner Image" class="w-100 h-100 banner_img"
                             src="{{ asset('public/frontend/infixlmstheme/img/images/courses-4.jpg') }}">
@@ -218,55 +301,88 @@
                             <h1 class="text-white custom-heading">Programs</h1>
                         </div>
                     </div>
-                </div> --}}
+                </div>
                 <x-breadcrumb :title="'Programs'" />
-            </div>
+            </div> --}}
         </div>
 
-        <div
-            style="background: linear-gradient(344deg, rgba(62,175,132,0.9360994397759104) 0%, rgba(107,183,154,0.8100490196078431) 38%, rgba(161,131,167,0.6055672268907564) 60%, rgba(164,84,167,1) 100%);">
+
+        <section>
             <div class="container px-lg-5 py-5">
-                <div class="px-xl-5 px-3">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <h2 class="fw-bold text-white">
-                            How do our Programs Work?
+                <div class="d-flex align-items-start justify-content-between mb-4 px-xl-5 px-3">
+                    <div>
+                        <h2 class="fw-bold">
+                            How Do Our Programs Work?
                         </h2>
 
-                        <a href="{{ route('quizzes') }}" class="theme_btn py-2 px-5 border-0">
-                            Explore Courses
-                        </a>
+                        <p>
+                            Our programs is designed for students who need a second chance at success. With expert
+                            coaching, <br class="d-none d-md-block">
+                            Florida BON approval, and a proven step-by-step curriculum, you’ll gain the knowledge,
+                            confidence, <br class="d-none d-md-block">
+                            and hands-on practice to pass the NCLEX and move forward in your nursing career.
+                        </p>
                     </div>
-                    @if(count($how_programs_work) > 0)
-                    <div class="grid-container">
-                        @foreach ($how_programs_work as $i => $tile)
-                        <div class="bg-white p-3" style="border-radius: 8px">
-                            <div>
-                                <div class="position-relative" style="width: 70px">
-                                    <img src="{{asset($tile->image)}}"
-                                        width="70" height="70" class="rounded-circle object-fit-cover"
-                                        alt="">
-                                    <span
-                                        class="position-absolute end-0 translate-middle badge rounded-circle bg-primary d-flex align-items-center justify-content-center"
-                                        style="top: 0px; right: 0px; height: 25px; width: 25px;">
-                                        {{$i+1}}
-                                    </span>
-                                </div>
-                                <h5 class="my-3">{{$tile->title}}</h5>
-                            </div>
 
-                            <p>
-                                {{$tile->text}}
-                            </p>
-                        </div>
+                    <a href="{{ route('quizzes') }}" class="theme_btn py-2 px-5 border-0">
+                        Explore Courses
+                    </a>
+                </div>
+
+                @if (count($how_programs_work) > 0)
+                    <div class="row px-xl-5 px-3 mt-4">
+                        @foreach ($how_programs_work as $i => $tile)
+                            <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
+                                <div class="card h-100 course-work p-4 border-0 position-relative"
+                                    style="border-radius: 30px;">
+                                    {{-- SVG Decoration --}}
+                                    <svg style="position: absolute; top: 30px; left: 20px" width="22" height="75"
+                                        viewBox="0 0 22 75" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="12" cy="10" r="10" fill="#26235C" />
+                                        <path
+                                            d="M0 72.2158L2.83209 71.083C3.37839 71.7232 3.87539 72.2652 5.06758 72.2652C6.21034 72.2652 6.93083 71.9696 6.93083 70.8204L10.4088 63.0033V70.8529C10.4088 73.234 8.2975 74.3179 5.21677 74.3179C2.43455 74.3179 0.819516 73.3654 0 72.2158Z"
+                                            fill="#F7DF1E" />
+                                        <path
+                                            d="M8.77282 62.7458C9.73088 62.7458 10.5075 62.243 10.5075 61.6229C10.5075 61.0027 9.73088 60.5 8.77282 60.5C7.81475 60.5 7.03809 61.0027 7.03809 61.6229C7.03809 62.243 7.81475 62.7458 8.77282 62.7458Z"
+                                            fill="#F7DF1E" />
+                                        <path
+                                            d="M21.6834 64.9432L18.8511 66.076C18.3048 65.4357 17.8077 64.8938 16.6155 64.8938C15.4729 64.8938 14.7523 65.1893 14.7523 66.3387L11.2744 74.1557V66.3063C11.2744 63.9252 13.3857 62.8413 16.4665 62.8413C19.2484 62.8413 20.8634 63.7938 21.6831 64.9434"
+                                            fill="#F7DF1E" />
+                                    </svg>
+
+                                    {{-- Dynamic Image --}}
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <img src="{{ asset($tile->image) }}" width="100" height="100"
+                                            class="rounded-circle object-fit-cover" style="border-radius: 50px;"
+                                            alt="{{ $tile->title }}">
+                                    </div>
+
+                                    {{-- Dynamic Title --}}
+                                    <h5 class="text-center text-dark mt-4 mb-3 inter">
+                                        {{ $tile->title }}
+                                    </h5>
+
+                                    {{-- Dynamic Text --}}
+                                    <p class="text-center inter" style="line-height: 1.2">
+                                        {{ $tile->text }}
+                                    </p>
+
+                                    {{-- Bottom decorative image --}}
+                                    <img src="{{ asset('public/assets/c-rec.png') }}"
+                                        style="position: absolute; bottom: 0; left: 0; width: 100%" alt="">
+                                </div>
+                            </div>
                         @endforeach
                     </div>
-                    @endif
-                    <div class="grid-container mt-4">
-                        @if(Settings('how_program_works_feature_title_1') && Settings('how_program_works_feature_text_1'))
+                @endif
+
+
+                <div class="grid-container mt-4 px-xl-5 px-3">
+                    @if (Settings('how_program_works_feature_title_1') && Settings('how_program_works_feature_text_1'))
                         <div class="d-flex align-items-start gap-2">
                             <div class="blob position-relative">
                                 <svg width="80px" viewBox="40 40 160 161" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill="#FF7619" stroke="#FF7619" stroke-width="20"
+                                    <path fill="#1E3A5F" stroke="#1E3A5F" stroke-width="20"
                                         d="M18.8,-35.6C24.9,-29,31,-25.2,43.2,-19.7C55.5,-14.2,74.1,-7.1,74.1,0C74.2,7.2,55.8,14.4,44.9,22.2C33.9,29.9,30.4,38.2,24.2,48.2C17.9,58.1,9,69.7,2.5,65.3C-3.9,60.9,-7.7,40.5,-8.9,27.6C-10,14.7,-8.4,9.3,-10.8,6C-13.1,2.6,-19.5,1.3,-27.2,-4.5C-34.9,-10.2,-44,-20.5,-41.9,-24.2C-39.8,-28,-26.5,-25.4,-17.6,-30.5C-8.7,-35.5,-4.4,-48.4,1,-50.1C6.3,-51.7,12.6,-42.3,18.8,-35.6Z"
                                         transform="translate(100 100)" />
                                 </svg>
@@ -274,10 +390,10 @@
 
                                 <svg class="position-absolute"
                                     style="top: 50%;
-                                    left: 50%;
-                                    transform: translate(-50%, -80%);"
+                                        left: 50%;
+                                        transform: translate(-50%, -80%);"
                                     xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
-                                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    <g fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round"
                                         stroke-width="1.5" color="currentColor">
                                         <path
                                             d="M6.514 2c-1.304.129-2.182.419-2.838 1.076c-1.175 1.177-1.175 3.072-1.175 6.863v4.02c0 3.79 0 5.686 1.175 6.864S6.743 22 10.526 22h2.007c3.783 0 5.675 0 6.85-1.177c1.067-1.07 1.166-2.717 1.175-5.846" />
@@ -288,19 +404,20 @@
                             </div>
 
                             <div>
-                                <h5 class="fw-bold text-dark" style="font-size: 20px">{{Settings('how_program_works_feature_title_1')}}</h5>
-                                <p>
-                                    {{Settings('how_program_works_feature_text_1')}}
+                                <h5 class="text-dark inter" style="font-size: 20px; font-weight: 600">
+                                    {{ Settings('how_program_works_feature_title_1') }}</h5>
+                                <p class="rubik" style="font-size: clamp(14px, 1.4vw, 18px)">
+                                    {{ Settings('how_program_works_feature_text_1') }}
                                 </p>
                             </div>
                         </div>
-                        @endif
-                        
-                        @if(Settings('how_program_works_feature_title_2') && Settings('how_program_works_feature_text_2'))
+                    @endif
+
+                    @if (Settings('how_program_works_feature_title_2') && Settings('how_program_works_feature_text_2'))
                         <div class="d-flex align-items-start gap-2">
                             <div class="blob position-relative">
                                 <svg width="80px" viewBox="40 40 160 161" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill="#FF7619" stroke="#FF7619" stroke-width="20"
+                                    <path fill="#1E3A5F" stroke="#1E3A5F" stroke-width="20"
                                         d="M18.8,-35.6C24.9,-29,31,-25.2,43.2,-19.7C55.5,-14.2,74.1,-7.1,74.1,0C74.2,7.2,55.8,14.4,44.9,22.2C33.9,29.9,30.4,38.2,24.2,48.2C17.9,58.1,9,69.7,2.5,65.3C-3.9,60.9,-7.7,40.5,-8.9,27.6C-10,14.7,-8.4,9.3,-10.8,6C-13.1,2.6,-19.5,1.3,-27.2,-4.5C-34.9,-10.2,-44,-20.5,-41.9,-24.2C-39.8,-28,-26.5,-25.4,-17.6,-30.5C-8.7,-35.5,-4.4,-48.4,1,-50.1C6.3,-51.7,12.6,-42.3,18.8,-35.6Z"
                                         transform="translate(100 100)" />
                                 </svg>
@@ -308,32 +425,31 @@
 
                                 <svg class="position-absolute"
                                     style="top: 50%;
-                                left: 50%;
-                                transform: translate(-50%, -80%);"
-                                    xmlns="http://www.w3.org/2000/svg" width="54" height="34"
-                                    viewBox="0 0 24 24">
-                                    <path fill="none" stroke="currentColor" stroke-linecap="round"
-                                        stroke-linejoin="round" stroke-width="1.5"
+                                    left: 50%;
+                                    transform: translate(-50%, -80%);"
+                                    xmlns="http://www.w3.org/2000/svg" width="54" height="34" viewBox="0 0 24 24">
+                                    <path fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="1.5"
                                         d="m12 22l-2-6H2l2 6zm0 0h4m-4-9v-.5c0-1.886 0-2.828-.586-3.414S9.886 8.5 8 8.5s-2.828 0-3.414.586S4 10.614 4 12.5v.5m15 0a2 2 0 1 1-4 0a2 2 0 0 1 4 0m-9-9a2 2 0 1 1-4 0a2 2 0 0 1 4 0m4 13.5h6a2 2 0 0 1 2 2v.5a2 2 0 0 1-2 2h-1"
                                         color="currentColor" />
                                 </svg>
                             </div>
 
                             <div>
-                                <h5 class="fw-bold text-dark" style="font-size: 20px">{{Settings('how_program_works_feature_title_2')}}</h5>
-                                <p>
-                                    {{Settings('how_program_works_feature_text_2')}}
+                                <h5 class="text-dark inter" style="font-size: 20px; font-weight: 600">
+                                    {{ Settings('how_program_works_feature_title_2') }}</h5>
+                                <p class="rubik" style="font-size: clamp(14px, 1.4vw, 18px)">
+                                    {{ Settings('how_program_works_feature_text_2') }}
                                 </p>
                             </div>
                         </div>
-                        @endif
-                        
-                        @if(Settings('how_program_works_feature_title_3') && Settings('how_program_works_feature_text_3'))
-                        <div class="d-flex align-items-start gap-2">
+                    @endif
 
+                    @if (Settings('how_program_works_feature_title_3') && Settings('how_program_works_feature_text_3'))
+                        <div class="d-flex align-items-start gap-2">
                             <div class="blob position-relative">
                                 <svg width="80px" viewBox="40 40 160 161" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill="#FF7619" stroke="#FF7619" stroke-width="20"
+                                    <path fill="#1E3A5F" stroke="#1E3A5F" stroke-width="20"
                                         d="M18.8,-35.6C24.9,-29,31,-25.2,43.2,-19.7C55.5,-14.2,74.1,-7.1,74.1,0C74.2,7.2,55.8,14.4,44.9,22.2C33.9,29.9,30.4,38.2,24.2,48.2C17.9,58.1,9,69.7,2.5,65.3C-3.9,60.9,-7.7,40.5,-8.9,27.6C-10,14.7,-8.4,9.3,-10.8,6C-13.1,2.6,-19.5,1.3,-27.2,-4.5C-34.9,-10.2,-44,-20.5,-41.9,-24.2C-39.8,-28,-26.5,-25.4,-17.6,-30.5C-8.7,-35.5,-4.4,-48.4,1,-50.1C6.3,-51.7,12.6,-42.3,18.8,-35.6Z"
                                         transform="translate(100 100)" />
                                 </svg>
@@ -341,16 +457,16 @@
 
                                 <svg class="position-absolute"
                                     style="top: 50%;
-                                left: 50%;
-                                transform: translate(-50%, -80%);"
+                                    left: 50%;
+                                    transform: translate(-50%, -80%);"
                                     xmlns="http://www.w3.org/2000/svg" width="26" height="26"
                                     viewBox="0 0 36 36">
-                                    <path fill="currentColor" d="M8.57 30.9A16 16 0 0 0 33.95 19H18.43Z"
+                                    <path fill="white" d="M8.57 30.9A16 16 0 0 0 33.95 19H18.43Z"
                                         class="clr-i-solid--alerted clr-i-solid-path-1--alerted" />
-                                    <path fill="currentColor"
+                                    <path fill="white"
                                         d="M33.95 17a16 16 0 0 0-.18-1.61H22.23A3.68 3.68 0 0 1 19 9.89l4.06-7A16 16 0 0 0 7 29.6L17.49 17Z"
                                         class="clr-i-solid--alerted clr-i-solid-path-2--alerted" />
-                                    <path fill="currentColor"
+                                    <path fill="white"
                                         d="M26.85 1.14L21.13 11a1.28 1.28 0 0 0 1.1 2h11.45a1.28 1.28 0 0 0 1.1-2l-5.72-9.86a1.28 1.28 0 0 0-2.21 0"
                                         class="clr-i-solid--alerted clr-i-solid-path-3--alerted clr-i-alert" />
                                     <path fill="none" d="M0 0h36v36H0z" />
@@ -358,19 +474,20 @@
                             </div>
 
                             <div>
-                                <h5 class="fw-bold text-dark" style="font-size: 20px">{{Settings('how_program_works_feature_title_3')}}</h5>
-                                <p>
-                                    {{Settings('how_program_works_feature_text_3')}}
+                                <h5 class="text-dark inter" style="font-size: 20px; font-weight: 600">
+                                    {{ Settings('how_program_works_feature_title_3') }}</h5>
+                                <p class="rubik" style="font-size: clamp(14px, 1.4vw, 18px)">
+                                    {{ Settings('how_program_works_feature_text_3') }}
                                 </p>
                             </div>
                         </div>
-                        @endif
-                        
-                        @if(Settings('how_program_works_feature_title_4') && Settings('how_program_works_feature_text_4'))
+                    @endif
+
+                    @if (Settings('how_program_works_feature_title_4') && Settings('how_program_works_feature_text_4'))
                         <div class="d-flex align-items-start gap-2">
                             <div class="blob position-relative">
                                 <svg width="80px" viewBox="40 40 160 161" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill="#FF7619" stroke="#FF7619" stroke-width="20"
+                                    <path fill="#1E3A5F" stroke="#1E3A5F" stroke-width="20"
                                         d="M18.8,-35.6C24.9,-29,31,-25.2,43.2,-19.7C55.5,-14.2,74.1,-7.1,74.1,0C74.2,7.2,55.8,14.4,44.9,22.2C33.9,29.9,30.4,38.2,24.2,48.2C17.9,58.1,9,69.7,2.5,65.3C-3.9,60.9,-7.7,40.5,-8.9,27.6C-10,14.7,-8.4,9.3,-10.8,6C-13.1,2.6,-19.5,1.3,-27.2,-4.5C-34.9,-10.2,-44,-20.5,-41.9,-24.2C-39.8,-28,-26.5,-25.4,-17.6,-30.5C-8.7,-35.5,-4.4,-48.4,1,-50.1C6.3,-51.7,12.6,-42.3,18.8,-35.6Z"
                                         transform="translate(100 100)" />
                                 </svg>
@@ -378,51 +495,51 @@
 
                                 <svg class="position-absolute"
                                     style="top: 50%;
-                                left: 50%;
-                                transform: translate(-50%, -80%);"
+                                    left: 50%;
+                                    transform: translate(-50%, -80%);"
                                     xmlns="http://www.w3.org/2000/svg" width="40" height="30"
                                     viewBox="0 0 24 24">
-                                    <path fill="currentColor"
+                                    <path fill="white"
                                         d="M3 18h18V6H3zM1 5a1 1 0 0 1 1-1h20a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm8 5a1 1 0 1 0-2 0a1 1 0 0 0 2 0m2 0a3 3 0 1 1-6 0a3 3 0 0 1 6 0m-2.998 6c-.967 0-1.84.39-2.475 1.025l-1.414-1.414A5.5 5.5 0 0 1 8.002 14a5.5 5.5 0 0 1 3.889 1.61l-1.414 1.415A3.5 3.5 0 0 0 8.002 16m8.205-1.293l4-4l-1.414-1.414l-3.293 3.293l-1.793-1.793l-1.414 1.414l2.5 2.5l.707.707z" />
                                 </svg>
                             </div>
 
                             <div>
-                                <h5 class="fw-bold text-dark" style="font-size: 20px">{{Settings('how_program_works_feature_title_4')}}</h5>
-                                <p>
-                                    {{Settings('how_program_works_feature_text_4')}}
+                                <h5 class="text-dark inter" style="font-size: 20px; font-weight: 600">
+                                    {{ Settings('how_program_works_feature_title_4') }}</h5>
+                                <p class="rubik" style="font-size: clamp(14px, 1.4vw, 18px)">
+                                    {{ Settings('how_program_works_feature_text_4') }}
                                 </p>
                             </div>
                         </div>
-                        @endif
-                    </div>
+                    @endif
                 </div>
             </div>
-        </div>
 
-        <div class="container custom-padd px-lg-5 pt-md-5 pt-4">
-            <div class="row px-4 ">
-                <div class="col-12 d-flex justify-content-between mb-3">
+        </section>
+
+
+        <div class="container px-lg-5 py-5">
+            <div class="px-xl-5 px-3">
+                <div class="d-flex justify-content-between mb-3">
                     <div class="col-6 col-md-8 p-0">
                         <h2 class="custom_small_heading font-weight-bold custom_heading_1">Program Features</h2>
+
                         <ul style="color: #996699!important" class="ml-4">
                             <li>
-                                <h5 class="small_heading font-weight-bold">
+                                <h6 class="small_heading font-weight-bold text-dark">
                                     Courses | {{ getProgramListCourseCount() }}
-                                </h5>
+                                </h6>
                             </li>
                             <li>
-                                <h5 class="small_heading font-weight-bold">
+                                <h6 class="small_heading font-weight-bold text-dark">
                                     Classes | {{ getProgramListClassCount() }}
-                                    {{-- @foreach(getProgramListClassCount() as $countclass)
-                                        {{$countclass->id}}<br>
-                                    @endforeach --}}
-                                </h5>
+                                </h6>
                             </li>
                         </ul>
                     </div>
-                    <div class="col-6 col-md-4 d-flex justify-content-end">
 
+                    <div class="col-6 col-md-4 d-flex justify-content-end">
                         <a class="font-weight-500 pull-bs-canvas-left text-dark filter_btn" id="filter_btn"
                             style="cursor: pointer; text-align:center;">
                             Show Filter
@@ -475,85 +592,127 @@
                     </form> --}}
                     </div>
                 </div>
-                @if (isset($programs))
-                    @foreach ($programs as $program)
-                        <div class="col-sm-6 col-lg-4 col-xl-3 d-flex justify-content-center mb-md-4 mb-3">
-                            <div class="quiz_wizged card rounded-card shadow w-100">
-                                <div class="thumb rounded-card-img">
-                                    <a href="{{ route('programs.detail', [$program->id]) }}"><img
-                                            src="{{ getCourseImage($program->icon) }}"
-                                            class="img-fluid img-cover w-100 rounded-card-img">
-                                        <div>
-                                            <span class="prise_tag"><span>
-                                                    ${{ $program->effectiveProgramPlan[0]->amount }}</span>
+
+
+                @if (isset($programs) && count($programs) > 0)
+                    <div class="row mt-4">
+
+                        @foreach ($programs as $program)
+                            @php
+                                // Program URL
+                                $programUrl = route('programs.detail', [$program->id]);
+
+                                // Price (assuming effectiveProgramPlan[0] always exists)
+                                $price = isset($program->effectiveProgramPlan[0])
+                                    ? $program->effectiveProgramPlan[0]->amount
+                                    : 0;
+
+                                // Duration in weeks
+                                $duration = isset($program->effectiveProgramPlan[0])
+                                    ? round(
+                                            (strtotime($program->effectiveProgramPlan[0]->edate) -
+                                                strtotime($program->effectiveProgramPlan[0]->sdate)) /
+                                                604800,
+                                            1,
+                                        ) . ' Weeks'
+                                    : null;
+
+                                // Number of courses inside program
+                                $courseCount = count(json_decode($program->allcourses));
+
+                                // Clean up description
+                                $description = str_replace(
+                                    '&nbsp;',
+                                    ' ',
+                                    htmlspecialchars_decode(strip_tags($program->discription)),
+                                );
+                                $description = Str::limit($description, 119, '...');
+                            @endphp
+
+                            <div class="col-md-6 col-lg-4 mb-4">
+                                <div class="card p-3 p-md-4 inter border-0 h-100"
+                                    style="border-radius: 10px; box-shadow: 0px 4px 30px 0px #00000026;">
+                                    <a href="{{ $programUrl }}" class="text-decoration-none text-dark d-block h-100">
+
+                                        {{-- Thumbnail --}}
+                                        <div class="position-relative">
+                                            <img class="img-thumb course-page-img"
+                                                src="{{ getCourseImage($program->icon) }}"
+                                                alt="{{ $program->programtitle }}" width="100%" height="350"
+                                                style="border-radius: 10px; object-fit: cover;">
+
+                                            <span class="py-2 px-4 text-white"
+                                                style="background-color: var(--footer_text_hover_color); border-radius: 7px; position: absolute; top: 30px !important; left: 30px !important">
+                                                Program
                                             </span>
+                                        </div>
+
+                                        {{-- Content --}}
+                                        <div class="mt-3 d-flex flex-column h-100">
+                                            {{-- Program Title --}}
+                                            <h5 style="font-weight: 600 !important"
+                                                class="fw-bold mt-2 inter noBrake text-dark"
+                                                style="text-transform: capitalize !important">
+                                                {{ $program->programtitle }}
+                                            </h5>
+
+                                            {{-- Subtitle (if exists) --}}
+                                            @if (!empty($program->subtitle))
+                                                <small class="text-muted d-block mb-2">{{ $program->subtitle }}</small>
+                                            @endif
+
+                                            {{-- Description --}}
+                                            <small class="inter flex-grow-1" style="line-height: 1.4; font-size: 14px;">
+                                                {{ $description }}
+                                            </small>
+
+                                            {{-- Meta Info --}}
+                                            <div class="d-flex align-items-center justify-content-between my-4 flex-wrap gap-2 pb-3"
+                                                style="border-bottom: 2px dashed #00000075">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <i class="fa-solid fa-book-open"></i>
+                                                    <small class="inter">{{ $courseCount }} Courses</small>
+                                                </div>
+
+                                                @if ($duration)
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <i class="fa-solid fa-clock"></i>
+                                                        <small class="inter">{{ $duration }}</small>
+                                                    </div>
+                                                @endif
+                                            </div>
+
+                                            {{-- Price --}}
+                                            <div
+                                                class="d-flex align-items-center justify-content-between mt-3 flex-wrap gap-2">
+                                                <h5 class="inter fw-bold text-dark mb-0"
+                                                    style="font-weight: 600 !important;">${{ number_format($price, 2) }}
+                                                </h5>
+                                                <small class="inter">Program</small>
+                                            </div>
                                         </div>
                                     </a>
                                 </div>
-                                <div class="card-body d-flex flex-column">
-                                    <h5 class="font-weight-bold thumb_heading">
-                                        <a href="{{ route('programs.detail', [$program->id]) }}">
-
-                                            {{ $program->programtitle }}
-                                        </a>
-                                    </h5>
-                                    <p class="font-weight-bold thumb_heading">
-                                        {{ $program->subtitle }}
-
-                                    </p>
-                                    <div class="paragraph_custom_height mb-2">
-                                        <p style="font-size: 18px !important;">
-                                            @php
-                                                $description = str_replace(
-                                                    '&nbsp;',
-                                                    ' ',
-                                                    htmlspecialchars_decode(strip_tags($program->discription)),
-                                                );
-                                            @endphp
-                                            @if (Str::length($description) > 119)
-                                                {{ Str::limit($description, 119, '...') }}
-                                            @else
-                                                {{ $description }}
-                                            @endif
-                                        </p>
-                                    </div>
-
-                                    <div class="course-small">
-                                        <small>
-                                            <i class="fa fa-book-open"></i>
-                                            {{ count(json_decode($program->allcourses)) }} Courses
-                                        </small>
-
-                                        <small>
-                                            <i class="fas fa-clock"></i>
-                                            {{ round((strtotime($program->effectiveProgramPlan[0]->edate) - strtotime($program->effectiveProgramPlan[0]->sdate)) / 604800, 1) }}
-                                            Weeks
-                                        </small>
-                                        {{-- <small>
-                                            ${{ $program->effectiveProgramPlan[0]->amount }}
-                                        </small> --}}
-                                    </div>
-                                </div>
                             </div>
-                        </div>
-                    @endforeach
-                @endif
-                @if (count($programs) == 0)
+                        @endforeach
+                    </div>
+
+                    {{-- Pagination --}}
+                    <div class="col-md-12 mt-4">
+                        {{ $programs->links() }}
+                    </div>
+                @else
                     <div class="col-lg-12 mb-md-5 mb-4">
                         <div class="Nocouse_wizged d-flex align-items-center justify-content-center text-center">
                             <div class="thumb">
                                 <img style="width: 50px"
-                                    src="{{ asset('public/frontend/infixlmstheme') }}/img/not-found.png" alt="">
+                                    src="{{ asset('public/frontend/infixlmstheme/img/not-found.png') }}" alt="">
                             </div>
-                            <h1>
-                                {{ __('No Program Found') }}
-                            </h1>
+                            <h1>{{ __('No Program Found') }}</h1>
                         </div>
                     </div>
                 @endif
-                <div class="col-md-12 {{ count($programs) ? 'd-block' : 'd-none' }} mt-4">
-                    {{ $programs->links() }}
-                </div>
+
 
                 {{-- <div class="col-md-12 my-3">
                 <h2>You May Like</h2>

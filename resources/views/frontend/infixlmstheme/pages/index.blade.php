@@ -31,6 +31,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
 
 {{-- for scroll our partner --}}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
@@ -233,12 +235,11 @@
         }
     }
 
-    @media (max-width: 1600px) {
-        .success-grid {
-            display: grid;
-            gap: 30px;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-        }
+    h1 {
+        font-weight: 600 !important;
+        font-size: 60px !important;
+        line-height: 100% !important;
+        font-family: "Inter" !important;
     }
 
     @media (max-width: 1240px) {
@@ -368,6 +369,85 @@
             margin-right: 10px;
         }
     }
+
+    @media (max-width: 1600px) {
+        .success-grid {
+            display: grid;
+            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        }
+
+        h1 {
+            font-size: 50px !important;
+        }
+
+        h2 {
+            font-size: 30px !important
+        }
+
+        h5 {
+            font-size: 20px !important
+        }
+
+        h6 {
+            font-size: 14px !important
+        }
+
+        button {
+            font-size: 14px !important
+        }
+
+        p {
+            font-size: 14px !important
+        }
+
+        li {
+            font-size: 12px !important
+        }
+
+        span {
+            font-size: 13px !important
+        }
+
+    }
+
+    @media (max-width: 1400px) {
+        h1 {
+            font-size: 40px !important;
+        }
+
+        h2 {
+            font-size: 24px !important
+        }
+
+        h3 {
+            font-size: 18px !important
+        }
+
+        h5 {
+            font-size: 16px !important
+        }
+
+        h6 {
+            font-size: 12px !important
+        }
+
+        button {
+            font-size: 12px !important
+        }
+
+        p {
+            font-size: 12px !important
+        }
+
+        li {
+            font-size: 11px !important
+        }
+
+        span {
+            font-size: 12px !important
+        }
+    }
 </style>
 
 
@@ -390,8 +470,7 @@
                         </span>Welcome to the Merkaii Xcellence Prep
                     </h6>
 
-                    <h1 class="hero-section-main-heading mb-3 navy-text"
-                        style="font-weight: 600; font-size: clamp(1.6rem, 4vw, 5rem) !important; line-height: 100%;">
+                    <h1 class="mb-3 navy-text">
                         {{-- {{@$homeContent->slider_title}} --}}
                         Pass The NCLEX® On Your First Attempt
                     </h1>
@@ -463,7 +542,7 @@
     <section class="benefits">
         <div class="container-fluid py-5 px-3 px-sm-5">
             <div class="benefit-grid row px-3 py-5">
-                <div class="col-lg-3 col-6">
+                <div class="col-lg-3 col-6" data-aos="fade-up">
                     <div
                         class="benefit-card d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2 h-100">
                         <div class="benefit-icon">
@@ -474,7 +553,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-3 col-6">
+                <div class="col-lg-3 col-6" data-aos="fade-up">
                     <div
                         class="benefit-card d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2 h-100">
                         <div class="benefit-icon">
@@ -485,7 +564,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-3 col-6">
+                <div class="col-lg-3 col-6" data-aos="fade-up">
                     <div
                         class="benefit-card d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2 h-100">
                         <div class="benefit-icon">
@@ -496,7 +575,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-3 col-6">
+                <div class="col-lg-3 col-6" data-aos="fade-up">
                     <div
                         class="benefit-card d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2 h-100">
                         <div class="benefit-icon">
@@ -513,14 +592,15 @@
     {{-- Testimonials Section --}}
     <section class="testimonial-section">
         <div class="text-center">
-            <h2>Trusted by Thousands of Nurses</h2>
-            <p class="opacity-75 inter">We’re proud to help aspiring nurses succeed every day. Here’s what they’re saying.
+            <h2 data-aos="fade-up">Trusted by Thousands of Nurses</h2>
+            <p class="opacity-75 inter" data-aos="fade-up">
+                We’re proud to help aspiring nurses succeed every day. Here’s what they’re saying.
             </p>
         </div>
 
         <div class="testimonial-top mt-4">
             @for ($i = 0; $i < 20; $i++)
-                <div class="card">
+                <div class="card" data-aos="fade-up">
                     <div class="card-body px-5 pt-5 pb-4 d-flex align-items-end">
                         <div class="d-flex flex-column">
                             <!-- Quote SVG -->
@@ -554,7 +634,8 @@
             @endfor
         </div>
 
-        <div class="testimonial-bottom mt-4">
+        <div class="testimonial-bottom
+    mt-4" data-aos="fade-up">
             @for ($i = 0; $i < 20; $i++)
                 <div class="card">
                     <div class="card-body px-5 pt-5 pb-4 d-flex align-items-end">
@@ -594,7 +675,7 @@
     {{-- Success-Metrics --}}
     <section class="success-metrics">
         <div class="container-fluid py-5 px-3 px-sm-5">
-            <div class="card py-5 px-4 px-md-5">
+            <div class="card py-5 px-4 px-md-5" data-aos="fade-up">
                 <h2 class="text-center text-white mb-4">Success Metrics</h2>
 
                 <div class="success-grid">
@@ -621,7 +702,7 @@
             </div>
         </div>
 
-        <img src="{{ asset('public/assets/partners.png') }}" width="100%" alt="">
+        <img src="{{ asset('public/assets/partners.png') }}" data-aos="fade-up" width="100%" alt="">
     </section>
 
     {{-- Instructor-Section --}}
@@ -629,11 +710,11 @@
         <div class="container-fluid py-5 px-3 px-sm-5 mt-5">
             <div class="card px-4 px-md-5">
                 <div class="row align-items-center justify-content-between">
-                    <div class="col-md-4">
+                    <div class="col-md-4" data-aos="fade-right">
                         <img src="{{ asset('public/assets/instructor.png') }}" style="margin-top: -4rem" width="100%"
                             alt="">
                     </div>
-                    <div class="col-md-8 col-xl-6 py-4">
+                    <div class="col-md-8 col-xl-6 py-4" data-aos="fade-left">
                         <h2 class="rubik text-white">Guidance from Real Nursing Experts</h2>
                         <p style="font-weight: 100" class="text-white rubik">Meet Maria, your lead instructor and
                             dedicated guide. With years of nursing and teaching experience, she’s here to support, motivate,
@@ -658,8 +739,9 @@
         <div class="container-fluid py-5 px-3 px-sm-5">
 
             <div class="text-center">
-                <h2>Courses & Pricing Overview</h2>
-                <p class="opacity-75 inter">Find the program that best fits your goals, schedule, and support needs.</p>
+                <h2 data-aos="fade-up">Courses & Pricing Overview</h2>
+                <p class="opacity-75 inter" data-aos="fade-up">Find the program that best fits your goals, schedule, and
+                    support needs.</p>
             </div>
 
             <ul class="nav nav-pills mb-3 d-flex align-items-center justify-content-center mt-3 mb-4" id="pills-tab"
@@ -683,7 +765,7 @@
                     <div class="row">
                         @for ($i = 0; $i < 3; $i++)
                             <div class="col-md-6 col-lg-4 mb-3">
-                                <div class="card border-0 rounded-3 w-100">
+                                <div class="card border-0 rounded-3 w-100" data-aos="fade-up">
 
                                     <div class="card-body rubik">
                                         <!-- Image with badge -->
@@ -1055,7 +1137,7 @@
         style="background-image: url('{{ asset('public/assets/resources.png') }}'); background-size: 100%; background-repeat: no-repeat;">
         <div class="container-fluid py-5 px-3 px-sm-5">
             <div class="row justify-content-between">
-                <div class="col-md-6">
+                <div class="col-md-6" data-aos="fade-right">
                     <div class="text-start">
                         <h2>Learn & Grow With Us</h2>
                         <p class="opacity-75 inter">
@@ -1108,7 +1190,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-6 col-lg-5">
+                <div class="col-md-6 col-lg-5" data-aos="fade-left">
                     <img src="{{ asset('public/assets/comunity-right.png') }}" width="100%" alt="">
                 </div>
             </div>
@@ -2418,6 +2500,15 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.min.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            anchorPlacement: 'top-bottom', // defines which position of the element regarding to window should trigger the animation
+
+        });
+    </script>
+
     <script>
         $('.blog-tag').on('click', function() {
             var tag = $(this).attr('data-tag');
@@ -2459,29 +2550,29 @@
                             ];
                             html = html +
                                 '<li class="single-notice">\
-                                                                                                                                                                                        <div class="single-notice-item">\
-                                                                                                                                                                                            <div class="notice-date">\
-                                                                                                                                                                                                ' +
+                                                                                                                                                                                                                                                                                                                                                            <div class="single-notice-item">\
+                                                                                                                                                                                                                                                                                                                                                                <div class="notice-date">\
+                                                                                                                                                                                                                                                                                                                                                                    ' +
                                 day +
                                 '<br>\
-                                                                                                                                                                                                <span>' +
+                                                                                                                                                                                                                                                                                                                                                                    <span>' +
                                 monthDay[
                                     month] +
                                 '</span>\
-                                                                                                                                                                                            </div>\
-                                                                                                                                                                                            <div class="notice-content">\
-                                                                                                                                                                                                <p>\
-                                                                                                                                                                                                    <a href="' +
+                                                                                                                                                                                                                                                                                                                                                                </div>\
+                                                                                                                                                                                                                                                                                                                                                                <div class="notice-content">\
+                                                                                                                                                                                                                                                                                                                                                                    <p>\
+                                                                                                                                                                                                                                                                                                                                                                        <a href="' +
                                 blog_url +
                                 '">' +
                                 row
                                 .title
                                 .en +
                                 '</a>\
-                                                                                                                                                                                                </p>\
-                                                                                                                                                                                            </div>\
-                                                                                                                                                                                        </div>\
-                                                                                                                                                                                    </li>';
+                                                                                                                                                                                                                                                                                                                                                                    </p>\
+                                                                                                                                                                                                                                                                                                                                                                </div>\
+                                                                                                                                                                                                                                                                                                                                                            </div>\
+                                                                                                                                                                                                                                                                                                                                                        </li>';
                         });
                         $('#blogs_ul').html(html);
                     }

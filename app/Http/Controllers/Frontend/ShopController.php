@@ -42,6 +42,32 @@ class ShopController extends Controller
         }
     }
 
+    public function products(Request $request)
+    {
+        try {
+            
+            $products = ShopProduct::where('type', 1)->where('status', '1')->get();// 1: product, 2:books
+            
+            return view(theme('pages.shopProducts'), compact('request', 'products'));
+        
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function books(Request $request)
+    {
+        try {
+            
+            $products = ShopProduct::where('type', 2)->where('status', '1')->get(); // 1: product, 2:books
+            
+            return view(theme('pages.shopBooks'), compact('request', 'products'));
+        
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()]);
+        }
+    }
+
     public function productDetail(Request $request, $id)
     {
         try {

@@ -268,13 +268,13 @@
     <x-about-page-students-work />
 
     <div class="container px-xl-5 px-lg-4 px-3 py-5">
-        <div class="row gap-3">
+        <div class="row gap-3 px-lg-5">
             <div class="col-lg-4 text-center" style="background-color: #f6f4ee6f; padding: 5rem 2rem">
                 <h1 class="mb-4 fw-semibold">
-                    We <br>
-                    are <br>
-                    better <br>
-                    together <br>
+                    We
+                    are
+                    better
+                    together
                 </h1>
                 <p>Drop Your Contact Details Into the form, and we'll reach out to you</p>
             </div>
@@ -292,19 +292,19 @@
 
                     <div class="form-floating col-lg-12 ps-0">
                         <input type="email" class="form-control input_shadow" id="email"
-                        placeholder="name@example.com">
+                            placeholder="name@example.com">
                         <label for="email">Email address</label>
                     </div>
 
                     <div class="form-floating col-lg-6 ps-0">
                         <input type="email" class="form-control input_shadow" id="subject"
-                        placeholder="name@example.com">
+                            placeholder="name@example.com">
                         <label for="subject">Subject</label>
                     </div>
 
                     <div class="form-floating col-lg-6 ps-0">
                         <input type="text" class="form-control input_shadow" id="message"
-                        placeholder="name@example.com">
+                            placeholder="name@example.com">
                         <label for="message">Message</label>
                     </div>
                 </div>
