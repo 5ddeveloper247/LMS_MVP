@@ -1117,6 +1117,7 @@
         color: #000 !important;
         box-shadow: none !important;
         border: none !important;
+        text-transform: uppercase !important;
     }
 
     .accordion-button:focus {
@@ -1277,28 +1278,34 @@
             <div class="container px-lg-5 py-5">
                 <div class="row py-5 px-xl-5 px-3">
                     <div class="col-lg-6">
-                        <h2 class="text-dark">Program Overview & <br> Frequently Ask <br> Questions</h2>
-                        <img src="{{ asset('public/assets/Image.png') }}" width="50%" alt="">
+                        <img src="https://i.ibb.co/sD4PzTr/320756662-11317252.jpg" width="100%" style="border-radius: 50px" alt="320756662-11317252">
                     </div>
 
                     <div class="col-lg-6">
+                        <h2 class="text-dark">Program Overview & <br> Who Program Is For ?</h2>
                         <div class="accordion" id="accordionExample">
                             <div class="accordion-item mb-3">
                                 <h2 class="accordion-header">
                                     <button class="accordion-button inter" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                        Who’s eligible ?
+                                        FLBON RETURN-T0-PRACTICE REMEDIATION
                                     </button>
                                 </h2>
                                 <div id="collapseOne" class="accordion-collapse collapse show"
                                     data-bs-parent="#accordionExample">
-                                    <div class="accordion-body inter">
-                                        <strong>This is the first item’s accordion body.</strong> It is shown by default,
-                                        until the collapse plugin adds the appropriate classes that we use to style each
-                                        element. These classes control the overall appearance, as well as the showing and
-                                        hiding via CSS transitions. You can modify any of this with custom CSS or overriding
-                                        our default variables. It’s also worth noting that just about any HTML can go within
-                                        the <code>.accordion-body</code>, though the transition does limit overflow.
+                                    <div class="accordion-body inter pt-0 d-flex align-items-center" style="gap: 20px">
+                                        <img src="https://cdn-icons-png.flaticon.com/128/10859/10859251.png" width="140" alt="">
+                                        <div class="d-flex flex-column" style="gap: 10px;">
+                                            <span>Your Nursing Journey Isn’t Over—It’s Just Getting a Second Chapter.</span>
+                                            <span>
+                                                <strong>Duration:</strong>
+                                                2026-04-01 to 2026-04-30
+                                            </span>
+                                            <span>
+                                                <strong>Price:</strong>
+                                                $ 1,500.00
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1307,18 +1314,24 @@
                                 <h2 class="accordion-header">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                        What’s the schedule ?
+                                        On-Demand
                                     </button>
                                 </h2>
                                 <div id="collapseTwo" class="accordion-collapse collapse"
                                     data-bs-parent="#accordionExample">
-                                    <div class="accordion-body">
-                                        <strong>This is the second item’s accordion body.</strong> It is hidden by default,
-                                        until the collapse plugin adds the appropriate classes that we use to style each
-                                        element. These classes control the overall appearance, as well as the showing and
-                                        hiding via CSS transitions. You can modify any of this with custom CSS or overriding
-                                        our default variables. It’s also worth noting that just about any HTML can go within
-                                        the <code>.accordion-body</code>, though the transition does limit overflow.
+                                    <div class="accordion-body pt-0 d-flex align-items-center" style="gap: 20px">
+                                        <img src="https://cdn-icons-png.flaticon.com/128/2936/2936735.png" width="140" alt="">
+                                        <div class="d-flex flex-column" style="gap: 10px;">
+                                            <span>This program will be offered from 8/9/25 to 8/12/25.</span>
+                                            <span>
+                                                <strong>Duration:</strong>
+                                                2025-12-09 to 2026-02-09
+                                            </span>
+                                            <span>
+                                                <strong>Price:</strong>
+                                                $ 2,250.00
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1333,13 +1346,19 @@
                                 </h2>
                                 <div id="collapseThree" class="accordion-collapse collapse"
                                     data-bs-parent="#accordionExample">
-                                    <div class="accordion-body">
-                                        <strong>This is the third item’s accordion body.</strong> It is hidden by default,
-                                        until the collapse plugin adds the appropriate classes that we use to style each
-                                        element. These classes control the overall appearance, as well as the showing and
-                                        hiding via CSS transitions. You can modify any of this with custom CSS or overriding
-                                        our default variables. It’s also worth noting that just about any HTML can go within
-                                        the <code>.accordion-body</code>, though the transition does limit overflow.
+                                    <div class="accordion-body pt-0 d-flex align-items-center" style="gap: 20px">
+                                        <img src="https://cdn-icons-png.flaticon.com/128/2936/2936735.png" width="140" alt="">
+                                        <div class="d-flex flex-column" style="gap: 10px;">
+                                            <span>This program will be offered from 8/9/25 to 8/12/25.</span>
+                                            <span>
+                                                <strong>Duration:</strong>
+                                                2025-12-09 to 2026-02-09
+                                            </span>
+                                            <span>
+                                                <strong>Price:</strong>
+                                                $ 2,250.00
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1354,13 +1373,19 @@
                                 </h2>
                                 <div id="collapseFour" class="accordion-collapse collapse"
                                     data-bs-parent="#accordionExample">
-                                    <div class="accordion-body">
-                                        <strong>This is the third item’s accordion body.</strong> It is hidden by default,
-                                        until the collapse plugin adds the appropriate classes that we use to style each
-                                        element. These classes control the overall appearance, as well as the showing and
-                                        hiding via CSS transitions. You can modify any of this with custom CSS or overriding
-                                        our default variables. It’s also worth noting that just about any HTML can go within
-                                        the <code>.accordion-body</code>, though the transition does limit overflow.
+                                    <div class="accordion-body pt-0 d-flex align-items-center" style="gap: 20px">
+                                        <img src="https://cdn-icons-png.flaticon.com/128/2936/2936735.png" width="140" alt="">
+                                        <div class="d-flex flex-column" style="gap: 10px;">
+                                            <span>This program will be offered from 8/9/25 to 8/12/25.</span>
+                                            <span>
+                                                <strong>Duration:</strong>
+                                                2025-12-09 to 2026-02-09
+                                            </span>
+                                            <span>
+                                                <strong>Price:</strong>
+                                                $ 2,250.00
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1380,7 +1405,7 @@
                         </p>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-4 col-xl-3 mb-4">
                         <div class="card get_card border-0 h-100 px-3 py-5 d-flex align-items-center justify-content-center"
                             style="background: linear-gradient(180deg, #F7F7F7 0%, #D9D9D9 100%); border-radius: 20px">
                             <img src="{{ asset('public/assets/coaching.png') }}" width="100" alt="">
@@ -1389,7 +1414,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-4 col-xl-3 mb-4">
                         <div class="card get_card border-0 h-100 px-3 py-5 d-flex align-items-center justify-content-center"
                             style="background: linear-gradient(180deg, #1E3A5F 0%, #3E78C5 100%); border-radius: 20px">
                             <img src="{{ asset('public/assets/clinical.png') }}" width="75" alt="">
@@ -1398,12 +1423,21 @@
                         </div>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-4 col-xl-3 mb-4">
                         <div class="card get_card border-0 h-100 px-3 py-5 d-flex align-items-center justify-content-center"
                             style="background: linear-gradient(180deg, #F7F7F7 0%, #D9D9D9 100%); border-radius: 20px">
                             <img src="{{ asset('public/assets/bon.png') }}" width="85" alt="">
                             <h4 class="text-dark mt-3 inter">BON Compliance</h4>
                             <p class="text-dark">Meets all FL BON criteria</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-xl-3 mb-4">
+                        <div class="card get_card border-0 h-100 px-3 py-5 d-flex align-items-center justify-content-center"
+                            style="background: linear-gradient(180deg, #1E3A5F 0%, #3E78C5 100%); border-radius: 20px">
+                            <img src="{{ asset('public/assets/live_classes.png') }}" width="85" alt="">
+                            <h4 class="text-white mt-3 inter">Live Instructor Lectures</h4>
+                            <p class="text-white">Interactive Learning Sessions</p>
                         </div>
                     </div>
                 </div>

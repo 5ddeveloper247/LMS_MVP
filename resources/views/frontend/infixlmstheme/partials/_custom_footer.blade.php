@@ -1,3 +1,12 @@
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+  integrity="sha512-K2m8j9G5CrXJcS7MZyDZp3c9ZFehXbZ2M4m8KpA4y6XrbY6x9xL7DkIbYp6EZxjEJSt2eyM4f53S4z2f6i2PAA=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+/>
+
+
 @section('css')
     <style>
         footer h5 {
@@ -18,6 +27,19 @@
                 margin-right: 0;
             }
         }
+
+        .fab, .fa {
+            font-family: "Font Awesome 6 Brands" !important;
+            font-weight: 400;
+        }
+
+        .fa-angle-up,.fa-angle-right {
+            font-family: "Font Awesome 6 Free" !important;
+        }
+
+        .fa-classic, .fa-regular, .fa-solid, .far, .fas {
+            font-family: "Font Awesome 6 Free" !important;
+        }
     </style>
 @endsection
 
@@ -28,8 +50,7 @@
             <!-- Right Content Section -->
             <div class="col-lg-7 py-4 px-5">
                 <h2 class="mb-4" style="font-weight: bold; color: #2b1c61;">
-                    Join <span style="color: #ff7b00;">Our Adult Learner’s</span> <span
-                        style="color: #2b1c61;">Community</span>
+                    Join <span style="color: #ff7b00;">Our Adult Learner’s</span>Community
                 </h2>
                 <p class="mb-4" style="color: #555;">
                     Encourage visitors to join your email list to receive exclusive content and updates. This positions
@@ -116,7 +137,7 @@
                         <i class="fi fi-rs-clock-three text-white" style="font-size: 1.5rem"></i>
                     </div>
                     <div>
-                        <h5 class="mb-1 inter" style="color: var(--system_secendory_color) !important; font-weight: 500 !important; font-size: 18px;">Hours</h5>
+                        <h5 class="mb-1 inter" style="color: var(--system_secendory_color) !important; font-weight: 500 !important; font-size: 18px;">Operations</h5>
                         <div class="d-flex flex-column gap-0">
                             <span>Mon – Thur: 8:30am – 7:00pm</span>
                             <span style="line-height: 100%">Sat: 10:00am – 3:00pm</span>

@@ -8,24 +8,29 @@
             }
 
             .theme_cookies {
-                background: {{@$cookie->bg_color}};
+                /* background: {{@$cookie->bg_color}}; */
+                background: var(--system_secendory_color) !important; 
+            }
+
+            * {
+                font-family: 'Inter' !important;
             }
 
             /* .theme_cookies .cookie_btn {
                 background: {{$cookie->text_color}};
             } */
         </style>
-        <div class="theme_cookies" style="display: none">
-            <div class="theme_cookies_info flex-fill">
+        <div class="theme_cookies flex-column" style="display: none; max-width: 340px;">
+            <div class="theme_cookies_info flex-fill d-flex flex-column">
                 <div class="icon">
                     <img src="{{asset(@$cookie->image)}}" alt="" class="h-100">
                     {{-- <img src="{{ asset('/public/uploads/images/footerimg/cookiess.png') }}"> --}}
                 </div>
-                <p>{!! @$cookie->details !!}</p>
+                <p class="text-white">{!! @$cookie->details !!}</p>
             </div>
            <div class="d-flex" style="gap: 10px">
-            <button type="button" class="cookie_reject_btn" onclick="setCookies();">Reject</button>
-            <button type="button" class="cookie_btn" onclick="setCookies();">{{@$cookie->btn_text}}</button>
+            <button type="button" class="cookie_reject_btn" style="background-color: var(--footer_text_hover_color)" onclick="setCookies();">Reject</button>
+            <button type="button" class="cookie_btn text-white" style="background-color: var(--system_primery_color)" onclick="setCookies();">{{@$cookie->btn_text}}</button>
            </div>
         </div>
     @endif

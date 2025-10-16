@@ -6,7 +6,7 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('public/assets/slick/slick.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('public/assets/slick/slick-theme.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('public/assets/home.css') }}">
-<script src="https://kit.fontawesome.com/b98cad50b5.js" crossorigin="anonymous"></script>
+<!-- <script src="https://kit.fontawesome.com/b98cad50b5.js" crossorigin="anonymous"></script> -->
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css'>
 <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css" />
@@ -44,6 +44,14 @@
 {{-- animation gsap --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
+
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+  integrity="sha512-K2m8j9G5CrXJcS7MZyDZp3c9ZFehXbZ2M4m8KpA4y6XrbY6x9xL7DkIbYp6EZxjEJSt2eyM4f53S4z2f6i2PAA=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+/>
 
 <style>
     .heading-icon {
@@ -420,7 +428,7 @@
             font-size: 24px !important
         }
 
-        h3 {
+        h3, .benefit-card h3 {
             font-size: 18px !important
         }
 
@@ -432,8 +440,24 @@
             font-size: 12px !important
         }
 
-        button {
-            font-size: 12px !important
+        .success-grid .num {
+            font-size: 35px !important
+        }
+
+        .success-grid {
+            display: grid
+    ;
+            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        }
+
+        button, .theme_btn, .anim-btn button {
+            font-size: 12px !important;
+            padding: 8px 10px !important;
+        }
+
+        .anim-hero {
+            width: 100px !important
         }
 
         p {
@@ -739,7 +763,7 @@
         <div class="container-fluid py-5 px-3 px-sm-5">
 
             <div class="text-center">
-                <h2 data-aos="fade-up">Courses & Pricing Overview</h2>
+                <h2 data-aos="fade-up">Program & Course Pricing Overview</h2>
                 <p class="opacity-75 inter" data-aos="fade-up">Find the program that best fits your goals, schedule, and
                     support needs.</p>
             </div>

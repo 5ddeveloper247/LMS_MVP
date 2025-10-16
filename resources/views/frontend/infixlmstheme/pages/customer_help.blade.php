@@ -19,7 +19,7 @@
 
     .nav-pills-custom .nav-link.active {
         color: #fff !important;
-        background: #996699 !important;
+        background: var(--system_primery_color) !important;
     }
 
     .tab-content {
@@ -97,14 +97,14 @@
         opacity: 1;
     }
 
-    .wrapper {
+    /* .wrapper {
         background-color: #eee;
         transition: 0.2s ease-in-out;
     }
 
     .wrapper:hover {
         background-color: white;
-    }
+    } */
 
     .shadow-1 {
         box-shadow: 0 0.2rem 0.7rem rgba(0, 0, 0, 0.15) !important
@@ -162,9 +162,9 @@
                         src="{{ asset('public/frontend/infixlmstheme/img/images/customer.jpg') }}">
                 </div>
 
-                <div class="col-lg-9 offset-lg-1">
+                <div class="col-lg-9 d-flex align-items-center justify-content-center">
                     <div class="breadcam_wrap">&nbsp;
-                        <h3 class="text-white custom-heading" id="tabHeading">Customer Help</h3>
+                        <h3 class="text-white custom-heading text-center" id="tabHeading">Customer Help</h3>
                         {{-- <h2  class="font-size-banner my-4 text-center font-weight-bold"  data-animate="fadeInRight">
                             </h2> --}}
                     </div>
@@ -188,7 +188,7 @@
 
                 <div class="col-md-3 px-md-0 px-lg-2">
                     <!-- Tabs nav -->
-                    <div class="wrapper">
+                    <div class="wrapper px-3">
                         <div class="eventsIcon d-md-none"><i id="left" class="fa-solid fa-angle-left"></i>
                         </div>
                         <div class="nav flex-md-column bg-white d-md-block d-none">
@@ -205,18 +205,9 @@
                                 <span class="text_small font-weight-bold small text-uppercase">News & Events</span>
                             </a>
                         </div>
+
                         <div class="nav flex-md-column nav-pills nav-pills-custom small_pills bg-white" id="v-pills-tab"
                             role="tablist" aria-orientation="vertical">
-
-                            {{-- <a class="nav-link mb-3 p-3 shadow" id="tab-8" data-toggle="pill" href="#customer"
-                                role="tab" aria-controls="customer" aria-selected="false">
-                                <i class="fa fa-arrow-right mr-2"></i>
-                                <span class="text_small font-weight-bold small text-uppercase">Customer Service</span></a> --}}
-
-                            {{-- <a class="nav-link mb-3 p-3 shadow" id="tab-9" data-toggle="pill" href="#contact"
-                                role="tab" aria-controls="contact" aria-selected="false">
-                                <i class="fa fa-arrow-right mr-2"></i>
-                                <span class="text_small font-weight-bold small text-uppercase">Contact Us</span></a> --}}
                             <a class="nav-link mb-md-3 p-md-3 p-2 shadow main-items d-md-none d-block" style="text-decoration: none; color: #aaa;" href="{{ route('about') }}">
                                 <i class="fa fa-arrow-right mr-2"></i>
                                 <span class="text_small font-weight-bold small text-uppercase">About Us</span>
@@ -260,37 +251,10 @@
                                     onclick="changeTab('Help and Support')">Help and Support</span></a>
 
 
-                            {{-- <a class="nav-link mb-md-3 p-md-3 p-2 shadow main-items" id="v-pills-settings-tab-3"
-                                    data-toggle="pill" href="#v-pills-settings" role="tab"
-                                    aria-controls="v-pills-settings" aria-selected="false">
-                                    <i class="fa fa-arrow-right mr-2"></i>
-                                    <span class="text_small font-weight-bold small text-uppercase"
-                                        onclick="changeTab('Certificate Verification')">Certificate Verification</span></a> --}}
-
-                            {{-- <a class="nav-link mb-3 p-3 shadow" id="tab-4" data-toggle="pill" href="#ship"
-                            role="tab" aria-controls="ship" aria-selected="false">
-                            <i class="fa fa-arrow-right mr-2"></i>
-                            <span class="text_small font-weight-bold small text-uppercase">Shipping & Returns</span></a> --}}
-
-                            {{-- <a class="nav-link mb-3 p-3 shadow" id="tab-5" data-toggle="pill" href="#track"
-                            role="tab" aria-controls="track" aria-selected="false">
-                            <i class="fa fa-arrow-right mr-2"></i>
-                            <span class="text_small font-weight-bold small text-uppercase">Track Order</span></a> --}}
-                            {{--
-                        <a class="nav-link mb-3 p-3 shadow" id="tab-6" data-toggle="pill" href="#account"
-                            role="tab" aria-controls="account" aria-selected="false">
-                            <i class="fa fa-arrow-right mr-2"></i>
-                            <span class="text_small font-weight-bold small text-uppercase">My Accounts</span></a> --}}
-
                             <a class="nav-link mb-md-3 p-md-3 p-2 shadow main-items" id="tab-7" data-bs-toggle="tab"
                                 href="#faq" role="tab" aria-controls="faq" aria-selected="false">
                                 <i class="fa fa-arrow-right mr-2"></i>
                                 <span class="text_small font-weight-bold small text-uppercase">Faq's</span></a>
-
-                            {{-- <a class="nav-link mb-md-3 p-md-3 p-2 shadow main-items" id="tab-8">
-                                    <i class="fa fa-arrow-right mr-2"></i>
-                                    <span class="text_small font-weight-bold small text-uppercase"
-                                        onclick="$('#v-pills-messages-tab-2').tab('show')">Resource center</span></a> --}}
                         </div>
                         <div class="eventsIcon d-md-none"><i id="right" class="fa-solid fa-angle-right"></i></div>
                     </div>
@@ -1478,172 +1442,7 @@
                                 </p>
                         </div>
 
-                        {{-- <div class="tab-pane fade rounded bg-white p-3 p-lg-5 shadow mb-3" id="v-pills-settings"
-                                role="tabpanel" aria-labelledby="v-pills-settings-tab">
-                                <h5>About this cookie policy</h5>
-                                <p>
-                                    This Cookie Policy explains what cookies are and how we use them, the types of cookies
-                                    we use i.e, the information we collect using cookies and how that information is used,
-                                    and how to control the cookie preferences. For further information on how we use, store,
-                                    and keep your personal data secure, see our Privacy Policy.You can at any time change or
-                                    withdraw your consent from the Cookie Declaration on our websiteLearn more about who we
-                                    are, how you can contact us, and how we process personal data in our Privacy Policy
-                                </p>
-                                <h5>What are cookies?</h5>
-                                <p>
-                                    Cookies are small text files that are used to store small pieces of information. They
-                                    are stored on your device when the website is loaded on your browser. These cookies help
-                                    us make the website function properly, make it more secure, provide better user
-                                    experience, and understand how the website performs and to analyze what works and where
-                                    it needs improvement.
-                                </p>
-                                <h5>
-                                    How do we use cookies?
-                                </h5>
-
-                                <p>
-                                    As most of the online services, our website uses first-party and third-party cookies for
-                                    several purposes. First-party cookies are mostly necessary for the website to function
-                                    the right way, and they do not collect any of your personally identifiable data.The
-                                    third-party cookies used on our website are mainly for understanding how the website
-                                    performs, how you interact with our website, keeping our services secure, providing
-                                    advertisements that are relevant to you, and all in all providing you with a better and
-                                    improved user experience and help speed up your future interactions with our website.
-
-                                </p>
-                                <h5>
-                                    What types of cookies do we use?
-                                </h5>
-                                <p>
-                                    <b>Essential:</b> Some cookies are essential for you to be able to experience the full
-                                    functionality of our site. They allow us to maintain user sessions and prevent any
-                                    security threats. They do not collect or store any personal information. For example,
-                                    these cookies allow you to log-in to your account and add products to your basket, and
-                                    checkout securely.
-                                </p>
-
-                                <p>
-                                    <b>Statistics:</b> These cookies store information like the number of visitors to the
-                                    website, the number of unique visitors, which pages of the website have been visited,
-                                    the source of the visit, etc. These data help us understand and analyze how well the
-                                    website performs and where it needs improvement.
-                                </p>
-                                <p>
-                                    <b>Marketing:</b> Our website displays advertisements. These cookies are used to
-                                    personalize the advertisements that we show to you so that they are meaningful to you.
-                                    These cookies also help us keep track of the efficiency of these ad campaigns.
-                                    The information stored in these cookies may also be used by the third-party ad providers
-                                    to show you ads on other websites on the browser as well.
-
-
-                                </p>
-                                <p>
-                                    <b>Functional:</b> These are the cookies that help certain non-essential functionalities
-                                    on our website. These functionalities include embedding content like videos or sharing
-                                    content of the website on social media platforms.
-                                </p>
-                                <p>
-                                    <b>Preferences:</b> These cookies help us store your settings and browsing preferences
-                                    like language preferences so that you have a better and efficient experience on future
-                                    visits to the website.
-                                </p>
-                            </div> --}}
-
-                        {{-- <div class="tab-pane fade shadow rounded bg-white p-5" id=ship role="tabpanel"
-                            aria-labelledby="tab-4">
-                            <h5>FREE SHIPPING</h5>
-                            <p>
-                                Below are the free shipping offers available on <strong>JUSOUTBEAUTY</strong>
-                            </p>
-                            <p>
-                                <b> DOMESTIC</b> FREE Standard Shipping on all U.S. merchandise orders (please allow 4-8
-                                business days for processing and shipping to receive your order)
-                            </p>
-
-                            <p>
-                                <b>INTERNATIONAL</b> FREE Standard International Shipping on all merchandise orders $75
-                                USD and over.
-                            </p>
-
-                            <p>
-                                Please note if your order contains a hazmat item US orders must ship via ground Standard
-                                Shipping. International orders must ship DHL Express. International shipping rates vary
-                                by country and will be determined at checkout.
-                            </p>
-
-                            <h5>DOMESTIC SHIPPING COSTS + DELIVERY TIMES</h5>
-                            <p>
-                                Orders must be placed by 12pm ET to start processing on the same day. Processing time
-                                usually takes 1-2 business days. Delivery times are based on orders placed between
-                                Monday – Friday.
-                            </p>
-
-                            <table class="table">
-                                <thead>
-                                    <tr>
-
-                                        <th scope="col">Shipping Method</th>
-                                        <th scope="col">Costs</th>
-                                        <th scope="col">Total Delivery Time (including processing time)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-
-                                        <td>Standard Shipping</td>
-                                        <td>Free</td>
-                                        <td>4-8 business days (up to 21 days for APO/FPO/DPO Military Addresses)</td>
-                                    </tr>
-                                    <tr>
-
-                                        <td>2 Day Shipping</td>
-                                        <td>$10.95 USD</td>
-                                        <td>3 – 4 business days</td>
-                                    </tr>
-                                    <tr>
-
-                                        <td>1 Day Shipping</td>
-                                        <td>$16.95 USD</td>
-                                        <td>2 – 3 business days</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                            <p>
-                                Orders must be placed by 12pm ET Monday – Friday to start processing on the same day.
-                                Processing time usually takes 1-2 business days. Delivery times are based on orders
-                                placed between Monday and Friday. FentyBeauty.com and FentySkin.com offer FREE Standard
-                                Shipping on all U.S. merchandise. Select items considered hazmat (hazardous materials)
-                                are restricted and must be shipped ground with Standard Shipping. All U.S. orders always
-                                ship Standard Shipping for free—no promotion code needed.
-                            </p>
-                        </div> --}}
-
-                        {{-- <div class="tab-pane fade shadow rounded bg-white p-5" id="track" role="tabpanel"
-                            aria-labelledby="tab-5">
-
-                            <p class="font-italic text-muted mb-2">Lorem ipsum dolor sit amet, consectetur adipisicing
-                                elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                                minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-                                eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa
-                                qui officia deserunt mollit anim id est laborum.</p>
-                        </div> --}}
-                        {{-- <div class="tab-pane fade shadow rounded bg-white p-5" id="account" role="tabpanel"
-                            aria-labelledby="tab-6">
-                            <h5>Sign In</h5>
-                            <p>Sign in to your account to add or edit your addresses and email Preference, save your Pro
-                                filter to your profile and more.</p>
-                            <h5>Creat Account</h5>
-                            <p>EXCLUSIVE OFFERS + INFO <br>
-                                Sign up to stay posted on hyper-limited offers, online-only product drops, in store
-                                events, and-as true fenty beauty + fenty skin family-personal beauty tips from Rihhana
-                                herself.</p>
-                            <p class="text-muted mb-2">Click here for Sign In or Creat Account</p>
-                            <button class="btn btn-primary"><a href="{{ url('/login') }}"
-                        style="color:white">Login</a></button>
-
-                    </div> --}}
+                       
                     <div class="tab-pane fade p-lg-5 rounded bg-white p-3 shadow mb-3" id="faq"
                         role="tabpanel" aria-labelledby="tab-7">
                         <h5 class="custom_small_heading font-weight-bold">Frequently Asked Questions</h5>
@@ -1673,76 +1472,7 @@
                             </div>
                             @endforelse
                         </div>
-                        {{-- <h5 class="font-weight-bolder text-dark">1. Can I apply my previous nursing or healthcare
-                                    experience toward becoming an RN and/or
-                                    earning a higher degree?
-                                </h5>
-
-                                <p class="mt-2">
-                                    Registered nurses (RNs) must have at least an Associate Degree in Nursing (ADN), but
-                                    some students decide to pursue a Bachelor of Science in Nursing (BSN). If you’re already
-                                    working in the medical field, there are multiple pathways to work toward becoming an RN.
-                                    <br>
-
-                                    <strong>Here are two examples:
-                                    </strong> <br>
-
-                                    <span class="font-weight-bold">Medical Assistant (MA):
-                                    </span> MAs may be able to apply some of the coursework from their
-                                    program (particularly community college courses) toward an ADN to shorten the time to
-                                    graduation. <br>
-                                    <span class="font-weight-bold"> Licensed Practical Nurse (LPN):
-                                    </span> Both LPN-to-ADN and LPN-to-BSN bridge programs take into
-                                    account prior education. The main difference is that an ADN can take a year or two,
-                                    while a BSN will generally take twice that long.
-
-                                </p>
-                                <h5 class="font-weight-bolder text-dark mt-2">2. How much math and science do I have to
-                                    take to become a nurse? </h5>
-                                <p class="mt-2">
-
-                                    These subjects appear to be a common fear among prospective students, and the answer
-                                    depends on the type of nursing you pursue. If you’re interested in the LPN/LVN route,
-                                    your training program will likely include science courses like anatomy, physiology,
-                                    human growth and development, and basic nutrition. You may need to meet a math
-                                    requirement to get into an LPN program. <br>
-                                    Whether in an ADN or BSN degree program, a prospective registered nurse will likely need to take health-related science courses, as well as meet math requirements (and liberal arts, too). <br>
-                                    Don’t let math anxiety keep you from pursuing your career goals. Revisit the basics—fractions are your friends!—if you feel like you’ve forgotten them since school. And don’t be afraid to hire a tutor to help you navigate college-level coursework that seems daunting.
-                                </p>
-                                <h5 class="font-weight-bolder text-dark mt-2">3.Can I really get a nursing degree online?
-                                </h5>
-                                <p class="mt-2">Since nursing is a hands-on profession, even online nursing programs require in-person clinical training with real patients. Programs that combine online learning with real-world practice are called hybrids. <br> If you’re pursuing a bachelor’s degree and already have a combination of clinical hours and a current RN license, you may be able to find a program that is exclusively online.
-
-
-                                </p> --}}
                     </div>
-                    {{-- resourse center --}}
-                    {{-- <div class="tab-pane fade rounded bg-white p-4 shadow mb-3" id="resource-center"
-                                role="tabpanel" aria-labelledby="tab-8">
-                                <h5>FOR Resource Center</h5>
-                                <h6>DOMESTIC CUSTOMERS</h6>
-                                <h6>Call Us:</h6>
-                                <p>
-                                    Representatives are available from 7am – 2am ET, 7 days a week (excluding major U.S.
-                                    holidays) and are ready to help.
-                                </p>
-                                <p><u>863-250-8764</u></p>
-
-                                <h5>Live Chat with Us:</h5>
-                                <p>
-                                    Representatives are available from 7am – 11pm ET, 7 days a week (excluding major U.S.
-                                    holidays) and are ready to help. Click the ‘Chat now’ button at the lower right of any
-                                    page.
-                                </p>
-                                <h5>International Customer</h5>
-                                <p>
-                                    Our international customers may access our international help center 24 hours a day, 7
-                                    days a week HERE. If you are unable to find the answer to your question, you may contact
-                                    a customer service representative through the help center. Representatives are available
-                                    6 days a week (Sunday - Friday) and are ready to help. Please allow 24 hours to receive
-                                    a response.
-                                </p>
-                            </div> --}}
                 </div>
 
             </div>
