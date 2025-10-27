@@ -12,6 +12,7 @@ use Modules\Shop\Entities\ShopProduct;
 use Modules\Shop\Entities\ShopProductFile;
 use App\Traits\ImageStore;
 use Yajra\DataTables\Facades\DataTables;
+use Modules\AuthorizeNetPayment\Http\Controllers\DoAuthorizeNetPaymentController;
 
 use App\Jobs\SendGeneralEmail;
 use App\User;
@@ -159,17 +160,34 @@ class ShopController extends Controller
 
             $order = ShopOrder::where('id', $request->id)->first();
             
+            $orderRespnseDetail = json_decode($order->checkout->response);
+            // dd($orderRespnseDetail);
+            $trans_id = $orderRespnseDetail->source->id ?? '';
+            $trans_amount = $orderRespnseDetail->amount ?? '';
+            $trans_last4digits = $orderRespnseDetail->source->last4 ?? '';
+            
             if(empty($order)){
                 Toastr::success('Record Not Found...', 'Error');
                 return redirect()->back();
             }
 
             $order->payment_status = $request->payment_status;
-            $order->save();
 
             if($order->payment_status == 3){    // in case of order refund confirm then add amount in user balance.
-                $this->addBalance($order->user_id, $order->purchase_price);
+                
+                // $this->addBalance($order->user_id, $order->purchase_price);
+                
+                // code for refund payment functionality
+                $authorize = new DoAuthorizeNetPaymentController();
+                $response = $authorize->refundPayment($trans_id, $trans_amount, $trans_last4digits);
+                
+                if($response['success'] == false){
+                    Toastr::success($response['message'] ?? 'Unable to refund...', 'Error');
+                    return redirect()->back();
+                }
             }
+
+            $order->save();
 
             Toastr::success(trans('common.Operation successful'), trans('common.Success'));
             return redirect()->back();

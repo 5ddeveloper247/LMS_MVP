@@ -27,20 +27,11 @@ class DoAuthorizeNetPaymentController extends Controller
     public function makePayment(Request $request, $type = 'new_user', $response = false, $installment_id = null, $is_checkout = false)
     {
 
-         // dd($request);
-         //   die;
-
-        //$amount=1000;
-
-
-
         //   retrieving the paymentGateway settings
-
         $gatewaySettings = DB::table('AuthorizeNet_Settings')
             ->where('status', 1)
             ->first();
 
-            //dd($gatewaySettings);
         if (!$gatewaySettings) {
             return redirect()->back()->with('error', 'Gateway settings not found');
         }
@@ -49,42 +40,36 @@ class DoAuthorizeNetPaymentController extends Controller
         $gatewayClient_secret = $gatewaySettings->client_secret;
         $user_id = $request->input('user_id');
 
-
-
-               // Get the submitted form data
-    $requestData = $request->all();
-    // Extracting data and formatting expiry date
-    $expiryDateParts = explode('/', $requestData['expiryDate']);
-    $formattedExpiryDate = $expiryDateParts[1] . '-' . $expiryDateParts[0]; // Format: YYYY-MM
-    $cardHolderName = (array_key_exists('cardHolderLastname',$requestData)) ? $requestData['cardHolder'].' '.$requestData['cardHolderLastname'] : $requestData['cardHolder'];
-    // Create the data array
-    $data = [
-        'user_id' => $requestData['user_id'],
-        //'tracking_id' => $requestData['tracking_id'],
-        'id' => $requestData['id'] ?? 0,
-        'card' => [
-            'cardHolder' => $cardHolderName,
-            'cardNumber' => str_replace(' ', '', $requestData['cardNumber']), // Remove spaces from card number
-            'expiryDate' => $formattedExpiryDate,
-            'cvv' => $requestData['cvv']
-        ],
-        'amount' => [
-            'amount' => $request->input('amount'),  // in cents
-            'amountInDollar' => $request->input('amount') / 100  // in dollars
-        ],
-        'gatewaySettings' => [
-            'client_id' =>   $gatewayClient_id,
-            'client_secret' => $gatewayClient_secret
-        ]
-    ];
-
-//  dd($data);
-
+        // Get the submitted form data
+        $requestData = $request->all();
+        // Extracting data and formatting expiry date
+        $expiryDateParts = explode('/', $requestData['expiryDate']);
+        $formattedExpiryDate = $expiryDateParts[1] . '-' . $expiryDateParts[0]; // Format: YYYY-MM
+        $cardHolderName = (array_key_exists('cardHolderLastname',$requestData)) ? $requestData['cardHolder'].' '.$requestData['cardHolderLastname'] : $requestData['cardHolder'];
+        // Create the data array
+        $data = [
+            'user_id' => $requestData['user_id'],
+            //'tracking_id' => $requestData['tracking_id'],
+            'id' => $requestData['id'] ?? 0,
+            'card' => [
+                'cardHolder' => $cardHolderName,
+                'cardNumber' => str_replace(' ', '', $requestData['cardNumber']), // Remove spaces from card number
+                'expiryDate' => $formattedExpiryDate,
+                'cvv' => $requestData['cvv']
+            ],
+            'amount' => [
+                'amount' => $request->input('amount'),  // in cents
+                'amountInDollar' => $request->input('amount') / 100  // in dollars
+            ],
+            'gatewaySettings' => [
+                'client_id' =>   $gatewayClient_id,
+                'client_secret' => $gatewayClient_secret
+            ]
+        ];
 
         if (!$request->session()->get('payment_details') || $request->session()->get('payment_details') == null) {
             $refId = 'ref' . time();
-            //dd(  $refId );
-
+        
             //stilll we have static payment values in curl request and we set the actual payment in database by after payment has completed
             // we are just using static payment for curl request but we are using actual payment for database
 
@@ -119,7 +104,6 @@ class DoAuthorizeNetPaymentController extends Controller
                             "customer": {
                                 "id": "' . $data['user_id'] . '"
                             },
-
 
                             "transactionSettings": {
                                 "setting": {
@@ -162,7 +146,6 @@ class DoAuthorizeNetPaymentController extends Controller
             $getresponse = curl_exec($curl);
             curl_close($curl);
 
-
             $dataArray = [];
             preg_match_all('/"([^"]+)":"([^"]+)"/', $getresponse, $matches, PREG_SET_ORDER);
             foreach ($matches as $match) {
@@ -189,8 +172,7 @@ class DoAuthorizeNetPaymentController extends Controller
                 $dataArray["currency"] = "USD";
                 $dataArray["created"] = '20122025';
                 $dataArray["captured"] = true;
-                // dd("jkjlkjlkjkl");
-
+        
                 //formated Data
                 $formatedData['id'] = $dataArray['refId'];
                 $formatedData['amount'] = $dataArray['amount'];
@@ -223,9 +205,7 @@ class DoAuthorizeNetPaymentController extends Controller
             }
         } else {
             $paymentDetails = $request->session()->get('payment_details');
-            // dd($paymentDetails);
             $termOneText = $paymentDetails->term_one_text;
-            //  dd($termOneText);
             $declarationDate = $paymentDetails->declaration_date;
             $termTwoText = $paymentDetails->term_two_text;
             $name = $paymentDetails->name;
@@ -250,7 +230,6 @@ class DoAuthorizeNetPaymentController extends Controller
                 $dateArray = explode("/", $expDate);
             }
 
-            // dd($dateArray);
             //Extract month and year from the array
             $expMonth = $dateArray[0];  //Month
             $expYear = $dateArray[1];
@@ -263,7 +242,6 @@ class DoAuthorizeNetPaymentController extends Controller
             $studentSignature = $paymentDetails->student_signature;
             $studentSignatureDate = $paymentDetails->student_signature_date;
             $userID = $paymentDetails->user_id;
-            //  dd($userID);
             $updatedAt = $paymentDetails->updated_at;
             $createdat = $paymentDetails->created_at;
             $createdAt = $createdat->format('mY H:i:s');
@@ -302,7 +280,6 @@ class DoAuthorizeNetPaymentController extends Controller
                                 "id": "' . $data['user_id'] . '"
                             },
 
-
                             "transactionSettings": {
                                 "setting": {
                                     "settingName": "testRequest",
@@ -322,16 +299,16 @@ class DoAuthorizeNetPaymentController extends Controller
                                 ]
                             },
                             "processingOptions": {
-                            "isSubsequentAuth": "true"
+                                "isSubsequentAuth": "true"
                             },
                             "subsequentAuthInformation": {
-                            "originalNetworkTransId": "123456789NNNH",
-                            "originalAuthAmount": "4.00",
-                            "reason": "resubmission"
+                                "originalNetworkTransId": "123456789NNNH",
+                                "originalAuthAmount": "4.00",
+                                "reason": "resubmission"
                             },
                             "authorizationIndicatorType": {
-                            "authorizationIndicator": "final"
-                        }
+                                "authorizationIndicator": "final"
+                            }
                         }
                     }
                 }',
@@ -340,16 +317,9 @@ class DoAuthorizeNetPaymentController extends Controller
                 ),
             ));
 
-
             $getresponse = curl_exec($curl);
-            // echo("2");
-            //   dd($getresponse);
-            // die;
             curl_close($curl);
 
-
-            //  dd($getresponse);
-            // die;
             $dataArray = [];
             preg_match_all('/"([^"]+)":"([^"]+)"/', $getresponse, $matches, PREG_SET_ORDER);
             foreach ($matches as $match) {
@@ -376,8 +346,7 @@ class DoAuthorizeNetPaymentController extends Controller
                 $dataArray["currency"] = "USD";
                 $dataArray["created"] = $createdAt;
                 $dataArray["captured"] = true;
-                // dd("jkjlkjlkjkl");
-
+               
                 //formated Data
                 $formatedData['id'] = $dataArray['refId'];
                 $formatedData['amount'] = $dataArray['amount'];
@@ -420,11 +389,8 @@ class DoAuthorizeNetPaymentController extends Controller
         if ($getresponse["paid"]) {
             $saveCheck = $this->saveCloverResponce((int) $user_id, $response1, $type);
             if ($saveCheck) {
-                // dd("paid");
-                // dd($is_checkout);
                 if ($is_checkout) {
                     $checkOutCheck = $this->saveCheckout($request, $response11, $type, $installment_id, $response1);
-                    // dd( $checkOutCheck);
                     if ($checkOutCheck) {
                         if ($response) {
                             return $response11;    //std class object
@@ -434,7 +400,6 @@ class DoAuthorizeNetPaymentController extends Controller
                 }
             }
         } else {
-            //dd("un");
             if ($response) {
                 return $getresponse;   //array
             }
@@ -442,19 +407,8 @@ class DoAuthorizeNetPaymentController extends Controller
         }
     }
 
-
-
-
-
-
-
-
-
     public function saveCheckout($request, $response11, $type, $installment_id, $response1)
     {
-
-        // echo(gettype(json_decode($getresponse)));
-        // dd(gettype($response1));
 
         $response = json_decode($response1);  //object
         $response1 = json_encode($response11, true);  //string
@@ -505,6 +459,129 @@ class DoAuthorizeNetPaymentController extends Controller
     }
 
 
+    public function refundPayment($transactionId, $amount, $last4Digits)
+    {
+        try {
+            // Retrieve Authorize.Net credentials
+            $gatewaySettings = DB::table('AuthorizeNet_Settings')
+                ->where('status', 1)
+                ->first();
+
+            if (!$gatewaySettings) {
+                return ['success' => false, 'message' => 'Gateway settings not found'];
+            }
+
+            $client_id = $gatewaySettings->client_id;
+            $client_secret = $gatewaySettings->client_secret;
+
+            // get transaction detail and check transaction status for refund payment
+            $checkPayload = [
+                "getTransactionDetailsRequest" => [
+                    "merchantAuthentication" => [
+                        "name" => $client_id,
+                        "transactionKey" => $client_secret
+                    ],
+                    "transId" => $transactionId
+                ]
+            ];
+        
+            $curl = curl_init();
+            curl_setopt_array($curl, [
+                CURLOPT_URL => 'https://apitest.authorize.net/xml/v1/request.api',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => json_encode($checkPayload),
+                CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+            ]);
+            $checkResponse = curl_exec($curl);
+            curl_close($curl);
+            
+            // Decode Response
+            $checkResult = preg_replace('/^\xEF\xBB\xBF/', '', $checkResponse);
+
+            $responseCheck = trim($checkResult, "\"");
+
+            $checkResult = json_decode($responseCheck, true);
+            $status = $checkResult['transaction']['transactionStatus'] ?? null;
+            $transAmount = $checkResult['transaction']['settleAmount'] ?? 0;
+        
+            // Decide type
+            $transactionType = ($status == 'settledSuccessfully') ? 'refundTransaction' : 'voidTransaction';
+            
+            // code for refund transaction
+            // Generate Reference ID
+            $refId = 'refund_' . time();
+
+            // Prepare Refund Request Payload
+            $payload = [
+                "createTransactionRequest" => [
+                    "merchantAuthentication" => [
+                        "name" => $client_id,
+                        "transactionKey" => $client_secret
+                    ],
+                    "refId" => $refId,
+                    "transactionRequest" => [
+                        "transactionType" => $transactionType, // "refundTransaction", // key difference
+                        "amount" => number_format($transAmount, 2, '.', ''), // must be formatted properly
+                        "payment" => [
+                            "creditCard" => [
+                                "cardNumber" => $last4Digits, // last 4 digits from original transaction
+                                "expirationDate" => "XXXX" // must be 'XXXX' when refunding
+                            ]
+                        ],
+                        "refTransId" => $transactionId // original transaction ID
+                    ]
+                ]
+            ];
+
+            // Execute CURL Request
+            $curl = curl_init();
+            curl_setopt_array($curl, [
+                CURLOPT_URL => 'https://apitest.authorize.net/xml/v1/request.api', // use live URL in prod
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => json_encode($payload),
+                CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+            ]);
+
+            $response = curl_exec($curl);
+            curl_close($curl);
+
+            // Decode Response
+            $response = preg_replace('/^\xEF\xBB\xBF/', '', $response);
+
+            $response = trim($response, "\"");
+
+            $result = json_decode($response, true);
+            
+            // Handle Refund Response
+            if (isset($result['transactionResponse']['responseCode']) && $result['transactionResponse']['responseCode'] == '1') {
+                return [
+                    'success' => true,
+                    'message' => 'Refund processed successfully.',
+                    'data' => $result
+                ];
+            } else {
+                return [
+                    'success' => false,
+                    'message' => $result['transactionResponse']['errors'][0]['errorText'] ?? 'Refund failed.',
+                    'data' => $result
+                ];
+            }
+
+        } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => 'Exception: ' . $e->getMessage(),
+                'data' => []
+            ];
+        }
+    }
 
 
 

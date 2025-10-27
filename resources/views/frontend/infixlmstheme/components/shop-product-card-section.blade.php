@@ -130,50 +130,53 @@
             @if (!empty($products) && count($products))
                 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 60px">
                     @foreach ($products as $product)
-                        @php
-                            $productImages = $product->files;
-                            $imageUrl = @$productImages[0]->file_path ?? url('public/assets/product-Placeholder.png');
+                        @if ($product->type == 2)
+                            @php
+                                $productImages = $product->files;
+                                $imageUrl = @$productImages[0]->file_path ?? url('public/assets/product-Placeholder.png');
 
-                            if ($product->type == 1) {
-                                $detailUrl = route('shop.product.detail', $product->id);
-                            } elseif ($product->type == 2) {
-                                $detailUrl = route('shop.book.detail', $product->id);
-                            } else {
-                                $detailUrl = '#';
-                            }
+                                if ($product->type == 1) {
+                                    $detailUrl = route('shop.product.detail', $product->id);
+                                } elseif ($product->type == 2) {
+                                    $detailUrl = route('shop.book.detail', $product->id);
+                                } else {
+                                    $detailUrl = '#';
+                                }
 
-                            $discountedPrice = $product->total_discount;
-                            $originalPrice = $product->total_amount;
-                        @endphp
+                                $discountPrice = $product->total_discount;
+                                $originalPrice = $product->total_amount;
+                            @endphp
 
-                        <div class="card p-4 border-0" style="box-shadow: 0px 4px 10px 0px #00000026;">
-                            <a href="{{ $detailUrl }}">
-                                <img src="{{ $imageUrl }}" alt="{{ $product->title }}"
-                                    style="filter: drop-shadow(0px 0px 4px #00000048); object-fit: cover; height: 300px;"
-                                    width="100%">
-                            </a>
-                            <div class="text-center mt-3">
-                                <h6 style="color: #393280">{{ $product->title }}</h6>
-                                <span class="d-block mb-2 text-muted">{{ $product->sub_title }}</span>
+                            <div class="card p-4 border-0" style="box-shadow: 0px 4px 10px 0px #00000026;">
+                                <a href="{{ $detailUrl }}">
+                                    <img src="{{ $imageUrl }}" alt="{{ $product->title }}"
+                                        style="filter: drop-shadow(0px 0px 4px #00000048); object-fit: cover; height: 300px;"
+                                        width="100%">
+                                </a>
+                                <div class="text-center mt-3">
+                                    <h6 style="color: #393280">{{ $product->title }}</h6>
+                                    <span class="d-block mb-2 text-muted">{{ $product->sub_title }}</span>
 
-                                @if ($discountedPrice < $originalPrice)
-                                    <div>
-                                        <span class="fw-bold" style="color: #ED553B;">$
-                                            {{ number_format($discountedPrice, 2) }}</span>
-                                        <span
-                                            class="text-muted text-decoration-line-through ms-2">${{ number_format($originalPrice, 2) }}</span>
-                                    </div>
-                                @else
-                                    <h5 class="fw-bold" style="color: #ED553B">$ {{ number_format($originalPrice, 2) }}
-                                    </h5>
-                                @endif
+                                    @if ($discountPrice > 0)
+                                        <div>
+                                            <span class="fw-bold" style="color: #ED553B;">
+                                                {{ getPriceFormat($originalPrice) }}
+                                            </span>
+                                            <span class="text-muted text-decoration-line-through ms-2">
+                                                <del>{{ getPriceFormat($originalPrice + $discountPrice) }}</del>
+                                            </span>
+                                        </div>
+                                    @else
+                                        <h5 class="fw-bold" style="color: #ED553B">{{ getPriceFormat($originalPrice - $discountPrice) }}</h5>
+                                    @endif
 
-                                <small class="d-block mt-2">
-                                    <i class="ti-shopping-cart"></i>
-                                    {{ $product->total_inventory > 0 ? 'In-Stock' : 'Out of Stock' }}
-                                </small>
+                                    <small class="d-block mt-2">
+                                        <i class="ti-shopping-cart"></i>
+                                        {{ $product->total_inventory > 0 ? 'In-Stock' : 'Out of Stock' }}
+                                    </small>
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     @endforeach
                 </div>
             @else
@@ -229,50 +232,53 @@
             @if (!empty($products) && count($products))
                 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 60px">
                     @foreach ($products as $product)
-                        @php
-                            $productImages = $product->files;
-                            $imageUrl = @$productImages[0]->file_path ?? url('public/assets/product-Placeholder.png');
+                        @if ($product->type == 1)
+                            @php
+                                $productImages = $product->files;
+                                $imageUrl = @$productImages[0]->file_path ?? url('public/assets/product-Placeholder.png');
 
-                            if ($product->type == 1) {
-                                $detailUrl = route('shop.product.detail', $product->id);
-                            } elseif ($product->type == 2) {
-                                $detailUrl = route('shop.book.detail', $product->id);
-                            } else {
-                                $detailUrl = '#';
-                            }
+                                if ($product->type == 1) {
+                                    $detailUrl = route('shop.product.detail', $product->id);
+                                } elseif ($product->type == 2) {
+                                    $detailUrl = route('shop.book.detail', $product->id);
+                                } else {
+                                    $detailUrl = '#';
+                                }
 
-                            $discountedPrice = $product->total_discount;
-                            $originalPrice = $product->total_amount;
-                        @endphp
+                                $discountPrice = $product->total_discount;
+                                $originalPrice = $product->total_amount;
+                            @endphp
 
-                        <div class="card p-4 border-0" style="box-shadow: 0px 4px 10px 0px #00000026;">
-                            <a href="{{ $detailUrl }}">
-                                <img src="{{ $imageUrl }}" alt="{{ $product->title }}"
-                                    style="filter: drop-shadow(0px 0px 4px #00000048); object-fit: cover; height: 300px;"
-                                    width="100%">
-                            </a>
-                            <div class="text-center mt-3">
-                                <h6 style="color: #393280">{{ $product->title }}</h6>
-                                <span class="d-block mb-2 text-muted">{{ $product->sub_title }}</span>
+                            <div class="card p-4 border-0" style="box-shadow: 0px 4px 10px 0px #00000026;">
+                                <a href="{{ $detailUrl }}">
+                                    <img src="{{ $imageUrl }}" alt="{{ $product->title }}"
+                                        style="filter: drop-shadow(0px 0px 4px #00000048); object-fit: cover; height: 300px;"
+                                        width="100%">
+                                </a>
+                                <div class="text-center mt-3">
+                                    <h6 style="color: #393280">{{ $product->title }}</h6>
+                                    <span class="d-block mb-2 text-muted">{{ $product->sub_title }}</span>
 
-                                @if ($discountedPrice < $originalPrice)
-                                    <div>
-                                        <span class="fw-bold" style="color: #ED553B;">$
-                                            {{ number_format($discountedPrice, 2) }}</span>
-                                        <span
-                                            class="text-muted text-decoration-line-through ms-2">${{ number_format($originalPrice, 2) }}</span>
-                                    </div>
-                                @else
-                                    <h5 class="fw-bold" style="color: #ED553B">$ {{ number_format($originalPrice, 2) }}
-                                    </h5>
-                                @endif
+                                    @if ($discountPrice > 0)
+                                        <div>
+                                            <span class="fw-bold" style="color: #ED553B;">
+                                                {{ getPriceFormat($originalPrice - $discountPrice) }}
+                                            </span>
+                                            <span class="text-muted text-decoration-line-through ms-2">
+                                                <del>{{ getPriceFormat($originalPrice) }}</del>
+                                            </span>
+                                        </div>
+                                    @else
+                                        <h5 class="fw-bold" style="color: #ED553B">{{ getPriceFormat($originalPrice - $discountPrice) }}</h5>
+                                    @endif
 
-                                <small class="d-block mt-2">
-                                    <i class="ti-shopping-cart"></i>
-                                    {{ $product->total_inventory > 0 ? 'In-Stock' : 'Out of Stock' }}
-                                </small>
+                                    <small class="d-block mt-2">
+                                        <i class="ti-shopping-cart"></i>
+                                        {{ $product->total_inventory > 0 ? 'In-Stock' : 'Out of Stock' }}
+                                    </small>
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     @endforeach
                 </div>
             @else
