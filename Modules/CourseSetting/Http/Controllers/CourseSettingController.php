@@ -2456,6 +2456,7 @@ class CourseSettingController extends Controller
     public function getCourseComparison($id)
     {
         try {
+            $currentDate = date('Y-m-d');
             $course = Course::where('id', $id)->with('category', 'user', 'currentCoursePlan')->first();
             
             if (!$course) {
@@ -2514,7 +2515,6 @@ class CourseSettingController extends Controller
                 ->toArray();
 
             // Get linked programs (programs where allcourses contains this course ID)
-            $currentDate = date('Y-m-d');
             $linkedPrograms = [];
             $programs = \Modules\StudentSetting\Entities\Program::where('status', 1)
                 ->whereNotNull('allcourses')
