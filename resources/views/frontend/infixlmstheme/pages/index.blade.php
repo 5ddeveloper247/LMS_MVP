@@ -491,16 +491,17 @@
                         style="border-radius: 50px; width: fit-content; padding-right: 22px !important;">
                         <span class="heading-icon">
                             <i class="fa-sharp fa-solid fa-bolt"></i>
-                        </span>Welcome to the Merkaii Xcellence Prep
+                        </span>Welcome to the Merkaii Xcellence Prepp
                     </h6>
 
                     <h1 class="mb-3 navy-text">
-                        {{-- {{@$homeContent->slider_title}} --}}
-                        Pass The NCLEX® On Your First Attempt
+                        {{@$homeContent->slider_title}}
+                        <!-- Pass The NCLEX® On Your First Attempt -->
                     </h1>
 
                     <p class="mb-4 hero-section-p">
-                        Personalized Tutoring, Flexible Live Courses, and Expert Nurse Educators.
+                    {{@$homeContent->slider_text}}
+                        <!-- Personalized Tutoring, Flexible Live Courses, and Expert Nurse Educators. -->
                     </p>
 
                     {{-- <p class="hero-section mb-1">
@@ -536,10 +537,10 @@
                 </div>
 
                 <div class="col-md-6 home_bg overflow-hidden">
-                    <div class="d-flex align-items-center justify-content-center position-relative h-100"
-                        style="z-index: 99;">
-                        {{-- <img class="hero_img" src="{{ asset($homeContent->slider_banner) }}" width="80%" alt=""> --}}
-                        <img src="{{ asset('public/assets/hero-banner.png') }}" width="100%" alt="">
+                    <div class="d-flex align-items-center justify-content-center position-relative h-100" style="z-index: 99;">
+                        <!-- <img class="hero_img" src="{{ asset($homeContent->slider_banner) }}" width="80%" alt=""> -->
+                        <!-- <img src="{{ asset('public/assets/hero-banner.png') }}" width="100%" alt=""> -->
+                        <img src="{{ asset($homeContent->slider_banner) }}" width="100%" alt="">
                         <div class="anim-hero d-none flex-column align-items-center d-lg-flex"
                             style="position: absolute; top: 30%; left: 0%;">
                             <img src="{{ asset('public/assets/badge-1.png') }}" width="160px" alt="Live Classes"
@@ -623,7 +624,8 @@
         </div>
 
         <div class="testimonial-top mt-4">
-            @for ($i = 0; $i < 20; $i++)
+        @if(@$testimonials != "")
+            @foreach (@$testimonials as $item)
                 <div class="card" data-aos="fade-up">
                     <div class="card-body px-5 pt-5 pb-4 d-flex align-items-end">
                         <div class="d-flex flex-column">
@@ -635,9 +637,7 @@
 
                             <div>
                                 <small>
-                                    Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.
-                                    Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt
-                                    nostrud amet.
+                                    {{@$item->body}}
                                 </small>
                                 <!-- Closing Quote -->
                                 <svg class="mt-3" style="rotate:180deg" width="25" height="16" fill="none"
@@ -647,20 +647,21 @@
                             </div>
 
                             <div class="mt-3">
-                                <h6 class="fw-bold">Cornelius B</h6>
-                                <small class="text-muted">Professional Nurse</small>
+                                <h6 class="fw-bold">{{@$item->author}}</h6>
+                                <small class="text-muted">{{@$item->profession}}</small>
                             </div>
                         </div>
 
-                        <img src="{{ asset('public/assets/review-img.png') }}" width="200" alt="Reviewer">
+                        <img src="{{getTestimonialImage($item->image)}}" width="200" alt="Reviewer">
                     </div>
                 </div>
-            @endfor
+            @endforeach
+        @endif
         </div>
 
-        <div class="testimonial-bottom
-    mt-4" data-aos="fade-up">
-            @for ($i = 0; $i < 20; $i++)
+        <div class="testimonial-bottom mt-4" data-aos="fade-up">
+        @if(@$testimonials2 != "")
+            @foreach (@$testimonials2 as $item)
                 <div class="card">
                     <div class="card-body px-5 pt-5 pb-4 d-flex align-items-end">
                         <div class="d-flex flex-column">
@@ -672,9 +673,7 @@
 
                             <div>
                                 <small>
-                                    Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.
-                                    Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt
-                                    nostrud amet.
+                                {{@$item->body}}
                                 </small>
                                 <!-- Closing Quote -->
                                 <svg class="mt-3" style="rotate:180deg" width="25" height="16" fill="none"
@@ -684,15 +683,16 @@
                             </div>
 
                             <div class="mt-3">
-                                <h6 class="fw-bold">Cornelius B</h6>
-                                <small class="text-muted">Professional Nurse</small>
+                                <h6 class="fw-bold">{{@$item->author}}</h6>
+                                <small class="text-muted">{{@$item->profession}}</small>
                             </div>
                         </div>
 
-                        <img src="{{ asset('public/assets/review-img.png') }}" width="200" alt="Reviewer">
+                        <img src="{{getTestimonialImage(@$item->image)}}" width="200" alt="Reviewer">
                     </div>
                 </div>
-            @endfor
+            @endforeach
+        @endif
         </div>
     </section>
 
@@ -735,21 +735,19 @@
             <div class="card px-4 px-md-5">
                 <div class="row align-items-center justify-content-between">
                     <div class="col-md-4" data-aos="fade-right">
-                        <img src="{{ asset('public/assets/instructor.png') }}" style="margin-top: -4rem" width="100%"
-                            alt="">
+                        <!-- <img src="{{ asset('public/assets/instructor.png') }}" style="margin-top: -4rem" width="100%" alt=""> -->
+                        <img src="{{ asset('/'.getRawHomeContents($home_content,'home_tile1_image','en'))}}" style="margin-top: -4rem" width="100%" alt="">
                     </div>
                     <div class="col-md-8 col-xl-6 py-4" data-aos="fade-left">
-                        <h2 class="rubik text-white">Guidance from Real Nursing Experts</h2>
-                        <p style="font-weight: 100" class="text-white rubik">Meet Maria, your lead instructor and
-                            dedicated guide. With years of nursing and teaching experience, she’s here to support, motivate,
-                            and help you succeed every step of the way.</p>
+                        <h2 class="rubik text-white">{{isset($home_content)? getRawHomeContents($home_content,'home_tile1_title','en') : ''}}</h2>
+                        <p style="font-weight: 100" class="text-white rubik">{{isset($home_content)? getRawHomeContents($home_content,'home_tile1_text','en') : ''}}</p>
 
-                        <h5 style="font-weight: 400" class="mt-4 text-white rubik">Maria T. , Lead Instructor</h5>
+                        <!-- <h5 style="font-weight: 400" class="mt-4 text-white rubik">Maria T. , Lead Instructor</h5> -->
 
-                        <a href="{{ route('instructors') }}">
+                        <a href="{{isset($home_content)? getRawHomeContents($home_content,'home_tile1_btnlink','en') : ''}}">
                             <button
                                 style="background-color: var(--footer_text_hover_color); border: none; color: #fff; border-radius: 50px;"
-                                class="py-2 px-4 text-white mt-3">Meet the Team</button>
+                                class="py-2 px-4 text-white mt-3">{{isset($home_content)? getRawHomeContents($home_content,'home_tile1_btntext','en') : ''}}</button>
                         </a>
                     </div>
                 </div>
@@ -787,14 +785,23 @@
                 <div class="tab-pane fade show active" id="pills-cards" role="tabpanel"
                     aria-labelledby="pills-cards-tab" tabindex="0">
                     <div class="row">
-                        @for ($i = 0; $i < 3; $i++)
-                            <div class="col-md-6 col-lg-4 mb-3">
+                        @php
+                            $recent_courses = $latest_courses;
+                            //$first_course = $recent_courses->first();
+                            //if ($first_course) {
+                            //    $recent_courses = $recent_courses->except($first_course->id);
+                            //}
+                            //$i = 0;
+                        @endphp
+                        @foreach ($recent_courses as $keycourses => $thiscourse)
+                            @if (array_key_exists($keycourses, $recent_courses->toArray()))
+                            <!-- <div class="col-md-6 col-lg-4 mb-3">
                                 <div class="card border-0 rounded-3 w-100" data-aos="fade-up">
 
                                     <div class="card-body rubik">
-                                        <!-- Image with badge -->
+                                        
                                         <div class="position-relative">
-                                            <img src="{{ asset('public/assets/course-img.png') }}" class="card-img-top"
+                                            <img src="{{ getCourseImage($thiscourse->image) }}" class="card-img-top"
                                                 alt="Course Instructors">
                                             <span style="position: absolute; top: 10px; right: 10px; border-radius: 6px;"
                                                 class="py-2 px-3 d-flex align-items-center gap-1 bg-white text-dark m-2">
@@ -818,13 +825,13 @@
                                             </span>
                                         </div>
 
-                                        <!-- Top meta -->
+                                        
                                         <div class="d-flex justify-content-between my-2">
                                             <span class="text-success fw-bold">Course 01</span>
                                             <span style="color: #CA8804">coaching</span>
                                         </div>
 
-                                        <!-- Title & Subtitle -->
+
                                         <h5 style="font-weight: 600"
                                             class="card-title rubik fw-bold text-dark d-flex align-items-center justify-content-between">
                                             Live Prep Course
@@ -838,7 +845,7 @@
                                             Structured live sessions led by expert instructors
                                         </p>
 
-                                        <!-- Features -->
+
                                         <ul class="list-unstyled small mb-4 d-flex flex-wrap justify-content-between">
                                             <li class="mb-1 d-flex align-items-center gap-1">
                                                 <img src="{{ asset('public/assets/point.png') }}" width="25"
@@ -857,7 +864,7 @@
                                             </li>
                                         </ul>
 
-                                        <!-- Footer -->
+
                                         <div class="d-flex justify-content-between align-items-center">
                                             <a href="{{ route('instructors') }}">
                                                 <button
@@ -869,8 +876,133 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div> -->
+
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="card border-0 rounded-3 w-100" data-aos="fade-up">
+                                    <div class="card-body rubik">
+                                        <!-- Image with badge -->
+                                        <div class="position-relative">
+                                            <a
+                                                href="{{ !empty($thiscourse->parent_id)
+                                                    ? courseDetailsUrl(@$thiscourse->parent->id, @$thiscourse->type, @$thiscourse->parent->slug) . '?courseType=' . $thiscourse->type
+                                                    : courseDetailsUrl(@$thiscourse->id, @$thiscourse->type, @$thiscourse->slug) }}">
+                                                <img src="{{ getCourseImage($thiscourse->image) }}" class="card-img-top"
+                                                    alt="{{ $thiscourse->title }}">
+                                            </a>
+
+                                            <span style="position: absolute; top: 10px; right: 10px; border-radius: 6px;"
+                                                class="py-2 px-3 d-flex align-items-center gap-1 bg-white text-dark m-2">
+                                                <svg width="16" height="17" viewBox="0 0 16 17" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <g clip-path="url(#clip0_2032_122)">
+                                                        <circle cx="8" cy="8.5" r="7.25" stroke="#413C69" stroke-width="1.5" />
+                                                        <path d="M8 4.94434V9.06787L10.6667 10.2777" stroke="#413C69" stroke-width="1.5"
+                                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                                    </g>
+                                                    <defs>
+                                                        <clipPath id="clip0_2032_122">
+                                                            <rect width="16" height="16" fill="white" transform="translate(0 0.5)" />
+                                                        </clipPath>
+                                                    </defs>
+                                                </svg>
+                                                {{ $thiscourse->duration ?? 'N/A' }} weeks
+                                            </span>
+                                        </div>
+
+                                        <!-- Top meta -->
+                                        <div class="d-flex justify-content-between my-2">
+                                            <span class="text-success fw-bold">
+                                                @if ($thiscourse->type == 1)
+                                                    {{ __('Course') }}
+                                                @elseif($thiscourse->type == 2)
+                                                    {{ __('Big Quiz') }}
+                                                @elseif($thiscourse->type == 3)
+                                                    {{ __('Individual Course') }}
+                                                @elseif($thiscourse->type == 4)
+                                                    {{ __('Full Course') }}
+                                                @elseif($thiscourse->type == 5)
+                                                    {{ __('Prep-Course (On-Demand)') }}
+                                                @elseif($thiscourse->type == 6)
+                                                    {{ __('Prep-Course (Live)') }}
+                                                @elseif($thiscourse->type == 8)
+                                                    {{ __('Repeat Course') }}
+                                                @elseif($thiscourse->type == 9)
+                                                    {{ __('Tutor Course') }}
+                                                @endif
+                                            </span>
+                                            <span style="color: #CA8804">{{ $thiscourse->category->name ?? 'N/A' }}</span>
+                                        </div>
+
+                                        <!-- Title & Subtitle -->
+                                        <h5 style="font-weight: 600"
+                                            class="card-title rubik fw-bold text-dark d-flex align-items-center justify-content-between">
+                                            {{ !empty($thiscourse->parent_id) ? $thiscourse->parent->title : $thiscourse->title }}
+                                            <svg width="24" height="28" viewBox="0 0 24 28" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M7 21L17 11M17 11H7M17 11V21" stroke="#101828" stroke-width="2"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                        </h5>
+
+                                        <p class="card-text text-muted small mb-3">
+                                            @php
+                                                $requirements = str_replace(
+                                                    '&nbsp;',
+                                                    ' ',
+                                                    htmlspecialchars_decode(
+                                                        strip_tags(
+                                                            !empty($thiscourse->parent_id)
+                                                                ? $thiscourse->parent->requirements
+                                                                : $thiscourse->requirements,
+                                                        ),
+                                                    ),
+                                                );
+                                            @endphp
+                                            @if (Str::length($requirements) > 120)
+                                                {{ Str::limit($requirements, 120, '...') }}
+                                            @else
+                                                {{ $requirements }}
+                                            @endif
+                                        </p>
+
+                                        <!-- Features (example static items, you can make dynamic if needed) -->
+                                        <ul class="list-unstyled small mb-4 d-flex flex-wrap justify-content-between">
+                                            @foreach ($thiscourse->features ?? ['Diagnostic assessment', 'Expert Instructors', 'Interactive Sessions'] as $feature)
+                                                <li class="mb-1 d-flex align-items-center gap-1">
+                                                    <img src="{{ asset('public/assets/point.png') }}" width="25" alt="Feature">
+                                                    {{ $feature }}
+                                                </li>
+                                            @endforeach
+                                        </ul>
+
+                                        <!-- Footer -->
+                                        @php
+                                            if (isset($thiscourse->currentCoursePlan[0])) {
+                                                $course_price = $thiscourse->currentCoursePlan[0]->amount;
+                                            } else {
+                                                $course_price = $thiscourse->price + $thiscourse->tax;
+                                            }
+                                        @endphp
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <a
+                                                href="{{ !empty($thiscourse->parent_id)
+                                                    ? courseDetailsUrl(@$thiscourse->parent->id, @$thiscourse->type, @$thiscourse->parent->slug) . '?courseType=' . $thiscourse->type
+                                                    : courseDetailsUrl(@$thiscourse->id, @$thiscourse->type, @$thiscourse->slug) }}">
+                                                <button
+                                                    style="background-color: var(--system_primery_color); border: none; color: #fff; border-radius: 50px;"
+                                                    class="py-2 px-4 text-white mt-3">Enroll Now</button>
+                                            </a>
+                                            <h2 style="color: var(--system_secendory_color); font-weight: 700 !important; font-family: 'Inter' !important;"
+                                                class="mb-0">
+                                                ${{ number_format($course_price, 0) }}
+                                            </h2>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        @endfor
+                            @endif
+                        @endforeach
                     </div>
                 </div>
 
@@ -880,35 +1012,33 @@
                         <table class="table comparison-table">
                             <thead>
                                 <tr>
-                                    <th>Course</th>
+                                    <th>Name</th>
+                                    <th>Type</th>
                                     <th>Duration</th>
-                                    <th>Format</th>
                                     <th>Price</th>
-                                    <th>Key Feature</th>
+                                    <th>Detail</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td data-label="Course">Live Prep Courses</td>
-                                    <td data-label="Duration">8–12 weeks</td>
-                                    <td data-label="Format">Live interactive classes</td>
-                                    <td data-label="Price">From $499</td>
-                                    <td data-label="Key Feature">Small groups + real-time instructor Q&amp;A</td>
-                                </tr>
-                                <tr>
-                                    <td data-label="Course">On-Demand Prep</td>
-                                    <td data-label="Duration">Self-paced</td>
-                                    <td data-label="Format">Pre-recorded lessons</td>
-                                    <td data-label="Price">From $299</td>
-                                    <td data-label="Key Feature">Flexible access + practice quizzes</td>
-                                </tr>
-                                <tr>
-                                    <td data-label="Course">Remedial Program</td>
-                                    <td data-label="Duration">Flexible</td>
-                                    <td data-label="Format">Personalized 1-on-1 coaching</td>
-                                    <td data-label="Price">From $599</td>
-                                    <td data-label="Key Feature">Tailored study plan + feedback</td>
-                                </tr>
+                                @if(isset($comparisons) && count($comparisons) > 0)
+                                    @foreach($comparisons as $index => $comparison)
+                                        <tr style="background-color: {{ $comparison['type'] == 'course' ? '#f5f5f5' : '#ffffff' }};">
+                                            <td data-label="Name">{{ $comparison['title'] }}</td>
+                                            <td data-label="Type">{{ $comparison['type_label'] }}</td>
+                                            <td data-label="Duration">{{ $comparison['duration'] }}</td>
+                                            <td data-label="Price">{{ $comparison['price'] }}</td>
+                                            <td data-label="Detail">
+                                                <a href="{{ $comparison['detail_url'] }}" class="btn btn-sm btn-primary">
+                                                    {{ __('Detail') }}
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td colspan="5" class="text-center">No comparisons available. Please add comparisons from the admin panel.</td>
+                                    </tr>
+                                @endif
                             </tbody>
                         </table>
                     </div>

@@ -42,7 +42,7 @@
                                         onclick="changeOrderPaymentStatus({{ $orderDetail->id }}, 4);">Refund Cancel</a>
                                     <a type="button" class="btn btn-rounded btn-warning" 
                                         onclick="changeOrderPaymentStatus({{ $orderDetail->id }}, 3);">Refund Confirm</a>
-                                @elseif(in_array($orderDetail->status, [1,2,3]))
+                                @elseif(in_array($orderDetail->status, [1,2,3,4]))
                                     <a type="button" class="btn btn-rounded btn-danger" 
                                         onclick="changeOrderStatus({{$orderDetail->id}}, 5)">Cancel</a>
                                 @endif

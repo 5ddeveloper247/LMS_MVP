@@ -358,8 +358,10 @@ class MeetingController extends Controller
                 "endDateTime":"'.$endDateTime.'", 
                 "subject": "'.$data['description'].'",
                 "allowMeetingChat": "enabled",
-                "allowAttendeeToEnableCamera": true,
-                "allowAttendeeToEnableMic": true,
+                "allowAttendeeToEnableCamera": false,
+                "allowAttendeeToEnableMic": false,
+                "allowOrganizerToEndMeeting" : true,
+                "allowAttendeeToEndMeeting" : false,
                 "isCopyToClipboardEnabled": true,
                 "allowRecording": true,
                 "allowTranscription": true,
@@ -367,9 +369,9 @@ class MeetingController extends Controller
                 "whoCanPresent": "organization",
                 "allowedPresenters": "organization",
                 "lobbyBypassSettings":{
-                    "scope":"everyone",
-                    "isDialInBypassEnabled":true
-                }
+                        "scope":"everyone",
+                        "isDialInBypassEnabled":true
+                    }
                 }';
                 
                 //dd($jsonData);

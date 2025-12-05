@@ -140,7 +140,7 @@
 
         /* .quiz_wizged {
     width: 14rem !important;
-} */
+    } */
 
     }
 

@@ -17,6 +17,7 @@ use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\BillingDetails;
+use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Distributions\F;
 
 class DoAuthorizeNetPaymentController extends Controller
 {
@@ -144,6 +145,7 @@ class DoAuthorizeNetPaymentController extends Controller
 
 
             $getresponse = curl_exec($curl);
+            // dd($getresponse);
             curl_close($curl);
 
             $dataArray = [];
@@ -182,7 +184,7 @@ class DoAuthorizeNetPaymentController extends Controller
                 $formatedData['created'] = $dataArray['created'];
                 $formatedData['captured'] = $dataArray['captured'];
                 $formatedData['ref_num'] = $dataArray['refId'];
-                $formatedData['auth_code'] = $dataArray['authCode'];
+                $formatedData['auth_code'] = $dataArray['authCode'] ?? '';
                 $formatedData['outcome'] = [
                     "network_status" => "approved_by_network",
                     "type" => "authorized"
@@ -379,7 +381,6 @@ class DoAuthorizeNetPaymentController extends Controller
             }
         }
 
-
         $response1 = json_encode($formatedData, true);   //string
         $response11 = json_decode($response1, true);   //std class object
 
@@ -393,12 +394,15 @@ class DoAuthorizeNetPaymentController extends Controller
                     $checkOutCheck = $this->saveCheckout($request, $response11, $type, $installment_id, $response1);
                     if ($checkOutCheck) {
                         if ($response) {
+
                             return $response11;    //std class object
                         }
                         return true;
                     }
                 }
+                return $response11;
             }
+            
         } else {
             if ($response) {
                 return $getresponse;   //array
@@ -459,7 +463,7 @@ class DoAuthorizeNetPaymentController extends Controller
     }
 
 
-    public function refundPayment($transactionId, $amount, $last4Digits)
+    public function refundPayment($order, $transactionId, $amount, $last4Digits)
     {
         try {
             // Retrieve Authorize.Net credentials
@@ -504,7 +508,7 @@ class DoAuthorizeNetPaymentController extends Controller
             $checkResult = json_decode($responseCheck, true);
             $status = $checkResult['transaction']['transactionStatus'] ?? null;
             $transAmount = $checkResult['transaction']['settleAmount'] ?? 0;
-        
+        // dd($checkResult);
             // Decide type
             $transactionType = ($status == 'settledSuccessfully') ? 'refundTransaction' : 'voidTransaction';
             
@@ -558,9 +562,35 @@ class DoAuthorizeNetPaymentController extends Controller
             $response = trim($response, "\"");
 
             $result = json_decode($response, true);
-            
+
+            // dd($result);
             // Handle Refund Response
             if (isset($result['transactionResponse']['responseCode']) && $result['transactionResponse']['responseCode'] == '1') {
+
+                $result['transactionResponse']['amount'] = $transAmount;
+
+                $responseString = json_encode($result, true);   //string
+                $type = 'order_refund';
+
+                $this->saveCloverResponce($order->user_id, $responseString, $type);
+                
+                $bill = BillingDetails::with('country')->where('user_id', $order->user_id)->latest()->first();
+                
+                $checkout_info = new Checkout();
+                $checkout_info->tracking = $order->tracking ?? $refId; //$result['refId'] ?? $refId;
+                $checkout_info->user_id = $order->user_id;
+                $checkout_info->billing_detail_id = $bill->id ?? null;
+                $checkout_info->installment_id = null;
+                $checkout_info->purchase_price = $transAmount;
+                $checkout_info->price = $transAmount;
+                $checkout_info->reveune = $transAmount;
+                $checkout_info->status = 1;
+                $checkout_info->payment_method = 'authorizeNet';
+                $checkout_info->checkout_type = 'Out';
+                $checkout_info->type = $type;
+                $checkout_info->response = $responseString;
+                $checkout_info->save();
+
                 return [
                     'success' => true,
                     'message' => 'Refund processed successfully.',

@@ -779,6 +779,27 @@
     </section>
     @include('backend.partials.delete_modal')
     @include('backend.partials.add_to_sale')
+    
+    <!-- Course Comparison Modal -->
+    <div class="modal fade admin-query" id="courseComparisonModal">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{ __('Course Comparison') }}</h4>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <i class="ti-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body" id="comparisonContent">
+                    <div class="text-center">
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @push('scripts')
     <script src="{{ asset('/') }}/Modules/CourseSetting/Resources/assets/js/course.js"></script>
@@ -1290,7 +1311,136 @@
 
         $('#lms_table_info').append('<span id="add_here"> new-dynamic-text</span>');
 
+        // Course Comparison Function
+        function openCourseComparison(courseId) {
+            $('#courseComparisonModal').modal('show');
+            $('#comparisonContent').html('<div class="text-center"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div></div>');
+            
+            $.ajax({
+                url: '{{ route("course.comparison", ":id") }}'.replace(':id', courseId),
+                type: 'GET',
+                success: function(response) {
+                    if (response.success) {
+                        var data = response.data;
+                        var html = '<div class="row">';
+                        
+                        // Course Details Section
+                        html += '<div class="col-lg-12 mb-4">';
+                        html += '<h5 class="mb-3">{{ __("Course Details") }}</h5>';
+                        html += '<div class="table-responsive">';
+                        html += '<table class="table table-bordered">';
+                        html += '<tr><th width="30%">{{ __("Course Code") }}</th><td>' + (data.course_code || 'N/A') + '</td></tr>';
+                        html += '<tr><th>{{ __("Title") }}</th><td>' + data.title + '</td></tr>';
+                        html += '<tr><th>{{ __("Category") }}</th><td>' + (data.category || 'N/A') + '</td></tr>';
+                        html += '<tr><th>{{ __("Instructor") }}</th><td>' + (data.instructor || 'N/A') + '</td></tr>';
+                        html += '<tr><th>{{ __("Status") }}</th><td>' + (data.status == 1 ? '{{ __("Active") }}' : '{{ __("Pending") }}') + '</td></tr>';
+                        if (data.duration !== null) {
+                            html += '<tr><th>{{ __("Duration") }}</th><td>' + data.duration + ' {{ __("weeks") }}</td></tr>';
+                        } else {
+                            html += '<tr><th>{{ __("Duration") }}</th><td>{{ __("No active plan") }}</td></tr>';
+                        }
+                        if (data.price !== null && data.price !== undefined) {
+                            html += '<tr><th>{{ __("Price") }}</th><td>$' + parseFloat(data.price).toLocaleString('en-US', {maximumFractionDigits: 0, minimumFractionDigits: 0}) + '</td></tr>';
+                        } else {
+                            html += '<tr><th>{{ __("Price") }}</th><td>{{ __("No active plan") }}</td></tr>';
+                        }
+                        if (data.description) {
+                            html += '<tr><th>{{ __("Description") }}</th><td>' + data.description.substring(0, 200) + (data.description.length > 200 ? '...' : '') + '</td></tr>';
+                        }
+                        html += '</table>';
+                        html += '</div>';
+                        html += '</div>';
+                        
+                        // Linked Programs Section
+                        html += '<div class="col-lg-12">';
+                        html += '<h5 class="mb-3">{{ __("Linked Programs") }}</h5>';
+                        if (data.linked_programs && data.linked_programs.length > 0) {
+                            html += '<div class="table-responsive">';
+                            html += '<table class="table table-bordered table-striped">';
+                            html += '<thead><tr><th width="50px">{{ __("Select") }}</th><th>{{ __("Program Title") }}</th><th>{{ __("Subtitle") }}</th><th>{{ __("Duration") }} ({{ __("weeks") }})</th><th>{{ __("Price") }}</th></tr></thead>';
+                            html += '<tbody>';
+                            data.linked_programs.forEach(function(program) {
+                                var checked = program.is_saved ? 'checked' : '';
+                                html += '<tr>';
+                                html += '<td class="text-center"><input type="checkbox" class="program-checkbox" value="' + program.id + '" data-program-id="' + program.id + '" ' + checked + '></td>';
+                                html += '<td>' + program.title + '</td>';
+                                html += '<td>' + (program.subtitle || 'N/A') + '</td>';
+                                html += '<td>' + (program.duration !== null ? program.duration : '{{ __("No active plan") }}') + '</td>';
+                                html += '<td>' + (program.price !== null ? '$' + parseFloat(program.price).toLocaleString('en-US', {maximumFractionDigits: 0}) : '{{ __("No active plan") }}') + '</td>';
+                                html += '</tr>';
+                            });
+                            html += '</tbody>';
+                            html += '</table>';
+                            html += '</div>';
+                            html += '<div class="text-right mt-3">';
+                            html += '<button type="button" class="btn btn-primary" id="saveComparisonBtn" onclick="saveCourseComparison(' + data.id + ')">{{ __("Save Comparison") }}</button>';
+                            html += '</div>';
+                        } else {
+                            html += '<div class="alert alert-info">{{ __("No linked programs found.") }}</div>';
+                        }
+                        html += '</div>';
+                        html += '</div>';
+                        
+                        // Store course ID for later use
+                        $('#comparisonContent').data('course-id', data.id);
+                        $('#comparisonContent').html(html);
+                    } else {
+                        $('#comparisonContent').html('<div class="alert alert-danger">' + (response.message || '{{ __("Error loading comparison data") }}') + '</div>');
+                    }
+                },
+                error: function(xhr) {
+                    var errorMsg = '{{ __("Error loading comparison data") }}';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMsg = xhr.responseJSON.message;
+                    }
+                    $('#comparisonContent').html('<div class="alert alert-danger">' + errorMsg + '</div>');
+                }
+            });
+        }
         
+        // Format currency helper function
+        function formatCurrency(amount) {
+            return '$' + parseFloat(amount).toFixed(2);
+        }
+        
+        // Save Course Comparison
+        function saveCourseComparison(courseId) {
+            var selectedPrograms = [];
+            $('.program-checkbox:checked').each(function() {
+                selectedPrograms.push($(this).data('program-id'));
+            });
+            
+            if (selectedPrograms.length === 0) {
+                toastr.warning('{{ __("Please select at least one program") }}', '{{ __("Warning") }}');
+                return;
+            }
+            
+            $.ajax({
+                url: '{{ route("course.comparison.save") }}',
+                type: 'POST',
+                data: {
+                    course_id: courseId,
+                    program_ids: selectedPrograms,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        toastr.success(response.message || '{{ __("Comparison saved successfully") }}', '{{ __("Success") }}');
+                        $('#courseComparisonModal').modal('hide');
+                        // Optionally reload table or show success message
+                    } else {
+                        toastr.error(response.message || '{{ __("Error saving comparison") }}', '{{ __("Error") }}');
+                    }
+                },
+                error: function(xhr) {
+                    var errorMsg = '{{ __("Error saving comparison") }}';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMsg = xhr.responseJSON.message;
+                    }
+                    toastr.error(errorMsg, '{{ __("Error") }}');
+                }
+            });
+        }
 
         // $('.course_enable_disable').on('change',function(){
         //     var id = $(this).val();

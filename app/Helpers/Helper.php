@@ -147,6 +147,7 @@ if (!function_exists('send_email')) {
                 $query->where('ecommerce', 0);
             }
             $email_template = $query->where('act', $type)->first();
+            
             if ($email_template && $email_template->status == 1) {
 
                 $message = $email_template->email_body;
@@ -155,7 +156,6 @@ if (!function_exists('send_email')) {
                 foreach ($shortcodes as $code => $value) {
                     $message = shortcode_replacer('{{' . $code . '}}', $value, $message);
                 }
-
 
                 $config = EmailSetting::where('active_status', 1)->first();
 

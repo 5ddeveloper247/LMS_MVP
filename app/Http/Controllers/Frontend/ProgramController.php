@@ -14,6 +14,7 @@ use Modules\FrontendManage\Entities\HomePageFaq;
 use Modules\CourseSetting\Entities\Course;
 use Modules\SystemSetting\Entities\SocialLink;
 use Modules\FrontendManage\Entities\HowProgramsWork;
+use Modules\SystemSetting\Entities\Testimonial;
 
 class ProgramController extends Controller
 {
@@ -62,6 +63,10 @@ class ProgramController extends Controller
         $recent_program = Program::where('status', 1)->has('effectiveProgramPlan')->with('effectiveProgramPlan')
         ->inRandomOrder()->take(4)
         ->get()->toArray();
+
+        $testimonials = Testimonial::where('status',1)->inRandomOrder()->get();
+        $testimonials2 = Testimonial::where('status',1)->inRandomOrder()->get();
+
         return view(theme('pages.florida_program'),get_defined_vars());
     }
     public function programsDetail(Request $request, $id)

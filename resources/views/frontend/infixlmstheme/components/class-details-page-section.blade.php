@@ -668,114 +668,113 @@
                                                     {{--                                                    @endif --}}
                                                 </div>
                                             @endforeach
-                                          @elseif($course->class->host == 'Team')
-                                              {{-- @dd('third') --}}
+                                        @elseif($course->class->host == 'Team')
+                                            {{-- @dd('third') --}}
 
-                                              @foreach ($course->class->teamMeetings as $key => $meeting)
-                                                  <div class="row justify-content-between m-2 p-3 text-center"
-                                                      style="border:1px solid #E1E2E6">
-                                                      @if ($course->class->type == '0')
-                                                          <div class="{{ !$allow ? 'col-sm-3' : 'col-sm-4' }} margin_auto"
-                                                              style="border-right: 1px solid #E1E2E6;">
-                                                              <span>
-                                                                  {{ __('common.Start Date') }}
-                                                              </span>
+                                            @foreach ($course->class->teamMeetings as $key => $meeting)
+                                                <div class="row justify-content-between m-2 p-3 text-center"
+                                                    style="border:1px solid #E1E2E6">
+                                                    @if ($course->class->type == '0')
+                                                        <div class="{{ !$allow ? 'col-sm-3' : 'col-sm-4' }} margin_auto"
+                                                            style="border-right: 1px solid #E1E2E6;">
+                                                            <span>
+                                                                {{ __('common.Start Date') }}
+                                                            </span>
 
-                                                              <h6 class="mb-0">
-                                                                  {{ date('d M Y', strtotime($meeting->start_time)) }}
-                                                              </h6>
-                                                          </div>
-                                                      @else
-                                                          <?php
+                                                            <h6 class="mb-0">
+                                                                {{ date('d M Y', strtotime($meeting->start_time)) }}
+                                                            </h6>
+                                                        </div>
+                                                    @else
+                                                        <?php
+                                                            $date = strtotime('next ' . strtolower(date('l', strtotime($course->classStartDate))));
 
-                                                          $date = strtotime('next ' . strtolower(date('l', strtotime($course->classStartDate))));
+                                                            $givenDate = strtotime($course->class->start_date);
+                                                            $targetDayOfWeek = date('N', strtotime($course->class->class_day));
 
-                                                          $givenDate = strtotime($course->class->start_date);
-                                                          $targetDayOfWeek = date('N', strtotime($course->class->class_day));
-
-                                                          while (date('N', $givenDate) != $targetDayOfWeek) {
-                                                              $givenDate = strtotime('+1 day', $givenDate);
-                                                          }
-
-                                                          $nextformattedDate = date('d M Y', $givenDate);
-                                                          $nextWeekDate = date('Y-m-d', $givenDate);
-                                                          ?>
-                                                          <div class="{{ !$allow ? 'col-sm-3' : 'col-sm-4' }} margin_auto"
-                                                              style="border-right: 1px solid #E1E2E6;">
-                                                              <span>
-                                                                  {{ __('common.Start Date') }}
-                                                              </span>
-                                                              <h6 class="mb-0">
-                                                                  {{ date('d M Y', strtotime($meeting->start_time)) }}
-                                                              </h6>
-                                                          </div>
-                                                      @endif
-                                                      <div class="{{ !$allow ? 'col-sm-3' : 'col-sm-4' }} margin_auto"
-                                                          style="border-right: 1px solid #E1E2E6;">
-                                                          <span>
-                                                              {{ __('common.Time') }} <br>
-                                                              ({{ __('common.Start') }} - {{ __('common.End') }})
-                                                          </span>
-                                                          <h6 class="mb-0">
-                                                              {{ date('g:i A', strtotime($meeting->start_time)) }}
-                                                              -{{ date('g:i A', strtotime($meeting->end_time)) }}</h6>
-                                                      </div>
-                                                      <div class="{{ !$allow ? 'col-sm-3' : 'col-sm-4' }} margin_auto"
-                                                          style="{{ !$allow ? 'border-right: 1px solid #E1E2E6;' : '' }}">
-                                                          <span>
-                                                              {{ __('common.Duration') }}
-                                                          </span>
-                                                          @php
-                                                              $str = $meeting->meeting_duration ?? 0;
-                                                              $duration = preg_replace('/[^0-9]/', '', $str);
-                                                          @endphp
-                                                          <h6 class="nowrap mb-0">{{ MinuteFormat($duration) }}</h6>
-                                                      </div>
-
-                                                      <div class="col-sm-3 margin_auto">
-                                                          {{-- @dd($course->classStartDate, $nextWeekDate) --}}
-                                                          @php
-                                                          if($meeting->cancelled == 1){
-                                                            $currClassStatus = 'cancelled';
-                                                          }else{
-                                                            if(Carbon\Carbon::now() < Carbon\Carbon::parse($meeting->start_time)){
-                                                                $currClassStatus = 'waiting';
-                                                            }elseif (Carbon\Carbon::now() >= Carbon\Carbon::parse($meeting->start_time) && Carbon\Carbon::now() <= Carbon\Carbon::parse($meeting->end_time)) {
-                                                                $currClassStatus = 'started';
-                                                            }elseif(Carbon\Carbon::now() > Carbon\Carbon::parse($meeting->end_time)){
-                                                                $currClassStatus = 'closed';
+                                                            while (date('N', $givenDate) != $targetDayOfWeek) {
+                                                                $givenDate = strtotime('+1 day', $givenDate);
                                                             }
-                                                            }
-                                                              $start_time = date('H:i:s', strtotime($meeting->start_time));
-                                                              $end_time = date('H:i:s', strtotime($meeting->end_time));
 
-                                                          @endphp
-                                                          @if ($currClassStatus == 'started')
-                                                              <a target="_blank"
-                                                                  href="{{ route('classStart', [$course->slug, 'Team', $meeting->id]) }}"
-                                                                  class="theme_btn small_btn2 height_50 p-3 text-center">
-                                                                  {{ __('common.Watch Now') }}
-                                                              </a>
-                                                          @elseif ($currClassStatus == 'waiting')
-                                                              <span
-                                                                  class="theme_line_btn small_btn2 height_50 text-center">
-                                                                  {{ __('frontend.Waiting') }}
-                                                              </span>
-                                                          @elseif ($currClassStatus == 'cancelled')
-                                                              <span
-                                                                  class="theme_line_btn small_btn2 height_50 text-center">
-                                                                  {{ __('Cancelled') }}
-                                                              </span>
-                                                          @else
-                                                              <span
-                                                                  class="theme_line_btn small_btn2 height_50 text-center">
-                                                                  {{ __('frontend.Closed') }}
-                                                              </span>
-                                                          @endif
-                                                      </div>
-                                                      {{--                                                    @endif --}}
-                                                  </div>
-                                              @endforeach
+                                                            $nextformattedDate = date('d M Y', $givenDate);
+                                                            $nextWeekDate = date('Y-m-d', $givenDate);
+                                                        ?>
+                                                        <div class="{{ !$allow ? 'col-sm-3' : 'col-sm-4' }} margin_auto"
+                                                            style="border-right: 1px solid #E1E2E6;">
+                                                            <span>
+                                                                {{ __('common.Start Date') }}
+                                                            </span>
+                                                            <h6 class="mb-0">
+                                                                {{ date('d M Y', strtotime($meeting->start_time)) }}
+                                                            </h6>
+                                                        </div>
+                                                    @endif
+                                                    <div class="{{ !$allow ? 'col-sm-3' : 'col-sm-4' }} margin_auto"
+                                                        style="border-right: 1px solid #E1E2E6;">
+                                                        <span>
+                                                            {{ __('common.Time') }} <br>
+                                                            ({{ __('common.Start') }} - {{ __('common.End') }})
+                                                        </span>
+                                                        <h6 class="mb-0">
+                                                            {{ date('g:i A', strtotime($meeting->start_time)) }}
+                                                            -{{ date('g:i A', strtotime($meeting->end_time)) }}</h6>
+                                                    </div>
+                                                    <div class="{{ !$allow ? 'col-sm-3' : 'col-sm-4' }} margin_auto"
+                                                        style="{{ !$allow ? 'border-right: 1px solid #E1E2E6;' : '' }}">
+                                                        <span>
+                                                            {{ __('common.Duration') }}
+                                                        </span>
+                                                        @php
+                                                            $str = $meeting->meeting_duration ?? 0;
+                                                            $duration = preg_replace('/[^0-9]/', '', $str);
+                                                        @endphp
+                                                        <h6 class="nowrap mb-0">{{ MinuteFormat($duration) }}</h6>
+                                                    </div>
+
+                                                    <div class="col-sm-3 margin_auto">
+                                                        {{-- @dd($course->classStartDate, $nextWeekDate) --}}
+                                                        @php
+                                                        if($meeting->cancelled == 1){
+                                                        $currClassStatus = 'cancelled';
+                                                        }else{
+                                                        if(Carbon\Carbon::now() < Carbon\Carbon::parse($meeting->start_time)){
+                                                            $currClassStatus = 'waiting';
+                                                        }elseif (Carbon\Carbon::now() >= Carbon\Carbon::parse($meeting->start_time) && Carbon\Carbon::now() <= Carbon\Carbon::parse($meeting->end_time)) {
+                                                            $currClassStatus = 'started';
+                                                        }elseif(Carbon\Carbon::now() > Carbon\Carbon::parse($meeting->end_time)){
+                                                            $currClassStatus = 'closed';
+                                                        }
+                                                        }
+                                                            $start_time = date('H:i:s', strtotime($meeting->start_time));
+                                                            $end_time = date('H:i:s', strtotime($meeting->end_time));
+
+                                                        @endphp
+                                                        @if ($currClassStatus == 'started')
+                                                            <a target="_blank"
+                                                                href="{{ route('classStart', [$course->slug, 'Team', $meeting->id]) }}"
+                                                                class="theme_btn small_btn2 height_50 p-3 text-center">
+                                                                {{ __('common.Watch Now') }}
+                                                            </a>
+                                                        @elseif ($currClassStatus == 'waiting')
+                                                            <span
+                                                                class="theme_line_btn small_btn2 height_50 text-center">
+                                                                {{ __('frontend.Waiting') }}
+                                                            </span>
+                                                        @elseif ($currClassStatus == 'cancelled')
+                                                            <span
+                                                                class="theme_line_btn small_btn2 height_50 text-center">
+                                                                {{ __('Cancelled') }}
+                                                            </span>
+                                                        @else
+                                                            <span
+                                                                class="theme_line_btn small_btn2 height_50 text-center">
+                                                                {{ __('frontend.Closed') }}
+                                                            </span>
+                                                        @endif
+                                                    </div>
+                                                    {{--                                                    @endif --}}
+                                                </div>
+                                            @endforeach
                                         @endif
                                     </div>
 

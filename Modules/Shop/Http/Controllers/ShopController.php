@@ -129,6 +129,21 @@ class ShopController extends Controller
             $order->status = $request->order_status;
             $order->save();
 
+            $user = $order->user ?? '';
+            // $user->email = 'hamza@5dsolutions.ae';
+            if(!empty($user) && !empty($order)){
+                $codes = [
+                    'order_no' => 'order#'.$order->id,
+                    'title' => $order->product->title ?? '',
+                    'amount' =>  number_format($order->purchase_price ?? 0, 2),
+                    'currency' => '$',
+                    'payment_status' => $order->payment_status_label ?? 'N/A',
+                    'order_status' => $order->status_label ?? '',
+                ];
+                
+                send_email($user,'Shop_Order',$codes);
+            }
+
             Toastr::success(trans('common.Operation successful'), trans('common.Success'));
             return redirect()->back();
         } catch (\Exception $e) {
@@ -179,7 +194,7 @@ class ShopController extends Controller
                 
                 // code for refund payment functionality
                 $authorize = new DoAuthorizeNetPaymentController();
-                $response = $authorize->refundPayment($trans_id, $trans_amount, $trans_last4digits);
+                $response = $authorize->refundPayment($order, $trans_id, $trans_amount, $trans_last4digits);
                 
                 if($response['success'] == false){
                     Toastr::success($response['message'] ?? 'Unable to refund...', 'Error');
@@ -187,7 +202,27 @@ class ShopController extends Controller
                 }
             }
 
+            if($order->payment_status == 4){ // in case of payment refund reject then payment status is paid and order status is placed
+                
+                $order->status = 1;             // placed
+                $order->payment_status = 1;     // paid
+            }
+
             $order->save();
+
+            $user = $order->user ?? '';
+            // $user->email = 'hamza@5dsolutions.ae';
+            if(!empty($user) && !empty($order)){
+                $codes = [
+                    'order_no' => 'order#'.$order->id,
+                    'title' => $order->product->title ?? '',
+                    'amount' =>  number_format($order->purchase_price ?? 0, 2),
+                    'currency' => '$',
+                    'payment_status' => $order->payment_status_label ?? 'N/A',
+                    'order_status' => $order->status_label ?? '',
+                ];
+                send_email($user,'Shop_Order',$codes);
+            }
 
             Toastr::success(trans('common.Operation successful'), trans('common.Success'));
             return redirect()->back();

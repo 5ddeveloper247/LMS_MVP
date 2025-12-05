@@ -2187,7 +2187,6 @@ class VirtualClassController extends Controller
         }
         $meeting = new MeetingController();
 
-
         $data = [];
         $data['instructor_id'] = Auth::user()->id;
         $data['class_id'] = $class->id;
@@ -2205,7 +2204,6 @@ class VirtualClassController extends Controller
 
         $setting =TeamSetting::find(1);
         
-
         $data['approval_type'] = $setting->approval_type;
         $data['auto_recording'] = $setting->auto_recording;
         $data['waiting_room'] = $setting->waiting_room;
@@ -2215,7 +2213,6 @@ class VirtualClassController extends Controller
         $data['participant_video'] = $setting->participant_video;
         $data['join_before_host'] = $setting->join_before_host;
         $result = $meeting->classStore($data);
-        
 
         return $result;
     }

@@ -38,7 +38,7 @@ class FooterSettingController extends Controller
             $SectionTwoPages = $this->widgetService->getAllAccount();
             $SectionThreePages = $this->widgetService->getAllService();
             $SectionFourPages = $this->widgetService->getAllAbout();
-            $setting = $this->footerService->getAll();
+            $setting = $this->footerService->getAll();  
             return view('footersetting::footer.index', compact('staticPageList', 'SectionOnePages', 'SectionTwoPages', 'SectionThreePages', 'SectionFourPages', 'setting'));
         } catch (Exception $e) {
             return $e->getMessage();

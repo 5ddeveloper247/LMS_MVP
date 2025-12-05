@@ -179,7 +179,7 @@
                 </div>
 
                 <p class="text-white inter" style="font-size: 16px !important; line-height: 1.3;">
-                    Interdum velit laoreet id donec ultrices tincidunt arcu. Tincidunt tortor aliqua mfacilisi cras fermentum odio eu.
+                {{ function_exists('footerSettings')?footerSettings('footer_about_description'):''  }}
                 </p>
 
                 <div class="row align-items-center justify-content-start mt-3 mx-1">

@@ -659,55 +659,55 @@
         padding: 4rem 1.5rem 2.5rem;
     }
 
-.banner_img{
-    object-fit: fill !important;
-}
-
-
-@media only screen and (max-width: 576px){
-    .small_screen {
-     flex-direction: column;
-     gap: 10px;
-}
-.program-span {
-    font-size: 12px !important;
-}
-.buttons-padding{
-    margin: 7px 0px;
-}
-}
-@media only screen and (max-width: 990px) {
-
-.img_height{
-     max-height: 10rem;
-     height: 100%;
-}
-
-.span_h{
-    font-size:12px !important;
-}
-}
-
-@media only screen and (min-width:991px) and (max-width: 1199px) {
-
-.custom_heading_1 {
-       font-size: 1rem !important;
+    .banner_img{
+        object-fit: fill !important;
     }
-.theme_btn {
-    font-size: 12px !important;
-}
-.span_h{
-    font-size:12px !important;
-}
-}
-@media only screen and (min-width:1800px){
-    .program-span{
-    font-size: 16px;
-}
-}
-.addToCartBuyNow{
-    cursor: pointer;
-}
+
+
+    @media only screen and (max-width: 576px){
+        .small_screen {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .program-span {
+        font-size: 12px !important;
+    }
+    .buttons-padding{
+        margin: 7px 0px;
+    }
+    }
+    @media only screen and (max-width: 990px) {
+
+    .img_height{
+        max-height: 10rem;
+        height: 100%;
+    }
+
+    .span_h{
+        font-size:12px !important;
+    }
+    }
+
+    @media only screen and (min-width:991px) and (max-width: 1199px) {
+
+    .custom_heading_1 {
+        font-size: 1rem !important;
+        }
+    .theme_btn {
+        font-size: 12px !important;
+    }
+    .span_h{
+        font-size:12px !important;
+    }
+    }
+    @media only screen and (min-width:1800px){
+        .program-span{
+        font-size: 16px;
+    }
+    }
+    .addToCartBuyNow{
+        cursor: pointer;
+    }
 </style>
 {{-- @endsection --}}
 {{--

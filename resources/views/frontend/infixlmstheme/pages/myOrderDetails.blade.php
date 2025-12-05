@@ -22,6 +22,7 @@
                                         <i class="fa fa-arrow-left"></i>
                                         Back to Orders
                                     </a>
+                                    
                                 </div>
                                 <div class="col-6 text-right">
                                     @if ($orderDetail->status == 1)
@@ -75,11 +76,17 @@
                                                         <td class="text-main text-bold"><strong>Payment status</strong></td>
                                                         <td class="text-right">{{strtoupper($orderDetail->payment_status_label ?? 'N/A')}}</td>
                                                     </tr>
+                                                    @if ($orderDetail->payment_status == 2)
+                                                        <tr>
+                                                            <td class="text-main text-bold" colspan="2"><p class="text-danger">Return your order on the same address to get the refund amount.</p></td>
+                                                        </tr>
+                                                    @endif
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
                                 </div>
+                                
                                 <div class="table-responsive">
                                     <table class="table table-striped">
                                         <thead>

@@ -76,5 +76,11 @@
                     class="dropdown-item edit_brand">{{ 'Repeat Course' }}</a>
             @endif --}}
         @endif
+        
+        @if ($query->type == 1)
+            <a href="javascript:void(0);" class="dropdown-item" onclick="openCourseComparison({{ $query->id }})">
+                {{ __('Comparison') }}
+            </a>
+        @endif
     </div>
 </div>

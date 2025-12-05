@@ -124,7 +124,7 @@
                 <div class="modal-content rounded-0" style="background-color:{{$popup->bg_color}}">
                     <div class="modal-header">
                         {{-- <h5 class="modal-title" id="exampleModalLabel">Modal title</h5> --}}
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -132,7 +132,7 @@
                         <div class="row align-items-center">
                             <div class="col-md-6 p-0">
                                 <div class="popup-image">
-                                    <img src="{{ asset($popup->image) }}" class="img-fluid w-100 h-100 object-fit-cover"
+                                    <img src="{{ asset($popup->image) }}" class="img-fluid w-100 h-100 object-fit-cover" style="object-fit:cover;"
                                         alt="">
                                 </div>
                             </div>

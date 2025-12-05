@@ -44,6 +44,7 @@ use Modules\Newsletter\Http\Controllers\MailchimpController;
 use Modules\Newsletter\Http\Controllers\GetResponseController;
 use Modules\Membership\Repositories\Interfaces\MembershipCourseRepositoryInterface;
 use Modules\CourseSetting\Entities\CourseReveiw;
+use Modules\CourseSetting\Entities\CourseComparison;
 
 
 class CourseSettingController extends Controller
@@ -2450,5 +2451,200 @@ class CourseSettingController extends Controller
         }
 
         return response()->json(200);
+    }
+
+    public function getCourseComparison($id)
+    {
+        try {
+            $course = Course::where('id', $id)->with('category', 'user', 'currentCoursePlan')->first();
+            
+            if (!$course) {
+                return response()->json(['success' => false, 'message' => 'Course not found'], 404);
+            }
+
+            // Get duration and price using same logic as first tab
+            $duration = null;
+            $price = null;
+            
+            // Check if course has children (type 4 or 6) and get plans from them
+            $childCourses = Course::where('parent_id', $course->id)
+                ->whereIn('type', [4, 6])
+                ->get();
+            
+            $currentPlan = null;
+            
+            if ($childCourses->count() > 0) {
+                // Parent course - get plan from child courses (same logic as first tab uses effectiveCoursePlan)
+                $childIds = $childCourses->pluck('id')->toArray();
+                $currentPlan = PaymentPlans::whereIn('parent_id', $childIds)
+                    ->whereIn('type', ['full_course', 'prep_course_live'])
+                    ->where('status', 1)
+                    ->where(function ($q) use ($currentDate) {
+                        $q->where(function($q2) use ($currentDate) {
+                            $q2->where('sdate', '<=', $currentDate)
+                               ->where('edate', '>=', $currentDate);
+                        })
+                        ->orWhere('sdate', '>', $currentDate);
+                    })
+                    ->orderBy('sdate', 'asc')
+                    ->first();
+            } else {
+                // Child course - use currentCoursePlan relationship
+                $course->load('currentCoursePlan');
+                if (isset($course->currentCoursePlan[0])) {
+                    $currentPlan = $course->currentCoursePlan[0];
+                }
+            }
+            
+            if ($currentPlan) {
+                // Use current course plan
+                $startDate = strtotime($currentPlan->sdate);
+                $endDate = strtotime($currentPlan->edate);
+                $duration = round(($endDate - $startDate) / 604800, 1); // weeks
+                $price = $currentPlan->amount;
+            } else {
+                // Use price + tax (same logic as first tab)
+                $price = $course->price + ($course->tax ?? 0);
+                $duration = $course->duration ? round($course->duration, 1) : null;
+            }
+
+            // Get existing saved comparisons for this course
+            $savedComparisons = CourseComparison::where('course_id', $course->id)
+                ->pluck('program_id')
+                ->toArray();
+
+            // Get linked programs (programs where allcourses contains this course ID)
+            $currentDate = date('Y-m-d');
+            $linkedPrograms = [];
+            $programs = \Modules\StudentSetting\Entities\Program::where('status', 1)
+                ->whereNotNull('allcourses')
+                ->get();
+
+            foreach ($programs as $program) {
+                $allCourses = json_decode($program->allcourses, true);
+                // Convert all course IDs to integers for comparison
+                if (is_array($allCourses)) {
+                    $allCourses = array_map('intval', $allCourses);
+                    if (in_array((int)$course->id, $allCourses)) {
+                    // Get current program plan
+                    $programPlan = PaymentPlans::where('parent_id', $program->id)
+                        ->where('type', 'program')
+                        ->where('status', 1)
+                        ->where('sdate', '<=', $currentDate)
+                        ->where('edate', '>=', $currentDate)
+                        ->orderBy('sdate', 'asc')
+                        ->first();
+
+                    $programDuration = null;
+                    $programPrice = null;
+                    if ($programPlan) {
+                        $startDate = strtotime($programPlan->sdate);
+                        $endDate = strtotime($programPlan->edate);
+                        $programDuration = round(($endDate - $startDate) / 604800, 1); // weeks
+                        $programPrice = $programPlan->amount;
+                    }
+
+                        $linkedPrograms[] = [
+                            'id' => $program->id,
+                            'title' => $program->programtitle,
+                            'subtitle' => $program->subtitle,
+                            'duration' => $programDuration,
+                            'price' => $programPrice,
+                            'description' => strip_tags($program->discription ?? ''),
+                            'is_saved' => in_array($program->id, $savedComparisons), // Mark if already saved
+                        ];
+                    }
+                }
+            }
+
+            // Format price for display (raw number, will be formatted in JS)
+            $formattedPrice = $price !== null ? number_format($price, 0) : null;
+
+            $courseData = [
+                'id' => $course->id,
+                'title' => $course->title,
+                'course_code' => $course->course_code ?? '',
+                'category' => $course->category->name ?? '',
+                'instructor' => $course->user->name ?? '',
+                'duration' => $duration,
+                'price' => $price, // Return raw number for JS formatting
+                'price_formatted' => $formattedPrice ? '$' . $formattedPrice : 'N/A',
+                'status' => $course->status,
+                'description' => strip_tags($course->about ?? ''),
+                'linked_programs' => $linkedPrograms,
+            ];
+
+            return response()->json(['success' => true, 'data' => $courseData]);
+
+        } catch (\Exception $e) {
+            \Log::error('Course Comparison Error: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Server error occurred'], 500);
+        }
+    }
+
+    public function saveCourseComparison(Request $request)
+    {
+        try {
+            $request->validate([
+                'course_id' => 'required|exists:courses,id',
+                'program_ids' => 'required|array',
+                'program_ids.*' => 'exists:programs,id',
+            ]);
+
+            $courseId = $request->course_id;
+            $programIds = $request->program_ids;
+
+            // Get existing saved comparisons for this course
+            $existingComparisons = CourseComparison::where('course_id', $courseId)
+                ->pluck('program_id')
+                ->toArray();
+
+            // Find programs to add (in selected but not in existing)
+            $programsToAdd = array_diff($programIds, $existingComparisons);
+            
+            // Find programs to remove (in existing but not in selected)
+            $programsToRemove = array_diff($existingComparisons, $programIds);
+
+            // Add new comparisons
+            foreach ($programsToAdd as $programId) {
+                CourseComparison::create([
+                    'course_id' => $courseId,
+                    'program_id' => $programId,
+                ]);
+            }
+
+            // Remove unchecked comparisons
+            if (!empty($programsToRemove)) {
+                CourseComparison::where('course_id', $courseId)
+                    ->whereIn('program_id', $programsToRemove)
+                    ->delete();
+            }
+
+            $message = 'Course comparison updated successfully';
+            if (!empty($programsToAdd) && !empty($programsToRemove)) {
+                $message = count($programsToAdd) . ' program(s) added, ' . count($programsToRemove) . ' program(s) removed';
+            } elseif (!empty($programsToAdd)) {
+                $message = count($programsToAdd) . ' program(s) added';
+            } elseif (!empty($programsToRemove)) {
+                $message = count($programsToRemove) . ' program(s) removed';
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => $message
+            ]);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 422);
+        } catch (\Exception $e) {
+            \Log::error('Save Course Comparison Error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Server error occurred'
+            ], 500);
+        }
     }
 }

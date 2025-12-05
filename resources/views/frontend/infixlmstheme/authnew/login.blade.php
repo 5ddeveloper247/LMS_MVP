@@ -478,10 +478,16 @@
             <div class="hidemainContent col-lg-5 d-none d-lg-block pr-0">
             <!-- reg_img     -->
             <div class="img-fluid h-100">
-                        <img src="{{ asset('/public/uploads/images/footerimg/login-signup-img.jpeg') }}"
+                        <img src="{{$page->banner != null ? asset($page->banner) : asset('/public/uploads/images/footerimg/login-signup-img.jpeg')}}"
                         class="w-100 h-100">
                 </div>
-                <h6 class="hidemainContent text-capitalize my-md-3 text-center">Student-Centered | Expert Instructors | Empower |  Study Anywhere | Community</h6>
+                <h6 class="hidemainContent text-capitalize my-md-3 text-center">
+                    {{$page->slogans1 != null ? $page->getTranslation('slogans1','en') : ''}} 
+                    {{$page->slogans2 != null ? '| '.$page->getTranslation('slogans2','en') : ''}}
+                    {{$page->slogans3 != null ? '| '.$page->getTranslation('slogans3','en') : ''}}
+                    {{$page->slogans4 != null ? '| '.$page->getTranslation('slogans4','en') : ''}}
+                    {{$page->slogans5 != null ? '| '.$page->getTranslation('slogans5','en') : ''}}
+                </h6>
             </div>
         </div>
     </div>

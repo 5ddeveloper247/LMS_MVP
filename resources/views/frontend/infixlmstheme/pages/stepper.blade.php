@@ -854,7 +854,8 @@
     </div>
 
     <div class="testimonial-top mt-4">
-        @for ($i = 0; $i < 20; $i++)
+    @if(@$testimonials != "")
+        @foreach (@$testimonials as $item)
             <div class="card" data-aos="fade-up">
                 <div class="card-body px-5 pt-5 pb-4 d-flex align-items-end">
                     <div class="d-flex flex-column">
@@ -866,9 +867,7 @@
 
                         <div>
                             <small>
-                                Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.
-                                Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt
-                                nostrud amet.
+                            {{@$item->body}}
                             </small>
                             <!-- Closing Quote -->
                             <svg class="mt-3" style="rotate:180deg" width="25" height="16" fill="none"
@@ -878,20 +877,22 @@
                         </div>
 
                         <div class="mt-3">
-                            <h6 class="fw-bold">Cornelius B</h6>
-                            <small class="text-muted">Professional Nurse</small>
+                            <h6 class="fw-bold">{{@$item->author}}</h6>
+                            <small class="text-muted">{{@$item->profession}}</small>
                         </div>
                     </div>
 
-                    <img src="{{ asset('public/assets/review-img.png') }}" width="200" alt="Reviewer">
+                    <img src="{{getTestimonialImage($item->image)}}" width="200" alt="Reviewer">
                 </div>
             </div>
-        @endfor
+            @endforeach
+        @endif
     </div>
 
     <div class="testimonial-bottom
     mt-4" data-aos="fade-up">
-        @for ($i = 0; $i < 20; $i++)
+    @if(@$testimonials2 != "")
+        @foreach (@$testimonials2 as $item)
             <div class="card">
                 <div class="card-body px-5 pt-5 pb-4 d-flex align-items-end">
                     <div class="d-flex flex-column">
@@ -903,9 +904,7 @@
 
                         <div>
                             <small>
-                                Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.
-                                Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt
-                                nostrud amet.
+                            {{@$item->body}}
                             </small>
                             <!-- Closing Quote -->
                             <svg class="mt-3" style="rotate:180deg" width="25" height="16" fill="none"
@@ -915,14 +914,15 @@
                         </div>
 
                         <div class="mt-3">
-                            <h6 class="fw-bold">Cornelius B</h6>
-                            <small class="text-muted">Professional Nurse</small>
+                            <h6 class="fw-bold">{{@$item->author}}</h6>
+                            <small class="text-muted">{{@$item->profession}}</small>
                         </div>
                     </div>
 
-                    <img src="{{ asset('public/assets/review-img.png') }}" width="200" alt="Reviewer">
+                    <img src="{{getTestimonialImage($item->image)}}" width="200" alt="Reviewer">
                 </div>
             </div>
-        @endfor
+        @endforeach
+    @endif
     </div>
 </section>

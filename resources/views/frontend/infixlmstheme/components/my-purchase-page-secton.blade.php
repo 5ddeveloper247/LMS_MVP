@@ -82,6 +82,8 @@
                                                                         Installment
                                                                     @elseif($enroll->type == 'student_register')
                                                                         Register
+                                                                    @elseif($enroll->type == 'order_refund')
+                                                                        Refund
                                                                     @else
                                                                         Checkout
                                                                     @endif

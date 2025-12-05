@@ -1284,37 +1284,41 @@
                     <div class="col-lg-6">
                         <h2 class="text-dark">Program Overview & <br> Who Program Is For ?</h2>
                         <div class="accordion" id="accordionExample">
-                            <div class="accordion-item mb-3">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button inter" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                        FLBON RETURN-T0-PRACTICE REMEDIATION
-                                    </button>
-                                </h2>
-                                <div id="collapseOne" class="accordion-collapse collapse show"
-                                    data-bs-parent="#accordionExample">
-                                    <div class="accordion-body inter pt-0 d-flex align-items-center" style="gap: 20px">
-                                        <img src="https://cdn-icons-png.flaticon.com/128/10859/10859251.png" width="140" alt="">
-                                        <div class="d-flex flex-column" style="gap: 10px;">
-                                            <span>Your Nursing Journey Isn’t Over—It’s Just Getting a Second Chapter.</span>
-                                            <span>
-                                                <strong>Duration:</strong>
-                                                2026-04-01 to 2026-04-30
-                                            </span>
-                                            <span>
-                                                <strong>Price:</strong>
-                                                $ 1,500.00
-                                            </span>
+                            @if (isset($recent_program[0]))
+                                <div class="accordion-item mb-3">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button inter" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            {{ $recent_program[0]['programtitle'] }}
+                                        </button>
+                                    </h2>
+                                    <div id="collapseOne" class="accordion-collapse collapse show"
+                                        data-bs-parent="#accordionExample">
+                                        <div class="accordion-body inter pt-0 d-flex align-items-center" style="gap: 20px">
+                                            <img src="https://cdn-icons-png.flaticon.com/128/10859/10859251.png" width="140" alt="">
+                                            <div class="d-flex flex-column" style="gap: 10px;">
+                                                <span>{{ $recent_program[0]['subtitle'] }}</span>
+                                                <span>
+                                                    <strong>Duration:</strong>
+                                                    {{ date('d M Y', strtotime($recent_program[0]['effective_program_plan'][0]['sdate'])) }} to 
+                                                    {{ date('d M Y', strtotime($recent_program[0]['effective_program_plan'][0]['edate'])) }}
+                                                </span>
+                                                <span>
+                                                    <strong>Price:</strong>
+                                                    {{ showPrice($recent_program[0]['effective_program_plan'][0]['amount']) }}
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
+                            @endif
+                            
+                            @if (isset($recent_program[1]))
                             <div class="accordion-item mb-3">
                                 <h2 class="accordion-header">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                        On-Demand
+                                        {{ $recent_program[1]['programtitle'] }}
                                     </button>
                                 </h2>
                                 <div id="collapseTwo" class="accordion-collapse collapse"
@@ -1322,26 +1326,28 @@
                                     <div class="accordion-body pt-0 d-flex align-items-center" style="gap: 20px">
                                         <img src="https://cdn-icons-png.flaticon.com/128/2936/2936735.png" width="140" alt="">
                                         <div class="d-flex flex-column" style="gap: 10px;">
-                                            <span>This program will be offered from 8/9/25 to 8/12/25.</span>
+                                            <span>{{ $recent_program[1]['subtitle'] }}</span>
                                             <span>
                                                 <strong>Duration:</strong>
-                                                2025-12-09 to 2026-02-09
+                                                    {{ date('d M Y', strtotime($recent_program[1]['effective_program_plan'][0]['sdate'])) }} to 
+                                                    {{ date('d M Y', strtotime($recent_program[1]['effective_program_plan'][0]['edate'])) }}
                                             </span>
                                             <span>
                                                 <strong>Price:</strong>
-                                                $ 2,250.00
+                                                {{ showPrice($recent_program[1]['effective_program_plan'][0]['amount']) }}
                                             </span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
+                            @endif
+                            @if (isset($recent_program[2]))
                             <div class="accordion-item mb-3">
                                 <h2 class="accordion-header">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#collapseThree" aria-expanded="false"
                                         aria-controls="collapseThree">
-                                        Tuition & financing ?
+                                        {{ $recent_program[2]['programtitle'] }}
                                     </button>
                                 </h2>
                                 <div id="collapseThree" class="accordion-collapse collapse"
@@ -1349,26 +1355,28 @@
                                     <div class="accordion-body pt-0 d-flex align-items-center" style="gap: 20px">
                                         <img src="https://cdn-icons-png.flaticon.com/128/2936/2936735.png" width="140" alt="">
                                         <div class="d-flex flex-column" style="gap: 10px;">
-                                            <span>This program will be offered from 8/9/25 to 8/12/25.</span>
+                                            <span>{{ $recent_program[2]['subtitle'] }}</span>
                                             <span>
                                                 <strong>Duration:</strong>
-                                                2025-12-09 to 2026-02-09
+                                                    {{ date('d M Y', strtotime($recent_program[2]['effective_program_plan'][0]['sdate'])) }} to 
+                                                    {{ date('d M Y', strtotime($recent_program[2]['effective_program_plan'][0]['edate'])) }}
                                             </span>
                                             <span>
                                                 <strong>Price:</strong>
-                                                $ 2,250.00
+                                                {{ showPrice($recent_program[2]['effective_program_plan'][0]['amount']) }}
                                             </span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
+                            @endif
+                            @if (isset($recent_program[3]))
                             <div class="accordion-item mb-3">
                                 <h2 class="accordion-header">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#collapseFour" aria-expanded="false"
                                         aria-controls="collapseFour">
-                                        What’s the schedule ?
+                                        {{ $recent_program[3]['programtitle'] }}
                                     </button>
                                 </h2>
                                 <div id="collapseFour" class="accordion-collapse collapse"
@@ -1376,19 +1384,21 @@
                                     <div class="accordion-body pt-0 d-flex align-items-center" style="gap: 20px">
                                         <img src="https://cdn-icons-png.flaticon.com/128/2936/2936735.png" width="140" alt="">
                                         <div class="d-flex flex-column" style="gap: 10px;">
-                                            <span>This program will be offered from 8/9/25 to 8/12/25.</span>
+                                            <span>{{ $recent_program[3]['subtitle'] }}</span>
                                             <span>
                                                 <strong>Duration:</strong>
-                                                2025-12-09 to 2026-02-09
+                                                    {{ date('d M Y', strtotime($recent_program[3]['effective_program_plan'][0]['sdate'])) }} to 
+                                                    {{ date('d M Y', strtotime($recent_program[3]['effective_program_plan'][0]['edate'])) }}
                                             </span>
                                             <span>
                                                 <strong>Price:</strong>
-                                                $ 2,250.00
+                                                {{ showPrice($recent_program[3]['effective_program_plan'][0]['amount']) }}
                                             </span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -1453,7 +1463,8 @@
             </div>
 
             <div class="testimonial-top mt-4">
-                @for ($i = 0; $i < 20; $i++)
+            @if(@$testimonials != "")
+                @foreach (@$testimonials as $item)
                     <div class="card">
                         <div class="card-body px-5 pt-5 pb-4 d-flex align-items-end">
                             <div class="d-flex flex-column">
@@ -1465,9 +1476,7 @@
 
                                 <div>
                                     <small class="inter">
-                                        Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.
-                                        Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt
-                                        nostrud amet.
+                                    {{@$item->body}}
                                     </small>
                                     <!-- Closing Quote -->
                                     <svg class="mt-3" style="rotate:180deg" width="25" height="16"
@@ -1477,19 +1486,21 @@
                                 </div>
 
                                 <div class="mt-3">
-                                    <h6 class="fw-bold inter">Cornelius B</h6>
-                                    <small class="text-muted inter">Professional Nurse</small>
+                                    <h6 class="fw-bold inter">{{@$item->author}}</h6>
+                                    <small class="text-muted inter">{{@$item->profession}}</small>
                                 </div>
                             </div>
 
-                            <img src="{{ asset('public/assets/review-img.png') }}" width="200" alt="Reviewer">
+                            <img src="{{getTestimonialImage(@$item->image)}}" width="200" alt="Reviewer">
                         </div>
                     </div>
-                @endfor
+                    @endforeach
+                @endif
             </div>
 
             <div class="testimonial-bottom mt-4">
-                @for ($i = 0; $i < 20; $i++)
+            @if(@$testimonials2 != "")
+                @foreach (@$testimonials2 as $item)
                     <div class="card">
                         <div class="card-body px-5 pt-5 pb-4 d-flex align-items-end">
                             <div class="d-flex flex-column">
@@ -1501,9 +1512,7 @@
 
                                 <div>
                                     <small class="inter">
-                                        Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.
-                                        Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt
-                                        nostrud amet.
+                                    {{@$item->body}}
                                     </small>
                                     <!-- Closing Quote -->
                                     <svg class="mt-3" style="rotate:180deg" width="25" height="16"
@@ -1513,15 +1522,16 @@
                                 </div>
 
                                 <div class="mt-3">
-                                    <h6 class="fw-bold inter">Cornelius B</h6>
-                                    <small class="text-muted inter">Professional Nurse</small>
+                                    <h6 class="fw-bold inter">{{@$item->author}}</h6>
+                                    <small class="text-muted inter">{{@$item->profession}}</small>
                                 </div>
                             </div>
 
-                            <img src="{{ asset('public/assets/review-img.png') }}" width="200" alt="Reviewer">
+                            <img src="{{getTestimonialImage(@$item->image)}}" width="200" alt="Reviewer">
                         </div>
                     </div>
-                @endfor
+                @endforeach
+            @endif
             </div>
         </section>
 
