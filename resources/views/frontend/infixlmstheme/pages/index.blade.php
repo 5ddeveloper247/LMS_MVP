@@ -7,6 +7,7 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('public/assets/slick/slick-theme.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('public/assets/home.css') }}">
 <!-- <script src="https://kit.fontawesome.com/b98cad50b5.js" crossorigin="anonymous"></script> -->
+<script src="https://kit.fontawesome.com/b98cad50b5.js" crossorigin="anonymous"></script>
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css'>
 <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css" />
@@ -45,13 +46,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
 
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-  integrity="sha512-K2m8j9G5CrXJcS7MZyDZp3c9ZFehXbZ2M4m8KpA4y6XrbY6x9xL7DkIbYp6EZxjEJSt2eyM4f53S4z2f6i2PAA=="
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"
-/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    integrity="sha512-K2m8j9G5CrXJcS7MZyDZp3c9ZFehXbZ2M4m8KpA4y6XrbY6x9xL7DkIbYp6EZxjEJSt2eyM4f53S4z2f6i2PAA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <style>
     .heading-icon {
@@ -91,6 +88,11 @@
         .anim-btn {
             font-size: 11px !important;
         }
+    }
+
+    .theme-btn {
+        color: #fff;
+        background-color: #1E3A5F;
     }
 
 
@@ -193,6 +195,24 @@
             to {
                 transform: translateX(0%);
             }
+        }
+    }
+
+    .serve-card {
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        padding: 15px 25px;
+        height: 100%;
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        align-items: center
+
+        h3 {
+            font-size: clamp(14px, 2.5vw, 18px) !important;
+            font-weight: 600 !important;
+            font-family: "Inter";
+            color: #000;
         }
     }
 
@@ -428,7 +448,8 @@
             font-size: 24px !important
         }
 
-        h3, .benefit-card h3 {
+        h3,
+        .benefit-card h3 {
             font-size: 18px !important
         }
 
@@ -445,13 +466,14 @@
         }
 
         .success-grid {
-            display: grid
-    ;
+            display: grid;
             gap: 30px;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         }
 
-        button, .theme_btn, .anim-btn button {
+        button,
+        .theme_btn,
+        .anim-btn button {
             font-size: 12px !important;
             padding: 8px 10px !important;
         }
@@ -472,35 +494,91 @@
             font-size: 12px !important
         }
     }
+
+    .accordion-button {
+        background-color: transparent !important;
+        color: #000 !important;
+        box-shadow: none !important;
+        border: none !important;
+        text-transform: uppercase !important;
+        font-size: 20px !important;
+        padding: 15px 25px
+    }
+
+    .accordion-button:focus {
+        box-shadow: none !important;
+    }
+
+    .accordion-item {
+        border-radius: 15px !important;
+        border: none !important;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    }
+
+    .accordion-button:not(.collapsed)::after {
+        color: #fdfbfb;
+        transform: rotate(0deg) !important;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    }
+
+    .accordion-button {
+        width: 100%;
+        border: none;
+        padding: 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-weight: bold;
+    }
+
+    .accordion-button:focus {
+        box-shadow: none;
+        border-color: transparent;
+    }
+
+    .accordion-button::after {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    }
+
+    .accordion-content {
+        display: none;
+        padding: 10px;
+    }
+
+    .accordion-body {
+        padding: 10px 25px
+    }
 </style>
 
 
 @section('mainContent')
     {{-- MainBanner --}}
     <section class="sec-1 show-animate position-relative"
-        style="background: linear-gradient(180deg, #2CA6A4, transparent); height: fit-content;">
+        style="background: linear-gradient(180deg, #2CA6A4, transparent); height: 90vh;">
         <img src="https://html.rrdevs.net/edcare/assets/img/shapes/hero-shape-11.png" width="300"
             style="position: absolute; left: 0; top: 0;" alt="">
 
-        <div class="container-fluid px-0 g-0 h-100 mb-4">
+        <div class="container-fluid px-0 g-0 h-100 mb-0">
             <div
-                class="row bg_text position-relative justify-content-between align-items-center px-3 px-sm-5 h-100 pt-5 pt-md-0 mb-4">
+                class="row bg_text position-relative justify-content-between align-items-center px-3 px-sm-5 h-100 pt-5 pt-md-0 mb-0">
 
                 <div class="col-md-6 mb-4 mb-md-0">
                     <h6 class="d-flex align-items-center gap-1 bg-white p-2 mb-4"
                         style="border-radius: 50px; width: fit-content; padding-right: 22px !important;">
                         <span class="heading-icon">
                             <i class="fa-sharp fa-solid fa-bolt"></i>
-                        </span>Welcome to the Merkaii Xcellence Prepp
+                        </span>Supporting Nursing Students at Every Stage Since [Year Founded]
                     </h6>
 
                     <h1 class="mb-3 navy-text">
-                        {{@$homeContent->slider_title}}
+                        {{ @$homeContent->slider_title }}
                         <!-- Pass The NCLEX® On Your First Attempt -->
                     </h1>
 
                     <p class="mb-4 hero-section-p">
-                    {{@$homeContent->slider_text}}
+                        {{ @$homeContent->slider_text }}
                         <!-- Personalized Tutoring, Flexible Live Courses, and Expert Nurse Educators. -->
                     </p>
 
@@ -512,7 +590,7 @@
                         <form action="{{ route('search') }}" class="mb-4 mt-3" id="search_form">
                             <div style="max-width: 530px !important;" class="d-none d-sm-flex position-relative">
                                 <input type="text" style="border-radius: 50px; height: 50px;"
-                                    class="form-control search_courses" name="query" placeholder="Search"
+                                    class="form-control search_courses" name="query" placeholder="Find Your Program & Start Today"
                                     onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'">
 
                                 <div class="input-group-prepend">
@@ -530,14 +608,27 @@
 
                     <div class="d-flex align-items-center gap-2 anim-btn border-0">
                         <button style="background-color: var(--system_primery_color); border-radius: 50px;"
-                            class="py-2 px-4 text-white">Start Your Free NCLEX® Prep Trial</button>
-                        <button style="background-color: var(--system_primery_color); border-radius: 50px;"
-                            class="py-2 px-4 text-white">Learn How It Works</button>
+                            class="py-2 px-4 text-white">Download Your Free NCLEX Success Starter Kit</button>
                     </div>
+
+                    <ul class="mt-4" style="list-style: disc">
+                        <li class="mb-2 " style="font-weight: 600">
+                            <i>Passed on my first try thanks to MXP!" — A.R., RN</i>
+                        </li>
+
+                        <li class="mb-2 " style="font-weight: 600">
+                            <i>Failed 3 times. MXP helped me finally pass." — K.L., RN</i>
+                        </li>
+
+                        <li class="" style="font-weight: 600">
+                            <i>I was on the verge of failing out. MXP saved my nursing career." — T.M., Student</i>
+                        </li>
+                    </ul>
                 </div>
 
                 <div class="col-md-6 home_bg overflow-hidden">
-                    <div class="d-flex align-items-center justify-content-center position-relative h-100" style="z-index: 99;">
+                    <div class="d-flex align-items-center justify-content-center position-relative h-100"
+                        style="z-index: 99;">
                         <!-- <img class="hero_img" src="{{ asset($homeContent->slider_banner) }}" width="80%" alt=""> -->
                         <!-- <img src="{{ asset('public/assets/hero-banner.png') }}" width="100%" alt=""> -->
                         <img src="{{ asset($homeContent->slider_banner) }}" width="100%" alt="">
@@ -557,7 +648,8 @@
             </div>
 
             <img style="position: absolute; right: 0; bottom: 0;" class="d-none d-lg-block"
-                src="{{ asset('public/assets/r-lines.png') }}" width="350px" alt="Live Classes" class="benefit-icon-img">
+                src="{{ asset('public/assets/r-lines.png') }}" width="350px" alt="Live Classes"
+                class="benefit-icon-img">
 
             {{-- <x-featured-program-plan /> --}}
         </div>
@@ -565,7 +657,7 @@
 
     {{-- Benefits --}}
     <section class="benefits">
-        <div class="container-fluid py-5 px-3 px-sm-5">
+        <div class="container-fluid pb-5 px-3 px-sm-5">
             <div class="benefit-grid row px-3 py-5">
                 <div class="col-lg-3 col-6" data-aos="fade-up">
                     <div
@@ -614,8 +706,601 @@
         </div>
     </section>
 
+    <section class="serve">
+        <div class="container-fluid pt-5 px-3 px-sm-5">
+            <div class="text-center">
+                <h2>WHO WE SERVE</h2>
+                <p>Wherever You Are, We Meet You There.</p>
+            </div>
+
+            <div class="row px-3 py-5">
+                <div class="col-lg-3 col-6" data-aos="fade-up">
+                    <div class="serve-card">
+                        <div class="benefit-icon mb-3">
+                            <img src="https://cdn-icons-png.flaticon.com/128/1205/1205526.png" width="60"
+                                alt="Live Classes" class="benefit-icon-img">
+                        </div>
+                        <h3 style="font-size: clamp(16px, 2vw, 20px)">First-Time Test-Takers</h3>
+                        <span>
+                            You've worked hard to get here. Now you want to pass
+                            the NCLEX on your first attempt—with confidence, not luck
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-6" data-aos="fade-up">
+                    <div class="serve-card">
+                        <div class="benefit-icon mb-3">
+                            <img src="https://cdn-icons-png.flaticon.com/128/1594/1594900.png" width="60"
+                                alt="Live Classes" class="benefit-icon-img">
+                        </div>
+                        <h3 style="font-size: clamp(16px, 2vw, 20px)">Repeat Test-Takers</h3>
+                        <span>You've faced setbacks, but you haven't given up. You need a
+                            new approach, not just more content</span>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-6" data-aos="fade-up">
+                    <div class="serve-card">
+                        <div class="benefit-icon mb-3">
+                            <img src="https://cdn-icons-png.flaticon.com/128/10211/10211886.png" width="60"
+                                alt="Live Classes" class="benefit-icon-img">
+                        </div>
+                        <h3 style="font-size: clamp(16px, 2vw, 20px)">Students in Remediation</h3>
+                        <span>
+                            Your program requires you to remediate before
+                            retesting. We provide the structure and documentation you need to get back on
+                            track
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-6" data-aos="fade-up">
+                    <div class="serve-card">
+                        <div class="benefit-icon mb-3">
+                            <img src="https://cdn-icons-png.flaticon.com/128/3461/3461560.png" width="60"
+                                alt="Live Classes" class="benefit-icon-img">
+                        </div>
+                        <h3 style="font-size: clamp(16px, 2vw, 20px)">Nursing Students Struggling in School</h3>
+                        <span>
+                            You're overwhelmed by coursework,
+                            failing exams, or on academic probation. You need support now—before it's too
+                            late
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="background-color: #e8e8e8">
+        <div class="container-fluid py-5 px-3 px-sm-5">
+
+            <div class="text-center w-100">
+                <h2 data-aos="fade-up">The Problem</h2>
+                <p data-aos="fade-up">The Nursing Journey Is Hard. You Shouldn't Have to Navigate It Alone.</p>
+            </div>
+
+            <div class="row px-3 py-5">
+                <div class="col-lg-5" data-aos="fade-right">
+                    <img src="https://images.unsplash.com/photo-1551601651-2a8555f1a136?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fG1lZGljYWx8ZW58MHx8MHx8fDA%3D"
+                        style="border-radius: 10px;object-fit: cover" height="100%" width="100%" alt="">
+                </div>
+
+                <div class="col-lg-7" data-aos="fade-left">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px">
+                        <div style="background-color: rgba(11, 180, 11, 0.071); border-radius: 20px" class="p-3">
+                            <h6 class="text-dark" style="font-weight: 800">If you're a first-time test-taker, you might be
+                                thinking:</h6>
+                            <ul style="list-style: disc" class="mb-3">
+                                <li>
+                                    <i>"There's so much content—where do I even start?"</i>
+                                </li>
+                                <li>
+                                    <i>"What if I'm not as prepared as I think I am?"</i>
+                                </li>
+                                <li>
+                                    <i>"I don't want to become a statistic. I want to pass the first time."</i>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div style="background-color: rgba(11, 180, 11, 0.071); border-radius: 20px" class="p-3">
+                            <h6 class="text-dark" style="font-weight: 800">If you've failed the NCLEX before, you know the
+                                feeling:</h6>
+                            <ul style="list-style: disc" class="mb-3">
+                                <li>
+                                    <i>"What's wrong with me?"</i>
+                                </li>
+                                <li>
+                                    <i>"Why can't I pass when everyone else does?"</i>
+                                </li>
+                                <li>
+                                    <i>"I'm running out of time, money, and hope."</i>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div style="background-color: rgba(11, 180, 11, 0.071); border-radius: 20px" class="p-3">
+                            <h6 class="text-dark" style="font-weight: 800">If you're in remediation, you're facing
+                                pressure:</h6>
+                            <ul style="list-style: disc" class="mb-3">
+                                <li>
+                                    <i>"My school says I have to complete a program before I can retest."</i>
+                                </li>
+                                <li>
+                                    <i>"I need structured proof that I'm ready."</i>
+                                </li>
+                                <li>
+                                    <i>"I feel like I'm starting over from scratch."</i>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div style="background-color: rgba(11, 180, 11, 0.071); border-radius: 20px" class="p-3">
+                            <h6 class="text-dark" style="font-weight: 800">If you're struggling in nursing school, you're
+                                overwhelmed:</h6>
+                            <ul style="list-style: disc">
+                                <li>
+                                    <i>"I'm failing exams and don't know how to turn it around."</i>
+                                </li>
+                                <li>
+                                    <i>"I might get kicked out of my program."</i>
+                                </li>
+                                <li>
+                                    <i>"I understand the material, but I can't pass the tests."</i>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="p-3 mt-4" style="background-color: rgba(255, 0, 0, 0.07); border-radius: 20px">
+                        <h6 class="text-dark" style="font-weight: 800">Here's What's Really Going On:</h6>
+                        <span>The problem isn't you. It's that most nursing programs and prep courses offer:</span>
+                        <ul style="list-style: disc">
+                            <li>
+                                <i>One-size-fits-all content with no personalization</i>
+                            </li>
+                            <li>
+                                <i>No real support for test anxiety or confidence issues</i>
+                            </li>
+                            <li>
+                                <i>Outdated teaching methods that don't match the current NCLEX</i>
+                            </li>
+                            <li>
+                                <i>Zero accountability or follow-through</i>
+                            </li>
+                            <li>
+                                <i>No help for students struggling before they even get to the NCLEX</i>
+                            </li>
+                        </ul>
+                        <span>You don't need more lectures. You need a system that meets you where you are.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="background:#f5f7fa;">
+        <div class="container-fluid px-3 px-md-5 py-5 text-center">
+            <h2 style="font-weight:700; margin-bottom:10px;" data-aos="fade-up">THE MXP SOLUTION FRAMEWORK</h2>
+            <p style="color:#4A4A4A; margin-bottom:40px;" data-aos="fade-up">The MXP Method: Personalized Paths to Nursing
+                Success</p>
+
+            <div class="row">
+
+                <!-- CARD 1 -->
+                <div class="col-md-4 mb-4" data-aos="fade-up">
+                    <div class="p-4 h-100"
+                        style="background:white; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.06);">
+                        <div>
+                            <img src="https://cdn-icons-png.flaticon.com/128/12797/12797177.png" width="80"
+                                alt="">
+                            <h5 style="font-weight:700;">Evidence-Based, NCLEX-Aligned Curriculum</h5>
+                        </div>
+                        <ul style="text-align:left; margin-top:15px;" class="text-center">
+                            <li>Built on the current NCSBN Test Plan</li>
+                            <li>Integrates Saunders Comprehensive Review</li>
+                            <li>NGN-style clinical judgment training from day one</li>
+                            <li>Nursing school course support</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- CARD 2 -->
+                <div class="col-md-4 mb-4" data-aos="fade-up">
+                    <div class="p-4 h-100"
+                        style="background:white; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.06);">
+                        <div>
+                            <img src="https://cdn-icons-png.flaticon.com/128/3466/3466190.png" width="80"
+                                alt="">
+                            <h5 style="font-weight:700;">Personalized Study Roadmap</h5>
+                        </div>
+                        <ul style="text-align:left; margin-top:15px;" class="text-center">
+                            <li>Diagnostic assessment finds your gaps</li>
+                            <li>Custom weekly pacing</li>
+                            <li>SMARTCARE & PRIORITY-X frameworks</li>
+                            <li>Remediation-compliant documentation</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- CARD 3 -->
+                <div class="col-md-4 mb-4" data-aos="fade-up">
+                    <div class="p-4 h-100"
+                        style="background:white; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.06);">
+                        <div>
+                            <img src="https://cdn-icons-png.flaticon.com/128/11511/11511383.png" width="80"
+                                alt="">
+                            <h5 style="font-weight:700;">Expert Instructor Support</h5>
+                        </div>
+                        <ul style="text-align:left; margin-top:15px;" class="text-center">
+                            <li>Live weekly classes</li>
+                            <li>Office hours for real-time help</li>
+                            <li>Nursing school tutoring</li>
+                            <li>Confidence & mindset coaching</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- CARD 4 -->
+                <div class="col-md-6" data-aos="fade-up">
+                    <div class="p-4 h-100"
+                        style="background:white; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.06);">
+                        <div>
+                            <img src="https://cdn-icons-png.flaticon.com/128/780/780552.png" width="80"
+                                alt="">
+                            <h5 style="font-weight:700;">High-Yield Tools</h5>
+                        </div>
+                        <ul style="text-align:left; margin-top:15px;" class="text-center">
+                            <li>NCLEX Daily Planner</li>
+                            <li>Medication Suffix Guide</li>
+                            <li>SAFE CARE Case Studies</li>
+                            <li>Practice Qbanks with rationales</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- CARD 5 -->
+                <div class="col-md-6" data-aos="fade-up">
+                    <div class="p-4 h-100"
+                        style="background:white; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.06);">
+                        <div>
+                            <img src="https://cdn-icons-png.flaticon.com/128/17811/17811354.png" width="80"
+                                alt="">
+                            <h5 style="font-weight:700;">Community & Accountability</h5>
+                        </div>
+                        <ul style="text-align:left; margin-top:15px;" class="text-center">
+                            <li>Small study cohorts</li>
+                            <li>Weekly check-ins</li>
+                            <li>A team that cares about your success</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <button data-aos="fade-up" class="py-2 px-4 rounded-2 theme-btn text-white mt-4">
+                <a href="" class="text-white">Explore Programs
+                    for Your Situation</a>
+            </button>
+
+        </div>
+    </section>
+
+    {{-- Courses-Section --}}
+    <section class="course-section" style="background-color: #F7F7F7">
+        <div class="container-fluid py-5 px-3 px-sm-5">
+
+            <div class="text-center">
+                <h2 data-aos="fade-up">FEATURED MXP PROGRAMS</h2>
+                <p class="opacity-75 inter" data-aos="fade-up">Choose the Path That Fits Your Journey</p>
+            </div>
+
+            <ul class="nav nav-pills mb-3 d-flex align-items-center justify-content-center mt-3 mb-4" id="pills-tab"
+                role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="pills-cards-tab" data-bs-toggle="pill"
+                        data-bs-target="#pills-cards" type="button" role="tab" aria-controls="pills-cards"
+                        aria-selected="true">Courses</button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-table-comparison-tab" data-bs-toggle="pill"
+                        data-bs-target="#pills-table-comparison" type="button" role="tab"
+                        aria-controls="pills-table-comparison" aria-selected="false">Courses Comparison</button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-cards" role="tabpanel"
+                    aria-labelledby="pills-cards-tab" tabindex="0">
+                    <div class="row">
+                        @php
+                            $recent_courses = $latest_courses;
+                            //$first_course = $recent_courses->first();
+                            //if ($first_course) {
+                            //    $recent_courses = $recent_courses->except($first_course->id);
+                            //}
+                            //$i = 0;
+                        @endphp
+                        @foreach ($recent_courses as $keycourses => $thiscourse)
+                            @if (array_key_exists($keycourses, $recent_courses->toArray()))
+                                <!-- <div class="col-md-6 col-lg-4 mb-3">
+                                                                                            <div class="card border-0 rounded-3 w-100" data-aos="fade-up">
+
+                                                                                                <div class="card-body rubik">
+                                                                                                    
+                                                                                                    <div class="position-relative">
+                                                                                                        <img src="{{ getCourseImage($thiscourse->image) }}" class="card-img-top"
+                                                                                                            alt="Course Instructors">
+                                                                                                        <span style="position: absolute; top: 10px; right: 10px; border-radius: 6px;"
+                                                                                                            class="py-2 px-3 d-flex align-items-center gap-1 bg-white text-dark m-2">
+                                                                                                            <svg width="16" height="17" viewBox="0 0 16 17" fill="none"
+                                                                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                                                                <g clip-path="url(#clip0_2032_122)">
+                                                                                                                    <circle cx="8" cy="8.5" r="7.25" stroke="#413C69"
+                                                                                                                        stroke-width="1.5" />
+                                                                                                                    <path d="M8 4.94434V9.06787L10.6667 10.2777" stroke="#413C69"
+                                                                                                                        stroke-width="1.5" stroke-miterlimit="10"
+                                                                                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                                                                                </g>
+                                                                                                                <defs>
+                                                                                                                    <clipPath id="clip0_2032_122">
+                                                                                                                        <rect width="16" height="16" fill="white"
+                                                                                                                            transform="translate(0 0.5)" />
+                                                                                                                    </clipPath>
+                                                                                                                </defs>
+                                                                                                            </svg>
+                                                                                                            8 weeks
+                                                                                                        </span>
+                                                                                                    </div>
+
+                                                                                                    
+                                                                                                    <div class="d-flex justify-content-between my-2">
+                                                                                                        <span class="text-success fw-bold">Course 01</span>
+                                                                                                        <span style="color: #CA8804">coaching</span>
+                                                                                                    </div>
+
+
+                                                                                                    <h5 style="font-weight: 600"
+                                                                                                        class="card-title rubik fw-bold text-dark d-flex align-items-center justify-content-between">
+                                                                                                        Live Prep Course
+                                                                                                        <svg width="24" height="28" viewBox="0 0 24 28" fill="none"
+                                                                                                            xmlns="http://www.w3.org/2000/svg">
+                                                                                                            <path d="M7 21L17 11M17 11H7M17 11V21" stroke="#101828" stroke-width="2"
+                                                                                                                stroke-linecap="round" stroke-linejoin="round" />
+                                                                                                        </svg>
+                                                                                                    </h5>
+                                                                                                    <p class="card-text text-muted small mb-3">
+                                                                                                        Structured live sessions led by expert instructors
+                                                                                                    </p>
+
+
+                                                                                                    <ul class="list-unstyled small mb-4 d-flex flex-wrap justify-content-between">
+                                                                                                        <li class="mb-1 d-flex align-items-center gap-1">
+                                                                                                            <img src="{{ asset('public/assets/point.png') }}" width="25"
+                                                                                                                alt="Course Instructors">
+                                                                                                            Diagnostic assessment
+                                                                                                        </li>
+                                                                                                        <li class="mb-1 d-flex align-items-center gap-1">
+                                                                                                            <img src="{{ asset('public/assets/point.png') }}" width="25"
+                                                                                                                alt="Course Instructors">
+                                                                                                            Diagnostic assessment
+                                                                                                        </li>
+                                                                                                        <li class="mb-1 d-flex align-items-center gap-1">
+                                                                                                            <img src="{{ asset('public/assets/point.png') }}" width="25"
+                                                                                                                alt="Course Instructors">
+                                                                                                            Diagnostic assessment
+                                                                                                        </li>
+                                                                                                    </ul>
+
+
+                                                                                                    <div class="d-flex justify-content-between align-items-center">
+                                                                                                        <a href="{{ route('instructors') }}">
+                                                                                                            <button
+                                                                                                                style="background-color: var(--system_primery_color); border: none; color: #fff; border-radius: 50px;"
+                                                                                                                class="py-2 px-4 text-white mt-3">Enroll Now</button>
+                                                                                                        </a>
+                                                                                                        <h2 style="color: var(--system_secendory_color); font-weight: 700 !important; font-family: 'Inter' !important;"
+                                                                                                            class="mb-0">$499</h2>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div> -->
+
+                                <div class="col-md-6 col-lg-4 mb-3">
+                                    <div class="card border-0 rounded-3 w-100" data-aos="fade-up">
+                                        <div class="card-body rubik">
+                                            <!-- Image with badge -->
+                                            <div class="position-relative">
+                                                <a
+                                                    href="{{ !empty($thiscourse->parent_id)
+                                                        ? courseDetailsUrl(@$thiscourse->parent->id, @$thiscourse->type, @$thiscourse->parent->slug) .
+                                                            '?courseType=' .
+                                                            $thiscourse->type
+                                                        : courseDetailsUrl(@$thiscourse->id, @$thiscourse->type, @$thiscourse->slug) }}">
+                                                    <img src="{{ getCourseImage($thiscourse->image) }}"
+                                                        class="card-img-top" style="" alt="{{ $thiscourse->title }}">
+                                                </a>
+
+                                                <!-- Eye Icon Trigger -->
+                                                <span class="position-absolute"
+                                                    style="top: 10px; left: 10px; background:#fff; padding:8px; border-radius:50%; box-shadow:0 2px 8px rgba(0,0,0,0.15); cursor:pointer;"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#quickView_{{ $thiscourse->id }}">
+                                                    <img src="https://cdn-icons-png.flaticon.com/128/11502/11502607.png"
+                                                        width="30" alt="">
+                                                </span>
+
+                                                <span
+                                                    style="position: absolute; top: 10px; right: 10px; border-radius: 6px;"
+                                                    class="py-2 px-3 d-flex align-items-center gap-1 bg-white text-dark m-2">
+                                                    <svg width="16" height="17" viewBox="0 0 16 17"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <g clip-path="url(#clip0_2032_122)">
+                                                            <circle cx="8" cy="8.5" r="7.25"
+                                                                stroke="#413C69" stroke-width="1.5" />
+                                                            <path d="M8 4.94434V9.06787L10.6667 10.2777" stroke="#413C69"
+                                                                stroke-width="1.5" stroke-miterlimit="10"
+                                                                stroke-linecap="round" stroke-linejoin="round" />
+                                                        </g>
+                                                        <defs>
+                                                            <clipPath id="clip0_2032_122">
+                                                                <rect width="16" height="16" fill="white"
+                                                                    transform="translate(0 0.5)" />
+                                                            </clipPath>
+                                                        </defs>
+                                                    </svg>
+                                                    {{ $thiscourse->duration ?? 'N/A' }} weeks
+                                                </span>
+                                            </div>
+
+                                            <!-- Top meta -->
+                                            <div class="d-flex justify-content-between my-2">
+                                                <span class="text-success fw-bold">
+                                                    @if ($thiscourse->type == 1)
+                                                        {{ __('Course') }}
+                                                    @elseif($thiscourse->type == 2)
+                                                        {{ __('Big Quiz') }}
+                                                    @elseif($thiscourse->type == 3)
+                                                        {{ __('Individual Course') }}
+                                                    @elseif($thiscourse->type == 4)
+                                                        {{ __('Full Course') }}
+                                                    @elseif($thiscourse->type == 5)
+                                                        {{ __('Prep-Course (On-Demand)') }}
+                                                    @elseif($thiscourse->type == 6)
+                                                        {{ __('Prep-Course (Live)') }}
+                                                    @elseif($thiscourse->type == 8)
+                                                        {{ __('Repeat Course') }}
+                                                    @elseif($thiscourse->type == 9)
+                                                        {{ __('Tutor Course') }}
+                                                    @endif
+                                                </span>
+                                                <span
+                                                    style="color: #CA8804">{{ $thiscourse->category->name ?? 'N/A' }}</span>
+                                            </div>
+
+                                            <!-- Title & Subtitle -->
+                                            <h5 style="font-weight: 600"
+                                                class="card-title rubik fw-bold text-dark d-flex align-items-center justify-content-between">
+                                                {{ !empty($thiscourse->parent_id) ? $thiscourse->parent->title : $thiscourse->title }}
+                                                <svg width="24" height="28" viewBox="0 0 24 28" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M7 21L17 11M17 11H7M17 11V21" stroke="#101828"
+                                                        stroke-width="2" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </svg>
+                                            </h5>
+
+                                            <p class="card-text text-muted small mb-3">
+                                                @php
+                                                    $requirements = str_replace(
+                                                        '&nbsp;',
+                                                        ' ',
+                                                        htmlspecialchars_decode(
+                                                            strip_tags(
+                                                                !empty($thiscourse->parent_id)
+                                                                    ? $thiscourse->parent->requirements
+                                                                    : $thiscourse->requirements,
+                                                            ),
+                                                        ),
+                                                    );
+                                                @endphp
+                                                @if (Str::length($requirements) > 120)
+                                                    {{ Str::limit($requirements, 120, '...') }}
+                                                @else
+                                                    {{ $requirements }}
+                                                @endif
+                                            </p>
+
+                                            <!-- Features (example static items, you can make dynamic if needed) -->
+                                            <ul class="list-unstyled small mb-4 d-flex flex-wrap justify-content-between">
+                                                @foreach ($thiscourse->features ?? ['Diagnostic assessment', 'Expert Instructors', 'Interactive Sessions'] as $feature)
+                                                    <li class="mb-1 d-flex align-items-center gap-1">
+                                                        <img src="{{ asset('public/assets/point.png') }}" width="25"
+                                                            alt="Feature">
+                                                        {{ $feature }}
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+
+                                            <!-- Footer -->
+                                            @php
+                                                if (isset($thiscourse->currentCoursePlan[0])) {
+                                                    $course_price = $thiscourse->currentCoursePlan[0]->amount;
+                                                } else {
+                                                    $course_price = $thiscourse->price + $thiscourse->tax;
+                                                }
+                                            @endphp
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <a
+                                                    href="{{ !empty($thiscourse->parent_id)
+                                                        ? courseDetailsUrl(@$thiscourse->parent->id, @$thiscourse->type, @$thiscourse->parent->slug) .
+                                                            '?courseType=' .
+                                                            $thiscourse->type
+                                                        : courseDetailsUrl(@$thiscourse->id, @$thiscourse->type, @$thiscourse->slug) }}">
+                                                    <button
+                                                        style="background-color: var(--system_primery_color); border: none; color: #fff; border-radius: 50px;"
+                                                        class="py-2 px-4 text-white mt-3">Enroll Now</button>
+                                                </a>
+                                                <h2 style="color: var(--system_secendory_color); font-weight: 700 !important; font-family: 'Inter' !important;"
+                                                    class="mb-0">
+                                                    ${{ number_format($course_price, 0) }}
+                                                </h2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        @endforeach
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="pills-table-comparison" role="tabpanel"
+                    aria-labelledby="pills-table-comparison-tab" tabindex="0">
+                    <div class="table-responsive bg-white p-2 p-md-4" style="border-radius: 8px">
+                        <table class="table comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Duration</th>
+                                    <th>Price</th>
+                                    <th>Detail</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (isset($comparisons) && count($comparisons) > 0)
+                                    @foreach ($comparisons as $index => $comparison)
+                                        <tr
+                                            style="background-color: {{ $comparison['type'] == 'course' ? '#f5f5f5' : '#ffffff' }};">
+                                            <td data-label="Name">{{ $comparison['title'] }}</td>
+                                            <td data-label="Type">{{ $comparison['type_label'] }}</td>
+                                            <td data-label="Duration">{{ $comparison['duration'] }}</td>
+                                            <td data-label="Price">{{ $comparison['price'] }}</td>
+                                            <td data-label="Detail">
+                                                <a href="{{ $comparison['detail_url'] }}" class="btn btn-sm btn-primary">
+                                                    {{ __('Detail') }}
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td colspan="5" class="text-center">No comparisons available. Please add
+                                            comparisons from the admin panel.</td>
+                                    </tr>
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     {{-- Testimonials Section --}}
-    <section class="testimonial-section">
+    <section class="testimonial-section py-5">
         <div class="text-center">
             <h2 data-aos="fade-up">Trusted by Thousands of Nurses</h2>
             <p class="opacity-75 inter" data-aos="fade-up">
@@ -624,75 +1309,315 @@
         </div>
 
         <div class="testimonial-top mt-4">
-        @if(@$testimonials != "")
-            @foreach (@$testimonials as $item)
-                <div class="card" data-aos="fade-up">
-                    <div class="card-body px-5 pt-5 pb-4 d-flex align-items-end">
-                        <div class="d-flex flex-column">
-                            <!-- Quote SVG -->
-                            <svg class="mb-3" width="25" height="16" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path d="M5.68 6.38C..." fill="#FF6B6B" />
-                            </svg>
-
-                            <div>
-                                <small>
-                                    {{@$item->body}}
-                                </small>
-                                <!-- Closing Quote -->
-                                <svg class="mt-3" style="rotate:180deg" width="25" height="16" fill="none"
+            @if (@$testimonials != '')
+                @foreach (@$testimonials as $item)
+                    <div class="card" data-aos="fade-up">
+                        <div class="card-body px-5 pt-5 pb-4 d-flex align-items-end">
+                            <div class="d-flex flex-column">
+                                <!-- Quote SVG -->
+                                <svg class="mb-3" width="25" height="16" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path d="M5.68 6.38C..." fill="#FF6B6B" />
                                 </svg>
+
+                                <div>
+                                    <small>
+                                        {{ @$item->body }}
+                                    </small>
+                                    <!-- Closing Quote -->
+                                    <svg class="mt-3" style="rotate:180deg" width="25" height="16"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M5.68 6.38C..." fill="#FF6B6B" />
+                                    </svg>
+                                </div>
+
+                                <div class="mt-3">
+                                    <h6 class="fw-bold">{{ @$item->author }}</h6>
+                                    <small class="text-muted">{{ @$item->profession }}</small>
+                                </div>
                             </div>
 
-                            <div class="mt-3">
-                                <h6 class="fw-bold">{{@$item->author}}</h6>
-                                <small class="text-muted">{{@$item->profession}}</small>
-                            </div>
+                            <img src="{{ getTestimonialImage($item->image) }}" width="200" alt="Reviewer">
                         </div>
-
-                        <img src="{{getTestimonialImage($item->image)}}" width="200" alt="Reviewer">
                     </div>
-                </div>
-            @endforeach
-        @endif
+                @endforeach
+            @endif
         </div>
 
         <div class="testimonial-bottom mt-4" data-aos="fade-up">
-        @if(@$testimonials2 != "")
-            @foreach (@$testimonials2 as $item)
-                <div class="card">
-                    <div class="card-body px-5 pt-5 pb-4 d-flex align-items-end">
-                        <div class="d-flex flex-column">
-                            <!-- Quote SVG -->
-                            <svg class="mb-3" width="25" height="16" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path d="M5.68 6.38C..." fill="#FF6B6B" />
-                            </svg>
-
-                            <div>
-                                <small>
-                                {{@$item->body}}
-                                </small>
-                                <!-- Closing Quote -->
-                                <svg class="mt-3" style="rotate:180deg" width="25" height="16" fill="none"
+            @if (@$testimonials2 != '')
+                @foreach (@$testimonials2 as $item)
+                    <div class="card">
+                        <div class="card-body px-5 pt-5 pb-4 d-flex align-items-end">
+                            <div class="d-flex flex-column">
+                                <!-- Quote SVG -->
+                                <svg class="mb-3" width="25" height="16" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path d="M5.68 6.38C..." fill="#FF6B6B" />
                                 </svg>
+
+                                <div>
+                                    <small>
+                                        {{ @$item->body }}
+                                    </small>
+                                    <!-- Closing Quote -->
+                                    <svg class="mt-3" style="rotate:180deg" width="25" height="16"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M5.68 6.38C..." fill="#FF6B6B" />
+                                    </svg>
+                                </div>
+
+                                <div class="mt-3">
+                                    <h6 class="fw-bold">{{ @$item->author }}</h6>
+                                    <small class="text-muted">{{ @$item->profession }}</small>
+                                </div>
                             </div>
 
-                            <div class="mt-3">
-                                <h6 class="fw-bold">{{@$item->author}}</h6>
-                                <small class="text-muted">{{@$item->profession}}</small>
-                            </div>
+                            <img src="{{ getTestimonialImage(@$item->image) }}" width="200" alt="Reviewer">
                         </div>
+                    </div>
+                @endforeach
+            @endif
+        </div>
+    </section>
 
-                        <img src="{{getTestimonialImage(@$item->image)}}" width="200" alt="Reviewer">
+    <section class="py-5" style="background:#f8faff;">
+        <div class="container">
+
+            <!-- Heading -->
+            <h2 class="text-center mb-3" style="font-weight:800;">What Makes MXP Different</h2>
+            <p class="text-center" style="font-size:18px; color:#555;">
+                Why MXP Works When Other Programs Don't
+            </p>
+
+            <p class="text-center mb-5" style="max-width:700px; margin:0 auto; color:#666;">
+                Most programs offer one thing: <strong>content</strong>. But content alone doesn’t help you pass.
+                MXP supports your knowledge, your confidence, your habits, and your unique situation.
+            </p>
+
+            <!-- Comparison Cards -->
+            <div class="row justify-content-center align-items-stretch">
+
+                <!-- Column: Other Programs -->
+                <div class="col-md-4 mb-4">
+                    <div
+                        style="background:#fff; border-radius:20px; padding:30px; box-shadow:0 4px 20px rgba(0,0,0,0.05); height:100%;">
+                        <h4 class="text-center mb-4" style="font-weight:700; color:#d9534f;">
+                            🚫 Other Programs
+                        </h4>
+
+                        <ul style="list-style:none; padding-left:0; color:#555; font-size:16px;">
+                            <li class="mb-3">❌ One-size-fits-all content</li>
+                            <li class="mb-3">❌ NCLEX prep only</li>
+                            <li class="mb-3">❌ Pre-recorded videos only</li>
+                            <li class="mb-3">❌ No support after purchase</li>
+                            <li class="mb-3">❌ Ignores test anxiety</li>
+                            <li class="mb-3">❌ Outdated question styles</li>
+                            <li class="mb-3">❌ No remediation support</li>
+                        </ul>
                     </div>
                 </div>
-            @endforeach
-        @endif
+
+                <!-- VS Circle -->
+                <div class="col-md-2 d-flex justify-content-center align-items-center mb-4">
+                    <div
+                        style="width:90px; height:90px; background:#eef3ff; border-radius:50%;
+                display:flex; justify-content:center; align-items:center; font-size:28px; font-weight:700; color:#4455aa;
+                box-shadow:0 4px 15px rgba(0,0,0,0.1);">
+                        VS
+                    </div>
+                </div>
+
+                <!-- Column: MXP -->
+                <div class="col-md-4 mb-4">
+                    <div
+                        style="background:#fff; border-radius:20px; padding:30px; box-shadow:0 4px 20px rgba(0,0,0,0.05); height:100%;">
+                        <h4 class="text-center mb-4" style="font-weight:700; color:#4455aa;">
+                            🌟 Why MXP Works
+                        </h4>
+
+                        <ul style="list-style:none; padding-left:0; font-size:16px;">
+                            <li class="mb-3">✅ <strong>Personalized plans</strong> based on your starting point</li>
+                            <li class="mb-3">✅ Support from <strong>nursing school through NCLEX</strong></li>
+                            <li class="mb-3">✅ <strong>Live instruction</strong> + real-time Q&A</li>
+                            <li class="mb-3">✅ <strong>Weekly check-ins</strong> & coaching</li>
+                            <li class="mb-3">✅ <strong>Trauma-informed</strong> confidence-building</li>
+                            <li class="mb-3">✅ <strong>NGN-aligned</strong> practice & strategies</li>
+                            <li class="mb-3">✅ <strong>Official remediation documentation</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- CTA -->
+            <div class="text-center mt-4">
+                <button class="theme-btn py-3 px-4" style="border-radius:50px;">
+                    <a href="#" class="text-white" style="text-decoration:none;">
+                        Start Your Personalized Success Plan
+                    </a>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <img src="{{ asset('public/assets/howWork.png') }}" width="100%" alt="Reviewer">
+
+
+    <section class="py-5" style="background:#f8faff;">
+        <div class="container-fluid px-3 px-md-5">
+
+            <!-- Heading -->
+            <h2 class="text-center mb-3" style="font-weight:800;">Your Bonus Value Stack</h2>
+            <p class="text-center" style="font-size:18px; color:#555;">
+                All the tools you need to accelerate your journey — included FREE.
+            </p>
+
+            <!-- Stack Wrapper -->
+            <div style="margin-top:40px;">
+
+                <!-- Bonus Item -->
+                <div style="display:flex; gap:20px; padding:20px 0; border-bottom:1px solid #e6e9f5;">
+                    <div>
+                        <img src="https://cdn-icons-png.flaticon.com/128/18250/18250914.png" width="50"
+                            alt="">
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between w-100">
+                        <h6 style="font-weight:700; font-size: 20px" class="text-dark">NCLEX Daily Planner</h6>
+                        <p style="margin:0; color:#555;">Stay consistent and organized throughout your prep.</p>
+                        <h4 style="font-weight:700;">$29 value</h4>
+                    </div>
+                </div>
+
+                <!-- Bonus Item -->
+                <div style="display:flex; gap:20px; padding:20px 0; border-bottom:1px solid #e6e9f5;">
+                    <div style="font-size:32px;">
+                        <img src="https://cdn-icons-png.flaticon.com/128/6916/6916167.png" width="50" alt="">
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between w-100">
+                        <h6 style="font-weight:700; font-size: 20px" class="text-dark">Medication Suffix Guide</h6>
+                        <p style="margin:0; color:#555;">Pharm made simple with fast memory patterns.</p>
+                        <h4 style="font-weight:700;">$19 value</h4>
+                    </div>
+                </div>
+
+                <!-- Bonus Item -->
+                <div style="display:flex; gap:20px; padding:20px 0; border-bottom:1px solid #e6e9f5;">
+                    <div style="font-size:32px;">
+                        <img src="https://cdn-icons-png.flaticon.com/128/16089/16089855.png" width="50"
+                            alt="">
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between w-100">
+                        <h6 style="font-weight:700; font-size: 20px" class="text-dark">NCLEX Success Starter Kit</h6>
+                        <p style="margin:0; color:#555;">Quick-start resources for immediate wins.</p>
+                        <h4 style="font-weight:700;">$49 value</h4>
+                    </div>
+                </div>
+
+                <!-- Bonus Item -->
+                <div style="display:flex; gap:20px; padding:20px 0; border-bottom:1px solid #e6e9f5;">
+                    <div style="font-size:32px;">
+                        <img src="https://cdn-icons-png.flaticon.com/128/10605/10605926.png" width="50"
+                            alt="">
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between w-100">
+                        <h6 style="font-weight:700; font-size: 20px" class="text-dark">SAFE CARE Case Study Bundle</h6>
+                        <p style="margin:0; color:#555;">Real-world clinical judgment practice.</p>
+                        <h4 style="font-weight:700;">$39 value</h4>
+                    </div>
+                </div>
+
+                <!-- Bonus Item -->
+                <div style="display:flex; gap:20px; padding:20px 0; border-bottom:1px solid #e6e9f5;">
+                    <div style="font-size:32px;">
+                        <img src="https://cdn-icons-png.flaticon.com/128/13560/13560465.png" width="50"
+                            alt="">
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between w-100">
+                        <h6 style="font-weight:700; font-size: 20px" class="text-dark">Private Study Community</h6>
+                        <p style="margin:0; color:#555;">Accountability + peer support + motivation.</p>
+                        <h4 style="font-weight:700;">Priceless</h4>
+                    </div>
+                </div>
+
+                <!-- Bonus Item -->
+                <div style="display:flex; gap:20px; padding:20px 0; border-bottom:1px solid #e6e9f5;">
+                    <div style="font-size:32px;">
+                        <img src="https://cdn-icons-png.flaticon.com/128/1705/1705312.png" width="50" alt="">
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between w-100">
+                        <h6 style="font-weight:700; font-size: 20px" class="text-dark">Nursing School Survival Guide</h6>
+                        <p style="margin:0; color:#555;">Perfect for students still in their program.</p>
+                        <h4 style="font-weight:700;">$25 value</h4>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Total Value -->
+            <div class="text-center mt-5 p-4"
+                style="background:#fff; color:white; border-radius:20px; box-shadow:0 4px 20px rgba(0,0,0,0.15);">
+                <h3 style="font-weight:800;">Total Bonus Value: $161+</h3>
+                <p style="margin:0; font-size:18px;">Yours FREE when you enroll today</p>
+            </div>
+
+            <!-- CTA -->
+            <div class="text-center mt-4">
+                <button class="theme-btn py-3 px-4" style="border-radius:50px;">
+                    <a href="#" class="text-white" style="text-decoration:none;">Claim Your Bonuses</a>
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    {{-- Instructor-Section --}}
+    <section class="instructor-section">
+        <div class="container-fluid py-5 px-3 px-sm-5 mt-5">
+            <div class="card px-4 px-md-5">
+                <div class="row align-items-center justify-content-between">
+                    <div class="col-md-4" data-aos="fade-right">
+                        <!-- <img src="{{ asset('public/assets/instructor.png') }}" style="margin-top: -4rem" width="100%" alt=""> -->
+                        <img src="{{ asset('/' . getRawHomeContents($home_content, 'home_tile1_image', 'en')) }}"
+                            style="margin-top: -4rem" width="100%" alt="">
+                    </div>
+
+                    <div class="col-md-8 col-xl-6 py-4" data-aos="fade-left">
+                        <h2 class="rubik text-white">
+                            {{ isset($home_content) ? getRawHomeContents($home_content, 'home_tile1_title', 'en') : '' }}
+                        </h2>
+                        <p style="font-weight: 100" class="text-white rubik">
+                            {{ isset($home_content) ? getRawHomeContents($home_content, 'home_tile1_text', 'en') : '' }}
+                        </p>
+
+                        <h6 style="font-size: 18px" class="text-white mt-4">We Believe:</h6>
+
+                        <ul>
+                            <li class="text-white">Every nursing student deserves personalized support</li>
+                            <li class="text-white">Struggling doesn't mean you're not meant to be a nurse</li>
+                            <li class="text-white">Success comes from the right system, not just hard work</li>
+                            <li class="text-white">No one should face this journey alone</li>
+                        </ul>
+
+                        <div class="mt-4">
+                            <span class="text-white">
+                                <strong>Our promise:</strong> Whether you're just starting, starting over, or barely holding
+                                on—
+                                we'll meet you where you are and walk with you until you succeed.
+                            </span>
+                        </div>
+
+                        <!-- <h5 style="font-weight: 400" class="mt-4 text-white rubik">Maria T. , Lead Instructor</h5> -->
+
+                        <a
+                            href="{{ isset($home_content) ? getRawHomeContents($home_content, 'home_tile1_btnlink', 'en') : '' }}">
+                            <button
+                                style="background-color: var(--footer_text_hover_color); border: none; color: #fff; border-radius: 50px;"
+                                class="py-2 px-4 text-white mt-3">{{ isset($home_content) ? getRawHomeContents($home_content, 'home_tile1_btntext', 'en') : '' }}</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -729,323 +1654,65 @@
         <img src="{{ asset('public/assets/partners.png') }}" data-aos="fade-up" width="100%" alt="">
     </section>
 
-    {{-- Instructor-Section --}}
-    <section class="instructor-section">
-        <div class="container-fluid py-5 px-3 px-sm-5 mt-5">
-            <div class="card px-4 px-md-5">
-                <div class="row align-items-center justify-content-between">
-                    <div class="col-md-4" data-aos="fade-right">
-                        <!-- <img src="{{ asset('public/assets/instructor.png') }}" style="margin-top: -4rem" width="100%" alt=""> -->
-                        <img src="{{ asset('/'.getRawHomeContents($home_content,'home_tile1_image','en'))}}" style="margin-top: -4rem" width="100%" alt="">
-                    </div>
-                    <div class="col-md-8 col-xl-6 py-4" data-aos="fade-left">
-                        <h2 class="rubik text-white">{{isset($home_content)? getRawHomeContents($home_content,'home_tile1_title','en') : ''}}</h2>
-                        <p style="font-weight: 100" class="text-white rubik">{{isset($home_content)? getRawHomeContents($home_content,'home_tile1_text','en') : ''}}</p>
 
-                        <!-- <h5 style="font-weight: 400" class="mt-4 text-white rubik">Maria T. , Lead Instructor</h5> -->
+    <!-- Quick View Modal -->
+    <div class="modal fade" id="quickView_{{ $thiscourse->id }}" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content" style="border-radius:15px;">
 
-                        <a href="{{isset($home_content)? getRawHomeContents($home_content,'home_tile1_btnlink','en') : ''}}">
-                            <button
-                                style="background-color: var(--footer_text_hover_color); border: none; color: #fff; border-radius: 50px;"
-                                class="py-2 px-4 text-white mt-3">{{isset($home_content)? getRawHomeContents($home_content,'home_tile1_btntext','en') : ''}}</button>
-                        </a>
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        {{ !empty($thiscourse->parent_id) ? $thiscourse->parent->title : $thiscourse->title }}
+                    </h5>
+                    <button type="button" data-bs-dismiss="modal">
+                        <img src="" alt="">
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="p-4 lg:p-5 h-100 mb-4"
+                        style="background:#fff; border-radius:20px; box-shadow:0 4px 20px rgba(0,0,0,0.06);">
+
+                        <div class="d-flex flex-column align-items-center gap-3">
+                            <img src="https://cdn-icons-png.flaticon.com/128/12210/12210362.png" width="70"
+                                alt="">
+                            <h4 class="text-center text-dark" style="font-weight:700;">Nursing School Success Program</h4>
+                            <p class="text-center">
+                                For students struggling in their nursing program. Get support now to turn your grades
+                                around.
+                            </p>
+                        </div>
+
+                        <h6 class="text-center" style="font-weight:700; margin-top:25px;">What's Included:</h6>
+                        <ul class="text-center mb-4">
+                            <li>One-on-one and group tutoring</li>
+                            <li>Nursing exam test-taking strategies</li>
+                            <li>Course support (Pharm, Med-Surg, OB, Psych, Peds)</li>
+                            <li>Study skills + time management coaching</li>
+                            <li>Academic recovery planning</li>
+                            <li>Confidence & mindset support</li>
+                        </ul>
+
+                        <div style="background:#eef3ff; padding:12px; border-radius:8px; margin-top:10px;">
+                            <strong>Best For:</strong> Failing students, academic probation, or at risk of dismissal.
+                        </div>
+
+                        <button class="mt-4 w-100 rounded-full theme-btn py-2">
+                            <a href="#" class="text-white">Get Nursing School
+                                Support Now</a>
+                        </button>
                     </div>
                 </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+
             </div>
         </div>
-    </section>
-
-
-    {{-- Courses-Section --}}
-    <section class="course-section" style="background-color: #F7F7F7">
-        <div class="container-fluid py-5 px-3 px-sm-5">
-
-            <div class="text-center">
-                <h2 data-aos="fade-up">Program & Course Pricing Overview</h2>
-                <p class="opacity-75 inter" data-aos="fade-up">Find the program that best fits your goals, schedule, and
-                    support needs.</p>
-            </div>
-
-            <ul class="nav nav-pills mb-3 d-flex align-items-center justify-content-center mt-3 mb-4" id="pills-tab"
-                role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="pills-cards-tab" data-bs-toggle="pill"
-                        data-bs-target="#pills-cards" type="button" role="tab" aria-controls="pills-cards"
-                        aria-selected="true">Courses</button>
-                </li>
-
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="pills-table-comparison-tab" data-bs-toggle="pill"
-                        data-bs-target="#pills-table-comparison" type="button" role="tab"
-                        aria-controls="pills-table-comparison" aria-selected="false">Courses Comparison</button>
-                </li>
-            </ul>
-
-            <div class="tab-content" id="pills-tabContent">
-                <div class="tab-pane fade show active" id="pills-cards" role="tabpanel"
-                    aria-labelledby="pills-cards-tab" tabindex="0">
-                    <div class="row">
-                        @php
-                            $recent_courses = $latest_courses;
-                            //$first_course = $recent_courses->first();
-                            //if ($first_course) {
-                            //    $recent_courses = $recent_courses->except($first_course->id);
-                            //}
-                            //$i = 0;
-                        @endphp
-                        @foreach ($recent_courses as $keycourses => $thiscourse)
-                            @if (array_key_exists($keycourses, $recent_courses->toArray()))
-                            <!-- <div class="col-md-6 col-lg-4 mb-3">
-                                <div class="card border-0 rounded-3 w-100" data-aos="fade-up">
-
-                                    <div class="card-body rubik">
-                                        
-                                        <div class="position-relative">
-                                            <img src="{{ getCourseImage($thiscourse->image) }}" class="card-img-top"
-                                                alt="Course Instructors">
-                                            <span style="position: absolute; top: 10px; right: 10px; border-radius: 6px;"
-                                                class="py-2 px-3 d-flex align-items-center gap-1 bg-white text-dark m-2">
-                                                <svg width="16" height="17" viewBox="0 0 16 17" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <g clip-path="url(#clip0_2032_122)">
-                                                        <circle cx="8" cy="8.5" r="7.25" stroke="#413C69"
-                                                            stroke-width="1.5" />
-                                                        <path d="M8 4.94434V9.06787L10.6667 10.2777" stroke="#413C69"
-                                                            stroke-width="1.5" stroke-miterlimit="10"
-                                                            stroke-linecap="round" stroke-linejoin="round" />
-                                                    </g>
-                                                    <defs>
-                                                        <clipPath id="clip0_2032_122">
-                                                            <rect width="16" height="16" fill="white"
-                                                                transform="translate(0 0.5)" />
-                                                        </clipPath>
-                                                    </defs>
-                                                </svg>
-                                                8 weeks
-                                            </span>
-                                        </div>
-
-                                        
-                                        <div class="d-flex justify-content-between my-2">
-                                            <span class="text-success fw-bold">Course 01</span>
-                                            <span style="color: #CA8804">coaching</span>
-                                        </div>
-
-
-                                        <h5 style="font-weight: 600"
-                                            class="card-title rubik fw-bold text-dark d-flex align-items-center justify-content-between">
-                                            Live Prep Course
-                                            <svg width="24" height="28" viewBox="0 0 24 28" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M7 21L17 11M17 11H7M17 11V21" stroke="#101828" stroke-width="2"
-                                                    stroke-linecap="round" stroke-linejoin="round" />
-                                            </svg>
-                                        </h5>
-                                        <p class="card-text text-muted small mb-3">
-                                            Structured live sessions led by expert instructors
-                                        </p>
-
-
-                                        <ul class="list-unstyled small mb-4 d-flex flex-wrap justify-content-between">
-                                            <li class="mb-1 d-flex align-items-center gap-1">
-                                                <img src="{{ asset('public/assets/point.png') }}" width="25"
-                                                    alt="Course Instructors">
-                                                Diagnostic assessment
-                                            </li>
-                                            <li class="mb-1 d-flex align-items-center gap-1">
-                                                <img src="{{ asset('public/assets/point.png') }}" width="25"
-                                                    alt="Course Instructors">
-                                                Diagnostic assessment
-                                            </li>
-                                            <li class="mb-1 d-flex align-items-center gap-1">
-                                                <img src="{{ asset('public/assets/point.png') }}" width="25"
-                                                    alt="Course Instructors">
-                                                Diagnostic assessment
-                                            </li>
-                                        </ul>
-
-
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <a href="{{ route('instructors') }}">
-                                                <button
-                                                    style="background-color: var(--system_primery_color); border: none; color: #fff; border-radius: 50px;"
-                                                    class="py-2 px-4 text-white mt-3">Enroll Now</button>
-                                            </a>
-                                            <h2 style="color: var(--system_secendory_color); font-weight: 700 !important; font-family: 'Inter' !important;"
-                                                class="mb-0">$499</h2>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> -->
-
-                            <div class="col-md-6 col-lg-4 mb-3">
-                                <div class="card border-0 rounded-3 w-100" data-aos="fade-up">
-                                    <div class="card-body rubik">
-                                        <!-- Image with badge -->
-                                        <div class="position-relative">
-                                            <a
-                                                href="{{ !empty($thiscourse->parent_id)
-                                                    ? courseDetailsUrl(@$thiscourse->parent->id, @$thiscourse->type, @$thiscourse->parent->slug) . '?courseType=' . $thiscourse->type
-                                                    : courseDetailsUrl(@$thiscourse->id, @$thiscourse->type, @$thiscourse->slug) }}">
-                                                <img src="{{ getCourseImage($thiscourse->image) }}" class="card-img-top"
-                                                    alt="{{ $thiscourse->title }}">
-                                            </a>
-
-                                            <span style="position: absolute; top: 10px; right: 10px; border-radius: 6px;"
-                                                class="py-2 px-3 d-flex align-items-center gap-1 bg-white text-dark m-2">
-                                                <svg width="16" height="17" viewBox="0 0 16 17" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <g clip-path="url(#clip0_2032_122)">
-                                                        <circle cx="8" cy="8.5" r="7.25" stroke="#413C69" stroke-width="1.5" />
-                                                        <path d="M8 4.94434V9.06787L10.6667 10.2777" stroke="#413C69" stroke-width="1.5"
-                                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                                                    </g>
-                                                    <defs>
-                                                        <clipPath id="clip0_2032_122">
-                                                            <rect width="16" height="16" fill="white" transform="translate(0 0.5)" />
-                                                        </clipPath>
-                                                    </defs>
-                                                </svg>
-                                                {{ $thiscourse->duration ?? 'N/A' }} weeks
-                                            </span>
-                                        </div>
-
-                                        <!-- Top meta -->
-                                        <div class="d-flex justify-content-between my-2">
-                                            <span class="text-success fw-bold">
-                                                @if ($thiscourse->type == 1)
-                                                    {{ __('Course') }}
-                                                @elseif($thiscourse->type == 2)
-                                                    {{ __('Big Quiz') }}
-                                                @elseif($thiscourse->type == 3)
-                                                    {{ __('Individual Course') }}
-                                                @elseif($thiscourse->type == 4)
-                                                    {{ __('Full Course') }}
-                                                @elseif($thiscourse->type == 5)
-                                                    {{ __('Prep-Course (On-Demand)') }}
-                                                @elseif($thiscourse->type == 6)
-                                                    {{ __('Prep-Course (Live)') }}
-                                                @elseif($thiscourse->type == 8)
-                                                    {{ __('Repeat Course') }}
-                                                @elseif($thiscourse->type == 9)
-                                                    {{ __('Tutor Course') }}
-                                                @endif
-                                            </span>
-                                            <span style="color: #CA8804">{{ $thiscourse->category->name ?? 'N/A' }}</span>
-                                        </div>
-
-                                        <!-- Title & Subtitle -->
-                                        <h5 style="font-weight: 600"
-                                            class="card-title rubik fw-bold text-dark d-flex align-items-center justify-content-between">
-                                            {{ !empty($thiscourse->parent_id) ? $thiscourse->parent->title : $thiscourse->title }}
-                                            <svg width="24" height="28" viewBox="0 0 24 28" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M7 21L17 11M17 11H7M17 11V21" stroke="#101828" stroke-width="2"
-                                                    stroke-linecap="round" stroke-linejoin="round" />
-                                            </svg>
-                                        </h5>
-
-                                        <p class="card-text text-muted small mb-3">
-                                            @php
-                                                $requirements = str_replace(
-                                                    '&nbsp;',
-                                                    ' ',
-                                                    htmlspecialchars_decode(
-                                                        strip_tags(
-                                                            !empty($thiscourse->parent_id)
-                                                                ? $thiscourse->parent->requirements
-                                                                : $thiscourse->requirements,
-                                                        ),
-                                                    ),
-                                                );
-                                            @endphp
-                                            @if (Str::length($requirements) > 120)
-                                                {{ Str::limit($requirements, 120, '...') }}
-                                            @else
-                                                {{ $requirements }}
-                                            @endif
-                                        </p>
-
-                                        <!-- Features (example static items, you can make dynamic if needed) -->
-                                        <ul class="list-unstyled small mb-4 d-flex flex-wrap justify-content-between">
-                                            @foreach ($thiscourse->features ?? ['Diagnostic assessment', 'Expert Instructors', 'Interactive Sessions'] as $feature)
-                                                <li class="mb-1 d-flex align-items-center gap-1">
-                                                    <img src="{{ asset('public/assets/point.png') }}" width="25" alt="Feature">
-                                                    {{ $feature }}
-                                                </li>
-                                            @endforeach
-                                        </ul>
-
-                                        <!-- Footer -->
-                                        @php
-                                            if (isset($thiscourse->currentCoursePlan[0])) {
-                                                $course_price = $thiscourse->currentCoursePlan[0]->amount;
-                                            } else {
-                                                $course_price = $thiscourse->price + $thiscourse->tax;
-                                            }
-                                        @endphp
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <a
-                                                href="{{ !empty($thiscourse->parent_id)
-                                                    ? courseDetailsUrl(@$thiscourse->parent->id, @$thiscourse->type, @$thiscourse->parent->slug) . '?courseType=' . $thiscourse->type
-                                                    : courseDetailsUrl(@$thiscourse->id, @$thiscourse->type, @$thiscourse->slug) }}">
-                                                <button
-                                                    style="background-color: var(--system_primery_color); border: none; color: #fff; border-radius: 50px;"
-                                                    class="py-2 px-4 text-white mt-3">Enroll Now</button>
-                                            </a>
-                                            <h2 style="color: var(--system_secendory_color); font-weight: 700 !important; font-family: 'Inter' !important;"
-                                                class="mb-0">
-                                                ${{ number_format($course_price, 0) }}
-                                            </h2>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            @endif
-                        @endforeach
-                    </div>
-                </div>
-
-                <div class="tab-pane fade" id="pills-table-comparison" role="tabpanel"
-                    aria-labelledby="pills-table-comparison-tab" tabindex="0">
-                    <div class="table-responsive bg-white p-2 p-md-4" style="border-radius: 8px">
-                        <table class="table comparison-table">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Type</th>
-                                    <th>Duration</th>
-                                    <th>Price</th>
-                                    <th>Detail</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if(isset($comparisons) && count($comparisons) > 0)
-                                    @foreach($comparisons as $index => $comparison)
-                                        <tr style="background-color: {{ $comparison['type'] == 'course' ? '#f5f5f5' : '#ffffff' }};">
-                                            <td data-label="Name">{{ $comparison['title'] }}</td>
-                                            <td data-label="Type">{{ $comparison['type_label'] }}</td>
-                                            <td data-label="Duration">{{ $comparison['duration'] }}</td>
-                                            <td data-label="Price">{{ $comparison['price'] }}</td>
-                                            <td data-label="Detail">
-                                                <a href="{{ $comparison['detail_url'] }}" class="btn btn-sm btn-primary">
-                                                    {{ __('Detail') }}
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @else
-                                    <tr>
-                                        <td colspan="5" class="text-center">No comparisons available. Please add comparisons from the admin panel.</td>
-                                    </tr>
-                                @endif
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    </div>
 
 
     {{-- @if (count($latest_programs) > 0 || count($latest_courses) > 0)
@@ -1288,16 +1955,15 @@
 
 
     <section
-        style="background-image: url('{{ asset('public/assets/resources.png') }}'); background-size: 100%; background-repeat: no-repeat;">
+        style="background-image: url('{{ asset('public/assets/resources.png') }}'); background-size: 100%; background-repeat: no-repeat;" class="py-5">
         <div class="container-fluid py-5 px-3 px-sm-5">
             <div class="row justify-content-between">
                 <div class="col-md-6" data-aos="fade-right">
                     <div class="text-start">
-                        <h2>Learn & Grow With Us</h2>
+                        <h2> TUITION & ENROLLMENT OPTIONS</h2>
                         <p class="opacity-75 inter">
-                            Access free study tips, expert guides, webinars, and blog posts — all designed
-                            to support your learning journey. Plus, unlock your free Study Resource Kit
-                            when you join our community.
+                            Flexible Payment Plans That Fit Your Budget
+                            We believe finances shouldn't stand between you and your nursing career.
                         </p>
                     </div>
 
@@ -1305,47 +1971,192 @@
                         <div class="col-md-6 mb-4">
                             <div class="p-3"
                                 style="backdrop-filter: blur(3px); border: 1px solid var(--system_secendory_color); border-radius: 6px">
-                                <h5 style="font-weight: 600; font-size: 20px" class="text-dark rubik">Mind Mapping</h5>
-                                <p style="font-size: 14px; font-weight: 600; line-height: 1.5" class="inter">Transform
-                                    complex subjects into easy-to-follow visual maps. This technique helps you connect ideas
-                                    and recall them more effectively.</p>
+                                <h5 class="text-dark rubik" style="font-weight: 700; font-size: 22px;">Full Payment Option
+                                </h5>
+                                <p class="inter" style="font-size: 14px; font-weight: 600; line-height: 1.5;">
+                                    Pay the full program fee upfront to maximize savings and focus entirely on your learning
+                                    journey without interruptions.
+                                </p>
                             </div>
                         </div>
 
                         <div class="col-md-6 mb-4">
                             <div class="p-3"
                                 style="backdrop-filter: blur(3px); border: 1px solid var(--system_secendory_color); border-radius: 6px">
-                                <h5 style="font-weight: 600; font-size: 20px" class="text-dark rubik">Mind Mapping</h5>
-                                <p style="font-size: 14px; font-weight: 600; line-height: 1.5" class="inter">Transform
-                                    complex subjects into easy-to-follow visual maps. This technique helps you connect ideas
-                                    and recall them more effectively.</p>
+                                <h5 class="text-dark rubik" style="font-weight: 700; font-size: 22px;">Flexible
+                                    Installment Plans</h5>
+                                <p class="inter" style="font-size: 14px; font-weight: 600; line-height: 1.5;">
+                                    Spread payments over 2, 4, or 6 months to manage your budget comfortably while accessing
+                                    full program benefits.
+                                </p>
                             </div>
                         </div>
 
                         <div class="col-md-6 mb-4">
                             <div class="p-3"
                                 style="backdrop-filter: blur(3px); border: 1px solid var(--system_secendory_color); border-radius: 6px">
-                                <h5 style="font-weight: 600; font-size: 20px" class="text-dark rubik">Mind Mapping</h5>
-                                <p style="font-size: 14px; font-weight: 600; line-height: 1.5" class="inter">Transform
-                                    complex subjects into easy-to-follow visual maps. This technique helps you connect ideas
-                                    and recall them more effectively.</p>
+                                <h5 class="text-dark rubik" style="font-weight: 700; font-size: 22px;">Scholarships And
+                                    Discounts</h5>
+                                <p class="inter" style="font-size: 14px; font-weight: 600; line-height: 1.5;">
+                                    Take advantage of scholarships and referral discounts to make quality education more
+                                    affordable and accessible for motivated learners.
+                                </p>
                             </div>
                         </div>
 
                         <div class="col-md-6 mb-4">
                             <div class="p-3"
                                 style="backdrop-filter: blur(3px); border: 1px solid var(--system_secendory_color); border-radius: 6px">
-                                <h5 style="font-weight: 600; font-size: 20px" class="text-dark rubik">Mind Mapping</h5>
-                                <p style="font-size: 14px; font-weight: 600; line-height: 1.5" class="inter">Transform
-                                    complex subjects into easy-to-follow visual maps. This technique helps you connect ideas
-                                    and recall them more effectively.</p>
+                                <h5 class="text-dark rubik" style="font-weight: 700; font-size: 22px;">Special Student
+                                    Rates</h5>
+                                <p class="inter" style="font-size: 14px; font-weight: 600; line-height: 1.5;">
+                                    Nursing students get exclusive discounted rates, making it easier to continue learning
+                                    without financial stress or interruption.
+                                </p>
                             </div>
                         </div>
+
                     </div>
                 </div>
 
                 <div class="col-md-6 col-lg-5" data-aos="fade-left">
                     <img src="{{ asset('public/assets/comunity-right.png') }}" width="100%" alt="">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container-fluid py-5">
+        <div class="">
+            <h2 class="text-center mb-4">Frequently Asked Questions <br> About Our Institute</h2>
+
+            <div class="accordion px-3" id="globalfaq">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="accordion-item mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button inter" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#globalfaq1" aria-expanded="true" aria-controls="globalfaq1">
+                                    Who’s eligible ?
+                                </button>
+                            </h2>
+                            <div id="globalfaq1" class="accordion-collapse collapse" data-bs-parent="#globalfaq">
+                                <div class="accordion-body inter">
+                                    <strong>This is the first item’s accordion body.</strong> It is shown by default,
+                                    until the collapse plugin adds the appropriate classes that we use to style each
+                                    element. These classes control the overall appearance, as well as the showing and
+                                    hiding via CSS transitions. You can modify any of this with custom CSS or overriding
+                                    our default variables. It’s also worth noting that just about any HTML can go within
+                                    the <code>.accordion-body</code>, though the transition does limit overflow.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="col-lg-6">
+                        <div class="accordion-item mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed inter" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#globalfaq2" aria-expanded="false" aria-controls="globalfaq2">
+                                    What’s the schedule ?
+                                </button>
+                            </h2>
+                            <div id="globalfaq2" class="accordion-collapse collapse" data-bs-parent="#globalfaq">
+                                <div class="accordion-body inter">
+                                    <strong>This is the second item’s accordion body.</strong> It is hidden by default,
+                                    until the collapse plugin adds the appropriate classes that we use to style each
+                                    element. These classes control the overall appearance, as well as the showing and
+                                    hiding via CSS transitions. You can modify any of this with custom CSS or overriding
+                                    our default variables. It’s also worth noting that just about any HTML can go within
+                                    the <code>.accordion-body</code>, though the transition does limit overflow.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="col-lg-6">
+                        <div class="accordion-item mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed inter" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#globalfaq3" aria-expanded="false" aria-controls="globalfaq3">
+                                    Tuition & financing ?
+                                </button>
+                            </h2>
+                            <div id="globalfaq3" class="accordion-collapse collapse" data-bs-parent="#globalfaq">
+                                <div class="accordion-body inter">
+                                    <strong>This is the third item’s accordion body.</strong> It is hidden by default,
+                                    until the collapse plugin adds the appropriate classes that we use to style each
+                                    element. These classes control the overall appearance, as well as the showing and
+                                    hiding via CSS transitions. You can modify any of this with custom CSS or overriding
+                                    our default variables. It’s also worth noting that just about any HTML can go within
+                                    the <code>.accordion-body</code>, though the transition does limit overflow.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="col-lg-6">
+                        <div class="accordion-item mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed inter" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#globalfaq4" aria-expanded="false" aria-controls="globalfaq4">
+                                    What’s the schedule ?
+                                </button>
+                            </h2>
+                            <div id="globalfaq4" class="accordion-collapse collapse" data-bs-parent="#globalfaq">
+                                <div class="accordion-body inter">
+                                    <strong>This is the third item’s accordion body.</strong> It is hidden by default,
+                                    until the collapse plugin adds the appropriate classes that we use to style each
+                                    element. These classes control the overall appearance, as well as the showing and
+                                    hiding via CSS transitions. You can modify any of this with custom CSS or overriding
+                                    our default variables. It’s also worth noting that just about any HTML can go within
+                                    the <code>.accordion-body</code>, though the transition does limit overflow.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="col-lg-6">
+                        <div class="accordion-item mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed inter" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#globalfaq5" aria-expanded="false" aria-controls="globalfaq5">
+                                    What’s the schedule ?
+                                </button>
+                            </h2>
+                            <div id="globalfaq5" class="accordion-collapse collapse" data-bs-parent="#globalfaq">
+                                <div class="accordion-body inter">
+                                    <strong>This is the second item’s accordion body.</strong> It is hidden by default,
+                                    until the collapse plugin adds the appropriate classes that we use to style each
+                                    element. These classes control the overall appearance, as well as the showing and
+                                    hiding via CSS transitions. You can modify any of this with custom CSS or overriding
+                                    our default variables. It’s also worth noting that just about any HTML can go within
+                                    the <code>.accordion-body</code>, though the transition does limit overflow.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="col-lg-6">
+                        <div class="accordion-item mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed inter" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#globalfaq6" aria-expanded="false" aria-controls="globalfaq6">
+                                    Tuition & financing ?
+                                </button>
+                            </h2>
+                            <div id="globalfaq6" class="accordion-collapse collapse" data-bs-parent="#globalfaq">
+                                <div class="accordion-body inter">
+                                    <strong>This is the third item’s accordion body.</strong> It is hidden by default,
+                                    until the collapse plugin adds the appropriate classes that we use to style each
+                                    element. These classes control the overall appearance, as well as the showing and
+                                    hiding via CSS transitions. You can modify any of this with custom CSS or overriding
+                                    our default variables. It’s also worth noting that just about any HTML can go within
+                                    the <code>.accordion-body</code>, though the transition does limit overflow.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2704,29 +3515,29 @@
                             ];
                             html = html +
                                 '<li class="single-notice">\
-                                                                                                                                                                                                                                                                                                                                                            <div class="single-notice-item">\
-                                                                                                                                                                                                                                                                                                                                                                <div class="notice-date">\
-                                                                                                                                                                                                                                                                                                                                                                    ' +
+                                                                                                                                                                                                                                                                                                                                                                                                                        <div class="single-notice-item">\
+                                                                                                                                                                                                                                                                                                                                                                                                                            <div class="notice-date">\
+                                                                                                                                                                                                                                                                                                                                                                                                                                ' +
                                 day +
                                 '<br>\
-                                                                                                                                                                                                                                                                                                                                                                    <span>' +
+                                                                                                                                                                                                                                                                                                                                                                                                                                <span>' +
                                 monthDay[
                                     month] +
                                 '</span>\
-                                                                                                                                                                                                                                                                                                                                                                </div>\
-                                                                                                                                                                                                                                                                                                                                                                <div class="notice-content">\
-                                                                                                                                                                                                                                                                                                                                                                    <p>\
-                                                                                                                                                                                                                                                                                                                                                                        <a href="' +
+                                                                                                                                                                                                                                                                                                                                                                                                                            </div>\
+                                                                                                                                                                                                                                                                                                                                                                                                                            <div class="notice-content">\
+                                                                                                                                                                                                                                                                                                                                                                                                                                <p>\
+                                                                                                                                                                                                                                                                                                                                                                                                                                    <a href="' +
                                 blog_url +
                                 '">' +
                                 row
                                 .title
                                 .en +
                                 '</a>\
-                                                                                                                                                                                                                                                                                                                                                                    </p>\
-                                                                                                                                                                                                                                                                                                                                                                </div>\
-                                                                                                                                                                                                                                                                                                                                                            </div>\
-                                                                                                                                                                                                                                                                                                                                                        </li>';
+                                                                                                                                                                                                                                                                                                                                                                                                                                </p>\
+                                                                                                                                                                                                                                                                                                                                                                                                                            </div>\
+                                                                                                                                                                                                                                                                                                                                                                                                                        </div>\
+                                                                                                                                                                                                                                                                                                                                                                                                                    </li>';
                         });
                         $('#blogs_ul').html(html);
                     }

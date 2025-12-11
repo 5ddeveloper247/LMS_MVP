@@ -50,14 +50,20 @@
             <!-- Right Content Section -->
             <div class="col-lg-7 py-4 px-5">
                 <h2 class="mb-4" style="font-weight: bold; color: #2b1c61;">
-                    Join <span style="color: #ff7b00;">Our Adult Learner’s</span>Community
+                    Your <span style="color: #ff7b00;">Nursing Career</span> Is Waiting
                 </h2>
-                <p class="mb-4" style="color: #555;">
-                    Encourage visitors to join your email list to receive exclusive content and updates. This positions
-                    you as a helpful partner and nurtures leads who aren’t yet ready to buy.
+
+                <p class="mb-2" style="color: #555;">
+                    Whether you're preparing for your first NCLEX, recovering from a setback,
+                    completing remediation, or fighting to stay in nursing school—MXP has a path
+                    for you
                 </p>
 
-                <div class="container-footer mb-2" style="max-width: 37rem">
+                <p class="mb-2">You're not alone. You're not behind. You just need the right support.</p>
+
+                <strong>Merkaii Xcellence Prep is ready when you are.</strong>
+
+                <div class="container-footer my-3" style="max-width: 37rem">
                     <form action="{{ route('subscribe') }}" class="form" method="POST">
                         @csrf
                         <input type="email" class="sub_email bg-white" placeholder="Enter Your Email" name="email"
@@ -68,9 +74,9 @@
                             SUBSCRIBE
                         </button>
                     </form>
-
                 </div>
-                <h6 class="custom_footer_text" style="color: #000;">
+
+                <h6 class="custom_footer_text mb-4" style="color: #000;">
                     By Subscribing You agree to and with
                     <a href="{{ route('customer-help') }}#v-pills-profile-tab-1"
                         style="color: #8a8a8a; font-weight:700;">
@@ -80,6 +86,11 @@
                         <u>Terms</u>
                     </a>
                 </h6>
+
+                <div>
+                    <button class="theme_btn">Find Your Program & Enroll Today</button>
+                    <button class="theme_btn">Schedule a Free Advisor Call</button>
+                </div>
             </div>
 
             <div class="col-lg-5" style="text-align: end">
