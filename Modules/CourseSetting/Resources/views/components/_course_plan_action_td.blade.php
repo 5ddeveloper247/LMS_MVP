@@ -6,10 +6,10 @@
     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
         @if ($query->type != 'full_course' || $query->type != 'prep_course_live')
             @if ($query->courses && $query->courses->parent && isset($query->courses->parent->slug))
-                <a target="_blank" href="{{ route('courseDetailsView',['slug' =>  $query->courses->parent->slug , 'courseType' => $query->courses->type]) }}"
-                {{-- <a target="_blank" href="{{ courseDetailsUrl($query->courses->id, $query->courses->type, $query->courses->slug) }}" --}}
-                    class="dropdown-item">
-                    {{ trans('courses.Frontend View') }}</a>
+            <a target="_blank" href="{{ route('courseDetailsView',['slug' =>  $query->courses->parent->slug , 'courseType' => $query->courses->type]) }}"
+            {{-- <a target="_blank" href="{{ courseDetailsUrl($query->courses->id, $query->courses->type, $query->courses->slug) }}" --}}
+                class="dropdown-item">
+                {{ trans('courses.Frontend View') }}</a>
             @endif
             @if (permissionCheck('courseDetails') && $query->type == 1)
                 <a href="{{ route('courseDetails', [$query->id]) }}" class="dropdown-item">
@@ -47,9 +47,9 @@
         @endif
 
         @if ($query->courses && $query->courses->parent && isset($query->courses->parent->id))
-            <a href="{{ route('course.enrolled_students', ['course_id' => $query->courses->parent->id, 'plan_id' => $query->id]) }}" class="dropdown-item">
-                        {{ trans('Students') }}
-                    </a>
+        <a href="{{ route('course.enrolled_students', ['course_id' => $query->courses->parent->id, 'plan_id' => $query->id]) }}" class="dropdown-item">
+                    {{ trans('Students') }}
+                </a>
         @endif
 
         @if ($query->type == 'full_course' || $query->type == 'prep_course_live')

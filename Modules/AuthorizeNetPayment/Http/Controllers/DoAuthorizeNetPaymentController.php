@@ -425,12 +425,12 @@ class DoAuthorizeNetPaymentController extends Controller
         }
 
         try {
-            $bill = BillingDetails::with('country')->where('user_id', Auth::id())->latest()->first();
+            $bill = BillingDetails::with('country')->where('user_id', $user_id)->latest()->first();
                     
             $checkout_info = new Checkout();
             $checkout_info->tracking = $response->id;
             $checkout_info->user_id = $user_id;
-            $checkout_info->billing_detail_id = $bill->id;
+            $checkout_info->billing_detail_id = $bill ? $bill->id : null;
             $checkout_info->installment_id = $installment_id;
             $checkout_info->purchase_price = $response->amount;
             $checkout_info->price = $response->amount;

@@ -27,50 +27,50 @@ class CoursePlanController extends Controller
     {
         try {
             $query = PaymentPlans::where(function($q){
-                $q->where('type','prep_course_live')->orWhere('type','full_course');
+          $q->where('type','prep_course_live')->orWhere('type','full_course');
             })
             ->whereHas('courses', function($q) {
                 $q->whereNotNull('parent_id');
             })
             ->with(['courses.parent']);
             
-            return Datatables::of($query)
-                ->addIndexColumn()
-                ->addColumn('type', function ($query) {
-                    $type = '';
-                    if ($query->type == 'full_course') {
-                        $type = 'Full Course';
-                    } elseif ($query->type == 'prep_course_live') {
-                        $type = 'Prep-Course (Live)';
-                    }
-                    return $type;
-                })
-                ->addColumn('course_code', function ($query) {
+        return Datatables::of($query)
+            ->addIndexColumn()
+            ->addColumn('type', function ($query) {
+                $type = '';
+                if ($query->type == 'full_course') {
+                    $type = 'Full Course';
+                } elseif ($query->type == 'prep_course_live') {
+                    $type = 'Prep-Course (Live)';
+                }
+                return $type;
+            })
+            ->addColumn('course_code', function ($query) {
                     return $query->courses && $query->courses->parent ? $query->courses->parent->course_code : '';
-                })
-                ->addColumn('title', function ($query) {
+            })
+            ->addColumn('title', function ($query) {
                     return $query->courses && $query->courses->parent ? $query->courses->parent->title : '';
-                })
-                ->addColumn('amount', function ($query) {
+            })
+            ->addColumn('amount', function ($query) {
                     return $query->amount ?? '';
-                })
-                ->addColumn('sdate', function ($query) {
+            })
+            ->addColumn('sdate', function ($query) {
                     return $query->sdate ?? '';
-                })
-                ->addColumn('edate', function ($query) {
+            })
+            ->addColumn('edate', function ($query) {
                     return $query->edate ?? '';
-                })
-                ->addColumn('cdate', function ($query) {
+            })
+            ->addColumn('cdate', function ($query) {
                     return $query->cdate ?? '';
-                })
-                ->addColumn('status', function ($query) {
-                    return view('coursesetting::components._course_status_td', ['query' => $query]);
-                })
-                ->addColumn('action', function ($query) {
-                    return view('coursesetting::components._course_plan_action_td', ['query' => $query]);
-                })
-                ->rawColumns([ 'type', 'title','amount',  'sdate', 'edate', 'cdate','status', 'action'])
-                ->make(true);
+            })
+            ->addColumn('status', function ($query) {
+                return view('coursesetting::components._course_status_td', ['query' => $query]);
+            })
+            ->addColumn('action', function ($query) {
+                return view('coursesetting::components._course_plan_action_td', ['query' => $query]);
+            })
+            ->rawColumns([ 'type', 'title','amount',  'sdate', 'edate', 'cdate','status', 'action'])
+            ->make(true);
         } catch (\Exception $e) {
             \Log::error('Course Plans Data Error: ' . $e->getMessage());
             return response()->json([

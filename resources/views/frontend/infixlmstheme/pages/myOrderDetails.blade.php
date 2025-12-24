@@ -25,7 +25,7 @@
                                     
                                 </div>
                                 <div class="col-6 text-right">
-                                    @if ($orderDetail->status == 1)
+                                    @if ($orderDetail->status != 5)
                                         <a type="button" class="btn btn-rounded btn-warning admin-view-add" 
                                             onclick="cancelOrderSubmit('{{ route('myOrderCancel', $orderDetail->id) }}')">Cancel</a>
                                     @endif
@@ -79,6 +79,11 @@
                                                     @if ($orderDetail->payment_status == 2)
                                                         <tr>
                                                             <td class="text-main text-bold" colspan="2"><p class="text-danger">Return your order on the same address to get the refund amount.</p></td>
+                                                        </tr>
+                                                    @endif
+                                                    @if ($orderDetail->payment_status == 4)
+                                                        <tr>
+                                                            <td class="text-main text-bold" colspan="2" style="max-width: 400px;"><p class="text-danger">{{$orderDetail->refund_cancel_reason ?? ''}}</p></td>
                                                         </tr>
                                                     @endif
                                                 </tbody>

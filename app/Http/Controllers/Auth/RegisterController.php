@@ -682,7 +682,7 @@ class RegisterController extends Controller
 
         // try {
             $authorize = new DoAuthorizeNetPaymentController();
-            $paymentResponse = $authorize->makePayment($request, 'student_register', true, null, false); //previous code has the last parameter true
+            $paymentResponse = $authorize->makePayment($request, 'student_register', true, null, true); //changed to true to create checkout entry
 
 
 

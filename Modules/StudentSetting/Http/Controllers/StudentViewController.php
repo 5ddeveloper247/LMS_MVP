@@ -31,7 +31,7 @@ class StudentViewController extends Controller
             $studentdeclaration = UserDeclaration::where('user_id',$id)->first();
             $studentauthorziationagreement =   UserAuthorzIationAgreement::where('user_id', $id)->first();
             $payment_detail =  CloverPayment::where('user_id', $id)->where('type', 'student_register')->first();
-            $invoice = Checkout::where('user_id',$id)->where('type','student_register')->first();
+            $invoice = Checkout::where('user_id',$id)->where('type','P')->first();
             //dd(json_decode($payment_detail->response));
             // dd($payment_detail);
             return view('studentsetting::student_view', get_defined_vars());
