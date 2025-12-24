@@ -70,9 +70,21 @@
         <div class="row position-relative py-5 px-3 px-sm-5">
             <!-- Product Image Section -->
             <div class="col-lg-6 d-flex align-items-center justify-content-center"
-                style="background: radial-gradient(50% 50% at 50% 50%, #FAFAFC 17.79%, #9FB4D1 100%); border-radius: 20px; padding: 12rem 2rem">
-                <img src="{{ isset($product->files[0]) ? url($product->files[0]->file_path) : asset('public/assets/product-Placeholder.png') }}"
-                    style="width: 350px; rotate: 30deg" alt="">
+                style="background: radial-gradient(50% 50% at 50% 50%, #FAFAFC 17.79%, #9FB4D1 100%); border-radius: 20px; padding: 12rem 2rem"
+                id="main-preview-container">
+                @php
+                    $firstImage = $product->files->first();
+                @endphp
+                @if($firstImage)
+                    <img id="main-preview-image" src="{{ url($firstImage->file_path) }}"
+                        style="width: 350px; rotate: 30deg; display: block;" alt="">
+                @else
+                    <img id="main-preview-image" src="{{ asset('public/assets/product-Placeholder.png') }}"
+                        style="width: 350px; rotate: 30deg; display: block;" alt="">
+                @endif
+                <video id="main-preview-video" width="350" height="auto" controls style="display: none; max-width: 100%; border-radius: 10px;">
+                    <source src="" type="">
+                </video>
             </div>
 
             <!-- Product Details Section -->
@@ -97,12 +109,33 @@
                     <div class="ck-content">{!! $product->description !!}</div>
                 @endif
 
-                <!-- Variation Images -->
+                <!-- Variation Images and Videos -->
                 <div class="other-vaiation d-flex align-items-center" style="gap: 10px">
-                    @foreach ($product->files as $file)
-                        <img src="{{ url($file->file_path) }}" width="100" height="100"
-                            style="filter: drop-shadow(0px 0px 4px #00000048); object-fit: cover;" alt="">
+                    @foreach ($product->videos as $video)
+                        <div class="video-thumbnail-wrapper" style="position: relative; display: inline-block; cursor: pointer;">
+                            <video width="150" height="100" muted preload="metadata"
+                                class="product-thumbnail"
+                                data-type="video"
+                                data-src="{{ url($video->file_path) }}"
+                                data-video-type="{{ $video->file_type }}"
+                                style="filter: drop-shadow(0px 0px 4px #00000048); object-fit: cover; display: block;">
+                                <source src="{{ url($video->file_path) }}" type="video/{{ $video->file_type }}">
+                            </video>
+                            <div class="video-play-icon" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; background-color: rgba(44, 166, 164, 0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; pointer-events: none; z-index: 10;">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="white" style="margin-left: 2px;">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
+                            </div>
+                        </div>
                     @endforeach
+                    @foreach ($product->files as $index => $file)
+                        <img src="{{ url($file->file_path) }}" width="100" height="100"
+                            class="product-thumbnail"
+                            data-type="image"
+                            data-src="{{ url($file->file_path) }}"
+                            style="filter: drop-shadow(0px 0px 4px #00000048); object-fit: cover; cursor: pointer; {{ $index === 0 ? 'border: 2px solid #2ca6a4;' : '' }}" alt="">
+                    @endforeach
+                    
                 </div>
             </div>
 
@@ -402,47 +435,61 @@
 
 
 <script>
-    // $(document).ready(function() {
-
-    //     // set About iframe
-    //     var iframeAbout = document.getElementById("iframeAbout");
-    //     var iframeDocAbout = iframeAbout.contentDocument || iframeAbout.contentWindow.document;
-    //     var dynamicDivAbout = document.createElement("div");
-
-    //     dynamicDivAbout.innerHTML = '{!! @$course->about !!}';
-
-    //     iframeDocAbout.body.appendChild(dynamicDivAbout);
-
-    //     var bodyHeight2 = iframeDocAbout.body.querySelector("div").scrollHeight + 25;
-    //     $("#iframeAbout").css('height', bodyHeight2);
-
-    //     // set outcome iframe
-    //     var iframe = document.getElementById("iframeOutcome");
-    //     var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-    //     var dynamicDiv = document.createElement("div");
-
-    //     dynamicDiv.innerHTML = '{!! @$course->outcomes !!}';
-
-    //     iframeDoc.body.appendChild(dynamicDiv);
-
-    //     var bodyHeight = iframeDoc.body.querySelector("div").scrollHeight + 25;
-    //     $("#iframeOutcome").css('height', bodyHeight);
-
-    //     // set requirement iframe
-    //     var iframeReq = document.getElementById("iframeRequirements");
-    //     var iframeDocReq = iframeReq.contentDocument || iframeReq.contentWindow.document;
-    //     var dynamicDivReq = document.createElement("div");
-
-    //     dynamicDivReq.innerHTML = '{!! @$course->requirements !!}';
-
-    //     iframeDocReq.body.appendChild(dynamicDivReq);
-
-    //     var bodyHeight1 = iframeDocReq.body.querySelector("div").scrollHeight + 25;
-    //     $("#iframeRequirements").css('height', bodyHeight1);
-
-
-
-    // });
+    $(document).ready(function() {
+        // Product gallery functionality
+        $('.product-thumbnail, .video-thumbnail-wrapper').on('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Get the thumbnail element (could be img, video, or wrapper)
+            let thumbnail = $(this);
+            if ($(this).hasClass('video-thumbnail-wrapper')) {
+                thumbnail = $(this).find('.product-thumbnail');
+            }
+            
+            const type = thumbnail.data('type');
+            const src = thumbnail.data('src');
+            const mainImage = $('#main-preview-image');
+            const mainVideo = $('#main-preview-video');
+            const videoElement = mainVideo[0];
+            
+            // Remove active border from all thumbnails and wrappers
+            $('.product-thumbnail').css('border', '');
+            $('.video-thumbnail-wrapper').css('border', '');
+            
+            // Add active border to clicked thumbnail or its wrapper
+            if (type === 'video') {
+                thumbnail.closest('.video-thumbnail-wrapper').css('border', '2px solid #2ca6a4');
+            } else {
+                thumbnail.css('border', '2px solid #2ca6a4');
+            }
+            
+            if (type === 'image') {
+                // Show image, hide video
+                mainImage.attr('src', src).css({
+                    'display': 'block',
+                    'width': '350px',
+                    'rotate': '30deg'
+                });
+                videoElement.pause();
+                mainVideo.hide();
+                // Clear video source
+                mainVideo.find('source').attr('src', '').attr('type', '');
+                videoElement.load();
+            } else if (type === 'video') {
+                // Show video, hide image
+                const videoType = thumbnail.data('video-type') || 'mp4';
+                mainVideo.find('source').attr('src', src).attr('type', 'video/' + videoType);
+                videoElement.load(); // Reload video source
+                mainVideo.css({
+                    'display': 'block',
+                    'max-width': '100%',
+                    'border-radius': '10px'
+                });
+                mainImage.hide();
+            }
+        });
+    });
 </script>
 <script>
     //         $(document).ready(function() {

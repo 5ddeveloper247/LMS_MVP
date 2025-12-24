@@ -62,6 +62,8 @@ class ProductController extends Controller
             // Product images (array of files)
             'product_images'      => 'required|array|min:1',
             'product_images.*'    => 'file|mimes:jpeg,jpg,png|max:2048', // 2MB per image
+            // Product video (single file, max 1MB)
+            'product_video'       => 'nullable|file|mimes:mp4,avi,mov,webm,mkv,flv,wmv,m4v|max:1024', // 1MB max
         ];
     
         $discountRules = ['nullable', 'numeric', 'min:0'];
@@ -120,6 +122,10 @@ class ProductController extends Controller
             'product_images.*.file'   => 'Each Product Image must be a file.',
             'product_images.*.mimes'  => 'Only JPEG and PNG images are allowed.',
             'product_images.*.max'    => 'Each Product Image may not be greater than 2MB.',
+            
+            'product_video.file'      => 'Product Video must be a file.',
+            'product_video.mimes'     => 'Only video files (mp4, avi, mov, webm, mkv, flv, wmv, m4v) are allowed.',
+            'product_video.max'       => 'Product Video may not be greater than 1MB.',
         
             // Book-only fields
             'author.required'       => 'The Author field is required for books.',
@@ -195,10 +201,25 @@ class ProductController extends Controller
                     'product_id' => $product->id,
                     'file_name'  => $image->getClientOriginalName(),
                     'file_path'  => $path,
-                    'file_type'  => $image->getClientOriginalExtension(), // jpg, png, pdf
+                    'file_type'  => $image->getClientOriginalExtension(), // jpg, png
                     'is_primary' => false,
                 ]);
             }
+        }
+
+        // Handle Product Video (single file, max 1MB)
+        if ($request->hasFile('product_video')) {
+            $video = $request->file('product_video');
+            $path = $this->saveFile($video);
+
+            // Save video in shop_product_files table
+            ShopProductFile::create([
+                'product_id' => $product->id,
+                'file_name'  => $video->getClientOriginalName(),
+                'file_path'  => $path,
+                'file_type'  => $video->getClientOriginalExtension(), // mp4, avi, mov, etc.
+                'is_primary' => false,
+            ]);
         }
 
         return response()->json([
@@ -250,6 +271,8 @@ class ProductController extends Controller
             // Product images (array of files)
             'product_images'      => 'nullable|array|min:1',
             'product_images.*'    => 'file|mimes:jpeg,jpg,png|max:2048', // 2MB per image
+            // Product video (single file, max 1MB)
+            'product_video'       => 'nullable|file|mimes:mp4,avi,mov,webm,mkv,flv,wmv,m4v|max:1024', // 1MB max
         ];
         
         $discountRules = ['nullable', 'numeric', 'min:0'];
@@ -302,19 +325,21 @@ class ProductController extends Controller
             'inventory.numeric'         => 'The Inventory must be a valid number.',
             'inventory.min'             => 'The Inventory must be at least 1.',
         
-            'product_images.required' => 'Please upload at least one product image.',
             'product_images.array'    => 'Product Images must be an array.',
             'product_images.min'      => 'Please upload at least one product image.',
             'product_images.*.file'   => 'Each Product Image must be a file.',
             'product_images.*.mimes'  => 'Only JPEG and PNG images are allowed.',
             'product_images.*.max'    => 'Each Product Image may not be greater than 2MB.',
+            
+            'product_video.file'      => 'Product Video must be a file.',
+            'product_video.mimes'     => 'Only video files (mp4, avi, mov, webm, mkv, flv, wmv, m4v) are allowed.',
+            'product_video.max'       => 'Product Video may not be greater than 1MB.',
         
             // Book-only fields
             'author.required'       => 'The Author field is required for books.',
             'publisher.required'    => 'The Publisher field is required for books.',
             'publication_date.required' => 'The Publication Date is required for books.',
             'publication_date.date' => 'The Publication Date must be a valid date.',
-            'book_pdf.required'     => 'Please upload the Book PDF.',
             'book_pdf.mimes'        => 'Only PDF files are allowed.',
             'book_pdf.max'          => 'The Book PDF may not be greater than 20MB.',
         ];
@@ -389,10 +414,38 @@ class ProductController extends Controller
                     'product_id' => $product->id,
                     'file_name'  => $image->getClientOriginalName(),
                     'file_path'  => $path,
-                    'file_type'  => $image->getClientOriginalExtension(), // jpg, png, pdf
+                    'file_type'  => $image->getClientOriginalExtension(), // jpg, png
                     'is_primary' => false,
                 ]);
             }
+        }
+
+        // Handle Product Video (single file, max 1MB)
+        // First, delete existing video if any
+        $existingVideoFiles = ShopProductFile::where('product_id', $product->id)
+            ->whereIn('file_type', ['mp4', 'avi', 'mov', 'webm', 'mkv', 'flv', 'wmv', 'm4v'])
+            ->get();
+        
+        foreach ($existingVideoFiles as $existingVideo) {
+            if ($existingVideo->file_path) {
+                $this->deleteImage($existingVideo->file_path);
+            }
+            $existingVideo->delete();
+        }
+
+        // Save new video if provided
+        if ($request->hasFile('product_video')) {
+            $video = $request->file('product_video');
+            $path = $this->saveFile($video);
+
+            // Save video in shop_product_files table
+            ShopProductFile::create([
+                'product_id' => $product->id,
+                'file_name'  => $video->getClientOriginalName(),
+                'file_path'  => $path,
+                'file_type'  => $video->getClientOriginalExtension(), // mp4, avi, mov, etc.
+                'is_primary' => false,
+            ]);
         }
 
         return response()->json([

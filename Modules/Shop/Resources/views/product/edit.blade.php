@@ -252,7 +252,7 @@
                                                     <button type="button">
                                                         <label class="primary-btn small fix-gr-bg" for="document_file_thumb_2">Browse</label>
                                                         <input type="file" class="d-none fileUpload" name="images[]" id="document_file_thumb_2" 
-                                                            accept="image/*,video/*" multiple>
+                                                            accept="image/*" multiple>
                                                     </button>
                                                 </div>
                                             </div>
@@ -263,10 +263,27 @@
                                             <div class="row" id="preview-container">
                                                 @php
                                                     $files = $product->files;
+                                                    $videoFile = null;
+                                                    $imageFiles = [];
+                                                    
+                                                    // Separate images and videos - only show images here
+                                                    $videoExtensions = ['mp4', 'avi', 'mov', 'webm', 'mkv', 'flv', 'wmv', 'm4v'];
+                                                    
+                                                    foreach($files as $file) {
+                                                        $extension = strtolower($file->file_type ?? '');
+                                                        
+                                                        // Only include non-video files in imageFiles
+                                                        if(!in_array($extension, $videoExtensions)) {
+                                                            $imageFiles[] = $file;
+                                                        } else {
+                                                            // Store video separately
+                                                            $videoFile = $file;
+                                                        }
+                                                    }
                                                 @endphp
 
-                                                @if (!empty($files))
-                                                    @foreach ($files as $index => $file)
+                                                @if (!empty($imageFiles))
+                                                    @foreach ($imageFiles as $index => $file)
                                                         <div class="col-sm-2 preview-item" data-index="{{$index}}">
                                                             <div class="position-relative d-inline-block">
                                                                 <img src="{{url($file->file_path)}}" class="img-thumbnail" style="width:100px;height:100px;object-fit:cover;">
@@ -277,6 +294,63 @@
                                                             </div>
                                                         </div>
                                                     @endforeach
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- ======================== VIDEO ==================== -->
+                                    <div class="row mt-4">
+                                        <div class="col-xl-12">
+                                            <label class="primary_input_label">
+                                                Product Video (Max Video Size 1MB)
+                                            </label>
+                                        </div>
+
+                                        <div class="col-xl-6">
+                                            <div class="primary_input mb-35">
+                                                <div class="primary_file_uploader">
+                                                    <input class="primary-input filePlaceholder placeholder_txt" type="text" 
+                                                        id="video_file_placeholder" placeholder="Browse Video file" readonly>
+                                                    <button type="button">
+                                                        <label class="primary-btn small fix-gr-bg" for="product_video_file">Browse</label>
+                                                        <input type="file" class="d-none fileUpload" name="product_video" id="product_video_file" 
+                                                            accept="video/*">
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Video Preview section -->
+                                        <div class="col-xl-10 text-center">
+                                            <div class="row" id="video-preview-container">
+                                                @php
+                                                    // Get existing video file (if any)
+                                                    $existingVideoFile = null;
+                                                    if(!empty($files)) {
+                                                        $videoExtensions = ['mp4', 'avi', 'mov', 'webm', 'mkv', 'flv', 'wmv', 'm4v'];
+                                                        foreach($files as $file) {
+                                                            $extension = strtolower($file->file_type ?? '');
+                                                            if(in_array($extension, $videoExtensions)) {
+                                                                $existingVideoFile = $file;
+                                                                break; // Only one video allowed
+                                                            }
+                                                        }
+                                                    }
+                                                @endphp
+                                                @if (!empty($existingVideoFile))
+                                                    <div class="col-sm-4 video-preview-item" data-file-id="{{$existingVideoFile->id}}">
+                                                        <div class="position-relative d-inline-block">
+                                                            <video width="200" height="150" controls style="object-fit:cover;">
+                                                                <source src="{{url($existingVideoFile->file_path)}}" type="video/{{$existingVideoFile->file_type}}">
+                                                                Your browser does not support the video tag.
+                                                            </video>
+                                                            <span class="deleteFile" data-id="{{$existingVideoFile->id}}" style="position:absolute;top:0px;right:0px;
+                                                                cursor:pointer;color:red;
+                                                                background:white;border-radius:50%;
+                                                                padding:0px 6px;font-size:12px;">&times;</span>
+                                                        </div>
+                                                    </div>
                                                 @endif
                                             </div>
                                         </div>
@@ -342,6 +416,7 @@
     <script>
 
         let selectedFiles = [];
+        let selectedVideoFile = null;
         
         function calculateTotal() {
             let price = parseFloat($("#price").val()) || 0;
@@ -398,6 +473,11 @@
             selectedFiles.forEach((file, i) => {
                 formData.append('product_images[]', file);
             });
+
+            // Add video if selected
+            if(selectedVideoFile) {
+                formData.append('product_video', selectedVideoFile);
+            }
             
             $.ajax({
                 url: url,
@@ -440,12 +520,12 @@
             toggleBookFields();
         });
         
-        // File input change
+        // File input change (Images only)
         $('#document_file_thumb_2').on('change', function(e) {
             let files = e.target.files;
 
             $.each(files, function(i, file) {
-                if (!file.type.match('image.*') && !file.type.match('video.*')) return;
+                if (!file.type.match('image.*')) return;
 
                 // Add to selectedFiles
                 selectedFiles.push(file);
@@ -453,26 +533,12 @@
                 let reader = new FileReader();
                 reader.onload = function(e) {
                     let index = selectedFiles.length - 1;
-                    let previewContent = '';
-
-                    if (file.type.match('image.*')) {
-                        // ✅ Image preview
-                        previewContent = `<img src="${e.target.result}" class="img-thumbnail" style="width:100px;height:100px;object-fit:cover;">`;
-                    } else if (file.type.match('video.*')) {
-                        // ✅ Video placeholder (not autoplay to save resources)
-                        previewContent = `
-                            <video width="100" height="100" style="object-fit:cover;" muted>
-                                <source src="${e.target.result}" type="${file.type}">
-                                Your browser does not support video.
-                            </video>
-                        `;
-                    }
 
                     // Create preview card
                     let html = `
                         <div class="col-sm-2 preview-item" data-index="${index}">
                             <div class="position-relative d-inline-block">
-                                ${previewContent}
+                                <img src="${e.target.result}" class="img-thumbnail" style="width:100px;height:100px;object-fit:cover;">
                                 <span class="remove-preview" style="
                                     position:absolute;top:0px;right:0px;
                                     cursor:pointer;color:red;
@@ -489,6 +555,64 @@
 
             // reset input (so same file can be chosen again)
             $(this).val('');
+        });
+
+        // Video input change (Only one video, max 1MB)
+        $('#product_video_file').on('change', function(e) {
+            let file = e.target.files[0];
+            
+            if (!file) return;
+
+            // Check if it's a video
+            if (!file.type.match('video.*')) {
+                toastr.error('Please select a video file.', 'Error');
+                $(this).val('');
+                return;
+            }
+
+            // Check file size (1MB = 1048576 bytes)
+            if (file.size > 1048576) {
+                toastr.error('Video file size must be less than 1MB.', 'Error');
+                $(this).val('');
+                return;
+            }
+
+            // Clear previous video selection
+            selectedVideoFile = file;
+            $('#video-preview-container').empty();
+
+            // Update placeholder
+            $('#video_file_placeholder').val(file.name);
+
+            // Show preview
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let html = `
+                    <div class="col-sm-4 video-preview-item">
+                        <div class="position-relative d-inline-block">
+                            <video width="200" height="150" controls style="object-fit:cover;">
+                                <source src="${e.target.result}" type="${file.type}">
+                                Your browser does not support the video tag.
+                            </video>
+                            <span class="remove-video-preview" style="position:absolute;top:0px;right:0px;
+                                cursor:pointer;color:red;
+                                background:white;border-radius:50%;
+                                padding:0px 6px;font-size:12px;">&times;</span>
+                        </div>
+                    </div>
+                `;
+                $('#video-preview-container').html(html);
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        // Remove video preview
+        $(document).on('click', '.remove-video-preview', function() {
+            selectedVideoFile = null;
+            $('#product_video_file').val('');
+            $('#video_file_placeholder').val('');
+            $('#video-preview-container').empty();
         });
 
         // Remove preview

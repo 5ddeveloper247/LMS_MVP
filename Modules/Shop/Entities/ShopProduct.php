@@ -16,6 +16,11 @@ class ShopProduct extends Model
 
     public function files()
     {
-        return $this->hasMany(ShopProductFile::class, 'product_id')->orderBy('created_at', 'desc');
+        return $this->hasMany(ShopProductFile::class, 'product_id')->whereNotIn('file_type', ['mp4','avi','mov','webm','mkv','flv','wmv','m4v'])->orderBy('created_at', 'desc');
+    }
+
+    public function videos()
+    {
+        return $this->hasMany(ShopProductFile::class, 'product_id')->whereIn('file_type', ['mp4','avi','mov','webm','mkv','flv','wmv','m4v'])->orderBy('created_at', 'desc');
     }
 }
