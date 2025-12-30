@@ -116,15 +116,20 @@ class ShopController extends Controller
                 session(['redirectTo' => route('shop.addToCart', ['id' => $id])]);
                 return \redirect()->route('login');
             }
+
+            $user = Auth::user();
+
+            if (Auth::check() && in_array($user->role_id,[1,2])) {  // admin, instructor
+                Toastr::error('Unable to add product in cart, please try with student login.', 'Failed');
+                return redirect()->to(route($detailUrl, $id));
+            }
            
             if (!$product) {
                 Toastr::error('Product not found', 'Failed');
                 return redirect()->to(route($detailUrl, $id));
             }
-           
-            $user = Auth::user();
 
-            if (Auth::check() && ($user->role_id != 1)) {
+            if (Auth::check() && !in_array($user->role_id, [1,2])) {    // admin , instructor
             
                 $exist = Cart::where('user_id', $user->id)->where('product_id', $id)->first();
                 $oldCart = Cart::where('user_id', $user->id)->when(isModuleActive('Appointment'), function ($query) {
@@ -216,14 +221,19 @@ class ShopController extends Controller
                 }
             }
 
+            $user = Auth::user();
+
+            if (Auth::check() && in_array($user->role_id,[1,2])) {  // admin, instructor
+                Toastr::error('Unable to add product in cart, please try with student login.', 'Failed');
+                return redirect()->to(route($detailUrl, $id));
+            }
+
             if (!$product) {
                 Toastr::error('Product not found', 'Failed');
                 return redirect()->to(route($detailUrl, $id));
             }
 
-            $user = Auth::user();
-            
-            if (Auth::check() && ($user->role_id != 1)) {
+            if (Auth::check() && !in_array($user->role_id, [1,2])) {    // admin, instructor
 
 
                 $exist = Cart::where('user_id', $user->id)->where('product_id', $id)->first();
