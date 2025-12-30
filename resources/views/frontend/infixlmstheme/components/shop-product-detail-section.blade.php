@@ -463,8 +463,8 @@
             } else {
                 thumbnail.css('border', '2px solid #2ca6a4');
             }
-            
-            if (type === 'image') {
+             
+            if (type === 'image') { 
                 // Show image, hide video
                 mainImage.attr('src', src).css({
                     'display': 'block',
