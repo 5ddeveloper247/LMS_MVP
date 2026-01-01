@@ -656,6 +656,12 @@ class MeetingController extends Controller
             $teamMeeting = $system_meeting->first();
             $start_date = Carbon::parse($request['date'])->format('Y-m-d') . ' ' . date("H:i:s", strtotime($request['time']));
 
+            $meetingDuration = (int) $system_meeting->meeting_duration ?? 60; // minutes
+
+            $start_time = Carbon::parse(Carbon::parse($request['date'])->format('Y-m-d') . ' ' . $request['time']);
+
+            $end_time = $start_time->copy()->addMinutes($meetingDuration);
+
             DB::beginTransaction();
 
             $system_meeting->update([
@@ -665,6 +671,8 @@ class MeetingController extends Controller
                 'description' => $request['description'],
                 'date_of_meeting' => Carbon::parse($request['date'])->format('m/d/Y'),
                 'time_of_meeting' => $request['time'],
+                'start_time' => $start_time,
+                'end_time' => $end_time,
 
                 'updated_by' => Auth::user()->id,
             ]);

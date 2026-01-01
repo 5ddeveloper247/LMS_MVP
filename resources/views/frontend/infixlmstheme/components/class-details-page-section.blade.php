@@ -288,17 +288,26 @@
                                                     @else
 
                                                     <?php
+                                                        // dd($course->class->teamMeetings);
+                                                        // $givenDate = strtotime($course->class->start_date);
+                                                        // $targetDayOfWeek = date('N', strtotime($course->class->class_day)); // Convert day to numeric representation (1 = Monday, 2 = Tuesday, etc.)
 
-                                                        $givenDate = strtotime($course->class->start_date);
-                                                        $targetDayOfWeek = date('N', strtotime($course->class->class_day)); // Convert day to numeric representation (1 = Monday, 2 = Tuesday, etc.)
+                                                        // while (date('N', $givenDate) != $targetDayOfWeek) {
+                                                        //     $givenDate = strtotime('+1 day', $givenDate);
+                                                        // }
 
-                                                        while (date('N', $givenDate) != $targetDayOfWeek) {
-                                                            $givenDate = strtotime('+1 day', $givenDate);
-                                                        }
+                                                        // $formatedDate = new DateTime(date('Y-m-d', $givenDate));
+                                                        // $nextformattedDate = $formatedDate->format('jS D, Y');
 
-                                                        $formatedDate = new DateTime(date('Y-m-d', $givenDate));
-                                                        $nextformattedDate = $formatedDate->format('jS D, Y');
+                                                        
+                                                        $now = Illuminate\Support\Carbon::now();
 
+                                                        $nextMeeting = $course->class->teamMeetings
+                                                            ->where('start_time', '>=', $now)
+                                                            ->sortBy('start_time')
+                                                            ->first();
+
+                                                        $nextformattedDate = $nextMeeting ? Illuminate\Support\Carbon::parse($nextMeeting->start_time)->format('jS D, Y') : 'No upcoming class';
                                                         ?>
 
 

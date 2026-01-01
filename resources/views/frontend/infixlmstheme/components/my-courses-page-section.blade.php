@@ -131,6 +131,7 @@
 
                         @endif
                         @if ($type == 3)
+                        
                             @if (isset($totalClasses))
                               {{-- @if(count($totalClasses) == 0) There are no Classes to show. @endif --}}
                                 @foreach ($totalClasses as $Class)
