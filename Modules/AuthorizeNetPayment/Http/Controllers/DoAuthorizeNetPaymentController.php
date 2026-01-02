@@ -32,6 +32,7 @@ class DoAuthorizeNetPaymentController extends Controller
         $gatewaySettings = DB::table('AuthorizeNet_Settings')
             ->where('status', 1)
             ->first();
+           
 
         if (!$gatewaySettings) {
             return redirect()->back()->with('error', 'Gateway settings not found');
@@ -39,6 +40,8 @@ class DoAuthorizeNetPaymentController extends Controller
 
         $gatewayClient_id = $gatewaySettings->client_id;
         $gatewayClient_secret = $gatewaySettings->client_secret;
+        $api_url= $gatewaySettings->api_url;
+        
         $user_id = $request->input('user_id');
 
         // Get the submitted form data
@@ -74,79 +77,67 @@ class DoAuthorizeNetPaymentController extends Controller
             //stilll we have static payment values in curl request and we set the actual payment in database by after payment has completed
             // we are just using static payment for curl request but we are using actual payment for database
 
-            $curl = curl_init();
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => 'https://apitest.authorize.net/xml/v1/request.api',
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => '',
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 0,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS => '{
-                    "createTransactionRequest": {
-                        "merchantAuthentication": {
-                            "name":"'. $data['gatewaySettings']['client_id'] .'",
-                             "transactionKey": "'. $data['gatewaySettings']['client_secret'] .'"
-                        },
-                        "refId": "' . $refId . '",
-                        "transactionRequest":{
-                            "transactionType": "authCaptureTransaction",
-                            "amount": "'. $data['amount']['amountInDollar'] .'",
-                            "payment":{
-                                "creditCard": {
-                                    "cardNumber": "'. $data['card']['cardNumber'] .'",
-                                    "expirationDate": "'. $data['card']['expiryDate'] .'",
-                                    "cardCode": "'. $data['card']['cvv'] .'"
-                                }
-                            },
+           $curl = curl_init();
 
-                            "customer": {
-                                "id": "' . $data['user_id'] . '"
-                            },
-
-                            "transactionSettings": {
-                                "setting": {
-                                    "settingName": "testRequest",
-                                    "settingValue": "false"
-                                }
-                            },
-                            "userFields": {
-                                "userField": [
-                                    {
-                                        "name": "MerchantDefinedFieldName1",
-                                        "value": "MerchantDefinedFieldValue1"
-                                    },
-                                    {
-                                        "name": "favorite_color",
-                                        "value": "blue"
-                                    }
-                                ]
-                            },
-                            "processingOptions": {
-                            "isSubsequentAuth": "true"
-                            },
-                            "subsequentAuthInformation": {
-                            "originalNetworkTransId": "123456789NNNH",
-                            "originalAuthAmount": "4.00",
-                            "reason": "resubmission"
-                            },
-                            "authorizationIndicatorType": {
-                            "authorizationIndicator": "final"
-                        }
-                        }
+curl_setopt_array($curl, array(
+    CURLOPT_URL => $api_url, // keep dynamic (LIVE should be https://api.authorize.net/xml/v1/request.api)
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => '',
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 30, // was 0 (infinite) - better to set a real timeout
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => 'POST',
+    CURLOPT_POSTFIELDS => '{
+        "createTransactionRequest": {
+            "merchantAuthentication": {
+                "name": "'. $data['gatewaySettings']['client_id'] .'",
+                "transactionKey": "'. $data['gatewaySettings']['client_secret'] .'"
+            },
+            "refId": "'. $refId .'",
+            "transactionRequest": {
+                "transactionType": "authCaptureTransaction",
+                "amount": "'. $data['amount']['amountInDollar'] .'",
+                "payment": {
+                    "creditCard": {
+                        "cardNumber": "'. $data['card']['cardNumber'] .'",
+                        "expirationDate": "'. $data['card']['expiryDate'] .'",
+                        "cardCode": "'. $data['card']['cvv'] .'"
                     }
-                }',
-                CURLOPT_HTTPHEADER => array(
-                    'Content-Type: application/json'
-                ),
-            ));
+                },
+                "customer": {
+                    "id": "'. $data['user_id'] .'"
+                },
+                "transactionSettings": {
+                    "setting": {
+                        "settingName": "testRequest",
+                        "settingValue": "false"
+                    }
+                },
+                "userFields": {
+                    "userField": [
+                        {
+                            "name": "MerchantDefinedFieldName1",
+                            "value": "MerchantDefinedFieldValue1"
+                        },
+                        {
+                            "name": "favorite_color",
+                            "value": "blue"
+                        }
+                    ]
+                }
+            }
+        }
+    }',
+    CURLOPT_HTTPHEADER => array(
+        'Content-Type: application/json'
+    ),
+));
 
+$getresponse = curl_exec($curl);
+$curl_error  = curl_error($curl);
+curl_close($curl);
 
-            $getresponse = curl_exec($curl);
-            // dd($getresponse);
-            curl_close($curl);
 
             $dataArray = [];
             preg_match_all('/"([^"]+)":"([^"]+)"/', $getresponse, $matches, PREG_SET_ORDER);
