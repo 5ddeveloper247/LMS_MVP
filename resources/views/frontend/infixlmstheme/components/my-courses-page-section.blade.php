@@ -104,6 +104,7 @@
                                                     {{ __('student.Students') }}
                                                 </a>
                                             </div>
+                                            
                                             @if($program->userTotalPercentage(Auth::id(), $program->id)>=100)
                                             <div class="course_less_students d-flex justify-content-center">
                                                 <small class="d-flex flex-column">

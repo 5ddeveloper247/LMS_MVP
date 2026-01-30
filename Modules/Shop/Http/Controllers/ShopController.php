@@ -130,7 +130,7 @@ class ShopController extends Controller
             $order->save();
 
             $user = $order->user ?? '';
-            // $user->email = 'hamza@5dsolutions.ae';
+            // $user->email = 'hamzawaheed195@gmail.com';
             // dd($user);
             if(!empty($user) && !empty($order)){
                 $codes = [
@@ -226,7 +226,7 @@ class ShopController extends Controller
             $order->save();
 
             $user = $order->user ?? '';
-            // $user->email = 'hamza@5dsolutions.ae';
+            // $user->email = 'hamzawaheed195@gmail.com';
             if(!empty($user) && !empty($order)){
                 $codes = [
                     'order_no' => 'order#'.$order->id,

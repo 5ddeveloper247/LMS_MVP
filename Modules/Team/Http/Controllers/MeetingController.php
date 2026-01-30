@@ -354,23 +354,49 @@ class MeetingController extends Controller
                 // $attendeeId = $this->getTeamUserIdFromEmail('lmstest@merakinursing.com',$access_token);
                 // dd($attendeeId);
                 $curl = curl_init();
-                $jsonData = '{"startDateTime":"'.$startDateTime.'", 
-                "endDateTime":"'.$endDateTime.'", 
-                "subject": "'.$data['description'].'",
-                "allowMeetingChat": "enabled",
-                "allowAttendeeToEnableCamera": false,
-                "allowAttendeeToEnableMic": false,
-                "allowOrganizerToEndMeeting" : true,
-                "allowAttendeeToEndMeeting" : false,
-                "isCopyToClipboardEnabled": true,
-                "allowRecording": true,
-                "allowTranscription": true,
-                "isLobbyEnabled": true,
-                "whoCanPresent": "organization",
-                "allowedPresenters": "organization",
-                "lobbyBypassSettings":{
-                        "scope":"everyone",
-                        "isDialInBypassEnabled":true
+                // $jsonData = '{"startDateTime":"'.$startDateTime.'", 
+                // "endDateTime":"'.$endDateTime.'", 
+                // "subject": "'.$data['description'].'",
+                // "allowMeetingChat": "enabled",
+                // "allowAttendeeToEnableCamera": false,
+                // "allowAttendeeToEnableMic": false,
+                // "allowOrganizerToEndMeeting" : true,
+                // "allowAttendeeToEndMeeting" : false,
+                // "isCopyToClipboardEnabled": true,
+                // "allowRecording": true,
+                // "allowTranscription": true,
+                // "isLobbyEnabled": true,
+                // "whoCanPresent": "organizer",
+                // "allowedPresenters": "organizer",
+                // "lobbyBypassSettings":{
+                //         "scope":"organization",
+                //         "isDialInBypassEnabled":false
+                //     }
+                // }';
+                $jsonData = '{
+                    "startDateTime": "'.$startDateTime.'",
+                    "endDateTime": "'.$endDateTime.'",
+                    "subject": "'.$data['description'].'",
+
+                    "allowMeetingChat": "enabled",
+
+                    "allowAttendeeToEnableCamera": false,
+                    "allowAttendeeToEnableMic": false,
+
+                    "allowOrganizerToEndMeeting": true,
+                    "allowAttendeeToEndMeeting": false,
+
+                    "isCopyToClipboardEnabled": true,
+                    "allowRecording": true,
+                    "allowTranscription": true,
+
+                    "isLobbyEnabled": true,
+
+                    "whoCanPresent": "organizer",
+
+                    "lobbyBypassSettings": {
+                        "scope": "organizer",
+                        "isDialInBypassEnabled": false
                     }
                 }';
                 
@@ -395,7 +421,7 @@ class MeetingController extends Controller
             curl_close($curl);
             
             $response = json_decode($response);
-            
+            // dd($response);
             
             
             // $r=$response['joinMeetingId'];
