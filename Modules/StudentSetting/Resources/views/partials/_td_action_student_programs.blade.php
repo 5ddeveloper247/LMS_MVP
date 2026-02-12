@@ -17,6 +17,9 @@
         </a>
         @endif
         @endif
+        {{-- <a href="{{route('course.generateCertificate',[$query->id])}}" class="dropdown-item">
+            Generate Certificate
+        </a> --}}
         @if($request->plan_id)
         <a href="{{route('program.studentProgramPlan',['program_id' => $program->id, 'student_id' => $query->user->id, 'plan_id' => $request->plan_id])}}"
             class="dropdown-item" type="button">Payment Plan

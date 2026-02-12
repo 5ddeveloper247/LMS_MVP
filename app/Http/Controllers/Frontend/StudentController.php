@@ -1287,7 +1287,7 @@ class StudentController extends Controller
             };
             
             // Add Student Name - Bold orange text (matching certificate style)
-            $centerTextTTF($studentName, $width / 2, $nameY, $nameFontSize, $boldFontPath, $darkGray, $darkGray, 1);
+            $centerTextTTF($studentName, 100, 100, $nameFontSize, $boldFontPath, $darkGray, $darkGray, 1);
             
             // Add Course/Program Name - Orange or dark gray
             $centerTextTTF($courseOrProgramName, $width / 2, $courseY, $courseFontSize, $fontPath, $darkGray, null, 0);
