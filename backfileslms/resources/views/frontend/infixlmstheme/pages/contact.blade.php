@@ -649,7 +649,7 @@
             <div class="ankar col-md-6" data-aos="fade-up" data-aos-delay="300">
                 <div class="data px-1">
                     <h2>
-                        Get In Touch
+                        Get In Touch 
                     </h2>
                     {{-- <div class="separator my-3"></div> --}}
                     <p class="pb-4 pt-3">

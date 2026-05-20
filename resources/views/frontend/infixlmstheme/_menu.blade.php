@@ -6,563 +6,401 @@
 
     <style>
 
-        :root {
-            --mid-teal: #1A8A6F;
-            --deep-teal: #0F6E56;
-            --darkest-teal: #0A4D3C;
-            --terracotta: #C65D3A;
-            --terracotta-dark: #A84827;
-            --cream: #F5EDE0;
-            --charcoal: #2B2B2B;
-            --charcoal-soft: #4a4a4a;
-            --white: #FFFFFF;
-            --serif: 'Playfair Display', Georgia, serif;
-            --sans: 'Montserrat', system-ui, sans-serif;
+:root {
+    --mid-teal: #1A8A6F;
+    --deep-teal: #0F6E56;
+    --darkest-teal: #0A4D3C;
+    --terracotta: #C65D3A;
+    --terracotta-dark: #A84827;
+    --cream: #F5EDE0;
+    --charcoal: #2B2B2B;
+    --charcoal-soft: #4a4a4a;
+    --white: #FFFFFF;
+  }
 
-        }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--charcoal);
+    line-height: 1.6;
+    background: var(--white);
+  }
 
+  .serif { font-family: 'Playfair Display', serif; }
+  .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+  .narrow { max-width: 820px; margin: 0 auto; padding: 0 24px; }
 
-        .navbar_fixed {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 9999;
-            animation: fadeInDown 0.3s ease;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-        }
-         * { box-sizing: border-box; margin: 0; padding: 0; }
-         html { scroll-behavior: smooth; }
-         body {
-           font-family: 'Montserrat', sans-serif;
-           color: var(--charcoal);
-           line-height: 1.6;
-           background: var(--white);
-         }
+  /* ============ HEADER NAV ============ */
+  .top-bar { height: 4px; background: var(--terracotta); }
 
-         .serif { font-family: 'Playfair Display', serif; }
-         .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
-         .narrow { max-width: 820px; margin: 0 auto; padding: 0 24px; }
+  .logo-mark {
+    display: flex; align-items: center; gap: 12px;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700; font-size: 22px; color: var(--deep-teal);
+  }
+  .logo-seal {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--mid-teal);
+    border: 1.5px solid var(--terracotta);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--white); font-family: 'Playfair Display', serif;
+    font-weight: 700; font-size: 18px;
+    position: relative;
+  }
+  .logo-seal::after {
+    content: ''; position: absolute; inset: 4px;
+    border-radius: 50%; background: var(--deep-teal);
+    z-index: 0;
+  }
+  .logo-seal span { position: relative; z-index: 1; }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a {
+    color: var(--charcoal); text-decoration: none;
+    font-size: 14px; font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--mid-teal); }
+  .btn {
+    display: inline-block;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600; font-size: 14px;
+    padding: 12px 24px; border-radius: 4px;
+    text-decoration: none; cursor: pointer;
+    transition: all 0.2s; border: 2px solid transparent;
+    letter-spacing: 0.3px;
+  }
+  
 
-
-        /* Utility Bar */
-        .utility-bar {
-          background: var(--teal-darkest);
-          color: var(--cream);
-          padding: 8px 0;
-          border-top: 4px solid var(--terracotta);
-          font-size: 12.5px;
-        }
-        .utility-inner {
-          max-width: 1240px;
-          margin: 0 auto;
-          padding: 0 24px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-        }
-        .utility-tagline {
-          font-family: var(--serif);
-          font-style: italic;
-          font-size: 13.5px;
-          color: var(--cream);
-          letter-spacing: 0.5px;
-        }
-        .utility-links {
-          display: flex;
-          align-items: center;
-          gap: 0;
-        }
-        .utility-link {
-          color: var(--cream) !important;
-          text-decoration: none;
-          padding: 4px 16px;
-          font-weight: 500;
-          font-size: 12.5px;
-          transition: color 0.2s;
-          border-right: 1px solid rgba(245, 237, 224, 0.25);
-          display: flex;
-          align-items: center;
-          gap: 6px;
-        }
-        .utility-link:last-child { border-right: none; padding-right: 0; }
-        .utility-link:first-child { padding-left: 0; }
-        .utility-link:hover { color: var(--terracotta) !important; }
-        .utility-link svg {
-          width: 14px;
-          height: 14px;
-          flex-shrink: 0;
-        }
-        .login-dot {
-          width: 7px;
-          height: 7px;
-          border-radius: 50%;
-          background: var(--terracotta);
-          display: inline-block;
-        }
-
-
-        /* logo Mark */
-        .logo-mark {
-          display: flex;
-          align-items: center;
-          gap: 14px;
-          text-decoration: none;
-          color: var(--teal-deep);
-          flex-shrink: 0;
-        }
-        .logo-seal-wrap {
-          width: 48px;
-          height: 48px;
-          position: relative;
-          flex-shrink: 0;
-        }
-        .logo-seal-svg {
-          width: 100%;
-          height: 100%;
-          display: block;
-        }
-        .logo-text {
-          display: flex;
-          flex-direction: column;
-          line-height: 1.05;
-        }
-        .logo-text .name {
-          font-family: var(--serif);
-          font-weight: 700;
-          font-size: 19px;
-          color: var(--teal-deep);
-          letter-spacing: 0.2px;
-        }
-        .logo-text .tag {
-          font-family: var(--sans);
-          font-size: 9.5px;
-          letter-spacing: 1.8px;
-          text-transform: uppercase;
-          color: var(--terracotta);
-          font-weight: 600;
-          margin-top: 2px;
-        }
-
-
-
-         /* ============ HEADER NAV ============ */
-
-           .nav-brand {
-             font-family: var(--serif);
-             font-weight: 700;
-             font-size: 20px;
-             color: var(--teal-darkest);
-             text-decoration: none;
-             letter-spacing: -0.3px;
-             line-height: 1.1;
-           }
-
-           .nav-brand-accent {
-             color: var(--terracotta);
-             font-style: italic;
-           }
-           /* .logo-seal {
-             width: 44px; height: 44px; border-radius: 50%;
-             background: var(--mid-teal);
-          border: 1.5px solid var(--terracotta);
-          display: flex; align-items: center; justify-content: center;
-          color: var(--white); font-family: 'Playfair Display', serif;
-          font-weight: 700; font-size: 18px;
-          position: relative;
-        }
-        .logo-seal::after {
-          content: ''; position: absolute; inset: 4px;
-          border-radius: 50%; background: var(--deep-teal);
-          z-index: 0;
+        /* .contact_wrap {
+            border-radius: 5px;
+            border: 1.4px solid var(--system_primery_color);
         } */
-      .nav-links { display: flex; gap: 28px; align-items: center; }
-      .nav-links a {
-        color: var(--charcoal); text-decoration: none;
-        font-size: 14px; font-weight: 500;
-        transition: color 0.2s;
-      }
-      .nav-links a:hover { color: var(--mid-teal) !important; }
-      .btn {
-        display: inline-block;
-        font-family: 'Montserrat', sans-serif;
-        font-weight: 600; font-size: 14px;
-        padding: 12px 24px; border-radius: 4px;
-        text-decoration: none; cursor: pointer;
-        transition: all 0.2s; border: 2px solid transparent;
-        letter-spacing: 0.3px;
-      }
 
-            .nav-inner {
-              max-width: 1240px;
-              margin: 0 auto;
-              padding: 0 24px;
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-              gap: 24px;
+        .contact_wrap:hover {
+            border-radius: 5px;
+            /* border: 1.4px solid var(--system_primery_color); */
+            /* color: var(--system_primery_color); */
+        }
+
+        .btn-primary {
+    background: var(--terracotta); color: var(--white);
+    border-color: var(--terracotta);
+  }
+  .btn-primary:hover { background: var(--deep-teal); border-color: var(--deep-teal);
+  color: white !important;
+  }
+
+        .login_btn a {
+            font-size: 12.5px;
+            font-weight: 300;
+            font-family: "Inter";
+            color: #eee;
+            background-color: var(--terracotta);
+            margin-left: 10px !important;
+            border-radius: 4px;
+            border: 1px solid var(--terracotta);
+        }
+
+        .login_btn a:hover {
+            color: var(--white) !important;
+            background-color: var(--deep-teal) !important;
+            border-color: var(--deep-teal);
+        }
+
+        .fa-lg {
+            font-size: 5px;
+        }
+
+        .menu-hamburger {
+            height: 20px;
+            width: 20px;
+        }
+
+        .theme_btn.small_btn2 {
+            white-space: nowrap;
+            /* border-radius: 16px !important; */
+        }
+
+        .on_cursor:hover {
+            background-color: #eee !important;
+            cursor: pointer !important;
+        }
+
+        .mobile-menu {
+            margin-left: 6rem;
+        }
+
+        #mobile-menu li a {
+            color: #000000 !important;
+            font-family: "Inter" !important;
+            font-weight: 400 !important;
+            font-size: 12px !important;
+            margin-right: 9px !important;
+        }
+
+        #mobile-menu li a.active {
+            color: var(--system_primery_color) !important;
+            font-family: "Inter" !important;
+            font-weight: 800 !important;
+        }
+
+        .inter {
+            font-family: "Inter"
+        }
+
+        /* small screen searchbar */
+        .search-bar {
+            position: absolute;
+            /* top: 50%; */
+            /* left: 50%; */
+            right: 0;
+            transform: translate(-50%, -50%);
+            background: #8a8787;
+            border: #e84118;
+            height: 40px;
+            border-radius: 40px;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .search-bar:hover>.search-txt {
+            width: 100%;
+            padding: 0 6px;
+        }
+
+        .search-btn {
+            color: #e84118;
+            float: right;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            /* background: #2f3640; */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .search-txt {
+            border: none;
+            background: none;
+            outline: none;
+            float: left;
+            padding: 0;
+            color: black;
+            font-size: 16px;
+            transition: 0.4s;
+            line-height: 40px;
+            width: 0px;
+
+        }
+
+        .register-btn-svg svg {
+            height: 17px;
+        }
+
+        .fa-user {
+            font-size: 15px;
+        }
+
+        @media only screen and (max-width: 768px) {
+            .login_btn {
+                display: flex;
+                font-family: "Inter";
+                margin: 0px 0px 0px 18px;
+                font-weight: 500;
+                width: fit-content;
+                border-radius: 16px !important;
             }
-            /* .contact_wrap {
-                border-radius: 5px;
-                border: 1.4px solid var(--system_primery_color);
-            } */
-
-            .contact_wrap:hover {
-                border-radius: 5px;
-                /* border: 1.4px solid var(--system_primery_color); */
-                /* color: var(--system_primery_color); */
-            }
-
-            .btn-primary {
-        background: var(--terracotta); color: var(--white);
-        border-color: var(--terracotta);
-      }
-      .btn-primary:hover { background: var(--deep-teal); border-color: var(--deep-teal);
-      color: white !important;
-      }
 
             .login_btn a {
-                font-size: 12.5px;
-                font-weight: 300;
-                font-family: "Inter";
-                color: #eee;
-                background-color: var(--terracotta);
-                border-radius: 4px;
-                padding: 10px 20px !important;
-                border: 1px solid var(--terracotta);
+                padding: 7px !important
             }
 
             .login_btn a:hover {
-                color: var(--white) !important;
-                background-color: var(--deep-teal) !important;
-                border-color: var(--deep-teal);
+                color: var(--system_primery_color) !important;
+                background-color: #fff !important;
+                border: 2px solid var(--system_primery_color) !important;
             }
 
-            .fa-lg {
-                font-size: 5px;
-            }
-
-            .menu-hamburger {
-                height: 20px;
-                width: 20px;
-            }
-
-            .theme_btn.small_btn2 {
-                white-space: nowrap;
-                /* border-radius: 16px !important; */
-            }
-
-            .on_cursor:hover {
-                background-color: #eee !important;
-                cursor: pointer !important;
-            }
-
-            .mobile-menu {
-                margin-left: 6rem;
-            }
-
-            #mobile-menu li a {
-                color: #000000 !important;
-                font-family: "Inter" !important;
-                font-weight: 400 !important;
-                font-size: 12px !important;
-                margin-right: 9px !important;
-            }
-
-            #mobile-menu li a.active {
-                color: var(--mid-teal) !important;
-                font-family: "Inter" !important;
-                font-weight: 800 !important;
-            }
-
-            .inter {
-                font-family: "Inter"
-            }
-
-            /* small screen searchbar */
-            .search-bar {
-                position: absolute;
-                /* top: 50%; */
-                /* left: 50%; */
-                right: 0;
-                transform: translate(-50%, -50%);
-                background: #8a8787;
-                border: #e84118;
-                height: 40px;
-                border-radius: 40px;
-                padding: 10px;
+            .search-column {
                 display: flex;
-                justify-content: center;
-                align-items: center;
+                justify-content: right;
+                align-items: end
             }
 
-            .search-bar:hover>.search-txt {
+            .search-form .form-group {
+                float: right !important;
+                transition: all 0.35s, border-radius 0s;
+                width: 32px;
+                height: 32px;
+                background-color: #fff;
+                box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+                border-radius: 25px;
+                border: 1px solid #ccc;
+            }
+
+            .search-form .form-group input.form-control {
+                border: 0 none;
+                background: transparent;
+                box-shadow: none;
+                display: block;
+                padding-top: 13px;
+            }
+
+            .search-form .form-group input.form-control::-webkit-input-placeholder {
+                display: none;
+            }
+
+            .search-form .form-group input.form-control:-moz-placeholder {
+
+                display: none;
+            }
+
+            .search-form .form-group input.form-control::-moz-placeholder {
+
+                display: none;
+            }
+
+            .search-form .form-group input.form-control:-ms-input-placeholder {
+                display: none;
+            }
+
+            .search-form .form-group:hover,
+            .search-form .form-group.hover {
                 width: 100%;
-                padding: 0 6px;
+                /* border-radius: 4px 25px 25px 4px; */
             }
 
-            .search-btn {
-                color: #e84118;
-                float: right;
-                width: 20px;
-                height: 20px;
-                border-radius: 50%;
-                /* background: #2f3640; */
+            .search-form .form-group i.form-control-feedback {
+                position: absolute;
+                top: 50%;
+                /* right: 25px; */
+                z-index: 2;
+                display: block;
+                width: 34px;
+                height: 34px;
+                /* line-height: 34px; */
+                text-align: center;
+                color: var(--system_primery_color);
+                left: initial;
+                font-size: 14px;
+                transform: translateY(10px);
+            }
+        }
+
+        @media only screen and (min-width: 769px) and (max-width:992px) {
+
+            .login_btn a:hover {
+                color: var(--system_primery_color) !important;
+                background-color: #fff !important;
+                border: 2px solid var(--system_primery_color) !important;
+            }
+
+            .login_btn {
                 display: flex;
-                justify-content: center;
-                align-items: center;
+                font-family: "Inter";
+                margin: 0px 0px 0px 18px;
+                font-weight: 500;
+                width: fit-content;
             }
 
-            .search-txt {
-                border: none;
-                background: none;
-                outline: none;
-                float: left;
-                padding: 0;
-                color: black;
-                font-size: 16px;
-                transition: 0.4s;
-                line-height: 40px;
-                width: 0px;
-
+            .login_btn a {
+                padding: 7px !important
             }
+        }
 
-            .register-btn-svg svg {
-                height: 17px;
+        
+
+        @media only screen and (min-width: 769px) and (max-width: 1100px) {
+            .login_btn a {
+                font-size: 11px !important;
+
             }
 
             .fa-user {
-                font-size: 15px;
+                font-size: 12px;
             }
 
-            @media only screen and (max-width: 768px) {
-                .login_btn {
-                    display: flex;
-                    font-family: "Inter";
-                    margin: 0px 0px 0px 18px;
-                    font-weight: 500;
-                    width: fit-content;
-                    border-radius: 16px !important;
-                }
+            .register-btn-svg svg {
+                height: 16px;
+            }
+        }
 
-                .login_btn a {
-                    padding: 7px !important
-                }
+        @media only screen and (min-width: 1200px) and (max-width:1279px) {
+            .login_btn a {
+                font-size: 13px;
+                color: #eee;
+            }
+        }
 
-                .login_btn a:hover {
-                    color: var(--system_primery_color) !important;
-                    background-color: #fff !important;
-                    border: 2px solid var(--system_primery_color) !important;
-                }
-
-                .search-column {
-                    display: flex;
-                    justify-content: right;
-                    align-items: end
-                }
-
-                .search-form .form-group {
-                    float: right !important;
-                    transition: all 0.35s, border-radius 0s;
-                    width: 32px;
-                    height: 32px;
-                    background-color: #fff;
-                    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
-                    border-radius: 25px;
-                    border: 1px solid #ccc;
-                }
-
-                .search-form .form-group input.form-control {
-                    border: 0 none;
-                    background: transparent;
-                    box-shadow: none;
-                    display: block;
-                    padding-top: 13px;
-                }
-
-                .search-form .form-group input.form-control::-webkit-input-placeholder {
-                    display: none;
-                }
-
-                .search-form .form-group input.form-control:-moz-placeholder {
-
-                    display: none;
-                }
-
-                .search-form .form-group input.form-control::-moz-placeholder {
-
-                    display: none;
-                }
-
-                .search-form .form-group input.form-control:-ms-input-placeholder {
-                    display: none;
-                }
-
-                .search-form .form-group:hover,
-                .search-form .form-group.hover {
-                    width: 100%;
-                    /* border-radius: 4px 25px 25px 4px; */
-                }
-
-                .search-form .form-group i.form-control-feedback {
-                    position: absolute;
-                    top: 50%;
-                    /* right: 25px; */
-                    z-index: 2;
-                    display: block;
-                    width: 34px;
-                    height: 34px;
-                    /* line-height: 34px; */
-                    text-align: center;
-                    color: var(--system_primery_color);
-                    left: initial;
-                    font-size: 14px;
-                    transform: translateY(10px);
-                }
+        @media only screen and (min-width: 1400px) and (max-width:1799px) {
+            .login_btn a {
+                font-size: 13px;
+                color: #eee;
             }
 
-            @media only screen and (min-width: 769px) and (max-width:992px) {
+            #mobile-menu li a {
+                font-size: 15px !important;
+                margin-right: 15px !important;
+            }
+        }
 
-                .login_btn a:hover {
-                    color: var(--system_primery_color) !important;
-                    background-color: #fff !important;
-                    border: 2px solid var(--system_primery_color) !important;
-                }
-
-                .login_btn {
-                    display: flex;
-                    font-family: "Inter";
-                    margin: 0px 0px 0px 18px;
-                    font-weight: 500;
-                    width: fit-content;
-                }
-
-                .login_btn a {
-                    padding: 7px !important
-                }
+        @media only screen and (min-width: 1800px) {
+            .login_btn a {
+                font-size: 18px !important;
             }
 
+            #mobile-menu li a {
+                font-size: 16px !important;
+                margin-right: 16px !important;
+            }
+        }
 
-
-            @media only screen and (min-width: 769px) and (max-width: 1100px) {
-                .login_btn a {
-                    font-size: 11px !important;
-
-                }
-
-                .fa-user {
-                    font-size: 12px;
-                }
-
-                .register-btn-svg svg {
-                    height: 16px;
-                }
+        /* @media only screen and (min-width: 2000px) {
+            .login_btn a {
+                font-size: 20px !important;
             }
 
-            @media only screen and (min-width: 1200px) and (max-width:1279px) {
-                .login_btn a {
-                    font-size: 13px;
-                    color: #eee;
-                }
+            #mobile-menu li a {
+                font-size: 20px !important;
             }
-
-            @media only screen and (min-width: 1400px) and (max-width:1799px) {
-                .login_btn a {
-                    font-size: 13px;
-                    color: #eee;
-                }
-
-                #mobile-menu li a {
-                    font-size: 15px !important;
-                    margin-right: 15px !important;
-                }
-            }
-
-            @media only screen and (min-width: 1800px) {
-                .login_btn a {
-                    font-size: 18px !important;
-                }
-
-                #mobile-menu li a {
-                    font-size: 16px !important;
-                    margin-right: 16px !important;
-                }
-            }
-
-            /* @media only screen and (min-width: 2000px) {
-                .login_btn a {
-                    font-size: 20px !important;
-                }
-
-                #mobile-menu li a {
-                    font-size: 20px !important;
-                }
-            } */
-
-            /* ============ MOCKUP NOTE BANNER ============ */
-      .mockup-banner {
-        background: var(--terracotta) !important; color: var(--white) !important;
-        text-align: center !important; padding: 10px 16px;
-        font-size: 13px; letter-spacing: 0.5px;
-      }
+        } */
     </style>
-
-
     <!-- HEADER::START -->
-    <header class="main-header">
-       <div class="utility-bar">
-          <div class="utility-inner">
-            <div class="utility-tagline">Knowledge · Understanding · Wisdom</div>
-            <div class="utility-links">
-              <a href="shop.html" class="utility-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-                Shop
-              </a>
-              <a href="tutoring.html" class="utility-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                Tutoring
-              </a>
-              <a href="login.html" class="utility-link">
-                <span class="login-dot"></span>
-                Student Login
-              </a>
-            </div>
-          </div>
-        </div>
-        
-        <div class="top-bar"></div>
 
+    <header class="main-header">
+        <div id="back-top" style="display: none;">
+            <a title="Go to Top" href="javascript:void(0)" id="back-top-btn">
+                <i class="fa fa-angle-up font-weight-bold" aria-hidden="true"
+                    style="
+            margin-top: 15px;
+        "></i>
+            </a>
+        </div>
         <div id="sticky-header" class="header_area py-0 px-0" style="background-color: #ffffff">
-            <div class="container-fluid" style="padding: 18px 24px;">
+            <div class="container-fluid px-0 py-0" style="max-width: 1650px !important;">
 
                 
-                    
+                    <div class="mockup-banner">
+                      Visual mockup · Merkaii Xcellence Prep homepage · 8 sections · Brand palette V3
+                    </div>
 
-                <div class="nav-inner">
+                    <div class="top-bar"></div>
+
+                <div class="row">
                     <!-- <div class="col-12"> -->
-                    {{-- <div class="col-md-2 col-4 px-0 d-flex align-items-center justify-content-center"> --}}
+                    <div class="col-md-2 col-4 px-0">
                         <!-- header__left__start  -->
-                        {{-- <div class="d-flex align-items-center pl-4"> --}}
-                            {{-- <div class="logo_img "> --}}
-                                <a href="{{ url('/') }}" class="logo-mark">
-                                    {{-- <img class="image_size p-1" style="filter: drop-shadow(0px 4px 4px #000000);" src="{{ getLogoImage(Settings('logo')) }}"
-                                        alt="{{ Settings('site_name') }}"> --}}
-                                       <div class="logo-seal-wrap">
-                                           <svg class="logo-seal-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                                             <circle cx="50" cy="50" r="48" fill="#1A8A6F" stroke="#C65D3A" stroke-width="1.5"/>
-                                             <circle cx="50" cy="50" r="40" fill="#0F6E56"/>
-                                             <text x="38" y="58" font-family="'Playfair Display', serif" font-size="26" font-weight="700" fill="#FFFFFF" text-anchor="middle">M</text>
-                                             <text x="50" y="58" font-family="'Playfair Display', serif" font-size="26" font-weight="700" fill="#FFFFFF" text-anchor="middle">X</text>
-                                             <text x="62" y="55" font-family="'Playfair Display', serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">P</text>
-                                             <line x1="38" y1="64" x2="62" y2="64" stroke="#C65D3A" stroke-width="1.2"/>
-                                           </svg>
-                                       </div>
-                                       <div class="logo-text">
-                                           <span class="name">Merkaii Xcellence Prep</span>
-                                           <span class="tag">NCLEX Prep · Remediation</span>
-                                       </div>
+                        <div class="d-flex align-items-center pl-4">
+                            <div class="logo_img ">
+                                <a href="{{ url('/') }}">
+                                    <img class="image_size p-1" style="filter: drop-shadow(0px 4px 4px #000000);" src="{{ getLogoImage(Settings('logo')) }}"
+                                        alt="{{ Settings('site_name') }}">
                                 </a>
-                            {{-- </div> --}}
+                            </div>
                             <div class="translator-switch">
 
                                 @if (Settings('frontend_language_translation') == 1)
@@ -624,8 +462,8 @@
                                 @endif
                                 <div class="search_courses_list position-absolute"></div> --}}
                             </div>
-                        {{-- </div> --}}
-                    {{-- </div> --}}
+                        </div>
+                    </div>
                     {{-- small screen search --}}
 
                     {{-- for serch --}}
@@ -673,9 +511,9 @@
                     </div> --}}
 
                     <!-- main_menu_start  -->
-                    {{-- <div
-                        class="col-md-10 col-sm-1 d-sm-flex justify-content-end main_menu d-none category_box_iner px-0 pl-lg-0 pr-lg-3 py-0"> --}}
-                        <nav class="navbar navbar-expand-md pl-0 mb-0 nav-center">
+                    <div
+                        class="col-md-10 col-sm-1 d-sm-flex justify-content-end main_menu d-none category_box_iner px-0 pl-lg-0 pr-lg-3 py-0">
+                        <nav class="navbar navbar-expand-md pl-0 mb-0">
                             <button class="navbar-toggler" type="button" data-toggle="collapse"
                                 data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
                                 aria-label="Toggle navigation">
@@ -688,12 +526,12 @@
                                         <ul >
                                             @if (isset($categories))
                                                 @foreach ($categories as $category)
-                                    <li class="mega_menu_dropdown active_menu_item">
+<li class="mega_menu_dropdown active_menu_item">
                                                         <a
                                                             href="{{ route('courses') }}?category={{ $category->id }}">{{ $category->name }}</a>
                                                         @if (isset($category->activeSubcategories))
-                                                        @if (count($category->activeSubcategories) != 0)
-                                                        <ul>
+@if (count($category->activeSubcategories) != 0)
+<ul>
                                                                     <li>
                                                                         <div class="menu_dropdown_iner d-flex">
                                                                             <div class="single_menu_dropdown">
@@ -701,23 +539,23 @@
                                                                                 </h4>
                                                                                 <ul>
                                                                                     @if (isset($category->activeSubcategories))
-                                                        @foreach ($category->activeSubcategories as $subcategory)
-                                                        <li>
+@foreach ($category->activeSubcategories as $subcategory)
+<li>
                                                                                                 <a
                                                                                                     href="{{ route('courses') }}?category={{ $category->id }}">{{ $subcategory->name }}</a>
                                                                                             </li>
-                                                        @endforeach
-                                                        @endif
+@endforeach
+@endif
                                                                                 </ul>
                                                                             </div>
 
                                                                         </div>
                                                                     </li>
                                                                 </ul>
-                                                        @endif
-                                                        @endif
+@endif
+@endif
                                                     </li>
-                                                        @endforeach
+@endforeach
                                             @endif
                                         </ul>
                                     </div> -->
@@ -847,9 +685,9 @@
                                         @endforeach
                                         @guest
                                             <div class="login_btn text-center d-lg-none d-flex">
-                                                {{-- <a class="inter" href="{{ url('login') }}"
+                                                <a class="inter" href="{{ url('login') }}"
                                                     class="text-white">{{ __('LogIn To Portal') }}
-                                                </a> --}}
+                                                </a>
                                                 <a class="inter" href="{{ url('pre-registration') }}" class="text-white"
                                                     style="gap: 5px;">{{ __('Apply Now') }}
                                                 </a>
@@ -966,8 +804,7 @@
                                                 <div class="login_btn d-flex p-0">
                                                     <a href="{{ url('pre-registration') }}"
                                                         class="d-flex justify-content-center align-items-center register-btn-svg px-2 py-1"
-                                                        style="gap: 5px;">
-                                                        {{-- <svg aria-hidden="true" focusable="false"
+                                                        style="gap: 5px;"><svg aria-hidden="true" focusable="false"
                                                             data-prefix="fas" data-icon="grid-2" role="img"
                                                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
                                                             class="svg-inline--fa fa-grid-2 fa-lg" "><path fill="currentColor" d="
@@ -978,8 +815,7 @@
                                                             48 48h96c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48H336c-26.5
                                                             0-48 21.5-48 48zM480 336c0-26.5-21.5-48-48-48H336c-26.5 0-48
                                                             21.5-48 48v96c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48V336z"
-                                                            class=""></path></svg> --}}
-                                                            {{ __('Schedule a Call') }}
+                                                            class=""></path></svg>{{ __('Apply Now') }}
                                                     </a>
                                                 </div>
                                             </div>
@@ -988,9 +824,9 @@
                                 @endguest
                                 <!-- header__right_end  -->
                             </div>
-                        </nav>
-                    {{-- </div> --}}
+                    </div>
                 </div>
+                </nav>
 
             </div>
 
@@ -1000,10 +836,10 @@
 
         </div>
     </header>
+</div>
+</div>
 
- </div>
-
- 
+</header>
 
 @if (Settings('category_show'))
     <div class="side_cate">
@@ -1086,30 +922,7 @@
     }
 </style>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
 
-    const header = document.getElementById("sticky-header");
-
-    if (!header) return;
-
-    function toggleStickyHeader() {
-
-        if (window.pageYOffset > 50 || document.documentElement.scrollTop > 50) {
-            header.classList.add("navbar_fixed");
-        } else {
-            header.classList.remove("navbar_fixed");
-        }
-    }
-
-    // Run once on load
-    toggleStickyHeader();
-
-    // Listen for scroll
-    window.addEventListener("scroll", toggleStickyHeader);
-
-});
-</script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {

@@ -1,6 +1,6 @@
 
 
-    <h5 class="text-white font-weight-bold">
+    <h5>
 
         {{function_exists('footerSettings')?footerSettings('footer_section_four_title'):''}}
 
@@ -16,11 +16,11 @@
 
             @endphp
 
-            <p><a href="{{ $route }}" style="color:inherit;">{{$page->name}} </a></p>
+            <p><a href="{{ $route }}">{{$page->name}} </a></p>
 
         @else
 
-            <p><a href="javascript:void(0)" style="color:inherit;">{{$page->name}} </a></p>
+            <p><a href="javascript:void(0)">{{$page->name}} </a></p>
 
         @endif
 

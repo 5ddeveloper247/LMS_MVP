@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap);
+/* @import url(https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap); */
 
 
 
@@ -311,11 +311,11 @@ html[dir="rtl"] .slicknav_btn {
     font-weight: 800;
 }
 
-body {
-    font-family: Jost, sans-serif;
+/* body {
+    font-family: Jost;
     font-style: normal;
     font-weight: 400;
-}
+} */
 
 a:hover {
     color: #0079a8;
@@ -398,7 +398,7 @@ p {
     line-height: 26px;
     color: #373737;
     margin-bottom: 0;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
 }
 
 label,
@@ -823,7 +823,7 @@ label {
 }
 
 .font_2 {
-    font-family: Jost, sans-serif;
+    font-family: Jost;
 }
 
 .ck-content table{
@@ -941,7 +941,7 @@ label {
 }
 
 .theme_select .current {
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     font-size: 14px;
     font-weight: 500;
     color: #afafaf;
@@ -1247,7 +1247,7 @@ label {
 .white_btn {
     background: #fff;
     border-radius: 0;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     font-size: 16px;
     color: var(--system_secendory_color);
     font-weight: 600;
@@ -1393,7 +1393,7 @@ label {
 /* .section__title p {
     font-size: 16px;
     font-weight: 500;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     color: #373737;
 } */
 
@@ -1411,7 +1411,7 @@ label {
 .section__title2 span {
     font-size: 14px;
     color: #373737;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     font-weight: 600;
     display: block;
     margin-bottom: 11px;
@@ -1841,7 +1841,7 @@ label {
     left: 0;
     top: 0;
     width: 100%;
-    z-index: 9999;
+    z-index: 999;
     padding: 0 30px;
     background: #fff;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
@@ -2023,7 +2023,7 @@ label {
     margin: 0 8px;
     display: inline-block;
     text-transform: capitalize;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     padding: 20px 0 20px;
     text-decoration: none;
 }
@@ -2229,7 +2229,7 @@ label {
     line-height: 26px;
     color: #373737;
     margin-bottom: 0;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
 }
 
 .payment_btn a,
@@ -2348,7 +2348,7 @@ input[type="number"] {
 
 .slicknav_nav .slicknav_row,
 .slicknav_nav a {
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     padding: 6.5px 20px;
     margin: 0;
     font-size: 16px;
@@ -2455,7 +2455,7 @@ input[type="number"] {
     font-weight: 500;
     color: #fff;
     line-height: 26px;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     margin-bottom: 51px;
 }
 
@@ -3286,7 +3286,7 @@ input[type="number"] {
 }
 
 .blog_page_wrapper .single_blog .blog_meta span {
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     font-size: 14px;
     font-weight: 500;
     color: #373737;
@@ -3570,7 +3570,7 @@ input[type="number"] {
     right: 30px;
     background: #fff;
     border-radius: 0;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     font-size: 16px;
     color: var(--system_secendory_color);
     font-weight: 600;
@@ -3720,7 +3720,7 @@ input[type="number"] {
 }
 
 .team_area .single_team span {
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     font-size: 14px;
     font-weight: 500;
     color: #373737;
@@ -3765,7 +3765,7 @@ input[type="number"] {
 }
 
 .who_we_area .who_we_info .info_left span {
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     font-size: 14px;
     font-weight: 600;
     color: #373737;
@@ -3803,7 +3803,7 @@ input[type="number"] {
 }
 
 .who_we_area .who_we_info .info_right p {
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     font-size: 35px;
     font-weight: 700;
     line-height: 45px;
@@ -3993,7 +3993,7 @@ input[type="number"] {
 .primary_checkbox h5 {
     font-size: 14px;
     font-weight: 500;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     color: var(--system_secendory_color);
     margin-bottom: 0;
 }
@@ -4038,7 +4038,7 @@ input[type="number"] {
 .primary_checkbox2 h5 {
     font-size: 16px;
     font-weight: 600;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     color: var(--system_secendory_color);
     margin-bottom: 0;
 }
@@ -4156,7 +4156,7 @@ input[type="number"] {
 .primary_bulet_checkbox h5 {
     font-size: 16px;
     font-weight: 500;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     color: var(--system_secendory_color);
     margin-bottom: 0;
 }
@@ -4505,7 +4505,7 @@ input[type="number"] {
 .shoping_wrapper .shoping_cart .shoping_cart_inner .single_cart .cart_content h5 {
     font-size: 16px;
     font-weight: 500;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     color: #373737;
     margin-bottom: 10px;
 }
@@ -4514,7 +4514,7 @@ input[type="number"] {
     font-size: 16px;
     font-weight: 500;
     color: #373737;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     display: flex;
     align-items: center;
 }
@@ -4696,7 +4696,7 @@ input[type="number"] {
 }
 
 .course__details .course__details_title .single__details .details_content .rating_star p {
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     color: var(--system_secendory_color);
     margin-bottom: 0;
     margin-left: 19px;
@@ -4729,7 +4729,7 @@ input[type="number"] {
 .course__details .video_screen p {
     font-size: 18px;
     font-weight: 600;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     color: #fff;
     margin-top: 14px;
 }
@@ -4892,7 +4892,7 @@ input[type="number"] {
 .lms_tab_content .instractor_details_wrapper .instractor_details_inner .instractor_details_info h5 {
     font-size: 16px;
     font-weight: 500;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     color: #373737;
 }
 
@@ -4912,7 +4912,7 @@ input[type="number"] {
     align-items: center;
     font-size: 16px;
     font-weight: 500;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     margin-bottom: 10px;
 }
 
@@ -4977,7 +4977,7 @@ input[type="number"] {
 }
 
 .course_review_wrapper .course_feedback .course_feedback_left span {
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     font-size: 14px;
     font-weight: 500;
     color: var(--system_secendory_color);
@@ -5036,7 +5036,7 @@ input[type="number"] {
 }
 
 .course_review_wrapper .course_feedback .feedbark_progressbar .single_progrssbar .rating_percent span {
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     font-size: 14px;
     font-weight: 500;
     color: var(--system_secendory_color);
@@ -5123,7 +5123,7 @@ input[type="number"] {
     font-size: 16px;
     font-weight: 400;
     color: #373737;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     display: flex;
     align-items: center;
     margin-bottom: 1px;
@@ -5221,7 +5221,7 @@ input[type="number"] {
 }
 
 .quiz_test_wrapper .quiz_test_body .quiz_test_info li {
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     font-weight: 400;
     color: #373737;
     display: grid;
@@ -6026,7 +6026,7 @@ input[type="number"] {
 .login_wrapper .login_wrapper_right .other_links span {
     font-size: 18px;
     font-weight: 500;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     color: var(--system_secendory_color);
 }
 
@@ -6080,7 +6080,7 @@ input[type="number"] {
     border: 0;
     font-size: 14px;
     font-weight: 500;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     box-shadow: none !important;
     padding-bottom: 19px;
     padding-left: 10px;
@@ -6138,7 +6138,7 @@ input[type="number"] {
 }
 
 .pricing_area .pricing_carousel .single_course_slide span {
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     font-size: 16px;
     font-weight: 500;
     color: #373737;
@@ -6198,7 +6198,7 @@ input[type="number"] {
 .pricing_area .single_pricing .pricing_body .pricing_lists li {
     font-size: 16px;
     font-weight: 500;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     color: #687083;
     margin-bottom: 8px;
 }
@@ -6246,7 +6246,7 @@ input[type="number"] {
     display: block;
     font-size: 14px;
     font-weight: 500;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     color: #373737;
 }
 
@@ -6498,7 +6498,7 @@ input[type="number"] {
 .instractos_details_wrapper .instractos_main_details .course__details_title .single__details .details_content .rating_star p {
     font-size: 14px;
     font-weight: 400;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     color: var(--system_secendory_color);
     margin-bottom: 0;
     margin-left: 19px;
@@ -6542,7 +6542,7 @@ input[type="number"] {
     height: 50px;
     border-radius: 5px;
     border: 1px solid #ebebeb;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     font-size: 14px;
     font-weight: 400;
     color: var(--system_secendory_color);
@@ -6565,7 +6565,7 @@ input[type="number"] {
 .primary_input3 {
     height: 50px;
     border: 1px solid #e1e2e6;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     font-size: 14px;
     font-weight: 400;
     color: var(--system_secendory_color);
@@ -6584,7 +6584,7 @@ input[type="number"] {
 .primary_input4 {
     height: 50px;
     border: 1px solid #e1e2e6;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     font-size: 14px;
     font-weight: 400;
     color: var(--system_secendory_color);
@@ -6604,7 +6604,7 @@ input[type="number"] {
 .primary_input5 {
     height: 56px;
     border: 0;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     font-size: 14px;
     font-weight: 500;
     color: #202e3b;
@@ -6626,7 +6626,7 @@ input[type="number"] {
     border-radius: 0;
     border: 0;
     border-bottom: 1px solid #ebebeb;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     font-size: 16px;
     font-weight: 300;
     color: var(--system_secendory_color);
@@ -6705,7 +6705,7 @@ input[type="number"] {
 .custom_input_group input {
     height: 50px;
     border: 1px solid #e1e2e6 !important;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     font-size: 14px;
     font-weight: 400;
     color: var(--system_secendory_color);
@@ -6727,7 +6727,7 @@ input[type="number"] {
     height: 150px;
     border-radius: 5px;
     border: 1px solid #ebebeb;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     font-size: 14px;
     font-weight: 400;
     color: var(--system_secendory_color);
@@ -6750,7 +6750,7 @@ input[type="number"] {
 .primary_textarea3 {
     height: 160px;
     border: 1px solid #e1e2e6;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     font-size: 14px;
     font-weight: 400;
     color: var(--system_secendory_color);
@@ -6769,7 +6769,7 @@ input[type="number"] {
 .primary_textarea4 {
     height: 120px;
     border: 1px solid #e1e2e6;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     font-size: 14px;
     font-weight: 400;
     color: var(--system_secendory_color);
@@ -6790,7 +6790,7 @@ input[type="number"] {
     height: 130px;
     border-radius: 0;
     border: 0;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     color: #202e3b;
     padding: 3px 25px 0 0;
     width: 100%;
@@ -6840,7 +6840,7 @@ input[type="number"] {
     border-radius: 0;
     border: 0;
     border-bottom: 1px solid #f0e7e2;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     font-size: 16px;
     font-weight: 300;
     color: var(--system_secendory_color);
@@ -6986,7 +6986,7 @@ input[type="number"] {
 
 .table.custom_table tbody tr td {
     border-bottom: 1px solid #e1e2e6;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     color: #373737;
     font-size: 16px;
     vertical-align: middle;
@@ -7075,7 +7075,7 @@ input[type="number"] {
 }
 
 .table.custom_table3 tbody tr td {
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     vertical-align: middle;
     padding: 14.5px 14.5px 14.5px 0;
     font-weight: 400;
@@ -7083,7 +7083,7 @@ input[type="number"] {
 
 .table.custom_table3 tbody tr td h5 {
     font-weight: 500;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     color: #373737;
     margin-bottom: 0;
     font-size: 16px;
@@ -7174,7 +7174,7 @@ input[type="number"] {
     background: #fff;
     color: #373737;
     font-weight: 500;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     font-size: 16px;
     border-right: 0;
     border-left: 0;
@@ -7301,7 +7301,7 @@ input[type="number"] {
 .checkout_wrapper .order_wrapper .bank_transfer .bank_check .label_name {
     font-size: 18px;
     font-weight: 600;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     color: #373737;
 }
 
@@ -10737,7 +10737,7 @@ footer .copyright_area .footer_widget .footer_links li a {
     font-weight: 500;
     color: var(--footer_text_color);
     line-height: 35px;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
 }
 
 footer .copyright_area .footer_widget .footer_links li a:hover {
@@ -11304,7 +11304,7 @@ ul {
     font-weight: 600;
     display: inline-block;
     text-transform: capitalize;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
 }
 
 .link a.active,
@@ -12137,7 +12137,7 @@ body {
 .white_btn2 {
     background: rgba(251, 17, 89, 0.1);
     border-radius: 5px;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     font-size: 16px;
     color: var(--system_primery_color);
     font-weight: 600;
@@ -12514,7 +12514,7 @@ body {
 }
 
 .translator-switch {
-    font-family: Jost, sans-serif !important;
+    font-family: Jost !important;
 }
 
 .lms_pricing_wized {
@@ -12552,7 +12552,7 @@ body {
 .lms_pricing_wized .lms_pricing_hader h5 {
     font-size: 16px;
     font-weight: 700;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     margin-bottom: 4px;
 }
 
@@ -12847,7 +12847,7 @@ body {
 
 .keyword_lists a {
     font-size: 14px;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     font-weight: 500;
     color: #373737;
     display: inline-block;
@@ -13522,7 +13522,7 @@ body {
     font-weight: 500;
     color: #0b0a24;
     line-height: 1.63;
-    font-family: Jost, sans-serif;
+    font-family: Jost;
     flex: 1 1 0;
 }
 

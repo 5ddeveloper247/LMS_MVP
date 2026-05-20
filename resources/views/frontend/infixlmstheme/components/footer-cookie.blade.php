@@ -12,9 +12,9 @@
                 background: var(--system_secendory_color) !important; 
             }
 
-            * {
+            /* * {
                 font-family: 'Inter' !important;
-            }
+            } */
 
             /* .theme_cookies .cookie_btn {
                 background: {{$cookie->text_color}};
