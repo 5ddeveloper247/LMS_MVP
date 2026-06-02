@@ -8,15 +8,15 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('public/assets/slick/slick-theme.css') }}">
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 <!-- AOS CSS -->
-<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+{{-- <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
 
 <!-- AOS JS -->
-<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script> --}}
 
 {{-- slider-timeline --}}
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-<style>
+{{-- <style>
     .card-custom {
         border: none;
         border-radius: 15px !important;
@@ -1204,23 +1204,1414 @@
             }
         }
     }
+</style> --}}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+
+
+<style>
+    :root {
+        --mid-teal: #1A8A6F;
+        --deep-teal: #0F6E56;
+        --darkest-teal: #0A4D3C;
+        --terracotta: #C65D3A;
+        --terracotta-dark: #A84827;
+        --cream: #F5EDE0;
+        --charcoal: #2B2B2B;
+        --charcoal-soft: #4a4a4a;
+        --white: #FFFFFF;
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: 'Montserrat', sans-serif !important;
+        color: var(--charcoal);
+        line-height: 1.6;
+        background: var(--white);
+    }
+
+    a {
+        color: inherit;
+    }
+
+    .mockup-banner {
+        background: var(--terracotta);
+        color: var(--white);
+        text-align: center;
+        padding: 10px 16px;
+        font-size: 13px;
+        letter-spacing: 0.5px;
+    }
+
+    .btn {
+        display: inline-block !important;
+        font-family: 'Montserrat', sans-serif !important;
+        font-weight: 600 !important;
+        font-size: 14px !important;
+        padding: 12px 24px !important;
+        border-radius: 4px !important;
+        text-decoration: none !important;
+        cursor: pointer !important;
+        transition: all 0.2s !important;
+        border: 2px solid transparent !important;
+        letter-spacing: 0.3px !important;
+    }
+
+    .btn-primary {
+        background: var(--terracotta) !important;
+        color: var(--white) !important;
+        border-color: var(--terracotta !important);
+    }
+
+    .btn-primary:hover {
+        background: var(--deep-teal) !important;
+        border-color: var(--deep-teal) !important;
+    }
+
+    .btn-on-teal {
+        background: var(--terracotta) !important;
+        color: var(--white) !important;
+        border-color: var(--terracotta) !important;
+    }
+
+    .btn-on-teal:hover {
+        background: var(--white) !important;
+        color: var(--deep-teal) !important;
+        border-color: var(--white) !important;
+    }
+
+    .btn-outline-white {
+        background: transparent !important;
+        color: var(--white) !important;
+        border-color: var(--white) !important;
+    }
+
+    .btn-outline-white:hover {
+        background: var(--white) !important;
+        color: var(--deep-teal) !important;
+    }
+
+    .btn-large {
+        padding: 16px 32px !important;
+        font-size: 15px !important;
+    }
+
+    .btn-small {
+        padding: 10px 18px !important;
+        font-size: 13px !important;
+    }
+
+    p {
+        font-family: 'Montserrat', sans-serif !important;
+    }
+
+    /* ============ HERO ============ */
+    .hero {
+        background: var(--mid-teal);
+        color: var(--white);
+        padding: 80px 24px 100px;
+        border-bottom: 4px solid var(--terracotta);
+        position: relative;
+    }
+
+    .hero-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 60px;
+        align-items: center;
+    }
+
+    .hero-eyebrow {
+        font-size: 13px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--cream);
+        margin-bottom: 20px;
+        font-weight: 500;
+    }
+
+    .hero-eyebrow .dot {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        background: var(--terracotta);
+        border-radius: 50%;
+        margin: 0 10px 2px 10px;
+        vertical-align: middle;
+    }
+
+    .hero h1 {
+        font-family: 'Playfair Display', serif;
+        font-weight: 800;
+        font-size: 60px;
+        line-height: 1.05;
+        margin-bottom: 16px;
+        color: var(--white);
+    }
+
+    .hero h1 .highlight {
+        color: var(--cream);
+        display: block;
+    }
+
+    .hero-italic {
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        font-size: 22px;
+        color: var(--cream);
+        margin-bottom: 24px;
+    }
+
+    .hero-support {
+        font-size: 17px;
+        line-height: 1.65;
+        color: rgba(255, 255, 255, 0.92);
+        margin-bottom: 32px;
+        font-family: var(--sans);
+    }
+
+    .hero-ctas {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .hero-secondary-link {
+        color: rgba(255, 255, 255, 0.85);
+        text-decoration: none;
+        font-size: 14px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+        padding-bottom: 2px;
+        transition: color 0.2s;
+    }
+
+    .hero-secondary-link:hover {
+        color: var(--terracotta);
+        border-color: var(--terracotta);
+    }
+
+    /* BON badge in hero */
+    .bon-badge {
+        background: rgba(0, 0, 0, 0.18);
+        border: 1.5px solid rgba(245, 237, 224, 0.3);
+        border-radius: 6px;
+        padding: 28px 28px;
+        color: var(--white);
+    }
+
+    .bon-badge-flag {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 14px;
+    }
+
+    .bon-badge-flag-icon {
+        width: 32px;
+        height: 24px;
+        background: var(--terracotta);
+        border-radius: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--white);
+        font-size: 14px;
+        font-weight: 700;
+        font-family: 'Playfair Display', serif;
+    }
+
+    .bon-badge-flag-text {
+        font-size: 11px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--cream);
+        font-weight: 600;
+    }
+
+    .bon-badge h3 {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 19px;
+        line-height: 1.3;
+        margin-bottom: 8px;
+        color: var(--white);
+    }
+
+    .bon-badge p {
+        font-size: 13px;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.85);
+        margin-bottom: 14px;
+        font-family: 'Montserrat', sans-serif !important;
+    }
+
+    .bon-badge p strong {
+        color: var(--cream);
+        font-weight: 600;
+    }
+
+    .bon-verify-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--cream);
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+        border-bottom: 1px solid var(--terracotta);
+        padding-bottom: 2px;
+    }
+
+    .bon-verify-link:hover {
+        color: var(--terracotta);
+    }
+
+    .bon-verify-link svg {
+        width: 12px;
+        height: 12px;
+    }
+
+    /* ============ SIGNATURE LINE ============ */
+    .signature-band {
+        background: var(--cream);
+        padding: 60px 24px;
+        text-align: center;
+    }
+
+    .signature-line {
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        font-size: 32px;
+        color: var(--charcoal);
+        line-height: 1.3;
+        max-width: 800px;
+        margin: 0 auto 14px;
+    }
+
+    .signature-attribution {
+        font-size: 12px;
+        letter-spacing: 1.5px;
+        color: var(--charcoal-soft);
+        text-transform: uppercase;
+        font-weight: 500;
+
+    }
+
+    /* ============ COMMON SECTION HEADER ============ */
+    .section {
+        padding: 90px 24px;
+    }
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 56px;
+        max-width: 880px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .section-eyebrow {
+        font-size: 12px;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: var(--terracotta);
+        font-weight: 600;
+        margin-bottom: 14px;
+    }
+
+    .section-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 40px;
+        color: var(--deep-teal);
+        line-height: 1.2;
+        margin-bottom: 14px;
+    }
+
+    .section-subtitle {
+        font-size: 16.5px;
+        color: var(--charcoal-soft);
+        max-width: 720px;
+        margin: 0 auto;
+        line-height: 1.65;
+    }
+
+    /* ============ AUDIENCE CARDS ============ */
+    .audiences-section {
+        background: var(--cream);
+    }
+
+    .audience-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 22px;
+        max-width: 1180px;
+        margin: 0 auto;
+    }
+
+    .audience-card {
+        background: var(--white);
+        border-top: 4px solid var(--mid-teal);
+        padding: 30px 26px;
+        border-radius: 4px;
+        transition: transform 0.2s, box-shadow 0.2s;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .audience-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 32px rgba(15, 110, 86, 0.12);
+    }
+
+    .audience-card.alt {
+        border-top-color: var(--terracotta);
+    }
+
+    .duration-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        letter-spacing: 1.4px;
+        text-transform: uppercase;
+        font-weight: 600;
+        background: var(--cream);
+        color: var(--deep-teal);
+        padding: 5px 11px;
+        border-radius: 100px;
+        margin-bottom: 16px;
+        align-self: flex-start;
+    }
+
+    .duration-tag.long {
+        background: rgba(198, 93, 58, 0.12);
+        color: var(--terracotta-dark);
+    }
+
+    .audience-card h3 {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 21px;
+        color: var(--deep-teal);
+        margin-bottom: 12px;
+        line-height: 1.25;
+    }
+
+    .audience-card p {
+        font-size: 14px;
+        line-height: 1.65;
+        color: var(--charcoal);
+        margin-bottom: 18px;
+        flex-grow: 1;
+    }
+
+    .audience-card .scenario-tag {
+        font-size: 11px;
+        letter-spacing: 1px;
+        color: var(--charcoal-soft);
+        font-weight: 500;
+        text-transform: uppercase;
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+        padding-top: 14px;
+    }
+
+    /* ============ REGULATORY EXPLAINER ============ */
+    .regulatory-section {
+        background: var(--white);
+    }
+
+    .regulatory-grid {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        gap: 60px;
+        align-items: start;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .regulatory-content h2 {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 36px;
+        color: var(--deep-teal);
+        margin-bottom: 16px;
+        line-height: 1.2;
+    }
+
+    .regulatory-content p {
+        margin-bottom: 16px;
+        font-size: 15px;
+        line-height: 1.75;
+    }
+
+    .regulatory-content .lead {
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        font-size: 19px;
+        color: var(--terracotta);
+        margin-bottom: 20px;
+    }
+
+    .scenario-list {
+        background: var(--cream);
+        border-radius: 4px;
+        padding: 32px 32px;
+        border-left: 4px solid var(--terracotta);
+    }
+
+    .scenario-list h4 {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 18px;
+        color: var(--deep-teal);
+        margin-bottom: 6px;
+    }
+
+    .scenario-list .source-line {
+        font-size: 12px;
+        color: var(--charcoal-soft);
+        margin-bottom: 24px;
+        font-style: italic;
+    }
+
+    .scenario-item {
+        display: flex;
+        gap: 18px;
+        align-items: flex-start;
+        padding: 16px 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .scenario-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .scenario-num {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 28px;
+        color: var(--terracotta);
+        line-height: 1;
+        flex-shrink: 0;
+    }
+
+    .scenario-text {
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--charcoal);
+    }
+
+    .scenario-text strong {
+        color: var(--deep-teal);
+        display: block;
+        margin-bottom: 4px;
+        font-weight: 600;
+    }
+
+    /* ============ WHAT'S INCLUDED ============ */
+    .included-section {
+        background: var(--cream);
+    }
+
+    .included-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 22px;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .included-card {
+        background: var(--white);
+        padding: 32px 24px;
+        text-align: center;
+        border-radius: 4px;
+    }
+
+    .included-icon {
+        width: 56px;
+        height: 56px;
+        margin: 0 auto 18px;
+        background: var(--cream);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--terracotta);
+    }
+
+    .included-icon svg {
+        width: 28px;
+        height: 28px;
+    }
+
+    .included-card h4 {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 17px;
+        color: var(--deep-teal);
+        margin-bottom: 8px;
+    }
+
+    .included-card p {
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--charcoal-soft);
+    }
+
+    /* ============ NCLEX PASS METHOD INLINE ============ */
+    .method-inline-section {
+        background: var(--white);
+    }
+
+    .method-inline-band {
+        background: var(--cream);
+        border-left: 6px solid var(--terracotta);
+        padding: 40px 44px;
+        border-radius: 4px;
+        max-width: 1100px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1.5fr;
+        gap: 40px;
+        align-items: center;
+    }
+
+    .method-inline-band h3 {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 28px;
+        color: var(--deep-teal);
+        margin-bottom: 6px;
+    }
+
+    .method-inline-band .italic-tag {
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        font-size: 17px;
+        color: var(--terracotta);
+    }
+
+    .method-inline-band p {
+        font-size: 14.5px;
+        line-height: 1.75;
+        color: var(--charcoal);
+    }
+
+    .method-inline-band a {
+        color: var(--mid-teal);
+        font-weight: 600;
+        text-decoration: none;
+        border-bottom: 2px solid var(--mid-teal);
+        padding-bottom: 1px;
+        font-size: 13px;
+    }
+
+    .method-inline-band a:hover {
+        color: var(--terracotta);
+        border-color: var(--terracotta);
+    }
+
+    /* ============ FOUNDER ============ */
+    .founder-section {
+        background: var(--cream);
+    }
+
+    .founder-grid {
+        display: grid;
+        grid-template-columns: 1fr 1.5fr;
+        gap: 50px;
+        align-items: center;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .founder-photo {
+        aspect-ratio: 4/5;
+        background: linear-gradient(135deg, var(--mid-teal) 0%, var(--deep-teal) 100%);
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--cream);
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        font-size: 16px;
+        text-align: center;
+        padding: 30px;
+        border: 3px solid var(--terracotta);
+    }
+
+    .founder-eyebrow {
+        font-size: 12px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--terracotta);
+        font-weight: 600;
+        margin-bottom: 14px;
+    }
+
+    .founder-section h2 {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 40px;
+        color: var(--deep-teal);
+        margin-bottom: 10px;
+    }
+
+    .founder-credentials {
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        font-size: 16px;
+        color: var(--terracotta);
+        margin-bottom: 22px;
+    }
+
+    .founder-section p {
+        margin-bottom: 16px;
+        font-size: 15px;
+        line-height: 1.75;
+    }
+
+    .founder-close {
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        font-size: 17px;
+        color: var(--deep-teal);
+        margin: 22px 0 26px;
+    }
+
+    /* ============ PRICING ============ */
+    .pricing-section {
+        background: var(--white);
+    }
+
+    .pricing-card {
+        background: var(--cream);
+        border: 2px solid var(--mid-teal);
+        border-radius: 6px;
+        padding: 50px 50px;
+        max-width: 920px;
+        margin: 0 auto;
+        text-align: center;
+        position: relative;
+    }
+
+    .pricing-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 6px;
+        background: var(--terracotta);
+        border-radius: 6px 6px 0 0;
+    }
+
+    .pricing-eyebrow {
+        font-size: 12px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--terracotta);
+        font-weight: 600;
+        margin-bottom: 16px;
+    }
+
+    .pricing-card h3 {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 32px;
+        color: var(--deep-teal);
+        margin-bottom: 24px;
+    }
+
+    .pricing-amount {
+        font-family: 'Playfair Display', serif;
+        font-weight: 800;
+        font-size: 80px;
+        color: var(--terracotta);
+        line-height: 1;
+        margin-bottom: 8px;
+    }
+
+    .pricing-amount-detail {
+        font-size: 14px;
+        color: var(--charcoal-soft);
+        margin-bottom: 36px;
+    }
+
+    .pricing-features {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px 36px;
+        max-width: 660px;
+        margin: 0 auto 36px;
+        text-align: left;
+    }
+
+    .pricing-feature {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        font-size: 14px;
+        line-height: 1.5;
+        color: var(--charcoal);
+    }
+
+    .pricing-check {
+        flex-shrink: 0;
+        width: 18px;
+        height: 18px;
+        background: var(--mid-teal);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--white);
+        font-size: 11px;
+        font-weight: 700;
+        margin-top: 2px;
+    }
+
+    .pricing-plans-note {
+        background: var(--white);
+        border-radius: 4px;
+        padding: 18px 24px;
+        margin: 0 auto 28px;
+        font-size: 13.5px;
+        color: var(--charcoal-soft);
+        line-height: 1.6;
+        max-width: 560px;
+    }
+
+    .pricing-plans-note strong {
+        color: var(--deep-teal);
+        font-weight: 600;
+    }
+
+    /* ============ FAQ ============ */
+    .faq-section {
+        background: var(--cream);
+    }
+
+    .faq-list {
+        max-width: 880px;
+        margin: 0 auto;
+    }
+
+    .faq-item {
+        background: var(--white);
+        border-radius: 4px;
+        margin-bottom: 12px;
+        padding: 22px 26px;
+        cursor: pointer;
+        border-left: 3px solid transparent;
+        transition: border-color 0.2s;
+    }
+
+    .faq-item:hover {
+        border-left-color: var(--mid-teal);
+    }
+
+    .faq-item.open {
+        border-left-color: var(--terracotta);
+    }
+
+    .faq-q {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 18px;
+        color: var(--deep-teal);
+    }
+
+    .faq-chevron {
+        color: var(--terracotta);
+        font-size: 22px;
+        flex-shrink: 0;
+        margin-left: 16px;
+    }
+
+    .faq-a {
+        margin-top: 14px;
+        font-size: 14.5px;
+        line-height: 1.75;
+        color: var(--charcoal);
+        display: none;
+    }
+
+    .faq-item.open .faq-a {
+        display: block;
+    }
+
+    .faq-item.open .faq-chevron {
+        transform: rotate(45deg);
+    }
+
+    /* ============ FINAL CTA ============ */
+    .final-cta {
+        background: var(--mid-teal);
+        color: var(--white);
+        padding: 90px 24px;
+        text-align: center;
+        border-top: 4px solid var(--terracotta);
+    }
+
+    .final-cta h2 {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 48px;
+        margin-bottom: 22px;
+        color: var(--white);
+    }
+
+    .final-cta-italic {
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        font-size: 22px;
+        color: var(--cream);
+        margin-bottom: 22px;
+    }
+
+    .final-cta-body {
+        max-width: 700px;
+        margin: 0 auto 36px;
+        font-size: 16.5px;
+        line-height: 1.7;
+        color: rgba(255, 255, 255, 0.95);
+    }
+
+    .final-cta-btns {
+        display: flex;
+        gap: 18px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .final-cta-trust {
+        margin-top: 32px;
+        font-size: 12.5px;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.75);
+        text-transform: uppercase;
+    }
+
+    /* ============ RESPONSIVE ============ */
+    @media (max-width: 1024px) {
+        .nav-center {
+            display: none;
+        }
+
+        .utility-tagline {
+            display: none;
+        }
+
+        .audience-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .included-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+    }
+
+    @media (max-width: 768px) {
+
+        .hero-inner,
+        .regulatory-grid,
+        .founder-grid,
+        .method-inline-band {
+            grid-template-columns: 1fr;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+        }
+
+        .section-title,
+        .founder-section h2,
+        .regulatory-content h2 {
+            font-size: 30px;
+        }
+
+        .pricing-amount {
+            font-size: 60px;
+        }
+
+        .audience-grid,
+        .included-grid,
+        .pricing-features {
+            grid-template-columns: 1fr;
+        }
+
+        .final-cta h2 {
+            font-size: 32px;
+        }
+
+        .signature-line {
+            font-size: 24px;
+        }
+
+    }
 </style>
+
 @section('mainContent')
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12 px-0 inter">
-                @php
-                    $banner_title = 'New Page';
-                    $banner_image = 'public/frontend/infixlmstheme/img/images/courses-4.jpg';
-                    $btn_title = auth()->check() ? '' : 'Sell With Us';
-                    $sub_title = 'YOUR COMEBACK STARTS HERE';
-                @endphp
-                <x-breadcrumb :title="$banner_title" :btntitle="$btn_title" :sub_title="$sub_title" :btnclass="'hit openModal'" />
+    {{-- <div class="container-fluid"> --}}
+    @php
+        $banner_title = $banner_title ?? 'Florida Board-Required Remediation, Done Right.';
+        $btn_title = auth()->check() ? '' : 'Sell With Us';
+        $sub_title = $sub_title ?? 'YOUR COMEBACK STARTS HERE';
+    @endphp
+
+    <!-- ============ Hero Section ============ -->
+    <section class="hero">
+        <div class="hero-inner">
+            <div>
+                <div class="hero-eyebrow">
+                    Coaching Program <span class="dot"></span> Specialty
+                </div>
+
+                <h1>
+                    {!! $banner_title !!}
+                </h1>
+                <p class="hero-italic">For RN candidates navigating Florida's licensure requirements.</p>
+
+                <p class="hero-support">
+                    A Florida Board of Nursing-approved remedial course for the five situations the Board recognizes —
+                    administered by the same team that's walked over a thousand nurses through this exact pathway since
+                    2019.
+                </p>
+
+                <div class="hero-ctas">
+                    <a href="{{ url('/contact') }}" class="btn btn-on-teal btn-large">Schedule a Free Confidential Call</a>
+                    <a href="#program-pricing" class="hero-secondary-link">See pricing & program details →</a>
+                </div>
+            </div>
+
+            <div class="bon-badge">
+                <div class="bon-badge-flag">
+                    <div class="bon-badge-flag-icon">FL</div>
+                    <div class="bon-badge-flag-text">Verified · Official .gov Listing</div>
+                </div>
+                <h3>Florida Board of Nursing Approved Remedial Course Provider</h3>
+
+                <p>Operating as <strong>Merakii College of Health</strong> — listed on the official Florida Board of Nursing
+                    approved providers page under Registered Nurse Courses.</p>
+
+                <a href="https://floridasnursing.gov/florida-board-of-nursing-approved-remedial-courses/" target="_blank"
+                    rel="noopener" class="bon-verify-link">
+                    Verify on FL BON Website
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 3h7v7" />
+                        <path d="M21 3l-9 9" />
+                        <path d="M21 14v5a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h5" />
+                    </svg>
+                </a>
             </div>
         </div>
+    </section>
 
-        {{-- =============== FLORIDA BOARD OF NURSING REMEDIATION ================= --}}
-        <section
+
+    <!-- SIGNATURE LINE -->
+    <section class="signature-band">
+        <p class="signature-line">"A struggling student is not a failing student."</p>
+        <p class="signature-attribution">— The Merkaii Xcellence Prep Team</p>
+    </section>
+
+    <!-- ============ FIVE AUDIENCES ============ -->
+    <section class="section audiences-section">
+        <div class="section-header">
+            <p class="section-eyebrow">Who This Program Serves</p>
+            <h2 class="section-title">Five Pathways. One Approved Curriculum.</h2>
+            <p class="section-subtitle">
+                The Florida Board of Nursing recognizes specific situations that require completion of an approved remedial
+                course. We serve every one of them — using the same evidence-based curriculum, with timing adjusted to your
+                specific pathway.
+            </p>
+        </div>
+        <div class="audience-grid">
+
+            <div class="audience-card alt">
+                <span class="duration-tag long">3-Month Track</span>
+                <h3>Repeat NCLEX Test-Takers</h3>
+                <p>You've taken the NCLEX three or more times without passing. The Board requires an authorization letter
+                    and completion of an approved remedial course before you can test again. We've walked over a thousand
+                    nurses through this exact pathway.</p>
+                <p class="scenario-tag">FL BON Scenario 1</p>
+            </div>
+
+            <div class="audience-card alt">
+                <span class="duration-tag long">3-Month Track</span>
+                <h3>Internationally Educated Nurses (IEN)</h3>
+                <p>You earned your nursing credential outside the U.S. and need a structured remediation pathway aligned to
+                    U.S. nursing standards and the NCLEX-RN. Our IEN track includes credential alignment, NCLEX preparation,
+                    and the documentation Florida requires.</p>
+                <p class="scenario-tag">IEN Pathway</p>
+            </div>
+
+            <div class="audience-card">
+                <span class="duration-tag">2-Month Track</span>
+                <h3>Compact License Transfer</h3>
+                <p>You hold an RN license in another Compact state and you're moving your primary residence to Florida. The
+                    transfer process can require a remedial course depending on your situation. We'll help you navigate the
+                    requirements and complete the coursework efficiently.</p>
+                <p class="scenario-tag">Compact Transfer</p>
+            </div>
+
+            <div class="audience-card">
+                <span class="duration-tag">2-Month Track</span>
+                <h3>Lapsed Licensure (5+ Years)</h3>
+                <p>You passed the NCLEX more than five years ago but never received your Florida license. Florida
+                    Administrative Code Rule 64B9-3.014 requires completion of an approved remedial course before licensure
+                    can be issued. This track gets you compliant and licensed.</p>
+                <p class="scenario-tag">FL BON Scenario 3</p>
+            </div>
+
+            <div class="audience-card">
+                <span class="duration-tag">2-Month Track</span>
+                <h3>License Transfer / Endorsement</h3>
+                <p>You hold an active RN license in another state and need to transfer or endorse it into Florida. Your
+                    situation may require a remedial course as part of the endorsement process. We'll work with you to meet
+                    the specific requirements your case requires.</p>
+                <p class="scenario-tag">Endorsement Pathway</p>
+            </div>
+
+            <div class="audience-card"
+                style="background: var(--deep-teal); color: var(--white); border-top-color: var(--terracotta);">
+                <span class="duration-tag" style="background: rgba(255,255,255,0.15); color: var(--cream);">Not sure which
+                    applies?</span>
+                <h3 style="color: var(--white);">Let's Figure It Out Together.</h3>
+                <p style="color: rgba(255,255,255,0.88);">FL BON requirements are situation-specific. On a free 20-minute
+                    confidential call, we'll review your case, identify which pathway fits, and give you a clear plan —
+                    whether or not you decide to enroll with us.</p>
+                <a href="{{ url('/contact') }}" class="btn btn-on-teal" style="align-self: flex-start;">Schedule a Free Call</a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ============ REGULATORY EXPLAINER ============ -->
+    <section class="section regulatory-section">
+        <div class="regulatory-grid">
+            <div class="regulatory-content">
+                <p class="section-eyebrow">The Regulatory Framework</p>
+                <h2>Florida's Three Triggering Scenarios.</h2>
+                <p class="lead">If you're here, you've probably already been told you need a remedial course. Here's what
+                    the Board says, in plain English.</p>
+                <p>The Florida Board of Nursing recognizes three official scenarios that require completion of an approved
+                    remedial course. We meet the standards for all three and serve two additional pathways (Compact transfer
+                    and license endorsement) where remediation is part of the licensure process.</p>
+                <p>If you've received any communication from the Florida Department of Health Licensure Unit, the Board, or
+                    your testing center indicating remediation is required, we're happy to review the documentation with you
+                    on a free confidential call.</p>
+            </div>
+            <div class="scenario-list">
+                <h4>Per the Florida Board of Nursing</h4>
+                <p class="source-line">Source: floridasnursing.gov</p>
+
+                <div class="scenario-item">
+                    <div class="scenario-num">1</div>
+                    <div class="scenario-text">
+                        <strong>Three Failed NCLEX Attempts</strong>
+                        Applicants who have failed the NCLEX three consecutive times require an authorization letter from
+                        the Licensure Unit before beginning an approved remedial course.
+                    </div>
+                </div>
+
+                <div class="scenario-item">
+                    <div class="scenario-num">2</div>
+                    <div class="scenario-text">
+                        <strong>Clinical Component Authorization</strong>
+                        A separate letter is required when progressing to the clinical portion of the remedial course.
+                        Theory begins without authorization; clinical requires Board approval.
+                    </div>
+                </div>
+
+                <div class="scenario-item">
+                    <div class="scenario-num">3</div>
+                    <div class="scenario-text">
+                        <strong>Lapsed Licensure (5+ Years)</strong>
+                        Applicants who passed the NCLEX more than five years ago and were never issued a license must
+                        complete an approved remedial course before licensure under Rule 64B9-3.014, FAC.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ WHAT'S INCLUDED ============ -->
+    <section class="section included-section">
+        <div class="section-header">
+            <p class="section-eyebrow">What You Get</p>
+            <h2 class="section-title">Everything Required. Nothing Generic.</h2>
+            <p class="section-subtitle">Built to meet Florida BON standards and the NCLEX PASS Method™ in one program.</p>
+        </div>
+        <div class="included-grid">
+
+            <div class="included-card">
+                <div class="included-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 14l9-5-9-5-9 5 9 5z" />
+                        <path
+                            d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                    </svg>
+                </div>
+                <h4>BON-Compliant Curriculum</h4>
+                <p>Theory and clinical components structured to meet every Florida Board of Nursing requirement, with
+                    documentation accepted by the Licensure Unit.</p>
+            </div>
+
+            <div class="included-card">
+                <div class="included-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                </div>
+                <h4>1-on-1 Coaching</h4>
+                <p>Weekly mentor calls with a licensed nurse educator. We don't disappear after enrollment — we walk with
+                    you through every week.</p>
+            </div>
+
+            <div class="included-card">
+                <div class="included-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                    </svg>
+                </div>
+                <h4>Official Documentation</h4>
+                <p>Letter of verification on official letterhead with the remedial course director's original signature —
+                    exactly what the Board office requires.</p>
+            </div>
+
+            <div class="included-card">
+                <div class="included-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </div>
+                <h4>NCLEX PASS Method™</h4>
+                <p>Content + Process + Confidence — every program built on our proprietary methodology. Not just content
+                    review; a complete system for test-day success.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ============ NCLEX PASS METHOD INLINE ============ -->
+    <section class="section method-inline-section">
+        <div class="method-inline-band">
+            <div>
+                <p class="section-eyebrow" style="margin-bottom: 8px;">Our Methodology</p>
+                <h3>The NCLEX PASS Method™</h3>
+                <p class="italic-tag">Content + Process + Confidence</p>
+            </div>
+            <div>
+                <p style="margin-bottom: 14px;">Most prep programs sell you content and call it done. The NCLEX PASS
+                    Method™ is built on three layers because passing the NCLEX requires all three. Every Merkaii program —
+                    including the BON-approved Remediation track — is engineered around this framework.</p>
+                <a href="#">Learn more about the method →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ FOUNDER ============ -->
+    <section class="section founder-section">
+        <div class="founder-grid">
+            <div class="founder-photo">
+                [Professional photograph<br>800 × 1000px<br>Warm, professional<br>Looking at camera]
+            </div>
+            <div>
+                <p class="founder-eyebrow">Your Program Administrator</p>
+                <h2>Paula Martin</h2>
+                <p class="founder-credentials">Licensed Nurse · Health Educator · Administrator, Merakii College of Health
+                </p>
+                <p>The administrator listed on the Florida Board of Nursing's official approved providers page is a real,
+                    named person — accountable to the Board. That accountability matters in regulated remediation, and it's
+                    why the program meets BON requirements without compromise.</p>
+                <p>Since 2019, our administrator has worked with over 1,500 nursing students. The repeat test-takers, the
+                    IENs, the nurses navigating Compact transfers and lapsed licensure — these aren't edge cases. They're
+                    who this program was built for.</p>
+                <p class="founder-close">A struggling student is not a failing student. Let us show you what that means.
+                </p>
+                <a href="{{ url('/contact') }}" class="btn btn-primary">Schedule a Free Confidential Call</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ PRICING ============ -->
+    <section class="section pricing-section" id="program-pricing">
+        <div class="pricing-card">
+            <p class="pricing-eyebrow">Program Tuition</p>
+            <h3>FL BON-Approved Remediation</h3>
+            <div class="pricing-amount">$2,450</div>
+            <p class="pricing-amount-detail">Total program tuition · 2-month or 3-month tracks based on your pathway</p>
+
+            <div class="pricing-features">
+                <div class="pricing-feature">
+                    <div class="pricing-check">✓</div>
+                    <div>BON-compliant theory and clinical components</div>
+                </div>
+                <div class="pricing-feature">
+                    <div class="pricing-check">✓</div>
+                    <div>Weekly 1-on-1 coaching with a licensed nurse educator</div>
+                </div>
+                <div class="pricing-feature">
+                    <div class="pricing-check">✓</div>
+                    <div>Official letter of verification on letterhead</div>
+                </div>
+                <div class="pricing-feature">
+                    <div class="pricing-check">✓</div>
+                    <div>NCLEX PASS Method™ curriculum included</div>
+                </div>
+                <div class="pricing-feature">
+                    <div class="pricing-check">✓</div>
+                    <div>Live instructor lectures + simulation</div>
+                </div>
+                <div class="pricing-feature">
+                    <div class="pricing-check">✓</div>
+                    <div>Documentation support for your BON case</div>
+                </div>
+            </div>
+
+            <div class="pricing-plans-note">
+                <strong>Payment plans available.</strong><br>
+                Spread tuition across 2 or 3 monthly installments. Scholarships and discounted student rates available based
+                on financial need. We'll find a path that works on your free advisor call.
+            </div>
+
+            <a href="{{ url('/contact') }}" class="btn btn-primary btn-large">Schedule a Free Confidential Call</a>
+        </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section class="section faq-section">
+        <div class="section-header">
+            <p class="section-eyebrow">FL BON-Specific Questions</p>
+            <h2 class="section-title">Answers Before You Ask.</h2>
+            <p class="section-subtitle">The real questions Florida nurses ask when they're navigating the remediation
+                requirement.</p>
+        </div>
+        <div class="faq-list">
+
+            <div class="faq-item open" onclick="this.classList.toggle('open')">
+                <div class="faq-q"><span>Is your program officially approved by the Florida Board of Nursing?</span><span
+                        class="faq-chevron">+</span></div>
+                <p class="faq-a">Yes. Our program is administered as Merakii College of Health and is listed on the
+                    Florida Board of Nursing's official approved providers page under Registered Nurse Courses. You can
+                    verify our listing directly on the FL BON website at floridasnursing.gov. The Board accepts our letters
+                    of verification on official letterhead with the remedial course director's signature.</p>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+                <div class="faq-q"><span>How do I know if I need an authorization letter from the Board?</span><span
+                        class="faq-chevron">+</span></div>
+                <p class="faq-a">If you've failed the NCLEX three or more times, you'll need an authorization letter
+                    before beginning the remedial course. The letter is requested by emailing the Licensure Unit at
+                    MQA.NursingAppStatus@flhealth.gov. Note: an authorization letter is not required to begin the theory
+                    component, but is required for the clinical portion. We'll walk you through the entire process on your
+                    free advisor call — including how to request the letter and what to send.</p>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+                <div class="faq-q"><span>How long does the program take?</span><span class="faq-chevron">+</span></div>
+                <p class="faq-a">Three months for repeat NCLEX test-takers and Internationally Educated Nurses. Two months
+                    for Compact license transfers, lapsed licensure (5+ years), and standard endorsement cases. Your
+                    specific pathway determines the timeline. The longer track allows additional clinical preparation that
+                    the Board expects for those two pathways.</p>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+                <div class="faq-q"><span>What does the program cost? Are payment plans available?</span><span
+                        class="faq-chevron">+</span></div>
+                <p class="faq-a">The full program tuition is $2,450. We offer 2-month and 3-month installment plans,
+                    scholarships for students with documented financial need, and discounted rates for active nursing
+                    students. We also work with case-specific situations — schedule a confidential call and we'll find a
+                    path that works for you.</p>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+                <div class="faq-q"><span>I'm an Internationally Educated Nurse. Will this program work for me?</span><span
+                        class="faq-chevron">+</span></div>
+                <p class="faq-a">Yes. Our IEN track is designed specifically for nurses who earned credentials outside the
+                    U.S. and need to align their education with U.S. nursing standards and pass the NCLEX-RN. We'll review
+                    your prior credentials, identify gaps, and structure the three-month program around your specific
+                    situation.</p>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+                <div class="faq-q"><span>What documentation do I receive when I complete the program?</span><span
+                        class="faq-chevron">+</span></div>
+                <p class="faq-a">Upon completion, the Board office accepts an electronically submitted letter of
+                    verification on our official letterhead. The letter bears the remedial course director's original
+                    signature as proof of authenticity — exactly what the Florida BON requires. We submit this directly on
+                    your behalf as part of program completion.</p>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+                <div class="faq-q"><span>Can I work while completing the program?</span><span
+                        class="faq-chevron">+</span></div>
+                <p class="faq-a">Most of our students do. The program combines live instructor lectures with on-demand
+                    content and 1-on-1 coaching, allowing you to balance study with work and family. We design your weekly
+                    schedule around your real life.</p>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+                <div class="faq-q"><span>What if I'm not sure which scenario applies to my situation?</span><span
+                        class="faq-chevron">+</span></div>
+                <p class="faq-a">That's exactly what the free advisor call is for. Florida BON requirements are
+                    situation-specific, and getting the right pathway from the start saves time and money. We'll review your
+                    case, look at any documentation you have from the Board or Licensure Unit, and tell you honestly which
+                    pathway applies — even if the answer is that you don't need a remedial course.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ============ FINAL CTA ============ -->
+    <section class="final-cta" id="final-cta">
+        <h2>Your Comeback Starts with a Conversation.</h2>
+        <p class="final-cta-italic">Confidential. Free. No pressure.</p>
+        <p class="final-cta-body">
+            Schedule a free 20-minute call to review your case, identify your pathway, and learn whether MXP is the right
+            fit. We'll be honest with you — even if the honest answer is that you need something different than what we
+            offer.
+        </p>
+        <div class="final-cta-btns">
+            <a href="#" class="btn btn-on-teal btn-large">Schedule a Free Confidential Call</a>
+            <a href="https://floridasnursing.gov/florida-board-of-nursing-approved-remedial-courses/" target="_blank"
+                rel="noopener" class="btn btn-outline-white btn-large">Verify Our BON Listing</a>
+        </div>
+        <p class="final-cta-trust">FL BON-Approved · Founded 2019 · 1,500+ Students Served · 95% Pass Rate</p>
+    </section>
+
+
+
+
+    {{-- =============== FLORIDA BOARD OF NURSING REMEDIATION ================= --}}
+    {{-- <section
             style="background-image: url('{{ asset('public/assets/program-bg.png') }}'); background-size: 100%; background-repeat: no-repeat;">
             <div class="container px-lg-5 py-5">
                 <div class="row justify-content-between py-5 px-xl-5 px-3">
@@ -1272,9 +2663,9 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> --}}
 
-        <section style="background-color: #F7F7F7;">
+    {{-- <section style="background-color: #F7F7F7;">
             <div class="container px-lg-5 py-5">
                 <div class="row py-5 px-xl-5 px-3">
                     <div class="col-lg-6">
@@ -1452,10 +2843,10 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> --}}
 
-        {{-- Testimonials Section --}}
-        <section class="testimonial-section py-5">
+    {{-- Testimonials Section --}}
+    {{-- <section class="testimonial-section py-5">
             <div class="text-center mb-4">
                 <h2>Trusted by Thousands of Students</h2>
                 <p class="opacity-75 inter">We’re proud to help aspiring nurses succeed every day. Here’s what they’re
@@ -1463,7 +2854,7 @@
             </div>
 
             <div class="testimonial-top mt-4">
-            @if(@$testimonials != "")
+            @if (@$testimonials != '')
                 @foreach (@$testimonials as $item)
                     <div class="card">
                         <div class="card-body px-5 pt-5 pb-4 d-flex align-items-end">
@@ -1499,7 +2890,7 @@
             </div>
 
             <div class="testimonial-bottom mt-4">
-            @if(@$testimonials2 != "")
+            @if (@$testimonials2 != '')
                 @foreach (@$testimonials2 as $item)
                     <div class="card">
                         <div class="card-body px-5 pt-5 pb-4 d-flex align-items-end">
@@ -1670,9 +3061,9 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> --}}
 
-        {{-- <div class="container px-lg-5 teach_offer">
+    {{-- <div class="container px-lg-5 teach_offer">
             <div class="row py-md-5 pt-md-0 pt-3 px-xl-5 px-3">
                 <div class="col-md-12 text-center">
                     <h2 class="font-weight-bold custom_small_heading mb-md-5 mb-3 text-capitalize"> FLORIDA BOARD OF NURSING
@@ -1750,9 +3141,9 @@
             </div>
         </div> --}}
 
-        <!-- ______________________________________________________________________________  -->
+    <!-- ______________________________________________________________________________  -->
 
-        {{-- <div class="container px-lg-5">
+    {{-- <div class="container px-lg-5">
             <div class="row percent-row px-xl-5 px-3">
                 <div class="col-md-12 text-center">
                     <h2 class="font-weight-bold custom_small_heading mb-3 mt-md-0 text-capitalize">Who Program Is For?</h2>
@@ -2237,7 +3628,7 @@
                 </div>
             </div>
         </div> --}}
-    </div>
+    {{-- </div> --}}
 
     @include(theme('partials._custom_footer'))
 
@@ -2246,6 +3637,7 @@
     <script>
         AOS.init();
     </script>
+
     <script>
         document.querySelectorAll('.accordion-button').forEach(button => {
             button.addEventListener('click', () => {

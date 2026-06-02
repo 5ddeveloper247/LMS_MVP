@@ -6,7 +6,7 @@
 <script src="https://kit.fontawesome.com/b98cad50b5.js" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="{{ asset('public/assets/slick/slick.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('public/assets/slick/slick-theme.css') }}">
-<style>
+{{-- <style>
     body {
         font-family: sans-serif;
         font-style: normal;
@@ -274,14 +274,1091 @@
     .course-work {
         box-shadow: 0px 4px 10px 0px #0000001A !important;
     }
+</style> --}}
+
+<style>
+    :root {
+        --teal-mid: #1A8A6F;
+        --teal-deep: #0F6E56;
+        --teal-darkest: #0A4D3C;
+        --terracotta: #C65D3A;
+        --terracotta-deep: #A84B2D;
+        --cream: #F5EDE0;
+        --cream-warm: #EFE3D0;
+        --charcoal: #2B2B2B;
+        --charcoal-soft: #4A4A4A;
+        --white: #FFFFFF;
+        --gray-line: #E8DFD0;
+        --serif: 'Playfair Display', Georgia, serif;
+        --sans: 'Montserrat', system-ui, sans-serif;
+        --shadow-sm: 0 2px 8px rgba(53, 243, 195, 0.06);
+        --shadow-md: 0 8px 24px rgba(10, 77, 60, 0.10);
+        --shadow-lg: 0 20px 50px rgba(10, 77, 60, 0.15);
+    }
+
+
+    body {
+        font-family: var(--sans) !important;
+        color: var(--charcoal);
+        background: var(--cream);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+        font-family: var(--serif) !important;
+        font-weight: 700 !important;
+        line-height: 1.2;
+        color: var(--teal-darkest);
+    }
+
+    /* Hero */
+    .hero {
+        background: linear-gradient(135deg, var(--teal-darkest) 0%, var(--teal-deep) 100%);
+        color: var(--white);
+        padding: 100px 32px 120px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero::before {
+        content: '';
+        position: absolute;
+        top: -100px;
+        right: -100px;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(198, 93, 58, 0.18) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+
+    .hero::after {
+        content: '';
+        position: absolute;
+        bottom: -150px;
+        left: -100px;
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(circle, rgba(245, 237, 224, 0.06) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+
+    .hero-inner {
+        max-width: 900px;
+        margin: 0 auto;
+        text-align: center;
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-eyebrow {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--terracotta);
+        margin-bottom: 24px;
+        padding: 6px 16px;
+        border: 1px solid var(--terracotta);
+        border-radius: 30px;
+    }
+
+    .hero h1 {
+        font-size: clamp(38px, 5vw, 60px);
+        color: var(--white);
+        margin-bottom: 24px;
+        font-weight: 700;
+        letter-spacing: -1px;
+    }
+
+    .hero h1 em {
+        font-style: italic;
+        color: var(--cream);
+        font-weight: 400;
+    }
+
+    .hero-sub {
+        font-family: var(--sans) !important;
+        font-size: 19px;
+        line-height: 1.6;
+        color: var(--cream-warm);
+        max-width: 680px;
+        margin: 0 auto 36px;
+    }
+
+    .hero-tag {
+        font-family: var(--serif) !important;
+        font-style: italic;
+        font-size: 18px;
+        color: var(--cream);
+        opacity: 0.9;
+        border-top: 1px solid rgba(245, 237, 224, 0.2);
+        padding-top: 28px;
+        margin-top: 36px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .container {
+        max-width: 1200px !important;
+        margin: 0 auto !important;
+        padding: 0 32px !important;
+    }
+
+    section {
+        padding: 80px 0;
+    }
+
+    /* Featured Card */
+    .featured-section {
+        background: var(--cream);
+        padding: 70px 0;
+        margin-top: -40px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .featured-card {
+        background: var(--white);
+        border-radius: 16px;
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: 1fr 1.5fr;
+        border: 1px solid var(--gray-line);
+    }
+
+    .featured-image {
+        background: linear-gradient(135deg, var(--terracotta) 0%, var(--terracotta-deep) 100%);
+        padding: 50px 40px;
+        color: var(--white);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .featured-image::before {
+        content: '';
+        position: absolute;
+        top: -50px;
+        right: -50px;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+
+    .featured-badge {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+        backdrop-filter: blur(10px);
+        align-self: flex-start;
+        position: relative;
+        z-index: 1;
+    }
+
+    .featured-image h3 {
+        font-size: 32px;
+        color: var(--white);
+        margin-bottom: 12px;
+        font-weight: 700;
+        line-height: 1.15;
+        position: relative;
+        z-index: 1;
+    }
+
+    .featured-image p {
+        font-family: var(--sans) !important;
+        color: rgba(255, 255, 255, 0.95);
+        font-size: 15px;
+        line-height: 1.6;
+        position: relative;
+        z-index: 1;
+    }
+
+    .featured-content {
+        padding: 50px;
+    }
+
+    .featured-content h4 {
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: var(--terracotta);
+        margin-bottom: 16px;
+        font-family: var(--sans) !important;
+        font-weight: 600;
+    }
+
+    .featured-content h2 {
+        font-size: 30px;
+        margin-bottom: 16px;
+        line-height: 1.2;
+        color: var(--teal-darkest) !important;
+    }
+
+    .featured-content p {
+        font-family: var(--sans) !important;
+        color: var(--charcoal-soft);
+        font-size: 15px;
+        margin-bottom: 24px;
+        line-height: 1.7;
+    }
+
+    .featured-meta {
+        display: flex;
+        gap: 28px;
+        margin-bottom: 28px;
+        padding: 18px 0;
+        border-top: 1px solid var(--gray-line);
+        border-bottom: 1px solid var(--gray-line);
+        flex-wrap: wrap;
+    }
+
+    .featured-meta-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .featured-meta-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: var(--charcoal-soft);
+        font-weight: 600;
+    }
+
+    .featured-meta-value {
+        font-family: var(--serif) !important;
+        font-size: 18px;
+        color: var(--teal-darkest);
+        font-weight: 600;
+    }
+
+    /* Section Headers */
+    .section-header {
+        text-align: center;
+        max-width: 720px;
+        margin: 0 auto 60px;
+    }
+
+    .section-eyebrow {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--terracotta);
+        margin-bottom: 16px;
+    }
+
+    .section-header h2 {
+        font-size: clamp(32px, 4vw, 44px);
+        margin-bottom: 16px;
+        letter-spacing: -0.5px;
+        color: var(--teal-darkest) !important;
+    }
+
+    .section-header p {
+        font-size: 17px;
+        color: var(--charcoal-soft);
+        line-height: 1.6;
+    }
+
+    /* Program Sections */
+    .program {
+        background: var(--white);
+        border-radius: 20px;
+        padding: 60px;
+        box-shadow: var(--shadow-md);
+        margin-bottom: 50px;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid var(--gray-line);
+    }
+
+    .program-bg-mark {
+        position: absolute;
+        top: 40px;
+        right: 50px;
+        font-family: var(--serif) !important;
+        font-size: 180px;
+        font-weight: 700;
+        color: var(--cream);
+        opacity: 0.5;
+        line-height: 1;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .program-header {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 40px;
+        align-items: end;
+        margin-bottom: 40px;
+        padding-bottom: 30px;
+        border-bottom: 2px solid var(--cream);
+        position: relative;
+        z-index: 1;
+    }
+
+    .program-eyebrow {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 2.5px;
+        color: var(--terracotta);
+        font-weight: 600;
+        margin-bottom: 12px;
+    }
+
+    .program h2 {
+        font-size: clamp(28px, 3.5vw, 38px);
+        margin-bottom: 8px;
+        line-height: 1.2;
+        color: var(--teal-darkest) !important;
+    }
+
+    .program-tagline {
+        font-family: var(--serif) !important;
+        font-style: italic;
+        font-size: 17px;
+        color: var(--teal-mid);
+        font-weight: 500;
+    }
+
+    .program-pricing {
+        text-align: right;
+        flex-shrink: 0;
+    }
+
+    .pricing-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: var(--charcoal-soft);
+        margin-bottom: 4px;
+        font-weight: 600;
+    }
+
+    .pricing-amount {
+        font-family: var(--serif) !important;
+        font-size: 32px;
+        color: var(--teal-darkest);
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    .pricing-amount small {
+        font-size: 14px;
+        font-weight: 400;
+        color: var(--charcoal-soft);
+    }
+
+    .pricing-duration {
+        font-size: 13px;
+        color: var(--charcoal-soft);
+        margin-top: 6px;
+    }
+
+    .program-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 50px;
+        margin-bottom: 40px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .program-block h4 {
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: var(--terracotta);
+        margin-bottom: 16px;
+        font-family: var(--sans) !important;
+        font-weight: 600;
+    }
+
+    .program-block ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .program-block ul li {
+        padding: 9px 0 9px 28px;
+        position: relative;
+        font-size: 15px;
+        color: var(--charcoal);
+        border-bottom: 1px solid var(--cream);
+    }
+
+    .program-block ul li:last-child {
+        border-bottom: none;
+    }
+
+    .program-block ul li::before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        top: 9px;
+        color: var(--teal-mid);
+        font-weight: 700;
+        font-size: 16px;
+    }
+
+    .program-block ul.frameworks li::before {
+        content: '◆';
+        color: var(--terracotta);
+        font-size: 12px;
+        top: 11px;
+    }
+
+    .program-meta {
+        display: flex;
+        gap: 32px;
+        flex-wrap: wrap;
+        padding: 22px 28px;
+        background: var(--cream);
+        border-radius: 10px;
+        margin-bottom: 30px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .program-meta-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .program-meta-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: var(--charcoal-soft);
+        font-weight: 600;
+    }
+
+    .program-meta-value {
+        font-family: var(--serif) !important;
+        font-size: 17px;
+        color: var(--teal-darkest);
+        font-weight: 600;
+    }
+
+    .program-callout {
+        background: linear-gradient(135deg, var(--cream) 0%, var(--cream-warm) 100%);
+        border-left: 4px solid var(--terracotta);
+        padding: 24px 28px;
+        border-radius: 0 10px 10px 0;
+        margin-bottom: 30px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .program-callout p {
+        font-family: var(--serif) !important;
+        font-style: italic;
+        font-size: 16px;
+        color: var(--teal-darkest);
+        line-height: 1.6;
+    }
+
+    .program-callout.warning {
+        background: rgba(198, 93, 58, 0.06);
+        border-left-color: var(--terracotta);
+    }
+
+    .program-callout.warning p {
+        font-style: normal;
+        font-family: var(--sans) !important;
+        font-size: 14px;
+        color: var(--charcoal);
+    }
+
+    .program-callout.warning strong {
+        color: var(--terracotta-deep);
+        display: block;
+        margin-bottom: 4px;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+    }
+
+    .program-cta-row {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        align-items: center;
+        position: relative;
+        z-index: 1;
+    }
+
+    .btn-primary {
+        background: var(--terracotta) !important;
+        color: var(--white) !important;
+        padding: 14px 30px !important;
+        border-radius: 6px !important;
+        text-decoration: none !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.5px !important;
+        transition: all 0.2s !important;
+        display: inline-block !important;
+        border: 2px solid var(--terracotta) !important;
+    }
+
+    .btn-primary:hover {
+        background: var(--terracotta-deep) !important;
+        border-color: var(--terracotta-deep) !important;
+        transform: translateY(-1px) !important;
+    }
+
+    .btn-secondary {
+        background: transparent !important;
+        color: var(--teal-darkest) !important;
+        padding: 14px 30px !important;
+        border-radius: 6px !important;
+        text-decoration: none !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.5px !important;
+        transition: all 0.2s !important;
+        display: inline-block !important;
+        border: 2px solid var(--teal-darkest) !important;
+    }
+
+    .btn-secondary:hover {
+        background: var(--teal-darkest) !important;
+        color: var(--white) !important;
+    }
+
+    /* Tier Cards */
+    .tiers-section {
+        margin-top: 40px;
+        margin-bottom: 30px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .tiers-section>h4 {
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: var(--terracotta);
+        margin-bottom: 24px;
+        font-family: var(--sans) !important;
+        font-weight: 600;
+    }
+
+    .tier-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .tier-card {
+        background: var(--cream);
+        border-radius: 14px;
+        padding: 32px 28px;
+        border: 2px solid transparent;
+        transition: all 0.3s;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .tier-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .tier-card.popular {
+        background: var(--white);
+        border-color: var(--terracotta);
+        box-shadow: var(--shadow-md);
+    }
+
+    .tier-popular-badge {
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--terracotta);
+        color: var(--white);
+        padding: 5px 16px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    .tier-name {
+        font-family: var(--serif) !important;
+        font-size: 22px;
+        color: var(--teal-darkest);
+        margin-bottom: 6px;
+        font-weight: 700;
+    }
+
+    .tier-subtitle {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: var(--charcoal-soft);
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+    .tier-price {
+        font-family: var(--serif) !important;
+        font-size: 28px;
+        color: var(--teal-mid);
+        font-weight: 700;
+        margin-bottom: 4px;
+        line-height: 1;
+    }
+
+    .tier-price small {
+        font-size: 13px;
+        font-weight: 400;
+        color: var(--charcoal-soft);
+    }
+
+    .tier-good-for {
+        font-size: 13px;
+        color: var(--charcoal-soft);
+        font-style: italic;
+        margin-bottom: 22px;
+        padding-bottom: 22px;
+        border-bottom: 1px solid var(--gray-line);
+    }
+
+    .tier-features {
+        list-style: none;
+        padding: 0;
+        flex-grow: 1;
+    }
+
+    .tier-features li {
+        padding: 7px 0 7px 22px;
+        font-size: 14px;
+        color: var(--charcoal);
+        position: relative;
+    }
+
+    .tier-features li::before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        color: var(--teal-mid);
+        font-weight: 700;
+    }
+
+    /* Comeback Sub-track */
+    .subtrack {
+        background: linear-gradient(135deg, var(--teal-darkest) 0%, var(--teal-deep) 100%);
+        color: var(--white);
+        border-radius: 16px;
+        padding: 50px;
+        margin-top: 40px;
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
+    }
+
+    .subtrack::before {
+        content: '';
+        position: absolute;
+        top: -100px;
+        right: -100px;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(198, 93, 58, 0.2) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+
+    .subtrack-eyebrow {
+        display: inline-block;
+        background: rgba(198, 93, 58, 0.25);
+        color: var(--cream);
+        padding: 5px 14px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 18px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .subtrack h3 {
+        font-size: 30px;
+        color: var(--white);
+        margin-bottom: 14px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .subtrack>p {
+        font-size: 16px;
+        color: var(--cream-warm);
+        margin-bottom: 28px;
+        max-width: 700px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .subtrack-features {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px 30px;
+        list-style: none;
+        padding: 0;
+        position: relative;
+        z-index: 1;
+    }
+
+    .subtrack-features li {
+        padding-left: 26px;
+        position: relative;
+        color: var(--cream);
+        font-size: 15px;
+    }
+
+    .subtrack-features li::before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        color: var(--terracotta);
+        font-weight: 700;
+    }
+
+    /* Add-ons */
+    .addons {
+        background: var(--cream);
+        border-radius: 12px;
+        padding: 28px 32px;
+        margin-top: 30px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .addons h4 {
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: var(--terracotta);
+        margin-bottom: 16px;
+    }
+
+    .addons-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .addon-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 18px;
+        background: var(--white);
+        border-radius: 8px;
+        border: 1px solid var(--gray-line);
+    }
+
+    .addon-item-name {
+        font-weight: 600;
+        color: var(--teal-darkest);
+        font-size: 14px;
+    }
+
+    .addon-item-price {
+        font-family: var(--serif) !important;
+        font-weight: 700;
+        color: var(--terracotta);
+        font-size: 16px;
+    }
+
+    /* Comparison Table */
+    .compare-section {
+        background: var(--white);
+        border-top: 1px solid var(--gray-line);
+        border-bottom: 1px solid var(--gray-line);
+    }
+
+    .compare-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--white);
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+    }
+
+    .compare-table th {
+        background: var(--teal-darkest);
+        color: var(--white);
+        padding: 22px 20px;
+        text-align: left;
+        font-family: var(--serif) !important;
+        font-weight: 700;
+        font-size: 16px;
+    }
+
+    .compare-table th:first-child {
+        background: var(--teal-deep);
+        width: 200px;
+    }
+
+    .compare-table td {
+        padding: 18px 20px;
+        border-bottom: 1px solid var(--gray-line);
+        font-size: 14px;
+        color: var(--charcoal);
+        vertical-align: top;
+    }
+
+    .compare-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .compare-table tr:nth-child(even) td {
+        background: var(--cream);
+    }
+
+    .compare-table td:first-child {
+        font-weight: 700;
+        color: var(--teal-darkest);
+        background: var(--cream-warm) !important;
+        font-family: var(--serif) !important;
+    }
+
+    /* FAQ */
+    .faq-section {
+        background: var(--cream);
+    }
+
+    .faq-list {
+        max-width: 820px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .faq-item {
+        background: var(--white);
+        border-radius: 10px;
+        border: 1px solid var(--gray-line);
+        overflow: hidden;
+        transition: box-shadow 0.2s;
+    }
+
+    .faq-item:hover {
+        box-shadow: var(--shadow-sm);
+    }
+
+    .faq-item summary {
+        padding: 22px 28px;
+        cursor: pointer;
+        font-family: var(--serif) !important;
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--teal-darkest);
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .faq-item summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .faq-item summary::after {
+        content: '+';
+        font-size: 26px;
+        color: var(--terracotta);
+        font-weight: 400;
+        transition: transform 0.2s;
+        line-height: 1;
+    }
+
+    .faq-item[open] summary::after {
+        content: '−';
+    }
+
+    .faq-item-body {
+        padding: 0 28px 24px;
+        font-size: 15px;
+        color: var(--charcoal-soft);
+        line-height: 1.7;
+    }
+
+    .faq-item-body a {
+        color: var(--terracotta);
+        font-weight: 600;
+    }
+
+    /* Final CTA */
+    .final-cta {
+        background: linear-gradient(135deg, var(--teal-darkest) 0%, var(--teal-deep) 100%);
+        color: var(--white);
+        padding: 90px 32px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .final-cta::before {
+        content: '';
+        position: absolute;
+        top: -150px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(circle, rgba(198, 93, 58, 0.15) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+
+    .final-cta-inner {
+        max-width: 700px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+    }
+
+    .final-cta h2 {
+        color: var(--white);
+        font-size: clamp(32px, 4vw, 44px);
+        margin-bottom: 18px;
+    }
+
+    .final-cta h2 em {
+        font-style: italic;
+        color: var(--cream);
+    }
+
+    .final-cta p {
+        font-family: var(--sans) !important;
+        font-size: 18px;
+        color: var(--cream-warm);
+        margin-bottom: 36px;
+        line-height: 1.6;
+    }
+
+    .final-cta .btn-primary {
+        padding: 18px 44px;
+        font-size: 15px;
+    }
+
+    .final-cta-reassure {
+        margin-top: 30px;
+        font-family: var(--serif) !important;
+        font-style: italic;
+        color: var(--cream);
+        font-size: 17px;
+        opacity: 0.85;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+        .featured-card {
+            grid-template-columns: 1fr;
+        }
+
+        .featured-image {
+            padding: 40px 32px;
+        }
+
+        .featured-content {
+            padding: 36px 32px;
+        }
+
+        .program {
+            padding: 40px 28px;
+        }
+
+        .program-bg-mark {
+            font-size: 100px;
+            top: 20px;
+            right: 20px;
+        }
+
+        .program-header {
+            grid-template-columns: 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .program-pricing {
+            text-align: left;
+        }
+
+        .program-grid {
+            grid-template-columns: 1fr;
+            gap: 32px;
+        }
+
+        .tier-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .subtrack {
+            padding: 36px 28px;
+        }
+
+        .subtrack-features {
+            grid-template-columns: 1fr;
+        }
+
+        .addons-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .compare-table {
+            font-size: 12px;
+        }
+
+        .compare-table th,
+        .compare-table td {
+            padding: 14px 10px;
+        }
+
+        .final-cta {
+            padding: 70px 28px;
+        }
+    }
 </style>
 
 @section('mainContent')
     <div class="container-fluid px-0">
         <div class="row">
-            <div class="col-md-12 px-0 inter">
+            <div class="col-md-12 px-0">
                 @php
-                    $banner_title = 'Unlock Your Potential – Start Learning Today';
+                    $banner_title = 'Programs designed for every stage of your nursing journey.';
                     $banner_image = 'public/frontend/infixlmstheme/img/images/courses-4.jpg';
                     $btn_title = auth()->check() ? '' : 'Sell With Us';
                     $sub_title =
@@ -307,7 +1384,414 @@
         </div>
 
 
-        <section>
+
+        <!-- FEATURED REMEDIATION -->
+        <section class="featured-section">
+            <div class="container">
+                <div class="featured-card">
+                    <div class="featured-image">
+                        <span class="featured-badge">★ Signature Program</span>
+                        <h3>FL BON Remediation Program</h3>
+                        <p>State-mandated remediation for Florida nurses required to complete a Board-approved program. Our
+                            specialty since 2019.</p>
+                    </div>
+                    <div class="featured-content">
+                        <h4>For Florida-Licensed Nurses</h4>
+                        <h2>The remediation program built for compliance — and your comeback.</h2>
+                        <p>If the Florida Board of Nursing has ordered you to complete remediation, you need a program that
+                            satisfies the Board's requirements while actually rebuilding your clinical foundation. That's
+                            what Merkaii Xcellence Prep has done for hundreds of nurses since 2019.</p>
+                        <div class="featured-meta">
+                            <div class="featured-meta-item">
+                                <span class="featured-meta-label">Specialty</span>
+                                <span class="featured-meta-value">FL BON Compliance</span>
+                            </div>
+                            <div class="featured-meta-item">
+                                <span class="featured-meta-label">Format</span>
+                                <span class="featured-meta-value">Structured + Personal</span>
+                            </div>
+                            <div class="featured-meta-item">
+                                <span class="featured-meta-label">Since</span>
+                                <span class="featured-meta-value">2019</span>
+                            </div>
+                        </div>
+                        <div class="program-cta-row">
+                            <a href="{{ url('/florida-remedial-program') }}" class="btn-primary">View Remediation Program →</a>
+                            <a href="{{ url('/contact') }}" class="btn-secondary">Speak With Our Team</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROGRAM 1: NCLEX SUCCESS COACHING -->
+        <section id="nclex-coaching">
+            <div class="container">
+                <div class="program">
+                    <div class="program-bg-mark">01</div>
+                    <div class="program-header">
+                        <div>
+                            <div class="program-eyebrow">For NCLEX Test-Takers</div>
+                            <h2>Merkaii NCLEX Success Coaching Program™</h2>
+                            <p class="program-tagline">Powered by the NCLEX PASS Method™</p>
+                        </div>
+                        <div class="program-pricing">
+                            <div class="pricing-label">Investment</div>
+                            <div class="pricing-amount">Starting at $797</div>
+                            <div class="pricing-duration">6–8 Weeks</div>
+                        </div>
+                    </div>
+
+                    <div class="program-callout warning">
+                        <p><strong>Important Notice</strong>This program does not fulfill state-mandated remediation
+                            requirements. If the FL BON has ordered remediation, please <a href="{{ url('/florida-remedial-program') }}"
+                                style="color:var(--terracotta-deep);font-weight:600;">view our Remediation Program</a>.</p>
+                    </div>
+
+                    <div class="program-grid">
+                        <div class="program-block">
+                            <h4>Who It's For</h4>
+                            <ul>
+                                <li>First-time test-takers who want to pass confidently</li>
+                                <li>Repeat test-takers who need a strategy reset</li>
+                                <li>Nurses ready to think strategically, not just study harder</li>
+                            </ul>
+                        </div>
+                        <div class="program-block">
+                            <h4>What Makes It Different</h4>
+                            <ul>
+                                <li>Clinical judgment over content cramming</li>
+                                <li>Strategic thinking, not memorization</li>
+                                <li>Priority-based decision making for Next Gen NCLEX</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="program-grid">
+                        <div class="program-block">
+                            <h4>What You'll Learn</h4>
+                            <ul class="frameworks">
+                                <li>The NCLEX PASS Method™</li>
+                                <li>PRIORITY-X Framework</li>
+                                <li>NCLEX Safety Pyramid</li>
+                                <li>Red Flag Recognition</li>
+                                <li>Question Analysis System</li>
+                            </ul>
+                        </div>
+                        <div class="program-block">
+                            <h4>Signature Features</h4>
+                            <ul>
+                                <li>Weekly Decision Lab Sessions</li>
+                                <li>Personalized Weak Area Plan</li>
+                                <li>Structured Question Practice</li>
+                                <li>Confidence & Test Strategy Coaching</li>
+                                <li>72-Hour Exam Preparation System</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="program-meta">
+                        <div class="program-meta-item">
+                            <span class="program-meta-label">Format</span>
+                            <span class="program-meta-value">Cohort-Based Live Coaching</span>
+                        </div>
+                        <div class="program-meta-item">
+                            <span class="program-meta-label">Access</span>
+                            <span class="program-meta-value">On-Demand Available</span>
+                        </div>
+                        <div class="program-meta-item">
+                            <span class="program-meta-label">Duration</span>
+                            <span class="program-meta-value">6–8 Weeks</span>
+                        </div>
+                    </div>
+
+                    <div class="program-callout">
+                        <p>"This is not just a review course — it is a structured coaching program powered by the NCLEX PASS
+                            Method™, designed to help you think, prioritize, and pass."</p>
+                    </div>
+
+                    <div class="addons">
+                        <h4>Optional Add-Ons</h4>
+                        <div class="addons-grid">
+                            <div class="addon-item">
+                                <span class="addon-item-name">1:1 Coaching Upgrade</span>
+                                <span class="addon-item-price">From $297</span>
+                            </div>
+                            <div class="addon-item">
+                                <span class="addon-item-name">Continued Support Membership</span>
+                                <span class="addon-item-price">From $49/mo</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="program-cta-row" style="margin-top:30px;">
+                        <a href="{{ url('/contact') }}" class="btn-primary">Apply for the Next Cohort →</a>
+                        <a href="{{ url('/contact') }}" class="btn-secondary">Schedule a Free Consult</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROGRAM 2: NURSING SCHOOL SUCCESS -->
+        <section id="nursing-school" style="background: var(--cream-warm); padding-top: 80px;">
+            <div class="container">
+                <div class="program" style="background: var(--white);">
+                    <div class="program-bg-mark">02</div>
+                    <div class="program-header">
+                        <div>
+                            <div class="program-eyebrow">For Current & Returning Nursing Students</div>
+                            <h2>Nursing School Success & Academic Recovery Program</h2>
+                            <p class="program-tagline">For students who want to PASS — not just survive nursing school.</p>
+                        </div>
+                        <div class="program-pricing">
+                            <div class="pricing-label">Investment</div>
+                            <div class="pricing-amount">Starting at $97</div>
+                            <div class="pricing-duration">3 tiers · 4–12 weeks</div>
+                        </div>
+                    </div>
+
+                    <div class="program-grid">
+                        <div class="program-block">
+                            <h4>Who This Serves</h4>
+                            <ul>
+                                <li>Students currently in nursing school who are struggling</li>
+                                <li>Average students who want to improve</li>
+                                <li>Anxious test-takers</li>
+                                <li>Students aiming for higher grades</li>
+                                <li>Recently dismissed students preparing to re-enter</li>
+                            </ul>
+                        </div>
+                        <div class="program-block">
+                            <h4>What's Included</h4>
+                            <ul>
+                                <li>Academic strategy + study skills training</li>
+                                <li>Decision Lab training & exam strategy</li>
+                                <li>Practice questions with full rationales</li>
+                                <li>Private student community for peer support</li>
+                                <li>Optional 1-on-1 coaching at the Elite tier</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="tiers-section">
+                        <h4>Choose Your Level of Support</h4>
+                        <div class="tier-grid">
+                            <div class="tier-card">
+                                <div class="tier-name">Foundations</div>
+                                <div class="tier-subtitle">Tier 1 · Self-Paced</div>
+                                <div class="tier-price">$97 <small>– $297</small></div>
+                                <p class="tier-good-for">For students who need light, self-directed support.</p>
+                                <ul class="tier-features">
+                                    <li>Content videos</li>
+                                    <li>Study guides</li>
+                                    <li>Basic test-taking strategies</li>
+                                    <li>Limited question practice</li>
+                                </ul>
+                            </div>
+                            <div class="tier-card popular">
+                                <div class="tier-popular-badge">Most Popular</div>
+                                <div class="tier-name">Success Program</div>
+                                <div class="tier-subtitle">Tier 2 · Live + Community</div>
+                                <div class="tier-price">$397 <small>– $897</small></div>
+                                <p class="tier-good-for">Our main offer — for students serious about transformation.</p>
+                                <ul class="tier-features">
+                                    <li>Weekly live sessions</li>
+                                    <li>Decision Lab training</li>
+                                    <li>Practice questions + rationales</li>
+                                    <li>Study skills training</li>
+                                    <li>Private student community access</li>
+                                </ul>
+                            </div>
+                            <div class="tier-card">
+                                <div class="tier-name">Elite Coaching</div>
+                                <div class="tier-subtitle">Tier 3 · High-Touch 1:1</div>
+                                <div class="tier-price">$997 <small>– $1,997+</small></div>
+                                <p class="tier-good-for">For students needing high-touch, deep transformation.</p>
+                                <ul class="tier-features">
+                                    <li>1-on-1 coaching</li>
+                                    <li>Personalized Weak Area Plan</li>
+                                    <li>Weekly check-ins</li>
+                                    <li>Academic recovery strategy</li>
+                                    <li>High-touch, high-transformation</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="program-meta">
+                        <div class="program-meta-item">
+                            <span class="program-meta-label">Intensive</span>
+                            <span class="program-meta-value">4–6 Weeks</span>
+                        </div>
+                        <div class="program-meta-item">
+                            <span class="program-meta-label">Full Program (Best)</span>
+                            <span class="program-meta-value">8–12 Weeks</span>
+                        </div>
+                        <div class="program-meta-item">
+                            <span class="program-meta-label">Ongoing Membership</span>
+                            <span class="program-meta-value">$49–$99/month</span>
+                        </div>
+                    </div>
+
+                    <div class="subtrack" id="comeback">
+                        <span class="subtrack-eyebrow">Specialized Track</span>
+                        <h3>The Nursing Comeback Program</h3>
+                        <p>For recently dismissed nursing students who feel lost but are highly motivated to come back
+                            stronger. We meet you where you are — and rebuild your foundation, your strategy, and your
+                            confidence.</p>
+                        <ul class="subtrack-features">
+                            <li>Academic recovery strategy</li>
+                            <li>Remediation support</li>
+                            <li>Re-entry preparation</li>
+                            <li>Confidence rebuilding</li>
+                        </ul>
+                    </div>
+
+                    <div class="program-cta-row" style="margin-top:36px;">
+                        <a href="{{ url('/contact') }}" class="btn-primary">Find Your Tier →</a>
+                        <a href="{{ url('/contact') }}" class="btn-secondary">Schedule a Free Consult</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- COMPARISON TABLE -->
+        <section class="compare-section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-eyebrow">Quick Comparison</span>
+                    <h2>Find your path at a glance.</h2>
+                    <p>Three programs, one mission: a structured, strategic comeback for nursing students at every stage.
+                    </p>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="compare-table">
+                        <thead>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>FL BON Remediation</th>
+                                <th>NCLEX Success Coaching</th>
+                                <th>Nursing School Success</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Best For</td>
+                                <td>FL nurses with state-mandated remediation</td>
+                                <td>First-time & repeat NCLEX test-takers</td>
+                                <td>Current students & dismissed students returning</td>
+                            </tr>
+                            <tr>
+                                <td>Starting Investment</td>
+                                <td>See remediation page</td>
+                                <td>$797</td>
+                                <td>$97 (Foundations)</td>
+                            </tr>
+                            <tr>
+                                <td>Duration</td>
+                                <td>Per FL BON requirements</td>
+                                <td>6–8 weeks</td>
+                                <td>4–12 weeks + optional ongoing</td>
+                            </tr>
+                            <tr>
+                                <td>Format</td>
+                                <td>Structured + personalized</td>
+                                <td>Cohort-based live + on-demand</td>
+                                <td>Self-paced, live cohort, or 1:1</td>
+                            </tr>
+                            <tr>
+                                <td>Includes 1:1?</td>
+                                <td>Yes</td>
+                                <td>Optional add-on</td>
+                                <td>Yes (Elite tier)</td>
+                            </tr>
+                            <tr>
+                                <td>Meets State Mandate?</td>
+                                <td>Yes (FL BON-approved focus)</td>
+                                <td>No</td>
+                                <td>No</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="faq-section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-eyebrow">Frequently Asked</span>
+                    <h2>Which program is right for me?</h2>
+                    <p>Still unsure where you fit? These are the questions our team hears most often.</p>
+                </div>
+                <div class="faq-list">
+                    <details class="faq-item">
+                        <summary>I failed the NCLEX. Which program should I start with?</summary>
+                        <div class="faq-item-body">If you've failed the NCLEX and are not under a state-mandated
+                            remediation order, the <strong>NCLEX Success Coaching Program™</strong> is built specifically
+                            for you. It focuses on clinical judgment, prioritization, and strategic thinking — the things
+                            that separate a pass from a fail. If you are under FL BON remediation, you'll need our <a
+                                href="{{ url('/florida-remedial-program') }}">Remediation Program</a> instead.</div>
+                    </details>
+                    <details class="faq-item">
+                        <summary>What's the difference between remediation and the NCLEX Coaching Program?</summary>
+                        <div class="faq-item-body">Remediation is a state-mandated, Board-approved program required for
+                            nurses with disciplinary action. The NCLEX Success Coaching Program is a strategic coaching
+                            system for students who want to pass the NCLEX with confidence — it does not satisfy state
+                            remediation requirements.</div>
+                    </details>
+                    <details class="faq-item">
+                        <summary>I was recently dismissed from nursing school. Can you help?</summary>
+                        <div class="faq-item-body">Absolutely. The <strong>Nursing Comeback Program</strong> — a
+                            specialized track inside our Nursing School Success Program — is built for exactly this
+                            situation. Recently dismissed students often feel lost but are highly motivated; we provide
+                            academic recovery strategy, remediation support, re-entry preparation, and confidence
+                            rebuilding.</div>
+                    </details>
+                    <details class="faq-item">
+                        <summary>I'm currently in nursing school and struggling. Is this for me?</summary>
+                        <div class="faq-item-body">Yes. The <strong>Nursing School Success Program</strong> is our primary
+                            offering for current students. Most students choose Tier 2 (Success Program) because it includes
+                            weekly live sessions, Decision Lab training, and our private student community. Students aiming
+                            for high transformation upgrade to Elite for 1:1 support.</div>
+                    </details>
+                    <details class="faq-item">
+                        <summary>What's the difference between the three tiers?</summary>
+                        <div class="faq-item-body"><strong>Foundations ($97–$297)</strong> is self-paced for students who
+                            need light support. <strong>Success Program ($397–$897)</strong> is our most popular tier with
+                            live sessions and community. <strong>Elite Coaching ($997–$1,997+)</strong> is high-touch 1:1
+                            coaching with personalized weak-area plans and weekly check-ins.</div>
+                    </details>
+                    <details class="faq-item">
+                        <summary>Are there payment plans available?</summary>
+                        <div class="faq-item-body">Yes. Payment plans are available for every program. Schedule a free
+                            consultation and we'll walk through the options that work for your situation.</div>
+                    </details>
+                    <details class="faq-item">
+                        <summary>How do I know which program to choose?</summary>
+                        <div class="faq-item-body">Book a free consultation with our team. With 13 years of nursing
+                            experience and 1,500+ students guided, we'll listen to your situation and help you choose the
+                            right path — even if that means recommending a different resource. No pressure, no sales script.
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <!-- FINAL CTA -->
+        <section class="final-cta" id="consult">
+            <div class="final-cta-inner">
+                <h2>Not sure which program is yours? <em>Let's talk.</em></h2>
+                <p>Book a free 20-minute consultation. We'll listen to where you are, understand what you've already tried,
+                    and help you choose the right path forward — without pressure.</p>
+                <a href="{{ url('/contact') }}" class="btn-primary">Book a Free Consultation →</a>
+                <p class="final-cta-reassure">"A struggling student is not a failing student."</p>
+            </div>
+        </section>
+
+
+        {{-- <section>
             <div class="container px-lg-5 py-5">
                 <div class="d-flex align-items-start justify-content-between mb-4 px-xl-5 px-3">
                     <div>
@@ -335,7 +1819,6 @@
                             <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
                                 <div class="card h-100 course-work p-4 border-0 position-relative"
                                     style="border-radius: 30px;">
-                                    {{-- SVG Decoration --}}
                                     <svg style="position: absolute; top: 30px; left: 20px" width="22" height="75"
                                         viewBox="0 0 22 75" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <circle cx="12" cy="10" r="10" fill="#26235C" />
@@ -350,24 +1833,20 @@
                                             fill="#F7DF1E" />
                                     </svg>
 
-                                    {{-- Dynamic Image --}}
                                     <div class="d-flex align-items-center justify-content-center">
                                         <img src="{{ asset($tile->image) }}" width="100" height="100"
                                             class="rounded-circle object-fit-cover" style="border-radius: 50px;"
                                             alt="{{ $tile->title }}">
                                     </div>
 
-                                    {{-- Dynamic Title --}}
                                     <h5 class="text-center text-dark mt-4 mb-3 inter">
                                         {{ $tile->title }}
                                     </h5>
 
-                                    {{-- Dynamic Text --}}
                                     <p class="text-center inter" style="line-height: 1.2">
                                         {{ $tile->text }}
                                     </p>
 
-                                    {{-- Bottom decorative image --}}
                                     <img src="{{ asset('public/assets/c-rec.png') }}"
                                         style="position: absolute; bottom: 0; left: 0; width: 100%" alt="">
                                 </div>
@@ -516,12 +1995,12 @@
                 </div>
             </div>
 
-        </section>
+        </section> --}}
 
 
-        <div class="container px-lg-5 py-5">
-            <div class="px-xl-5 px-3">
-                <div class="d-flex justify-content-between mb-3">
+        {{-- <div class="container px-lg-5 py-5">
+            <div class="px-xl-5 px-3"> --}}
+        {{-- <div class="d-flex justify-content-between mb-3">
                     <div class="col-6 col-md-8 p-0">
                         <h2 class="custom_small_heading font-weight-bold custom_heading_1">Program Features</h2>
 
@@ -537,9 +2016,9 @@
                                 </h6>
                             </li>
                         </ul>
-                    </div>
+                    </div> --}}
 
-                    <div class="col-6 col-md-4 d-flex justify-content-end">
+        {{-- <div class="col-6 col-md-4 d-flex justify-content-end">
                         <a class="font-weight-500 pull-bs-canvas-left text-dark filter_btn" id="filter_btn"
                             style="cursor: pointer; text-align:center;">
                             Show Filter
@@ -551,8 +2030,8 @@
                                     <circle fill="#373737" cx="6.5" cy="3" r="2.5"></circle>
                                 </g>
                             </svg>
-                        </a>
-                        {{-- <form action="" class="form w-100 {{ request()->has('filter') ? '' : 'd-none' }}" id="filter_form">
+                        </a> --}}
+        {{-- <form action="" class="form w-100 {{ request()->has('filter') ? '' : 'd-none' }}" id="filter_form">
 
                         <input type="hidden" name="filter" value="1">
                         <div class="row">
@@ -590,11 +2069,11 @@
 
                         </div>
                     </form> --}}
-                    </div>
-                </div>
+        {{-- </div>
+                </div> --}}
 
 
-                @if (isset($programs) && count($programs) > 0)
+        {{-- @if (isset($programs) && count($programs) > 0)
                     <div class="row mt-4">
 
                         @foreach ($programs as $program)
@@ -634,7 +2113,7 @@
                                     style="border-radius: 10px; box-shadow: 0px 4px 30px 0px #00000026;">
                                     <a href="{{ $programUrl }}" class="text-decoration-none text-dark d-block h-100">
 
-                                        {{-- Thumbnail --}}
+                                        Thumbnail
                                         <div class="position-relative">
                                             <img class="img-thumb course-page-img"
                                                 src="{{ getCourseImage($program->icon) }}"
@@ -647,26 +2126,26 @@
                                             </span>
                                         </div>
 
-                                        {{-- Content --}}
+                                        Content
                                         <div class="mt-3 d-flex flex-column h-100">
-                                            {{-- Program Title --}}
+                                            Program Title
                                             <h5 style="font-weight: 600 !important"
                                                 class="fw-bold mt-2 inter noBrake text-dark"
                                                 style="text-transform: capitalize !important">
                                                 {{ $program->programtitle }}
                                             </h5>
 
-                                            {{-- Subtitle (if exists) --}}
+                                            Subtitle (if exists)
                                             @if (!empty($program->subtitle))
                                                 <small class="text-muted d-block mb-2">{{ $program->subtitle }}</small>
                                             @endif
 
-                                            {{-- Description --}}
+                                            Description
                                             <small class="inter flex-grow-1" style="line-height: 1.4; font-size: 14px;">
                                                 {{ $description }}
                                             </small>
 
-                                            {{-- Meta Info --}}
+                                            Meta Info
                                             <div class="d-flex align-items-center justify-content-between my-4 flex-wrap gap-2 pb-3"
                                                 style="border-bottom: 2px dashed #00000075">
                                                 <div class="d-flex align-items-center gap-2">
@@ -682,7 +2161,7 @@
                                                 @endif
                                             </div>
 
-                                            {{-- Price --}}
+                                            Price
                                             <div
                                                 class="d-flex align-items-center justify-content-between mt-3 flex-wrap gap-2">
                                                 <h5 class="inter fw-bold text-dark mb-0"
@@ -697,7 +2176,7 @@
                         @endforeach
                     </div>
 
-                    {{-- Pagination --}}
+                    Pagination
                     <div class="col-md-12 mt-4">
                         {{ $programs->links() }}
                     </div>
@@ -711,14 +2190,14 @@
                             <h1>{{ __('No Program Found') }}</h1>
                         </div>
                     </div>
-                @endif
+                @endif --}}
 
 
-                {{-- <div class="col-md-12 my-3">
-                <h2>You May Like</h2>
-            </div> --}}
-            </div>
-        </div>
+        {{-- <div class="col-md-12 my-3">
+                   <h2>You May Like</h2>
+                </div> --}}
+        {{-- </div> --}}
+        {{-- </div> --}}
 
         {{-- <div class="row custom_slick_slider_02 mb-4 text-center">
             @forelse($recent_program as  $program)
@@ -778,7 +2257,8 @@
                 </div>
             @endforelse
         </div> --}}
-        <div class="bs-canvas bs-canvas-left position-fixed bg-light h-100">
+
+        {{-- <div class="bs-canvas bs-canvas-left position-fixed bg-light h-100">
             <header class="border-bottom bs-canvas-header p-3">
                 <h4 class="d-inline-block f_w_600 mb-0">Filter</h4>
                 <button type="button" class="bs-canvas-close close" aria-label="Close"><span aria-hidden="true"
@@ -830,8 +2310,7 @@
                     </div>
                 </form>
             </div>
-        </div>
-    </div>
+        </div> --}}
     </div>
 
 

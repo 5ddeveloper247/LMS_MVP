@@ -472,3 +472,9 @@ Route::get('invoice',function(){
 //     return view(theme('new-page'));
 
 // });
+
+
+
+Route::get('/nclex-reset', function () {
+    return view('frontend.infixlmstheme.pages.nclex-reset');
+})->name('nclex-reset');

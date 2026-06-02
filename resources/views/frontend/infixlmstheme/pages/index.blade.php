@@ -1898,14 +1898,14 @@
   }
 
   body {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Montserrat', sans-serif !important;
     color: var(--charcoal);
     line-height: 1.6;
     background: var(--white);
   }
 
   .serif {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Playfair Display', serif !important;
   }
 
   .container {
@@ -1922,40 +1922,40 @@
 
 
   .btn {
-    display: inline-block;
-    font-family: 'Montserrat', sans-serif;
+    display: inline-block !important;
+    font-family: 'Montserrat', sans-serif !important;
     font-weight: 600;
-    font-size: 14px;
-    padding: 12px 24px;
-    border-radius: 4px;
-    text-decoration: none;
-    cursor: pointer;
-    transition: all 0.2s;
-    border: 2px solid transparent;
-    letter-spacing: 0.3px;
+    font-size: 14px !important;
+    padding: 12px 24px !important;
+    border-radius: 4px !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    transition: all 0.2s !important;
+    border: 2px solid transparent !important;
+    letter-spacing: 0.3px !important;
   }
 
   .btn-primary {
-    background: var(--terracotta);
-    color: var(--white);
-    border-color: var(--terracotta);
+    background: var(--terracotta) !important;
+    color: var(--white) !important;
+    border-color: var(--terracotta) !important;
   }
 
   .btn-primary:hover {
-    background: var(--deep-teal);
-    border-color: var(--deep-teal);
+    background: var(--deep-teal) !important;
+    border-color: var(--deep-teal) !important;
     color: white !important;
   }
 
   .btn-secondary {
-    background: transparent;
-    color: var(--mid-teal);
-    border-color: var(--mid-teal);
+    background: transparent !important;
+    color: var(--mid-teal) !important;
+    border-color: var(--mid-teal) !important;
   }
 
   .btn-secondary:hover {
-    background: var(--mid-teal);
-    color: var(--white);
+    background: var(--mid-teal) !important;
+    color: var(--white) !important;
   }
 
   .btn-on-teal {
@@ -2007,7 +2007,7 @@
   }
 
   .hero h1 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Playfair Display', serif !important;
     font-weight: 800;
     font-size: 76px;
     line-height: 1.05;
@@ -2026,6 +2026,7 @@
     font-size: 18px;
     line-height: 1.6;
     color: rgba(255, 255, 255, 0.92);
+    font-family: 'Montserrat', sans-serif !important;
   }
 
   .hero-ctas {
@@ -2058,7 +2059,7 @@
   }
 
   .signature-line {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Playfair Display', serif !important;
     font-style: italic;
     font-size: 38px;
     color: var(--charcoal);
@@ -2073,6 +2074,7 @@
     color: var(--charcoal-soft);
     text-transform: uppercase;
     font-weight: 500;
+    font-family: 'Montserrat', sans-serif !important;
   }
 
   .founder-section {
@@ -2097,7 +2099,7 @@
     align-items: center;
     justify-content: center;
     color: var(--cream);
-    font-family: 'Playfair Display', serif;
+    font-family: 'Playfair Display', serif !important;
     font-style: italic;
     font-size: 18px;
     text-align: center;
@@ -2119,10 +2121,11 @@
     color: var(--terracotta);
     font-weight: 600;
     margin-bottom: 16px;
+    font-family: 'Montserrat', sans-serif !important;
   }
 
   .founder-section h2 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Playfair Display', serif !important;
     font-weight: 700;
     font-size: 44px;
     color: var(--deep-teal);
@@ -2130,7 +2133,7 @@
   }
 
   .founder-credentials {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Playfair Display', serif !important;
     font-style: italic;
     font-size: 17px;
     color: var(--terracotta);
@@ -2151,10 +2154,12 @@
     margin-bottom: 18px;
     font-size: 15.5px;
     line-height: 1.75;
+    font-family: 'Montserrat', sans-serif !important;
+    
   }
 
   .founder-close {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Playfair Display', serif !important;
     font-style: italic;
     font-size: 19px;
     color: var(--deep-teal);
@@ -2179,10 +2184,11 @@
     color: var(--terracotta);
     font-weight: 600;
     margin-bottom: 14px;
+    font-family: 'Montserrat', sans-serif !important;
   }
 
   .section-title {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Playfair Display', serif !important;
     font-weight: 700;
     font-size: 44px;
     color: var(--charcoal);
@@ -2195,6 +2201,8 @@
     color: var(--charcoal-soft);
     max-width: 640px;
     margin: 0 auto;
+    font-family: 'Montserrat', sans-serif !important;
+
   }
 
   .paths-grid {
@@ -2250,7 +2258,7 @@
   }
 
   .path-card h3 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Playfair Display', serif !important;
     font-weight: 700;
     font-size: 24px;
     color: var(--deep-teal);
@@ -2263,6 +2271,7 @@
     line-height: 1.7;
     color: var(--charcoal);
     margin-bottom: 22px;
+    font-family: 'Montserrat', sans-serif !important;
   }
 
   .path-cta {
@@ -2286,7 +2295,7 @@
   }
 
   .method-italic {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Playfair Display', serif !important;
     font-style: italic;
     font-size: 22px;
     color: var(--terracotta);
@@ -2299,7 +2308,9 @@
     margin: 0 auto 64px;
     font-size: 16px;
     line-height: 1.75;
-    color: var(--charcoal-soft);
+    color: var(--charcoal-soft) !important;
+    font-family: 'Montserrat', sans-serif !important;
+
   }
 
   .method-grid {
@@ -2315,7 +2326,7 @@
   }
 
   .method-numeral {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Playfair Display', serif !important;
     font-weight: 700;
     font-size: 80px;
     color: var(--terracotta);
@@ -2324,7 +2335,7 @@
   }
 
   .method-col h3 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Playfair Display', serif !important;
     font-weight: 700;
     font-size: 26px;
     color: var(--deep-teal);
@@ -2336,11 +2347,13 @@
     line-height: 1.75;
     color: var(--charcoal);
     text-align: left;
+    font-family: 'Montserrat', sans-serif !important;
+
   }
 
   .method-close {
     text-align: center;
-    font-family: 'Playfair Display', serif;
+    font-family: 'Playfair Display', serif !important;
     font-style: italic;
     font-size: 22px;
     color: var(--deep-teal);
@@ -2399,7 +2412,7 @@
   }
 
   .course-thumb-label {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Playfair Display', serif !important;
     font-weight: 700;
     font-size: 28px;
     text-align: center;
@@ -2418,10 +2431,12 @@
     color: var(--terracotta);
     font-weight: 600;
     margin-bottom: 8px;
+    font-family: 'Montserrat', sans-serif !important;
+
   }
 
   .course-card h3 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Playfair Display', serif !important;
     font-weight: 700;
     font-size: 20px;
     color: var(--deep-teal);
@@ -2434,6 +2449,7 @@
     color: var(--charcoal-soft);
     margin-bottom: 18px;
     min-height: 60px;
+    font-family: 'Montserrat', sans-serif !important;
   }
 
   .course-footer {
@@ -2445,7 +2461,7 @@
   }
 
   .course-price {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Playfair Display', serif !important;
     font-weight: 700;
     font-size: 22px;
     color: var(--terracotta);
@@ -2500,7 +2516,7 @@
   }
 
   .stat-number {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Playfair Display', serif !important;
     font-weight: 700;
     font-size: 56px;
     color: var(--white);
@@ -2514,6 +2530,8 @@
     text-transform: uppercase;
     color: var(--cream);
     font-weight: 500;
+    font-family: 'Montserrat', sans-serif !important;
+
   }
 
   .testimonials-section {
@@ -2537,7 +2555,7 @@
   }
 
   .testimonial-quote {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Playfair Display', serif !important;
     font-style: italic;
     font-size: 16.5px;
     line-height: 1.65;
@@ -2549,6 +2567,7 @@
     font-size: 13px;
     line-height: 1.6;
     color: var(--charcoal-soft);
+     font-family: 'Montserrat', sans-serif !important;
   }
 
   .testimonial-name {
@@ -2603,7 +2622,7 @@
   }
 
   .email-mockup-top h4 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Playfair Display', serif !important;
     font-weight: 700;
     font-size: 32px;
     line-height: 1.2;
@@ -2612,7 +2631,7 @@
   }
 
   .email-mockup-top .sub {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Playfair Display', serif !important;
     font-style: italic;
     font-size: 16px;
     color: var(--cream);
@@ -2622,6 +2641,7 @@
     background: var(--cream);
     padding: 24px 28px;
     text-align: center;
+    font-family: 'Montserrat', sans-serif !important;
   }
 
   .email-mockup-bottom .author {
@@ -2630,6 +2650,8 @@
     text-transform: uppercase;
     color: var(--charcoal-soft);
     font-weight: 500;
+    font-family: 'Montserrat', sans-serif !important;
+
   }
 
   .email-form-eyebrow {
@@ -2639,10 +2661,12 @@
     color: var(--terracotta);
     font-weight: 600;
     margin-bottom: 14px;
+   font-family: 'Montserrat', sans-serif !important;
+
   }
 
   .email-form h2 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Playfair Display', serif !important;
     font-weight: 700;
     font-size: 40px;
     color: var(--deep-teal);
@@ -2655,6 +2679,7 @@
     line-height: 1.75;
     color: var(--charcoal);
     margin-bottom: 28px;
+    font-family: 'Montserrat', sans-serif !important;
   }
 
   .email-form-fields {
@@ -2683,6 +2708,8 @@
     line-height: 1.6;
     color: var(--charcoal-soft);
     margin-top: 14px;
+    font-family: 'Montserrat', sans-serif !important;
+
   }
 
   /* ============ SECTION 8 — FAQ + FINAL CTA ============ */
@@ -2706,7 +2733,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-family: 'Playfair Display', serif;
+    font-family: 'Playfair Display', serif !important;
     font-weight: 700;
     font-size: 19px;
     color: var(--deep-teal);
@@ -2723,6 +2750,8 @@
     line-height: 1.75;
     color: var(--charcoal);
     display: none;
+    font-family: 'Montserrat', sans-serif !important;
+
   }
 
   .faq-item.open .faq-a {
@@ -2742,7 +2771,7 @@
   }
 
   .final-cta h2 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Playfair Display', serif !important;
     font-weight: 700;
     font-size: 52px;
     margin-bottom: 22px;
@@ -2755,10 +2784,11 @@
     font-size: 17px;
     line-height: 1.7;
     color: rgba(255, 255, 255, 0.95);
+    font-family: 'Montserrat', sans-serif !important;
   }
 
   .final-cta-italic {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Playfair Display', serif !important;
     font-style: italic;
     font-size: 22px;
     color: var(--cream);
@@ -2838,9 +2868,9 @@
                 {{@$homeContent->slider_text}}
               </p>
               <div class="hero-ctas">
-                <a href="#final" class="btn btn-on-teal btn-large">Schedule a Free Advisor Call</a>
+                <a href="{{ url('/contact')}}" class="btn btn-on-teal btn-large">Schedule a Free Advisor Call</a>
               </div>
-              <a href="#courses" class="hero-secondary-link">Just need a single subject? Browse prep-courses →</a>
+              <a href="{{ url('/prep-courses')}}" class="hero-secondary-link">Just need a single subject? Browse prep-courses →</a>
 
         </section>
     
@@ -2882,7 +2912,7 @@
                 students learn.</p>
               <p class="founder-close">A struggling student is not a failing student. I was one. Let me show you what's
                 possible on the other side.</p>
-              <a href="#final" class="btn btn-primary">Schedule a Free Advisor Call</a>
+              <a href="{{ url('/contact')}}" class="btn btn-primary">Schedule a Free Advisor Call</a>
             </div>
           </div>
         </section>
@@ -2902,7 +2932,7 @@
                   <p>You've faced setbacks but you haven't given up. You don't need more content — you need a different
                     approach. The NCLEX PASS Method™ is built specifically for the student everyone else stopped believing
                     in. Live coaching, diagnostic-driven planning, and the confidence work first-time prep skipped.</p>
-                  <a href="#final" class="path-cta">Schedule a Free Advisor Call →</a>
+                  <a href="{{ url('/contact')}}" class="path-cta">Schedule a Free Advisor Call →</a>
                 </div>
             
                 <div class="path-card specialty">
@@ -2911,7 +2941,7 @@
                   <p>Court-ordered or program-required remediation handled by a specialist. Structured curriculum, official
                     documentation accepted by the Florida Board of Nursing, and one-on-one instructor support through the
                     entire process. We've walked over a thousand students through this exact pathway.</p>
-                  <a href="#final" class="path-cta">Schedule a Confidential Call →</a>
+                  <a href="{{ url('/contact')}}" class="path-cta">Schedule a Confidential Call →</a>
                 </div>
             
                 <div class="path-card">
@@ -2920,7 +2950,7 @@
                   <p>You've worked hard to get here. Now you want to walk into the testing center prepared, calm, and certain.
                     Full NCLEX Coaching gives you the live classes, the personalized roadmap, and the confidence work that
                     turns nervous students into confident test-takers.</p>
-                  <a href="#final" class="path-cta">Schedule a Free Advisor Call →</a>
+                  <a href="{{ url('/contact')}}" class="path-cta">Schedule a Free Advisor Call →</a>
                 </div>
             
                 <div class="path-card ecommerce">
@@ -2929,7 +2959,7 @@
                   <p>Failing exams, on academic probation, or watching one bad subject drag down your GPA? Our subject
                     prep-courses give you focused, on-demand mastery in A&P, Mental Health, Pharm, Med-Surg, OB, Peds, and
                     more. Buy what you need, learn at your pace, pass the next exam.</p>
-                  <a href="#courses" class="path-cta">Browse Prep-Courses →</a>
+                  <a href="{{ url('/prep-courses')}}" class="path-cta">Browse Prep-Courses →</a>
                 </div>
             
               </div>
@@ -3238,8 +3268,8 @@
           </p>
           <p class="final-cta-italic">Merkaii Xcellence Prep is ready when you are.</p>
           <div class="final-cta-btns">
-            <a href="#" class="btn btn-on-teal btn-large">Schedule a Free Advisor Call</a>
-            <a href="#courses" class="btn btn-outline-white btn-large">Browse Prep-Courses</a>
+            <a href="{{ url('/contact')}}" class="btn btn-on-teal btn-large">Schedule a Free Advisor Call</a>
+            <a href="{{ url('/prep-courses')}}" class="btn btn-outline-white btn-large">Browse Prep-Courses</a>
           </div>
         </section>
 
