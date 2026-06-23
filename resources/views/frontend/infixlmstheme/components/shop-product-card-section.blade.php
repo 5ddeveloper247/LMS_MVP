@@ -573,8 +573,8 @@
     <h2>Need more than resources? <em>Get the full program.</em></h2>
     <p>Our study tools complement — but don't replace — the structure, coaching, and accountability of a full Merkaii
         program.</p>
-    <a href="programs.html" class="btn-on-teal">Explore Programs</a>
-    <a href="contact.html" class="btn-outline-light">Schedule a Call</a>
+    <a href="{{ url('/programs') }}" class="btn-on-teal">Explore Programs</a>
+    <a href="{{ url('/contact') }}" class="btn-outline-light">Schedule a Call</a>
 </section>
 
 

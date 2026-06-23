@@ -1851,13 +1851,15 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: var(--cream);
-        font-family: 'Playfair Display', serif;
-        font-style: italic;
-        font-size: 16px;
-        text-align: center;
         padding: 30px;
         border: 3px solid var(--terracotta);
+    }
+
+    .founder-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
     }
 
     .founder-eyebrow {
@@ -2305,7 +2307,8 @@
                 <p style="color: rgba(255,255,255,0.88);">FL BON requirements are situation-specific. On a free 20-minute
                     confidential call, we'll review your case, identify which pathway fits, and give you a clear plan —
                     whether or not you decide to enroll with us.</p>
-                <a href="{{ url('/contact') }}" class="btn btn-on-teal" style="align-self: flex-start;">Schedule a Free Call</a>
+                <a href="{{ url('/contact') }}" class="btn btn-on-teal" style="align-self: flex-start;">Schedule a Free
+                    Call</a>
             </div>
 
         </div>
@@ -2441,7 +2444,8 @@
     <section class="section founder-section">
         <div class="founder-grid">
             <div class="founder-photo">
-                [Professional photograph<br>800 × 1000px<br>Warm, professional<br>Looking at camera]
+                <img src="{{ asset('public/assets/program/founder.png') }}">
+
             </div>
             <div>
                 <p class="founder-eyebrow">Your Program Administrator</p>

@@ -113,6 +113,46 @@
         font-weight: 700 !important;
         line-height: 1.2 !important;
     }
+    
+    .btn-primary {
+      background: var(--terracotta) !important;
+      color: var(--white) !important;
+      padding: 16px 40px !important;
+      border-radius: 6px !important;
+      text-decoration: none !important;
+      font-size: 15px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.5px !important;
+      transition: all 0.2s !important;
+      display: inline-block !important;
+      border: 2px solid var(--terracotta) !important;
+    }
+
+    .btn-primary:hover {
+      background: var(--terracotta-deep) !important;
+      border-color: var(--terracotta-deep) !important;
+      transform: translateY(-1px) !important;
+    }
+
+    .btn-secondary {
+      background: transparent !important;
+      color: var(--white) !important;
+      padding: 16px 40px !important;
+      border-radius: 6px !important;
+      text-decoration: none !important;
+      font-size: 15px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.5px !important;
+      transition: all 0.2s !important;
+      display: inline-block !important;
+      border: 2px solid var(--cream) !important;
+      margin-left: 12px !important;
+    }
+
+    .btn-secondary:hover {
+      background: var(--cream) !important;
+      color: var(--teal-darkest) !important;
+    }
 
     /* Hero */
     .hero {
@@ -292,7 +332,7 @@
         margin-bottom: 18px;
     }
 
-    p{
+    p {
         font-family: var(--sans) !important;
     }
 
@@ -356,14 +396,18 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: rgba(245, 237, 224, 0.6);
-        font-size: 14px;
-        text-align: center;
-        padding: 30px;
-        line-height: 1.6;
         box-shadow: var(--shadow-lg);
         position: relative;
         overflow: hidden;
+        padding: 30px;
+    }
+
+
+    .origin-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
     }
 
     .origin-photo::before {
@@ -1257,7 +1301,7 @@
                         serves nurses across every pathway — and the basement origin still shapes everything we do.</p>
                 </div>
                 <div class="origin-photo">
-                    [Founder portrait or origin imagery<br>Recommended: warm, candid<br>700 × 875px]
+                    <img src="{{ asset('public/assets/program/founder-office.png') }}">
                 </div>
             </div>
         </div>
@@ -1401,7 +1445,8 @@
                         <div>
                             <h4>Process & Strategy</h4>
                             <p>The PRIORITY-X Framework, NCLEX Safety Pyramid, and Question Analysis System — how to
-                                <em>think</em> on test day, not just what to know.</p>
+                                <em>think</em> on test day, not just what to know.
+                            </p>
                         </div>
                     </div>
                     <div class="pillar">
@@ -1439,7 +1484,7 @@
                         quietly refer the next nurse who needs a way back in.</p>
                     <p class="pullout">The program isn't one person. It's a methodology, a team, and a community — built on
                         a single conviction that hasn't changed since 2015.</p>
-                    <a href="programs.html" class="btn-primary" style="margin-top: 24px;">Explore Our Programs →</a>
+                    <a href="{{ url('/programs') }}" class="btn-primary" style="margin-top: 24px;">Explore Our Programs →</a>
                 </div>
             </div>
         </div>
@@ -1451,8 +1496,8 @@
             <h2>Ready to start <em>your</em> comeback?</h2>
             <p>Whether you're staring down a remediation order, a failed attempt, or a nursing program that's pushing you to
                 your edge — there's a path here. Book a free consultation and we'll walk it with you.</p>
-            <a href="contact.html" class="btn-primary">Book a Free Consultation →</a>
-            <a href="programs.html" class="btn-secondary">View Programs</a>
+            <a href="{{ url('/contact') }}" class="btn-primary">Book a Free Consultation →</a>
+            <a href="{{ url('/programs') }}" class="btn-secondary">View Programs</a>
             <p class="final-cta-reassure">"A struggling student is not a failing student."</p>
         </div>
     </section>

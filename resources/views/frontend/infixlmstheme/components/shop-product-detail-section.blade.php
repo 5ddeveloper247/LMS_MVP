@@ -172,7 +172,7 @@
             </div>
 
             <button class="purchase-cta" onclick="event.preventDefault();">Add to Cart →</button>
-            <a href="contact.html" class="purchase-secondary">Have questions? Talk to an advisor</a>
+            <a href="{{ url('/contact') }}" class="purchase-secondary">Have questions? Talk to an advisor</a>
 
             <div class="purchase-trust">
                 <div class="purchase-trust-item"><span class="trust-check">✓</span> Free shipping on orders $50+</div>
@@ -380,8 +380,8 @@
     <h2>Need more than a workbook? <em>Get the full program.</em></h2>
     <p>The workbook is a powerful self-study tool — but if you want live coaching, a personalized study plan, and real
         accountability, our programs deliver all of that.</p>
-    <a href="programs.html" class="btn-on-teal">Explore Programs</a>
-    <a href="shop.html" class="btn-outline-light">Back to Shop</a>
+    <a href="{{ url('/programs') }}" class="btn-on-teal">Explore Programs</a>
+    <a href="{{ url('/shop') }}" class="btn-outline-light">Back to Shop</a>
 </section>
 
 
