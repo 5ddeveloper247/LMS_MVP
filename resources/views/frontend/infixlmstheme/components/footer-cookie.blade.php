@@ -1,6 +1,17 @@
 <div>
     @if($cookie)
         <style>
+            :root {
+                --mid-teal: #1A8A6F;
+                --deep-teal: #0F6E56;
+                --darkest-teal: #0A4D3C;
+                --terracotta: #C65D3A;
+                --terracotta-dark: #A84827;
+                --cream: #F5EDE0;
+                --charcoal: #2B2B2B;
+                --charcoal-soft: #4a4a4a;
+                --white: #FFFFFF;
+            }
             .remove_cart {
                 margin-left: -22px;
                 margin-right: 8px;
@@ -9,8 +20,14 @@
 
             .theme_cookies {
                 /* background: {{@$cookie->bg_color}}; */
-                background: var(--system_secendory_color) !important; 
+                background: var(--cream) !important; 
             }
+             button {
+                font-family: 'Montserrat', sans-serif !important;
+             }
+             .cookie-text{
+                color: var(--deep-teal) !important;
+             }
 
             /* * {
                 font-family: 'Inter' !important;
@@ -26,11 +43,11 @@
                     <img src="{{asset(@$cookie->image)}}" alt="" class="h-100">
                     {{-- <img src="{{ asset('/public/uploads/images/footerimg/cookiess.png') }}"> --}}
                 </div>
-                <p class="text-white">{!! @$cookie->details !!}</p>
+                <p class="cookie-text">{!! @$cookie->details !!}</p>
             </div>
            <div class="d-flex" style="gap: 10px">
-            <button type="button" class="cookie_reject_btn" style="background-color: var(--footer_text_hover_color)" onclick="setCookies();">Reject</button>
-            <button type="button" class="cookie_btn text-white" style="background-color: var(--system_primery_color)" onclick="setCookies();">{{@$cookie->btn_text}}</button>
+            <button type="button" class="cookie_reject_btn" style="background-color: var(--terracotta)" onclick="setCookies();">Reject</button>
+            <button type="button" class="cookie_btn text-white" style="background-color: var(--mid-teal)" onclick="setCookies();">{{@$cookie->btn_text}}</button>
            </div>
         </div>
     @endif

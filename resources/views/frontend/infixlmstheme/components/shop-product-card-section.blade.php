@@ -121,10 +121,10 @@
 <!-- CATEGORY TABS -->
 <div class="tabs-section">
     <div class="tabs-inner">
-        <button class="tab-btn active" onclick="scrollToCategory('books')">Books &amp; Journals</button>
-        <button class="tab-btn" onclick="scrollToCategory('study-guides')">Study Guides</button>
+        <button class="tab-btn active" onclick="scrollToCategory('books')">Books &amp; Journals &amp; Study Guides</button>
+        {{-- <button class="tab-btn" onclick="scrollToCategory('study-guides')">Study Guides</button>
         <button class="tab-btn" onclick="scrollToCategory('study-tools')">Study Tools</button>
-        <button class="tab-btn" onclick="scrollToCategory('bundles')">Bundles &amp; Savings</button>
+        <button class="tab-btn" onclick="scrollToCategory('bundles')">Bundles &amp; Savings</button> --}}
         <button class="tab-btn" onclick="scrollToCategory('merchandise')">Merchandise</button>
     </div>
 </div>
@@ -254,7 +254,7 @@
             </div>
         </div>
 
-        <!-- DIGITAL STUDY GUIDES -->
+        {{-- <!-- DIGITAL STUDY GUIDES -->
         <div class="category-group" id="study-guides">
             <div class="category-header">
                 <h2>Digital Study Guides</h2>
@@ -391,12 +391,12 @@
                 </div>
 
             </div>
-        </div>
+        </div> --}}
 
     </div>
 </section>
 
-
+{{-- 
 <!-- BUNDLES -->
 <section class="bundles-section" id="bundles">
     <div class="section-header">
@@ -471,7 +471,7 @@
         </div>
 
     </div>
-</section>
+</section> --}}
 
 <!-- MERCHANDISE (Coming Soon) -->
 <section class="products-section" style="background: var(--cream); padding-top: 60px;">

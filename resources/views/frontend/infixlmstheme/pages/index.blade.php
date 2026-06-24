@@ -2894,7 +2894,7 @@
             <div>
               <p class="founder-eyebrow">Your founder</p>
               <h2>Meet Paula Martin</h2>
-              <p class="founder-credentials">Nurse · Health Educator · College Instructor · Founder of Merkaii Xcellence
+              <p class="founder-credentials">Licensed Nurse · Health Educator · Founder of Merkaii Xcellence
                 Prep</p>
               <p class="founder-personal">I failed the NCLEX.</p>
               <p>I remember sitting in my car after I got the results, hands shaking, certain that everything I'd worked

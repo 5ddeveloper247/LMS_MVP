@@ -2502,8 +2502,7 @@
 
             <div class="pricing-plans-note">
                 <strong>Payment plans available.</strong><br>
-                Spread tuition across 2 or 3 monthly installments. Scholarships and discounted student rates available based
-                on financial need. We'll find a path that works on your free advisor call.
+                Spread tuition across 2 or 3 monthly installments. We'll find a path that works on your free advisor call.
             </div>
 
             <a href="{{ url('/contact') }}" class="btn btn-primary btn-large">Schedule a Free Confidential Call</a>

@@ -635,12 +635,12 @@
       <div class="footer-legal-top">
         <span>{{ function_exists('footerSettings') ? strip_tags(footerSettings('footer_copy_right')) : '' }}</span>
         
-        <div class="footer-legal-links">
+        {{-- <div class="footer-legal-links">
             <a href="{{ route('customer-help') }}#v-pills-profile-tab-1" class="text-white">Privacy Policy</a>
             <a href="{{ route('customer-help') }}#v-pills-home-tab" class="text-white">Terms</a>
             <a href="{{ route('customer-help') }}#v-pills-cookies-tab" class="text-white">Cookies Policy</a>
             <a href="{{ route('customer-help') }}#tab-7" class="text-white">FAQs</a> </span> 
-        </div>
+        </div> --}}
       </div>
       <p class="footer-disclaimer">Merkaii Xcellence Prep offers educational materials and preparatory resources for the NCLEX, FL BON remediation, and related nursing examinations. All cited trademarks (NCLEX®, NCSBN®, etc.) are the property of their respective owners and are used here for referential purposes only. Merkaii Xcellence Prep operates independently and is not affiliated with, sponsored by, or endorsed by the proprietors of these examination trademarks. For the most current information about these examinations, please refer to the official testing bodies.</p>
     </div>

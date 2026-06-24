@@ -925,7 +925,7 @@
             <div class="purchase-pricing">
                 <div class="price-early">
                     <span class="price-current" id="priceDisplay">$37</span>
-                    <span class="price-original" id="priceOriginal">$47</span>
+                    <span class="price-original" id="priceOriginal">$67</span>
                     <span class="price-save active" id="priceSave">Save $10</span>
                 </div>
                 <p class="price-note" id="priceNote">
@@ -1210,7 +1210,7 @@
                     regular price?</div>
                 <div class="faq-a">
                     <p class="faq-a-text">The early bird price of $37 is available for the first 7 days after launch. After
-                        that, the planner moves to its regular price of $47. The content is exactly the same — the early
+                        that, the planner moves to its regular price of $67. The content is exactly the same — the early
                         bird pricing is simply a thank-you to our earliest supporters.</p>
                 </div>
             </div>
@@ -1232,8 +1232,8 @@
         <p class="final-cta-sub">30 days. One planner. A clear path from where you are to where you're going.</p>
         <p class="final-cta-quote">"You didn't come this far to only come this far."</p>
         <div class="final-price-display">
-            <span class="final-price" id="finalPriceDisplay">$37</span>
-            <span class="final-price-orig" id="finalPriceOrig">$47</span>
+            <span class="final-price" id="finalPriceDisplay">$67</span>
+            <span class="final-price-orig" id="finalPriceOrig">$67</span>
             <p class="final-price-note" id="finalPriceNote">Early bird pricing — limited time</p>
         </div>
         <a href="checkout.html?product=nclex-reset-planner" class="btn-on-teal" id="buyBtnBottom">Get the NCLEX Reset
@@ -1253,7 +1253,7 @@
 
             var earlyBirdDays = 7;
             var earlyPrice = 37;
-            var regularPrice = 47;
+            var regularPrice = 67;
 
             var endDate = new Date(launchDate);
             endDate.setDate(endDate.getDate() + earlyBirdDays);
