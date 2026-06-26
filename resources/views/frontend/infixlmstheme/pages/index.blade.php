@@ -2861,8 +2861,9 @@
         <section class="hero">
               <div class="hero-eyebrow">Since 2019 · Nursing test prep & FL BON remediation</div>
               <h1>
-                 {{@$homeContent->slider_title}}
-                {{-- <span class="second-line">Your comeback starts here.</span> --}}
+                 {{-- {{@$homeContent->slider_title}} --}}
+                     Failed the NCLEX?
+                <span class="second-line">Your comeback starts here.</span>
               </h1>
               <p class="hero-support">
                 {{@$homeContent->slider_text}}
