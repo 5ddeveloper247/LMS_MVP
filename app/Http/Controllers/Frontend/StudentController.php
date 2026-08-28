@@ -53,9 +53,15 @@ use Modules\Payment\Entities\StudentProgramPaymentPlans;
 use Modules\Certificate\Http\Controllers\CertificateController;
 use Modules\AuthorizeNetPayment\Http\Controllers\DoAuthorizeNetPaymentController;
 use Illuminate\Support\Facades\Validator;
+use Intervention\Image\Facades\Image;
+require_once base_path('vendor/fpdf/fpdf/src/Fpdf/Fpdf.php');
+use Fpdf\Fpdf;
 
 class StudentController extends Controller
 {
+    
+
+    
     use ImageStore;
 
     public function __construct()
@@ -957,7 +963,114 @@ class StudentController extends Controller
     }
 
     
-public function getProgramCertificate($id, $slug, Request $request)
+    // public function getProgramCertificate($id, $slug, Request $request)
+    // {
+    //     if($request->has('program')){
+    //         $program = Program::findOrFail($id);
+    //         $certificate = Certificate::where('for_program', 1)->first();
+    //         $course = false;
+    //     }else{
+    //         $course = Course::findOrFail($id);
+    //         $program = false;
+    //         if (!empty($course->certificate_id)) {
+    //             $certificate = Certificate::find($course->certificate_id);
+    //         } else {
+    //             if ($course->type == 1) {
+    //                 $certificate = Certificate::where('for_course', 1)->first();
+    //             } elseif ($course->type == 2) {
+    //                 $certificate = Certificate::where('for_quiz', 1)->first();
+    //             } elseif ($course->type == 3) {
+    //                 $certificate = Certificate::where('for_class', 1)->first();
+    //             } else {
+    //                 $certificate = null;
+    //             }
+    //         }
+    //     }
+    //     if (!$certificate) {
+    //         Toastr::error(trans('certificate.Right Now You Cannot Download The Certificate'));
+    //         return back();
+    //     }
+
+    //     if ($course && !$course->isLoginUserEnrolled) {
+    //         Toastr::error(trans('certificate.You Are Not Already Enrolled This course. Please Enroll It First'));
+    //         return back();
+    //     }
+    //     if ($course && $course->type == 1) {
+    //         $percentage = round($course->userTotalPercentage(Auth::id(), $course->id));
+    //         if ($percentage < 100) {
+    //             Toastr::error(trans('certificate.Please Complete The Course First'));
+    //             return back();
+    //         }
+    //     } 
+    //     if ($program) {
+    //         $percentage = round($program->userTotalPercentage(Auth::id(), $program->id));
+    //         if ($percentage < 100) {
+    //             Toastr::error(trans('Please Complete The Program First'));
+    //             return redirect()->back();
+    //         }
+    //     } 
+    //     if ($course && $course->type == 2) {
+    //         $quiz = QuizTest::where('course_id', $course->id)->where('pass', 1)->first();
+    //         if (!$quiz) {
+    //             Toastr::error(trans('certificate.You must pass the quiz'));
+    //             return back();
+    //         }
+    //     }
+    //         $certificateCanDownload = false;
+    //         $totalClass = $course ? $course->class->total_class : 0;
+    //         $completeClass = $course ? ClassComplete::where('course_id', $course->id)->where('class_id', $course->class->id)->count() : 0;
+    //         if ($course && $totalClass == $completeClass) {
+    //             $hasCertificate = $course->certificate_id;
+    //             if (!empty($hasCertificate)) {
+    //                 $certificate = Certificate::find($hasCertificate);
+    //                 if ($certificate) {
+    //                     $certificateCanDownload = true;
+    //                 }
+    //             } else {
+    //                 $certificate = Certificate::where('for_class', 1)->first();
+    //                 if ($certificate) {
+    //                     $certificateCanDownload = true;
+    //                 }
+    //             }
+    //         }
+    //         if ($course && !$certificateCanDownload) {
+    //             Toastr::error(trans('certificate.You must attend live class'));
+    //             return back();
+    //         }
+
+
+    //     $title = $course ? "{$course->slug}-certificate-for-" . Auth::user()->name . ".jpg" : "{$program->programtitle}-certificate-for-" . Auth::user()->name . ".jpg";
+
+    //     $downloadFile = new CertificateController();
+    //     $websiteController = new WebsiteController();
+    //     try {
+    //         $certificate_record = $course ? $websiteController->getCertificateRecord($course->id) : $websiteController->getProgramCertificateRecord($program->id);
+
+    //         $request->certificate_id = $certificate_record->certificate_id;
+    //         $request->course = $course;
+    //         $request->program = $program;
+    //         $request->user = Auth::user();
+    //         $certificate = $downloadFile->makeCertificate($certificate->id, $request)['image'];
+    //         if (Settings('frontend_active_theme') == 'tvt' && empty(\request('download'))) {
+    //             $url = $certificate->encode('data-url');
+    //             return view(theme('pages.certificate-preview'), compact('url', 'course'));
+    //         }
+
+    //         $certificate->encode('jpg');
+    //         $headers = [
+    //             'Content-Type' => 'image/jpeg',
+    //             'Content-Disposition' => 'attachment; filename=' . $title,
+    //         ];
+
+    //         return response()->stream(function () use ($certificate) {
+    //             echo $certificate;
+    //         }, 200, $headers);
+    //     } catch (\Exception $e) {
+    //         GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
+    //     }
+    // }
+    
+    public function getProgramCertificate($id, $slug, Request $request)
     {
         if($request->has('program')){
             $program = Program::findOrFail($id);
@@ -1033,34 +1146,200 @@ public function getProgramCertificate($id, $slug, Request $request)
             }
 
 
-        $title = $course ? "{$course->slug}-certificate-for-" . Auth::user()->name . ".jpg" : "{$program->programtitle}-certificate-for-" . Auth::user()->name . ".jpg";
+        $title = $course ? "{$course->slug}-certificate-for-" . Auth::user()->name . ".pdf" : "{$program->programtitle}-certificate-for-" . Auth::user()->name . ".pdf";
 
-        $downloadFile = new CertificateController();
         $websiteController = new WebsiteController();
         try {
             $certificate_record = $course ? $websiteController->getCertificateRecord($course->id) : $websiteController->getProgramCertificateRecord($program->id);
 
-            $request->certificate_id = $certificate_record->certificate_id;
-            $request->course = $course;
-            $request->program = $program;
-            $request->user = Auth::user();
-            $certificate = $downloadFile->makeCertificate($certificate->id, $request)['image'];
-            if (Settings('frontend_active_theme') == 'tvt' && empty(\request('download'))) {
-                $url = $certificate->encode('data-url');
-                return view(theme('pages.certificate-preview'), compact('url', 'course'));
+            if (!$certificate_record) {
+                Toastr::error(trans('certificate.Certificate record not found'));
+                return back();
             }
 
-            $certificate->encode('jpg');
+            $studentName = Auth::user()->name;
+            $certificateDate = $certificate_record->created_at ? $certificate_record->created_at->format('F d, Y') : date('F d, Y');
+            $courseOrProgramName = $course ? $course->title : $program->programtitle;
+
+            // Check if PDF template file exists
+            $templatePath = public_path('certificate/student-certificate.pdf');
+            if (!file_exists($templatePath)) {
+                Toastr::error('Certificate template file not found. Please contact administrator.');
+                GettingError('Certificate template file not found: ' . $templatePath, url()->current(), request()->ip(), request()->userAgent(), true);
+                return back();
+            }
+
+            // Convert PDF to Image using ImageMagick (if available) or use alternative method
+            $tempImagePath = storage_path('app/temp/cert_' . time() . '.png');
+            $tempDir = dirname($tempImagePath);
+            if (!file_exists($tempDir)) {
+                mkdir($tempDir, 0777, true);
+            }
+
+            // Try to convert PDF to image using ImageMagick
+            if (extension_loaded('imagick')) {
+                try {
+                    $imagick = new \Imagick();
+                    $imagick->setResolution(300, 300); // High resolution
+                    $imagick->readImage($templatePath . '[0]'); // First page only
+                    $imagick->setImageFormat('png');
+                    $imagick->writeImage($tempImagePath);
+                    $imagick->clear();
+                    $imagick->destroy();
+                } catch (\Exception $e) {
+                    \Log::error('Imagick conversion failed: ' . $e->getMessage());
+                    // Fallback: try command line ImageMagick
+                    $command = "convert -density 300 \"{$templatePath}[0]\" \"{$tempImagePath}\" 2>&1";
+                    exec($command, $output, $returnVar);
+                    if ($returnVar !== 0 || !file_exists($tempImagePath)) {
+                        Toastr::error('Failed to process PDF template. ImageMagick may not be installed.');
+                        GettingError('PDF to image conversion failed', url()->current(), request()->ip(), request()->userAgent(), true);
+                        return back();
+                    }
+                }
+            } else {
+                // Try command line ImageMagick
+                $command = "convert -density 300 \"{$templatePath}[0]\" \"{$tempImagePath}\" 2>&1";
+                exec($command, $output, $returnVar);
+                if ($returnVar !== 0 || !file_exists($tempImagePath)) {
+                    Toastr::error('ImageMagick is required to process PDF templates. Please install ImageMagick.');
+                    GettingError('ImageMagick not available for PDF conversion', url()->current(), request()->ip(), request()->userAgent(), true);
+                    return back();
+                }
+            }
+
+            // Load image and add text
+            $img = Image::make($tempImagePath);
+            $width = $img->width();
+            $height = $img->height();
+
+            // Add text using TTF fonts with style matching the certificate template
+            $gdImage = $img->getCore();
+            
+            // Colors - Orange for main text (matching certificate style)
+            $orange = imagecolorallocate($gdImage, 255, 140, 0); // Bright orange
+            $darkOrange = imagecolorallocate($gdImage, 200, 100, 0); // Darker orange
+            $black = imagecolorallocate($gdImage, 0, 0, 0);
+            $darkGray = imagecolorallocate($gdImage, 60, 60, 60);
+            $gray = imagecolorallocate($gdImage, 100, 100, 100);
+            
+            // Font file path - Use bold sans-serif font (matching the certificate style)
+            // Try to find a bold font first
+            $fontPath = public_path('vendor/spondonit/fonts/poppins/Poppins-SemiBold.ttf'); // Bold sans-serif
+            if (!file_exists($fontPath)) {
+                $fontPath = public_path('vendor/spondonit/fonts/poppins/Poppins-Medium.ttf');
+                if (!file_exists($fontPath)) {
+                    $fontPath = public_path('vendor/spondonit/fonts/poppins/Poppins-Regular.ttf');
+                    if (!file_exists($fontPath)) {
+                        $fontPath = public_path('fonts/nunito.ttf');
+                    }
+                }
+            }
+            
+            // Bold font for headings
+            $boldFontPath = public_path('vendor/spondonit/fonts/poppins/Poppins-SemiBold.ttf');
+            if (!file_exists($boldFontPath)) {
+                $boldFontPath = $fontPath;
+            }
+            
+            // Font sizes optimized for certificate layout
+            $dpi = 300; // Resolution we converted at
+            $ptToPx = $dpi / 72; // Convert points to pixels
+            
+            // Student Name - Large and bold (matching certificate style)
+            $nameFontSize = 12 * $ptToPx; // Adjust based on your template
+            $nameY = $height * 0.42; // Adjust Y position as needed
+            
+            // Course/Program Name - Medium size
+            $courseFontSize = 6 * $ptToPx; // Adjust based on your template
+            $courseY = $height * 0.63; // Adjust Y position as needed
+            
+            // Date - Smaller
+            $dateFontSize = 4 * $ptToPx; // Adjust based on your template
+            $dateY = $height * 0.72; // Adjust Y position as needed
+            
+            // Certificate ID - Smallest
+            $certIdFontSize = 4 * $ptToPx; // Adjust based on your template
+            $certIdY = $height * 1.00; // Adjust Y position as needed
+            
+            // Helper function to center text using TTF with optional stroke for bold effect
+            $centerTextTTF = function($text, $x, $y, $fontSize, $fontPath, $color, $strokeColor = null, $strokeWidth = 0) use ($gdImage) {
+                // Calculate text bounding box
+                $bbox = imagettfbbox($fontSize, 0, $fontPath, $text);
+                $textWidth = abs($bbox[4] - $bbox[0]);
+                
+                // Center the text
+                $x = $x - ($textWidth / 2);
+                
+                // Add stroke for bold/distressed effect (optional)
+                if ($strokeColor !== null && $strokeWidth > 0) {
+                    for ($i = -$strokeWidth; $i <= $strokeWidth; $i++) {
+                        for ($j = -$strokeWidth; $j <= $strokeWidth; $j++) {
+                            if ($i != 0 || $j != 0) {
+                                imagettftext($gdImage, $fontSize, 0, $x + $i, $y + $j, $strokeColor, $fontPath, $text);
+                            }
+                        }
+                    }
+                }
+                
+                // Add text
+                imagettftext($gdImage, $fontSize, 0, $x, $y, $color, $fontPath, $text);
+            };
+            
+            // Add Student Name - Bold orange text (matching certificate style)
+            $centerTextTTF($studentName, 100, 100, $nameFontSize, $boldFontPath, $darkGray, $darkGray, 1);
+            
+            // Add Course/Program Name - Orange or dark gray
+            $centerTextTTF($courseOrProgramName, $width / 2, $courseY, $courseFontSize, $fontPath, $darkGray, null, 0);
+            
+            // Add Date - Dark gray or black
+            $centerTextTTF($certificateDate, 922, $dateY + 74, $dateFontSize, $fontPath, $darkGray, null, 0);
+            
+            // Add Certificate ID if available
+            if ($certificate_record->certificate_id) {
+                $centerTextTTF('Certificate ID: ' . $certificate_record->certificate_id, 922, $certIdY-100, $certIdFontSize, $fontPath, $gray, null, 0);
+            }
+            
+            // Update the image object
+            $img->setCore($gdImage);
+
+            // Save the image
+            $img->save($tempImagePath);
+
+            // Convert image back to PDF using FPDF
+            $pdf = new Fpdf('L', 'mm', [$width * 0.264583, $height * 0.264583]); // Convert pixels to mm
+            $pdf->AddPage();
+            $pdf->Image($tempImagePath, 0, 0, $width * 0.264583, $height * 0.264583);
+
+            // Clean up temp image
+            if (file_exists($tempImagePath)) {
+                unlink($tempImagePath);
+            }
+
+            // Output PDF
+            $pdfContent = $pdf->Output('', 'S');
+            
+            if (empty($pdfContent)) {
+                Toastr::error('Failed to generate PDF. Please try again.');
+                GettingError('PDF output is empty', url()->current(), request()->ip(), request()->userAgent(), true);
+                return back();
+            }
+            
             $headers = [
-                'Content-Type' => 'image/jpeg',
-                'Content-Disposition' => 'attachment; filename=' . $title,
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="' . $title . '"',
             ];
 
-            return response()->stream(function () use ($certificate) {
-                echo $certificate;
-            }, 200, $headers);
+            return response($pdfContent, 200, $headers);
         } catch (\Exception $e) {
-            GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
+            \Log::error('PDF Generation Error: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            GettingError($e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine(), url()->current(), request()->ip(), request()->userAgent(), true);
+            Toastr::error('Failed to generate certificate. Error: ' . $e->getMessage());
+            return back();
         }
     }
 

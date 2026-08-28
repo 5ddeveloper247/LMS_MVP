@@ -20,6 +20,18 @@ ini_set('post_max_size', -1);
 
 define('LARAVEL_START', microtime(true));
 
+// Load FPDF in global namespace for FPDI compatibility (MUST be before vendor autoload)
+if (!class_exists('FPDF', false)) {
+    $fpdfPath = __DIR__ . '/vendor/fpdf/fpdf/src/Fpdf/Fpdf.php';
+    if (file_exists($fpdfPath)) {
+        require_once $fpdfPath;
+        // Define FPDF in global namespace
+        class FPDF extends \Fpdf\Fpdf {
+            // Wrapper class for FPDI compatibility
+        }
+    }
+}
+
 if (file_exists(__DIR__.'/storage/framework/maintenance.php')) {
     require __DIR__.'/storage/framework/maintenance.php';
 }

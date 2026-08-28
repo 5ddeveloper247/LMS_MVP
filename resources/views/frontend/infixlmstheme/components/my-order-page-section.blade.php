@@ -43,7 +43,8 @@
                                                 <table class="custom_table3 table table-responsive">
                                                     <thead>
                                                         <tr>
-                                                            <th scope="col">{{ __('common.SL') }}</th>
+                                                            <!-- <th scope="col">{{ __('common.SL') }}</th> -->
+                                                            <th scope="col">{{ __('Order#') }}</th>
                                                             <th scope="col">{{ __('Product Title') }}</th>
                                                             <th scope="col">{{ __('Product Sub-Title') }}</th>
                                                             <!-- <th scope="col">{{ __('Actual Price') }}</th> -->
@@ -60,7 +61,8 @@
                                                             @foreach ($orderProductsListing as $key => $order)
                                                                 
                                                                 <tr>
-                                                                    <td scope="row">{{ $key + 1 }}</td>
+                                                                    <!-- <td scope="row">{{ $key + 1 }}</td> -->
+                                                                    <td scope="row">order#{{ $order->id }}</td>
                                                                     <td>{{ $order->product->title ?? 'N/A' }}</td>
                                                                     <td>{{ $order->product->sub_title ?? 'N/A' }}</td>
                                                                     <td class="text-center">{{ number_format($order->purchase_price ?? 0, 2) }}</td>

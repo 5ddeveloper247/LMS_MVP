@@ -23,7 +23,8 @@
     <meta property="og:description" content="{{ Settings('footer_about_description') }}" />
     <meta property="og:image" content=" @yield('og_image')" />
     <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-regular-straight/css/uicons-regular-straight.css'>
+    <link rel='stylesheet'
+        href='https://cdn-uicons.flaticon.com/uicons-regular-straight/css/uicons-regular-straight.css'>
     <title>
         @yield('title')
     </title>
@@ -92,38 +93,38 @@
     {{-- FOR TUTOR PAYMENT --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
         integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.css" />
-        {{-- @endif --}}
-        
-        @if (str_contains(request()->url(), 'chat'))
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.css" />
+    {{-- @endif --}}
+
+    @if (str_contains(request()->url(), 'chat'))
         <link rel="stylesheet" href="{{ asset('public/backend/css/jquery-ui.css') }}{{ assetVersion() }}" />
         <link rel="stylesheet" href="{{ asset('public/backend/vendors/select2/select2.css') }}{{ assetVersion() }}" />
         <link rel="stylesheet" href="{{ asset('public/chat/css/style-student.css') }}{{ assetVersion() }}">
-        @endif
-        
-        @if (auth()->check() && auth()->user()->role_id == 3 && !str_contains(request()->url(), 'chat'))
-        <link rel="stylesheet" href="{{ asset('public/chat/css/notification.css') }}{{ assetVersion() }}">
-        @endif
-        
-        @if (isModuleActive('WhatsappSupport'))
-        <link rel="stylesheet" href="{{ asset('public/whatsapp-support/style.css') }}{{ assetVersion() }}">
-        @endif
-        <script>
-            window.Laravel = {
-                "baseUrl": '{{ url("/") }}' + '/',
-                "current_path_without_domain": '{{ request()->path() }}',
-                "csrfToken": '{{ csrf_token() }}',
-            }
-            </script>
+    @endif
 
-<script>
-    window._locale = '{{ app()->getLocale() }}';
-    window._translations = {!! json_encode(cache('translations'), JSON_INVALID_UTF8_IGNORE) !!}
+    @if (auth()->check() && auth()->user()->role_id == 3 && !str_contains(request()->url(), 'chat'))
+        <link rel="stylesheet" href="{{ asset('public/chat/css/notification.css') }}{{ assetVersion() }}">
+    @endif
+
+    @if (isModuleActive('WhatsappSupport'))
+        <link rel="stylesheet" href="{{ asset('public/whatsapp-support/style.css') }}{{ assetVersion() }}">
+    @endif
+    <script>
+        window.Laravel = {
+            "baseUrl": '{{ url('/') }}' + '/',
+            "current_path_without_domain": '{{ request()->path() }}',
+            "csrfToken": '{{ csrf_token() }}',
+        }
     </script>
 
-@yield('css')
-@if (auth()->check() && auth()->user()->role_id == 3)
-<style>
+    <script>
+        window._locale = '{{ app()->getLocale() }}';
+        window._translations = {!! json_encode(cache('translations'), JSON_INVALID_UTF8_IGNORE) !!}
+    </script>
+
+    @yield('css')
+    @if (auth()->check() && auth()->user()->role_id == 3)
+        <style>
             .admin-visitor-area {
                 margin: 0 30px 30px 30px !important;
             }

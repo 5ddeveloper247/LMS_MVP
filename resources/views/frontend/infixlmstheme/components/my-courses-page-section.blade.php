@@ -104,20 +104,21 @@
                                                     {{ __('student.Students') }}
                                                 </a>
                                             </div>
+                                            
                                             @if($program->userTotalPercentage(Auth::id(), $program->id)>=100)
                                             <div class="course_less_students d-flex justify-content-center">
                                                 <small class="d-flex flex-column">
-                                                            @if($SinglePrograms->certificate_access > 0)
-                                                            <a href="{{ route('getProgramCertificate', ['id' => $program->id, 'slug' => $program->programtitle, 'program' => 1]) }}"
-                                                                class="theme_btn w-100 text-center">
-                                                                {{ __('frontend.Get Certificate') }}
-                                                            </a>
-                                                            @else
-                                                            <span>
-                                                                Your certificate will be available soon.
-                                                            </span>
-                                                            @endif
-                                                            </small>
+                                                    @if($SinglePrograms->certificate_access > 0)
+                                                    <a href="{{ route('getProgramCertificate', ['id' => $program->id, 'slug' => $program->programtitle, 'program' => 1]) }}"
+                                                        class="theme_btn w-100 text-center">
+                                                        {{ __('frontend.Get Certificate') }}
+                                                    </a>
+                                                    @else
+                                                    <span>
+                                                        Your certificate will be available soon.
+                                                    </span>
+                                                    @endif
+                                                </small>
                                             </div>
                                             @endif
                                         </div>
@@ -131,6 +132,7 @@
 
                         @endif
                         @if ($type == 3)
+                        
                             @if (isset($totalClasses))
                               {{-- @if(count($totalClasses) == 0) There are no Classes to show. @endif --}}
                                 @foreach ($totalClasses as $Class)

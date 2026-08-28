@@ -11,7 +11,7 @@ Auth::routes(['verify' => true]);
 //clover
 Route::get('get/clover/code', 'CloverController@getclovercode');
 //clover
-
+ 
 //cron
 Route::get('run/cron/incoming_installment', 'CronController@incoming_installment');
 Route::get('run/cron/previous_installment', 'CronController@previous_installment');
@@ -472,3 +472,14 @@ Route::get('invoice',function(){
 //     return view(theme('new-page'));
 
 // });
+
+
+
+Route::get('/nclex-reset', function () {
+    return view('frontend.infixlmstheme.pages.nclex-reset');
+})->name('nclex-reset');
+
+
+Route::get('/accessibility', function () {
+    return view('frontend.infixlmstheme.pages.accessibility');
+})->name('accessibility');

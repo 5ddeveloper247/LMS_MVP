@@ -59,6 +59,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
 use Modules\FrontendManage\Entities\RequirementSlider;
 use Modules\Shop\Entities\ShopProduct;
+use Modules\SystemSetting\Entities\Testimonial;
+
 class WebsiteController extends Controller
 {
     public function __construct()
@@ -77,7 +79,11 @@ class WebsiteController extends Controller
             // } else {
             $about = AboutPage::first();
             $latest_course_reveiws = CourseReveiw::where('status', 1)->with('user')->latest()->limit(4)->get();
-            return view(theme('pages.about'), compact('about','latest_course_reveiws'));
+            
+            $testimonials = Testimonial::where('status',1)->inRandomOrder()->get();
+            $testimonials2 = Testimonial::where('status',1)->inRandomOrder()->get();
+
+            return view(theme('pages.about'), compact('about','latest_course_reveiws','testimonials','testimonials2'));
             // }
         } catch (\Exception $e) {
             GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());

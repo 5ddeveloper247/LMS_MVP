@@ -1031,6 +1031,7 @@ class StudentSettingController extends Controller
         if($request->has('plan_id')){
             $query = $query->where('plan_id',$request->plan_id);
         }
+        
         return Datatables::of($query)
             ->addIndexColumn()
             ->addColumn('image', function ($query) {
@@ -1096,7 +1097,7 @@ class StudentSettingController extends Controller
                         $link = '';
                     }
                 }
-
+                
                 return $link;
             })->rawColumns(['status', 'progressbar', 'image', 'notify_user', 'action', 'student_name'])
             ->make(true);

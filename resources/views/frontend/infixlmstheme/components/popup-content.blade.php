@@ -132,7 +132,7 @@
                         <div class="row align-items-center">
                             <div class="col-md-6 p-0">
                                 <div class="popup-image">
-                                    <img src="{{ asset($popup->image) }}" class="img-fluid w-100 h-100 object-fit-cover"
+                                    <img src="{{ asset($popup->image) }}" class="img-fluid w-100 h-100 object-fit-cover" style="object-fit:cover;"
                                         alt="">
                                 </div>
                             </div>

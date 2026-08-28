@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Http\Controllers\Auth\LoginController;
 use App\Repositories\UserRepositoryInterface;
+use Modules\FrontendManage\Entities\LoginPage;
 
 
 class PreRegistrationController extends Controller{
@@ -26,8 +27,9 @@ class PreRegistrationController extends Controller{
 
   public function index(){
     $contactLogin = session()->has('contactLogin') ? session()->get('contactLogin') : null;
+    $page = LoginPage::getData();
     session()->forget('contactLogin');
-    return view(theme('authnew.pre-registration'),compact('contactLogin'));
+    return view(theme('authnew.pre-registration'),compact('contactLogin','page'));
   }
 
   public function preRegister(Request $request){

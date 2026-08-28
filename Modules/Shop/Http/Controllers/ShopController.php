@@ -12,6 +12,7 @@ use Modules\Shop\Entities\ShopProduct;
 use Modules\Shop\Entities\ShopProductFile;
 use App\Traits\ImageStore;
 use Yajra\DataTables\Facades\DataTables;
+use Modules\AuthorizeNetPayment\Http\Controllers\DoAuthorizeNetPaymentController;
 
 use App\Jobs\SendGeneralEmail;
 use App\User;
@@ -128,6 +129,22 @@ class ShopController extends Controller
             $order->status = $request->order_status;
             $order->save();
 
+            $user = $order->user ?? '';
+            // $user->email = 'hamzawaheed195@gmail.com';
+            // dd($user);
+            if(!empty($user) && !empty($order)){
+                $codes = [
+                    'order_no' => 'order#'.$order->id,
+                    'title' => $order->product->title ?? '',
+                    'amount' =>  number_format($order->purchase_price ?? 0, 2),
+                    'currency' => '$',
+                    'payment_status' => $order->payment_status_label ?? 'N/A',
+                    'order_status' => $order->status_label ?? '',
+                ];
+                
+                send_email($user,'Shop_Order',$codes);
+            }
+
             Toastr::success(trans('common.Operation successful'), trans('common.Success'));
             return redirect()->back();
         } catch (\Exception $e) {
@@ -146,13 +163,19 @@ class ShopController extends Controller
             'id.required' => 'Order Id is required.',
             'payment_status.required' => 'Status is required.',
         ];
+
+        // Add validation for refund_cancel_reason when payment_status is 4 (refund cancel)
+        if($request->payment_status == 4){
+            $rules['refund_cancel_reason'] = 'required|string|max:250';
+            $messages['refund_cancel_reason.required'] = 'Cancel reason is required.';
+            $messages['refund_cancel_reason.max'] = 'Cancel reason must be less than 250 characters.';
+        }
+
         $validator = Validator::make($request->all(), $rules, $messages);
     
         if ($validator->fails()) {
-            return response()->json([
-                'status' => 400,
-                'message'   => $validator->errors()->first()
-            ], 422);
+            Toastr::error($validator->errors()->first(), 'Error');
+            return redirect()->back();
         }
 
         try {
@@ -160,15 +183,60 @@ class ShopController extends Controller
             $order = ShopOrder::where('id', $request->id)->first();
             
             if(empty($order)){
-                Toastr::success('Record Not Found...', 'Error');
+                Toastr::error('Record Not Found...', 'Error');
                 return redirect()->back();
             }
 
+            $orderRespnseDetail = json_decode($order->checkout->response);
+            // dd($orderRespnseDetail);
+            $trans_id = $orderRespnseDetail->source->id ?? '';
+            $trans_amount = $orderRespnseDetail->amount ?? '';
+            $trans_last4digits = $orderRespnseDetail->source->last4 ?? '';
+            
             $order->payment_status = $request->payment_status;
-            $order->save();
+
+            // Save refund cancel reason if payment_status is 4 (refund cancel)
+            if($request->payment_status == 4 && $request->has('refund_cancel_reason')){
+                $order->refund_cancel_reason = $request->refund_cancel_reason;
+            } else {
+                // Clear the reason if status is not refund cancel
+                $order->refund_cancel_reason = null;
+            }
 
             if($order->payment_status == 3){    // in case of order refund confirm then add amount in user balance.
-                $this->addBalance($order->user_id, $order->purchase_price);
+                
+                // $this->addBalance($order->user_id, $order->purchase_price);
+                
+                // code for refund payment functionality
+                $authorize = new DoAuthorizeNetPaymentController();
+                $response = $authorize->refundPayment($order, $trans_id, $trans_amount, $trans_last4digits);
+                
+                if($response['success'] == false){
+                    Toastr::error($response['message'] ?? 'Unable to refund...', 'Error');
+                    return redirect()->back();
+                }
+            }
+
+            // if($order->payment_status == 4){ // in case of payment refund reject then payment status is paid and order status is placed
+                
+            //     $order->status = 1;             // placed
+            //     $order->payment_status = 1;     // paid
+            // }
+
+            $order->save();
+
+            $user = $order->user ?? '';
+            // $user->email = 'hamzawaheed195@gmail.com';
+            if(!empty($user) && !empty($order)){
+                $codes = [
+                    'order_no' => 'order#'.$order->id,
+                    'title' => $order->product->title ?? '',
+                    'amount' =>  number_format($order->purchase_price ?? 0, 2),
+                    'currency' => '$',
+                    'payment_status' => $order->payment_status_label ?? 'N/A',
+                    'order_status' => $order->status_label ?? '',
+                ];
+                send_email($user,'Shop_Order',$codes);
             }
 
             Toastr::success(trans('common.Operation successful'), trans('common.Success'));
@@ -242,7 +310,7 @@ class ShopController extends Controller
         return Datatables::of($query)
             ->addIndexColumn()
             ->editColumn('order_number', function ($query) {
-                return 'order#'.$query->id;
+                return 'order#'.$query->id ?? '';
             })
             ->editColumn('username', function ($query) {
                 $firstname = $query->checkout->billing->first_name ?? '';
@@ -282,7 +350,7 @@ class ShopController extends Controller
         return Datatables::of($query)
             ->addIndexColumn()
             ->editColumn('order_number', function ($query) {
-                return 'order#'.$query->id;
+                return 'order#'.$query->id ?? '';
             })
             ->editColumn('username', function ($query) {
                 $firstname = $query->checkout->billing->first_name ?? '';
@@ -290,19 +358,19 @@ class ShopController extends Controller
                 return $firstname . ' ' . $lastname;
             })
             ->addColumn('product_title', function ($query) {
-                return $query->product->title;
+                return $query->product->title ?? '';
             })
             ->addColumn('product_sub_title', function ($query) {
-                return $query->product->sub_title;
+                return $query->product->sub_title ?? '';
             })
             ->addColumn('purchase_price', function ($query) {
-                return '$' . number_format($query->purchase_price, 2);
+                return '$' . number_format($query->purchase_price ?? 0, 2);
             })
             ->addColumn('discount', function ($query) {
-                return '$' . number_format($query->discount_amount, 2);
+                return '$' . number_format($query->discount_amount ?? 0, 2);
             })
             ->addColumn('order_status', function ($query) {
-                return $query->status_label;
+                return $query->status_label ?? '';
             })
             ->addColumn('payment_status', function ($query) {
                 return view('shop::partials._td_status_order', compact('query'));

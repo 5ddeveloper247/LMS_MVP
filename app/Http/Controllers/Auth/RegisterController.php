@@ -680,15 +680,15 @@ class RegisterController extends Controller
               }
         
 
-        try {
+        // try {
             $authorize = new DoAuthorizeNetPaymentController();
-            $paymentResponse = $authorize->makePayment($request, 'student_register', true, null, true); //previous code has the last parameter true
+            $paymentResponse = $authorize->makePayment($request, 'student_register', true, null, true); //changed to true to create checkout entry
 
 
 
-             // dd($paymentResponse->paid);
+            //  dd($paymentResponse);
             // dd($paymentResponse->paid, $clover->makePayment($request, 'student_register', true, null, true));
-            if ($paymentResponse["paid"]) {
+            if (isset($paymentResponse["paid"]) && $paymentResponse["paid"]) {
                 $user = User::find($request->user_id);
                 $user->enrolled_date = date('Y-m-d');
                 $user->save();
@@ -718,13 +718,13 @@ class RegisterController extends Controller
                 Toastr::error('Payment Not Done, Please Try Again Later !', 'Error');
                 return redirect()->back();
             }
-        }
-        catch (\Exception $e) {
-        //    dd($e);
-           // Toastr::error($e);
-            Toastr::error('Something Went Wrong', 'Error');
-            return redirect()->back();
-        }
+        // }
+        // catch (\Exception $e) {
+        // //    dd($e);
+        //    // Toastr::error($e);
+        //     Toastr::error('Something Went Wrong', 'Error');
+        //     return redirect()->back();
+        // }
     }
 
 

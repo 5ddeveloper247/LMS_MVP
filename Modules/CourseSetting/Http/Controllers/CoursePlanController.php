@@ -25,11 +25,15 @@ class CoursePlanController extends Controller
 
     public function coursePlansData()
     {
-        //dd('km');
-
-        $query=PaymentPlans::where(function($q){
+        try {
+            $query = PaymentPlans::where(function($q){
           $q->where('type','prep_course_live')->orWhere('type','full_course');
-        })->has('courses')->with('courses')->get();
+            })
+            ->whereHas('courses', function($q) {
+                $q->whereNotNull('parent_id');
+            })
+            ->with(['courses.parent']);
+            
         return Datatables::of($query)
             ->addIndexColumn()
             ->addColumn('type', function ($query) {
@@ -42,22 +46,22 @@ class CoursePlanController extends Controller
                 return $type;
             })
             ->addColumn('course_code', function ($query) {
-                return $query->courses->parent->course_code ?? '';
+                    return $query->courses && $query->courses->parent ? $query->courses->parent->course_code : '';
             })
             ->addColumn('title', function ($query) {
-                return $query->courses->parent->title ?? '';
+                    return $query->courses && $query->courses->parent ? $query->courses->parent->title : '';
             })
             ->addColumn('amount', function ($query) {
-                return $query->amount;
+                    return $query->amount ?? '';
             })
             ->addColumn('sdate', function ($query) {
-                return $query->sdate;
+                    return $query->sdate ?? '';
             })
             ->addColumn('edate', function ($query) {
-                return $query->edate;
+                    return $query->edate ?? '';
             })
             ->addColumn('cdate', function ($query) {
-                return $query->cdate;
+                    return $query->cdate ?? '';
             })
             ->addColumn('status', function ($query) {
                 return view('coursesetting::components._course_status_td', ['query' => $query]);
@@ -67,6 +71,16 @@ class CoursePlanController extends Controller
             })
             ->rawColumns([ 'type', 'title','amount',  'sdate', 'edate', 'cdate','status', 'action'])
             ->make(true);
+        } catch (\Exception $e) {
+            \Log::error('Course Plans Data Error: ' . $e->getMessage());
+            return response()->json([
+                'draw' => request()->get('draw', 1),
+                'recordsTotal' => 0,
+                'recordsFiltered' => 0,
+                'data' => [],
+                'error' => 'Server Error: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
 

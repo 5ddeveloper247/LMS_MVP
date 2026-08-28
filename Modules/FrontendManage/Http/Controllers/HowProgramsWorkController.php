@@ -78,14 +78,13 @@ class HowProgramsWorkController extends Controller
     {
         $rules = [
             'title' => 'required|max:50',
-            'image' => 'required',
+            'image' => 'nullable',
             'text' => 'required|max:150'
         ];
         $this->validate($request, $rules, validationMessage($rules));
         if (demoCheck()) {
             return redirect()->back();
         }
-
 
         try {
             $slider = HowProgramsWork::find($request->id);

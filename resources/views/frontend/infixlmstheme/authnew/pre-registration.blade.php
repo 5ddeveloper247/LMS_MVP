@@ -467,10 +467,16 @@
             </div>
             <div class="col-lg-5 d-none d-lg-block pr-0">
                 <div class="img-fluid mb-4">
-                <img src="{{ asset('/public/uploads/images/footerimg/login-signup-img.jpeg') }}"
+                <img src="{{$page->reg_banner != null ? asset($page->reg_banner) : asset('/public/uploads/images/footerimg/login-signup-img.jpeg') }}"
                 class="w-100 h-100">
                 </div>
-                <h6 class="text-capitalize mb-0 text-center">Student-Centered | Expert Instructors | Empower |  Study Anywhere | Community</h6>
+                <h6 class="text-capitalize mb-0 text-center">
+                    {{$page->reg_slogans1 != null ? $page->getTranslation('reg_slogans1','en') : ''}} 
+                    {{$page->reg_slogans2 != null ? '| '.$page->getTranslation('reg_slogans2','en') : ''}}
+                    {{$page->reg_slogans3 != null ? '| '.$page->getTranslation('reg_slogans3','en') : ''}}
+                    {{$page->reg_slogans4 != null ? '| '.$page->getTranslation('reg_slogans4','en') : ''}}
+                    {{$page->reg_slogans5 != null ? '| '.$page->getTranslation('reg_slogans5','en') : ''}}
+                </h6>
             </div>
         </div>
     </div>

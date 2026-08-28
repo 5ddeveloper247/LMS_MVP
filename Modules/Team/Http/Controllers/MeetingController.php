@@ -354,22 +354,50 @@ class MeetingController extends Controller
                 // $attendeeId = $this->getTeamUserIdFromEmail('lmstest@merakinursing.com',$access_token);
                 // dd($attendeeId);
                 $curl = curl_init();
-                $jsonData = '{"startDateTime":"'.$startDateTime.'", 
-                "endDateTime":"'.$endDateTime.'", 
-                "subject": "'.$data['description'].'",
-                "allowMeetingChat": "enabled",
-                "allowAttendeeToEnableCamera": true,
-                "allowAttendeeToEnableMic": true,
-                "isCopyToClipboardEnabled": true,
-                "allowRecording": true,
-                "allowTranscription": true,
-                "isLobbyEnabled": true,
-                "whoCanPresent": "organization",
-                "allowedPresenters": "organization",
-                "lobbyBypassSettings":{
-                    "scope":"everyone",
-                    "isDialInBypassEnabled":true
-                }
+                // $jsonData = '{"startDateTime":"'.$startDateTime.'", 
+                // "endDateTime":"'.$endDateTime.'", 
+                // "subject": "'.$data['description'].'",
+                // "allowMeetingChat": "enabled",
+                // "allowAttendeeToEnableCamera": false,
+                // "allowAttendeeToEnableMic": false,
+                // "allowOrganizerToEndMeeting" : true,
+                // "allowAttendeeToEndMeeting" : false,
+                // "isCopyToClipboardEnabled": true,
+                // "allowRecording": true,
+                // "allowTranscription": true,
+                // "isLobbyEnabled": true,
+                // "whoCanPresent": "organizer",
+                // "allowedPresenters": "organizer",
+                // "lobbyBypassSettings":{
+                //         "scope":"organization",
+                //         "isDialInBypassEnabled":false
+                //     }
+                // }';
+                $jsonData = '{
+                    "startDateTime": "'.$startDateTime.'",
+                    "endDateTime": "'.$endDateTime.'",
+                    "subject": "'.$data['description'].'",
+
+                    "allowMeetingChat": "enabled",
+
+                    "allowAttendeeToEnableCamera": false,
+                    "allowAttendeeToEnableMic": false,
+
+                    "allowOrganizerToEndMeeting": true,
+                    "allowAttendeeToEndMeeting": false,
+
+                    "isCopyToClipboardEnabled": true,
+                    "allowRecording": true,
+                    "allowTranscription": true,
+
+                    "isLobbyEnabled": true,
+
+                    "whoCanPresent": "organizer",
+
+                    "lobbyBypassSettings": {
+                        "scope": "organizer",
+                        "isDialInBypassEnabled": false
+                    }
                 }';
                 
                 //dd($jsonData);
@@ -393,7 +421,7 @@ class MeetingController extends Controller
             curl_close($curl);
             
             $response = json_decode($response);
-            
+            // dd($response);
             
             
             // $r=$response['joinMeetingId'];
@@ -654,6 +682,12 @@ class MeetingController extends Controller
             $teamMeeting = $system_meeting->first();
             $start_date = Carbon::parse($request['date'])->format('Y-m-d') . ' ' . date("H:i:s", strtotime($request['time']));
 
+            $meetingDuration = (int) $system_meeting->meeting_duration ?? 60; // minutes
+
+            $start_time = Carbon::parse(Carbon::parse($request['date'])->format('Y-m-d') . ' ' . $request['time']);
+
+            $end_time = $start_time->copy()->addMinutes($meetingDuration);
+
             DB::beginTransaction();
 
             $system_meeting->update([
@@ -663,6 +697,8 @@ class MeetingController extends Controller
                 'description' => $request['description'],
                 'date_of_meeting' => Carbon::parse($request['date'])->format('m/d/Y'),
                 'time_of_meeting' => $request['time'],
+                'start_time' => $start_time,
+                'end_time' => $end_time,
 
                 'updated_by' => Auth::user()->id,
             ]);

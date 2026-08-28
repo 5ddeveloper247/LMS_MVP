@@ -152,6 +152,36 @@
                                                                                     </div>
                                                                                 </div>
 
+                                                                                <div class="col-xl-4">
+                                                                                    <div class="primary_input mb-25">
+                                                                                        <label
+                                                                                            class="primary_input_label"
+                                                                                            for="slogan4">{{__('frontendmanage.Slogan 4')}}</label>
+                                                                                        <input
+                                                                                            class="primary_input_field"
+                                                                                            placeholder="Community."
+                                                                                            type="text"
+                                                                                            id="slogan4"
+                                                                                            name="slogan4[{{$language->code}}]"
+                                                                                            value="{{$page->getTranslation('slogans4',$language->code)}}">
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="col-xl-4">
+                                                                                    <div class="primary_input mb-25">
+                                                                                        <label
+                                                                                            class="primary_input_label"
+                                                                                            for="slogan5">{{__('frontendmanage.Slogan 5')}}</label>
+                                                                                        <input
+                                                                                            class="primary_input_field"
+                                                                                            placeholder="Community."
+                                                                                            type="text"
+                                                                                            id="slogan5"
+                                                                                            name="slogan5[{{$language->code}}]"
+                                                                                            value="{{$page->getTranslation('slogans5',$language->code)}}">
+                                                                                    </div>
+                                                                                </div>
+
 
                                                                             </div>
                                                                         </div>
@@ -286,6 +316,35 @@
                                                                                     </div>
                                                                                 </div>
 
+                                                                                <div class="col-xl-4">
+                                                                                    <div class="primary_input mb-25">
+                                                                                        <label
+                                                                                            class="primary_input_label"
+                                                                                            for="slogan4">{{__('frontendmanage.Slogan 4')}}</label>
+                                                                                        <input
+                                                                                            class="primary_input_field"
+                                                                                            placeholder="Community."
+                                                                                            type="text"
+                                                                                            id="reg_slogan4"
+                                                                                            name="reg_slogan4[{{$language->code}}]"
+                                                                                            value="{{$page->getTranslation('reg_slogans4',$language->code)}}">
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="col-xl-4">
+                                                                                    <div class="primary_input mb-25">
+                                                                                        <label
+                                                                                            class="primary_input_label"
+                                                                                            for="slogan5">{{__('frontendmanage.Slogan 5')}}</label>
+                                                                                        <input
+                                                                                            class="primary_input_field"
+                                                                                            placeholder="Community."
+                                                                                            type="text"
+                                                                                            id="reg_slogan5"
+                                                                                            name="reg_slogan5[{{$language->code}}]"
+                                                                                            value="{{$page->getTranslation('reg_slogans5',$language->code)}}">
+                                                                                    </div>
+                                                                                </div>
 
                                                                             </div>
                                                                         </div>
@@ -418,6 +477,35 @@
                                                                                     </div>
                                                                                 </div>
 
+                                                                                <div class="col-xl-4">
+                                                                                    <div class="primary_input mb-25">
+                                                                                        <label
+                                                                                            class="primary_input_label"
+                                                                                            for="forget_slogan4">{{__('frontendmanage.Slogan 4')}}</label>
+                                                                                        <input
+                                                                                            class="primary_input_field"
+                                                                                            placeholder="Community."
+                                                                                            type="text"
+                                                                                            id="forget_slogan4"
+                                                                                            name="forget_slogan4[{{$language->code}}]"
+                                                                                            value="{{$page->getTranslation('forget_slogans4',$language->code)}}">
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="col-xl-4">
+                                                                                    <div class="primary_input mb-25">
+                                                                                        <label
+                                                                                            class="primary_input_label"
+                                                                                            for="forget_slogan5">{{__('frontendmanage.Slogan 5')}}</label>
+                                                                                        <input
+                                                                                            class="primary_input_field"
+                                                                                            placeholder="Community."
+                                                                                            type="text"
+                                                                                            id="forget_slogan5"
+                                                                                            name="forget_slogan5[{{$language->code}}]"
+                                                                                            value="{{$page->getTranslation('forget_slogans5',$language->code)}}">
+                                                                                    </div>
+                                                                                </div>
 
                                                                             </div>
                                                                         </div>

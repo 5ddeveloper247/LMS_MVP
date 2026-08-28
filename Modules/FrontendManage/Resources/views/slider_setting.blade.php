@@ -500,7 +500,7 @@
                                         </form>
                                         <hr />
                                     </div>
-                                    <div class="main-title mb-25">
+                                    <div class="main-title mb-25 d-none">
                                         <div class="white_box_tittle list_header">
                                             <h4>Homepage Tile 2</h4>
                                         </div>

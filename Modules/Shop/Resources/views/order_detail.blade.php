@@ -42,7 +42,7 @@
                                         onclick="changeOrderPaymentStatus({{ $orderDetail->id }}, 4);">Refund Cancel</a>
                                     <a type="button" class="btn btn-rounded btn-warning" 
                                         onclick="changeOrderPaymentStatus({{ $orderDetail->id }}, 3);">Refund Confirm</a>
-                                @elseif(in_array($orderDetail->status, [1,2,3]))
+                                @elseif(in_array($orderDetail->status, [1,2,3,4]))
                                     <a type="button" class="btn btn-rounded btn-danger" 
                                         onclick="changeOrderStatus({{$orderDetail->id}}, 5)">Cancel</a>
                                 @endif
@@ -105,6 +105,11 @@
                                                     <td class="text-main text-bold"><strong>Payment status</strong></td>
                                                     <td class="text-right">{{strtoupper($orderDetail->payment_status_label ?? 'N/A')}}</td>
                                                 </tr>
+                                                @if ($orderDetail->payment_status == 4)
+                                                    <tr>
+                                                        <td class="text-main text-bold" colspan="2" style="max-width: 400px;"><p class="text-danger">{{$orderDetail->refund_cancel_reason ?? ''}}</p></td>
+                                                    </tr>
+                                                @endif
                                             </tbody>
                                         </table>
                                     </div>
@@ -200,7 +205,7 @@
         <div class="modal fade admin-query" id="paymentStatusConfirmationModal">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <form action="{{ route('order.update_payment_status') }}" method="POST">
+                    <form action="{{ route('order.update_payment_status') }}" method="POST" id="paymentStatusForm">
                         @csrf
                         <div class="modal-header">
                             <h4 class="modal-title">{{ __('Confirmation') }}</h4>
@@ -215,10 +220,19 @@
                             <input type="hidden" name="id" value="" class="orderId">
                             <input type="hidden" name="payment_status" value="" id="paymentStatus">
 
+                            <div id="refund_cancel_reason_field" style="display: none;" class="mt-20">
+                                <div class="form-group">
+                                    <label for="refund_cancel_reason">{{ __('Cancel Reason') }} <span class="text-danger">*</span></label>
+                                    <textarea name="refund_cancel_reason" id="refund_cancel_reason" class="form-control" rows="3" maxlength="250" placeholder="{{ __('Please provide a reason for cancelling the refund request') }}"></textarea>
+                                    <small class="form-text text-muted">{{ __('Maximum 250 characters') }}</small>
+                                    <span class="text-danger" id="refund_cancel_reason_error" style="display: none;"></span>
+                                </div>
+                            </div>
+
                             <div class="d-flex justify-content-between mt-40">
                                 <button type="button" class="primary-btn tr-bg"
                                     data-dismiss="modal">{{ __('No') }}</button>
-                                <button class="primary-btn fix-gr-bg" type="submit">{{ __('Yes') }}</button>
+                                <button class="primary-btn fix-gr-bg" type="submit" id="submit_payment_status">{{ __('Yes') }}</button>
 
                             </div>
                         </div>
@@ -249,15 +263,43 @@
             
             $(".orderId").val(id);
             $("#paymentStatus").val(status);
+            
+            // Reset the reason field
+            $("#refund_cancel_reason").val('');
+            $("#refund_cancel_reason_error").hide();
 
             if(status == 3){
                $("#payment_status_msg").text('Are you sure you want to confirm refund request?'); 
+               $("#refund_cancel_reason_field").hide();
             }else if(status == 4){
                 $("#payment_status_msg").text('Are you sure you want to cancel refund request?'); 
+                $("#refund_cancel_reason_field").show();
+            } else {
+                $("#refund_cancel_reason_field").hide();
             }
 
             $("#paymentStatusConfirmationModal").modal("show");
         }
+
+        // Form validation before submit
+        $("#paymentStatusForm").on('submit', function(e){
+            var paymentStatus = $("#paymentStatus").val();
+            var refundCancelReason = $("#refund_cancel_reason").val().trim();
+            
+            if(paymentStatus == 4){
+                if(refundCancelReason === ''){
+                    e.preventDefault();
+                    $("#refund_cancel_reason_error").text('Cancel reason is required.').show();
+                    return false;
+                }
+                if(refundCancelReason.length > 250){
+                    e.preventDefault();
+                    $("#refund_cancel_reason_error").text('Cancel reason must be less than 250 characters.').show();
+                    return false;
+                }
+            }
+            return true;
+        });
         
         // Orders Table
         let table = $('#lms_table').DataTable({

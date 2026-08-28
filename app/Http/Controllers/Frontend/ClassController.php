@@ -77,10 +77,10 @@ class ClassController extends Controller
             }
 
 
-//            if (!isViewable($course)) {
-//                Toastr::error(trans('common.Access Denied'), trans('common.Failed'));
-//                return redirect()->back();
-//            }
+            // if (!isViewable($course)) {
+            //     Toastr::error(trans('common.Access Denied'), trans('common.Failed'));
+            //     return redirect()->back();
+            // }
 
 
             $comments = CourseComment::where('course_id', $course->id)->with('replies', 'replies.user', 'user')->paginate(10);

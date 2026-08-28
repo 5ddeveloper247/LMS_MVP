@@ -96,6 +96,8 @@ Route::group(['prefix' => 'admin/course', 'middleware' => ['auth', 'admin']], fu
     Route::post('/unpublishCourse', 'CourseSettingController@unpublishCourse')->name('AdminUnpublishCourse');
     Route::get('/publishCourse/{id}', 'CourseSettingController@publishCourse')->name('publishCourse');
     Route::post('/courseStatus', 'CourseSettingController@courseStatus')->name('AdminCourseStatus')->middleware('RoutePermissionCheck:course.status_update');
+    Route::get('/course/comparison/{id}', 'CourseSettingController@getCourseComparison')->name('course.comparison');
+    Route::post('/course/comparison/save', 'CourseSettingController@saveCourseComparison')->name('course.comparison.save');
 
     // Course Plan
     Route::get('/all/course-plans', 'CoursePlanController@index')->name('getAllCoursePlan');

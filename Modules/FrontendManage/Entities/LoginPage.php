@@ -13,7 +13,7 @@ class LoginPage extends Model
     use Tenantable;
     use HasTranslations;
 
-    public $translatable = ['title', 'slogans1', 'slogans2', 'slogans3', 'reg_title', 'reg_slogans1', 'reg_slogans2', 'reg_slogans3', 'forget_title', 'forget_slogans1', 'forget_slogans2', 'forget_slogans3'];
+    public $translatable = ['title', 'slogans1', 'slogans2', 'slogans3','slogans4','slogans5', 'reg_title', 'reg_slogans1', 'reg_slogans2', 'reg_slogans3','reg_slogans4','reg_slogans5', 'forget_title', 'forget_slogans1', 'forget_slogans2', 'forget_slogans3','forget_slogans4','forget_slogans5'];
     protected $fillable = [];
 
     public static function boot()
@@ -39,10 +39,15 @@ class LoginPage extends Model
 
     }
 
+    // public static function getData()
+    // {
+    //     return Cache::rememberForever('login_pages_' . app()->getLocale() . SaasDomain(), function () {
+    //         return LoginPage::firstOrCreate();
+    //     });
+    // }
+
     public static function getData()
     {
-        return Cache::rememberForever('login_page_' . app()->getLocale() . SaasDomain(), function () {
-            return LoginPage::firstOrCreate();
-        });
+        return LoginPage::firstOrCreate();
     }
 }

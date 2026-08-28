@@ -24,248 +24,446 @@
             gap: 30px;
         }
     }
+
+
+    /* ===============BANNER================ */
+    .breadcrumb_area {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100% !important;
+        text-align: center;
+    }
+
+    .breadcrumb_area:before {
+        display: none
+    }
+
+    .breadcrumb_area:after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: #2ca6a49d !important;
+    }
+
+    .breadcam_wrap {
+        padding: 0 !important;
+        position: relative;
+        z-index: 99
+    }
+
+    .breadcam_wrap h1,
+    .breadcam_wrap p {
+        text-shadow: 1px 0px 5px #737373;
+    }
+
+    .theme_btn {
+        border-radius: 50px !important;
+        font-weight: 600 !important
+    }
+
+    h1,
+    h2 {
+        font-family: "Inter" !important;
+        font-weight: 600 !important;
+    }
+
+    h2 {
+        font-size: clamp(1.3rem, 4vw, 2.5rem) !important;
+        font-family: "Rubik" !important;
+        font-weight: 600 !important;
+    }
+
+    p,
+    a {
+        font-family: "Rubik" !important;
+    }
+
+    .breadcrumb_area a {
+        border-radius: 50px !important;
+        font-weight: 400 !important
+    }
+
+    li {
+        font-family: "Inter" !important;
+        font-size: clamp(14px, 1.5vw, 18px) !important;
+        font-weight: 500
+    }
+
+    .course-work {
+        box-shadow: 0px 4px 10px 0px #0000001A !important;
+    }
 </style>
 
-<div
-    style="background: linear-gradient(344deg, rgba(62,175,132,0.9360994397759104) 0%, rgba(107,183,154,0.8100490196078431) 38%, rgba(161,131,167,0.6055672268907564) 60%, rgba(164,84,167,1) 100%);">
-    <div class="container px-lg-5 py-5">
-        <div class="px-xl-5 px-3">
-            <div class="d-flex align-items-center justify-content-between mb-3">
-                <h2 class="fw-bold text-white">
-                    How Do Our Courses Work?
-                </h2>
-
-                <button class="theme_btn py-2 px-5 border-0">
-                    Explore Courses
-                </button>
-            </div>
-
-            <div class="grid-container">
-
-                <div class="bg-white p-3" style="border-radius: 8px">
-                    <div>
-                        <div class="position-relative" style="width: 70px">
-                            <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y291cnNlfGVufDB8fDB8fHww"
-                                width="70" height="70" class="rounded-circle object-fit-cover" alt="">
-                            <span
-                                class="position-absolute end-0 translate-middle badge rounded-circle bg-primary d-flex align-items-center justify-content-center"
-                                style="top: 0px; right: 0px; height: 25px; width: 25px;">
-                                1
-                            </span>
-                        </div>
-                        <h5 class="my-3">Choose a Course</h5>
-                    </div>
-
-                    <p>
-                        From foundational to advanced, high-quality courses in all areas, created and instructed by
-                        professionals in academia and the healthcare sector.
-                    </p>
-                </div>
-
-                <div class="bg-white p-3" style="border-radius: 8px">
-
-                    <div class="position-relative">
-                        <div>
-                            <div class="position-relative" style="width: 70px">
-                                <img src="https://plus.unsplash.com/premium_photo-1664302091622-32248181a4b6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cmVnaXN0ZXJ8ZW58MHx8MHx8fDA%3D"
-                                    width="70" height="70" class="rounded-circle object-fit-cover"
-                                    alt="">
-                                <span
-                                    class="position-absolute end-0 translate-middle badge rounded-circle bg-primary d-flex align-items-center justify-content-center"
-                                    style="top: 0px; right: 0px; height: 25px; width: 25px;">
-                                    2
-                                </span>
-                            </div>
-                            <h5 class="my-3">Register or Login</h5>
-                        </div>
-                    </div>
-
-                    <p>
-                        Join Merkaii Xcel to access our educational resources for NCLEX, nursing school, and more.
-                    </p>
-                </div>
-
-                <div class="bg-white p-3" style="border-radius: 8px">
-                    <div>
-                        <div class="position-relative" style="width: 70px">
-                            <img src="https://plus.unsplash.com/premium_photo-1681336549590-b8e0ea002a63?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8cHVyY2hhc2V8ZW58MHx8MHx8fDA%3D"
-                                width="70" height="70" class="rounded-circle object-fit-cover" alt="">
-                            <span
-                                class="position-absolute end-0 translate-middle badge rounded-circle bg-primary d-flex align-items-center justify-content-center"
-                                style="top: 0px; right: 0px; height: 25px; width: 25px;">
-                                2
-                            </span>
-                        </div>
-                        <h5 class="my-3">Purchase Your Weakest Subject to Begin</h5>
-                    </div>
-                    <p>
-                        Purchase the course that caused you discomfort and made it hard for you to sleep after failing.
-                    </p>
-                </div>
-
-                <div class="bg-white p-3" style="border-radius: 8px">
-                    <div>
-                        <div class="position-relative" style="width: 70px">
-                            <img src="https://plus.unsplash.com/premium_photo-1669652639356-f5cb1a086976?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bGVhcm58ZW58MHx8MHx8fDA%3D"
-                                width="70" height="70" class="rounded-circle object-fit-cover" alt="">
-                            <span
-                                class="position-absolute end-0 translate-middle badge rounded-circle bg-primary d-flex align-items-center justify-content-center"
-                                style="top: 0px; right: 0px; height: 25px; width: 25px;">
-                                2
-                            </span>
-                        </div>
-                        <h5 class="mt-2">Learn, Connect and Discuss</h5>
-                    </div>
-                    <p>
-                        Courses are organized into weeks and steps. You can connect with other students and tutors
-                        during your learning experience.
-                    </p>
-                </div>
-            </div>
-
-            <div class="grid-container mt-4">
-                <div class="d-flex align-items-start gap-2">
-                    <div class="blob position-relative">
-                        <svg width="80px" viewBox="40 40 160 161" xmlns="http://www.w3.org/2000/svg">
-                            <path fill="#FF7619" stroke="#FF7619" stroke-width="20"
-                                d="M18.8,-35.6C24.9,-29,31,-25.2,43.2,-19.7C55.5,-14.2,74.1,-7.1,74.1,0C74.2,7.2,55.8,14.4,44.9,22.2C33.9,29.9,30.4,38.2,24.2,48.2C17.9,58.1,9,69.7,2.5,65.3C-3.9,60.9,-7.7,40.5,-8.9,27.6C-10,14.7,-8.4,9.3,-10.8,6C-13.1,2.6,-19.5,1.3,-27.2,-4.5C-34.9,-10.2,-44,-20.5,-41.9,-24.2C-39.8,-28,-26.5,-25.4,-17.6,-30.5C-8.7,-35.5,-4.4,-48.4,1,-50.1C6.3,-51.7,12.6,-42.3,18.8,-35.6Z"
-                                transform="translate(100 100)" />
-                        </svg>
-
-
-                        <svg class="position-absolute"
-                            style="top: 50%;
-                                    left: 50%;
-                                    transform: translate(-50%, -80%);"
-                            xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
-                            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                stroke-width="1.5" color="currentColor">
-                                <path
-                                    d="M6.514 2c-1.304.129-2.182.419-2.838 1.076c-1.175 1.177-1.175 3.072-1.175 6.863v4.02c0 3.79 0 5.686 1.175 6.864S6.743 22 10.526 22h2.007c3.783 0 5.675 0 6.85-1.177c1.067-1.07 1.166-2.717 1.175-5.846" />
-                                <path
-                                    d="m10.526 7l1.003 3.5c.56 1.11 1.263 1.4 3.01 1.5c1.389-.034 2.195-.198 2.883-.796c.469-.408.681-1.023.784-1.635L18.55 7.5m2.508-2v5M8.601 4.933c1.587-1.317 3.001-2.024 5.934-2.802a1.94 1.94 0 0 1 1.009.005c2.596.714 3.998 1.348 5.876 2.758c.08.06.104.172.048.255c-.613.902-1.982 1.633-5.34 2.935a2.98 2.98 0 0 1-2.171-.012c-3.576-1.42-5.22-2.18-5.42-2.969a.17.17 0 0 1 .064-.17" />
-                            </g>
-                        </svg>
-                    </div>
-
-                    <div>
-                        <h5 class="fw-bold text-dark" style="font-size: 20px">Short Course</h5>
-                        <p>
-                            Learn new content with a flexible online course
-                        </p>
-                    </div>
-                </div>
-
-                <div class="d-flex align-items-start gap-2">
-                    <div class="blob position-relative">
-                        <svg width="80px" viewBox="40 40 160 161" xmlns="http://www.w3.org/2000/svg">
-                            <path fill="#FF7619" stroke="#FF7619" stroke-width="20"
-                                d="M18.8,-35.6C24.9,-29,31,-25.2,43.2,-19.7C55.5,-14.2,74.1,-7.1,74.1,0C74.2,7.2,55.8,14.4,44.9,22.2C33.9,29.9,30.4,38.2,24.2,48.2C17.9,58.1,9,69.7,2.5,65.3C-3.9,60.9,-7.7,40.5,-8.9,27.6C-10,14.7,-8.4,9.3,-10.8,6C-13.1,2.6,-19.5,1.3,-27.2,-4.5C-34.9,-10.2,-44,-20.5,-41.9,-24.2C-39.8,-28,-26.5,-25.4,-17.6,-30.5C-8.7,-35.5,-4.4,-48.4,1,-50.1C6.3,-51.7,12.6,-42.3,18.8,-35.6Z"
-                                transform="translate(100 100)" />
-                        </svg>
-
-
-                        <svg class="position-absolute"
-                            style="top: 50%;
-                                left: 50%;
-                                transform: translate(-50%, -80%);"
-                            xmlns="http://www.w3.org/2000/svg" width="54" height="34" viewBox="0 0 24 24">
-                            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                stroke-width="1.5"
-                                d="m12 22l-2-6H2l2 6zm0 0h4m-4-9v-.5c0-1.886 0-2.828-.586-3.414S9.886 8.5 8 8.5s-2.828 0-3.414.586S4 10.614 4 12.5v.5m15 0a2 2 0 1 1-4 0a2 2 0 0 1 4 0m-9-9a2 2 0 1 1-4 0a2 2 0 0 1 4 0m4 13.5h6a2 2 0 0 1 2 2v.5a2 2 0 0 1-2 2h-1"
-                                color="currentColor" />
-                        </svg>
-                    </div>
-
-                    <div>
-                        <h5 class="fw-bold text-dark" style="font-size: 20px">Expert Tutors | Mentors</h5>
-                        <p>
-                            Take a preassessment to determine your weakness for guided learning
-                        </p>
-                    </div>
-                </div>
-
-                <div class="d-flex align-items-start gap-2">
-
-                    <div class="blob position-relative">
-                        <svg width="80px" viewBox="40 40 160 161" xmlns="http://www.w3.org/2000/svg">
-                            <path fill="#FF7619" stroke="#FF7619" stroke-width="20"
-                                d="M18.8,-35.6C24.9,-29,31,-25.2,43.2,-19.7C55.5,-14.2,74.1,-7.1,74.1,0C74.2,7.2,55.8,14.4,44.9,22.2C33.9,29.9,30.4,38.2,24.2,48.2C17.9,58.1,9,69.7,2.5,65.3C-3.9,60.9,-7.7,40.5,-8.9,27.6C-10,14.7,-8.4,9.3,-10.8,6C-13.1,2.6,-19.5,1.3,-27.2,-4.5C-34.9,-10.2,-44,-20.5,-41.9,-24.2C-39.8,-28,-26.5,-25.4,-17.6,-30.5C-8.7,-35.5,-4.4,-48.4,1,-50.1C6.3,-51.7,12.6,-42.3,18.8,-35.6Z"
-                                transform="translate(100 100)" />
-                        </svg>
-
-
-                        <svg class="position-absolute"
-                            style="top: 50%;
-                                left: 50%;
-                                transform: translate(-50%, -80%);"
-                            xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 36 36">
-                            <path fill="currentColor" d="M8.57 30.9A16 16 0 0 0 33.95 19H18.43Z"
-                                class="clr-i-solid--alerted clr-i-solid-path-1--alerted" />
-                            <path fill="currentColor"
-                                d="M33.95 17a16 16 0 0 0-.18-1.61H22.23A3.68 3.68 0 0 1 19 9.89l4.06-7A16 16 0 0 0 7 29.6L17.49 17Z"
-                                class="clr-i-solid--alerted clr-i-solid-path-2--alerted" />
-                            <path fill="currentColor"
-                                d="M26.85 1.14L21.13 11a1.28 1.28 0 0 0 1.1 2h11.45a1.28 1.28 0 0 0 1.1-2l-5.72-9.86a1.28 1.28 0 0 0-2.21 0"
-                                class="clr-i-solid--alerted clr-i-solid-path-3--alerted clr-i-alert" />
-                            <path fill="none" d="M0 0h36v36H0z" />
-                        </svg>
-                    </div>
-
-                    <div>
-                        <h5 class="fw-bold text-dark" style="font-size: 20px">NCLEX – Ready Resources</h5>
-                        <p>
-                            Enjoy tailored content geared towards the NCLEX TEST PLAN
-                        </p>
-                    </div>
-                </div>
-
-                <div class="d-flex align-items-start gap-2">
-                    <div class="blob position-relative">
-                        <svg width="80px" viewBox="40 40 160 161" xmlns="http://www.w3.org/2000/svg">
-                            <path fill="#FF7619" stroke="#FF7619" stroke-width="20"
-                                d="M18.8,-35.6C24.9,-29,31,-25.2,43.2,-19.7C55.5,-14.2,74.1,-7.1,74.1,0C74.2,7.2,55.8,14.4,44.9,22.2C33.9,29.9,30.4,38.2,24.2,48.2C17.9,58.1,9,69.7,2.5,65.3C-3.9,60.9,-7.7,40.5,-8.9,27.6C-10,14.7,-8.4,9.3,-10.8,6C-13.1,2.6,-19.5,1.3,-27.2,-4.5C-34.9,-10.2,-44,-20.5,-41.9,-24.2C-39.8,-28,-26.5,-25.4,-17.6,-30.5C-8.7,-35.5,-4.4,-48.4,1,-50.1C6.3,-51.7,12.6,-42.3,18.8,-35.6Z"
-                                transform="translate(100 100)" />
-                        </svg>
-
-
-                        <svg class="position-absolute"
-                            style="top: 50%;
-                                left: 50%;
-                                transform: translate(-50%, -80%);"
-                            xmlns="http://www.w3.org/2000/svg" width="40" height="30" viewBox="0 0 24 24">
-                            <path fill="currentColor"
-                                d="M3 18h18V6H3zM1 5a1 1 0 0 1 1-1h20a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm8 5a1 1 0 1 0-2 0a1 1 0 0 0 2 0m2 0a3 3 0 1 1-6 0a3 3 0 0 1 6 0m-2.998 6c-.967 0-1.84.39-2.475 1.025l-1.414-1.414A5.5 5.5 0 0 1 8.002 14a5.5 5.5 0 0 1 3.889 1.61l-1.414 1.415A3.5 3.5 0 0 0 8.002 16m8.205-1.293l4-4l-1.414-1.414l-3.293 3.293l-1.793-1.793l-1.414 1.414l2.5 2.5l.707.707z" />
-                        </svg>
-                    </div>
-
-                    <div>
-                        <h5 class="fw-bold text-dark" style="font-size: 20px">Prepare to Pass</h5>
-                        <p>
-                            Build your knowledge and strategies for success as you adapt
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="row">
+    <div class="col-md-12 px-0 inter">
+        @php
+            $banner_title = 'New Page';
+            $banner_image = 'public/frontend/infixlmstheme/img/images/courses-4.jpg';
+            $btn_title = auth()->check() ? '' : 'Sell With Us';
+            $sub_title = 'YOUR COMEBACK STARTS HERE';
+        @endphp
+        <x-breadcrumb :title="$banner_title" :btntitle="$btn_title" :sub_title="$sub_title" :btnclass="'hit openModal'" />
     </div>
 </div>
 
 
-<div>
+<section>
+    <div class="container px-lg-5 py-5">
+        <div class="d-flex align-items-start justify-content-between mb-4 px-xl-5 px-3">
+            <div>
+                <h2 class="fw-bold">
+                    How Do Our Courses Work?
+                </h2>
+
+                <p>
+                    Our prep course is designed for students who need a second chance at success. With expert
+                    coaching, <br class="d-none d-md-block">
+                    Florida BON approval, and a proven step-by-step curriculum, you’ll gain the knowledge,
+                    confidence, <br class="d-none d-md-block">
+                    and hands-on practice to pass the NCLEX and move forward in your nursing career.
+                </p>
+            </div>
+
+            <button class="theme_btn py-2 px-5 border-0">
+                Explore Courses
+            </button>
+        </div>
+
+        <div class="row px-xl-5 px-3 mt-4">
+
+            <div class="col-md-6 col-lg-4 col-xl-3">
+                <div class="card h-100 course-work p-4 border-0" style="border-radius: 30px;">
+                    <svg style="position: absolute; top: 30px; left: 20px" width="22" height="75"
+                        viewBox="0 0 22 75" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="10" r="10" fill="#26235C" />
+                        <path
+                            d="M0 72.2158L2.83209 71.083C3.37839 71.7232 3.87539 72.2652 5.06758 72.2652C6.21034 72.2652 6.93083 71.9696 6.93083 70.8204L10.4088 63.0033V70.8529C10.4088 73.234 8.2975 74.3179 5.21677 74.3179C2.43455 74.3179 0.819516 73.3654 0 72.2158Z"
+                            fill="#F7DF1E" />
+                        <path
+                            d="M8.77282 62.7458C9.73088 62.7458 10.5075 62.243 10.5075 61.6229C10.5075 61.0027 9.73088 60.5 8.77282 60.5C7.81475 60.5 7.03809 61.0027 7.03809 61.6229C7.03809 62.243 7.81475 62.7458 8.77282 62.7458Z"
+                            fill="#F7DF1E" />
+                        <path
+                            d="M21.6834 64.9432L18.8511 66.076C18.3048 65.4357 17.8077 64.8938 16.6155 64.8938C15.4729 64.8938 14.7523 65.1893 14.7523 66.3387L11.2744 74.1557V66.3063C11.2744 63.9252 13.3857 62.8413 16.4665 62.8413C19.2484 62.8413 20.8634 63.7938 21.6831 64.9434"
+                            fill="#F7DF1E" />
+                    </svg>
+
+                    <div class="d-flex align-items-center justify-content-center">
+                        <img src="https://plus.unsplash.com/premium_photo-1755001060420-7a561e278353?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8"
+                            width="100" height="100" style="border-radius: 50px" alt="">
+                    </div>
+
+                    <h5 class="text-center text-dark mt-4 mb-3 inter">Choose a Course</h5>
+                    <p style="line-height: 1.2" class="text-center inter">
+                        From foundational to advanced, high-quality courses in all areas, created and instructed by
+                        professionals in academia and the healthcare sector.
+                    </p>
+
+                    <img src="{{ asset('public/assets/c-rec.png') }}"
+                        style="position: absolute; bottom: 0; left: 0; width: 100%" width="100%" alt="">
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 col-xl-3">
+                <div class="card h-100 course-work p-4 border-0" style="border-radius: 30px;">
+                    <svg style="position: absolute; top: 30px; left: 20px" width="22" height="75"
+                        viewBox="0 0 22 75" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="10" r="10" fill="#26235C" />
+                        <path
+                            d="M0 72.2158L2.83209 71.083C3.37839 71.7232 3.87539 72.2652 5.06758 72.2652C6.21034 72.2652 6.93083 71.9696 6.93083 70.8204L10.4088 63.0033V70.8529C10.4088 73.234 8.2975 74.3179 5.21677 74.3179C2.43455 74.3179 0.819516 73.3654 0 72.2158Z"
+                            fill="#F7DF1E" />
+                        <path
+                            d="M8.77282 62.7458C9.73088 62.7458 10.5075 62.243 10.5075 61.6229C10.5075 61.0027 9.73088 60.5 8.77282 60.5C7.81475 60.5 7.03809 61.0027 7.03809 61.6229C7.03809 62.243 7.81475 62.7458 8.77282 62.7458Z"
+                            fill="#F7DF1E" />
+                        <path
+                            d="M21.6834 64.9432L18.8511 66.076C18.3048 65.4357 17.8077 64.8938 16.6155 64.8938C15.4729 64.8938 14.7523 65.1893 14.7523 66.3387L11.2744 74.1557V66.3063C11.2744 63.9252 13.3857 62.8413 16.4665 62.8413C19.2484 62.8413 20.8634 63.7938 21.6831 64.9434"
+                            fill="#F7DF1E" />
+                    </svg>
+
+                    <div class="d-flex align-items-center justify-content-center">
+                        <img src="https://plus.unsplash.com/premium_photo-1755001060420-7a561e278353?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8"
+                            width="100" height="100" style="border-radius: 50px" alt="">
+                    </div>
+
+                    <h5 class="text-center text-dark mt-4 mb-3 inter">Register or Login</h5>
+                    <p style="line-height: 1.2" class="text-center inter">
+                        Join Merkaii Xcel to access our educational resources for NCLEX, nursing school, and more.
+                    </p>
+
+                    <img src="{{ asset('public/assets/c-rec.png') }}"
+                        style="position: absolute; bottom: 0; left: 0; width: 100%" width="100%" alt="">
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 col-xl-3">
+                <div class="card h-100 course-work p-4 border-0" style="border-radius: 30px;">
+                    <svg style="position: absolute; top: 30px; left: 20px" width="22" height="75"
+                        viewBox="0 0 22 75" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="10" r="10" fill="#26235C" />
+                        <path
+                            d="M0 72.2158L2.83209 71.083C3.37839 71.7232 3.87539 72.2652 5.06758 72.2652C6.21034 72.2652 6.93083 71.9696 6.93083 70.8204L10.4088 63.0033V70.8529C10.4088 73.234 8.2975 74.3179 5.21677 74.3179C2.43455 74.3179 0.819516 73.3654 0 72.2158Z"
+                            fill="#F7DF1E" />
+                        <path
+                            d="M8.77282 62.7458C9.73088 62.7458 10.5075 62.243 10.5075 61.6229C10.5075 61.0027 9.73088 60.5 8.77282 60.5C7.81475 60.5 7.03809 61.0027 7.03809 61.6229C7.03809 62.243 7.81475 62.7458 8.77282 62.7458Z"
+                            fill="#F7DF1E" />
+                        <path
+                            d="M21.6834 64.9432L18.8511 66.076C18.3048 65.4357 17.8077 64.8938 16.6155 64.8938C15.4729 64.8938 14.7523 65.1893 14.7523 66.3387L11.2744 74.1557V66.3063C11.2744 63.9252 13.3857 62.8413 16.4665 62.8413C19.2484 62.8413 20.8634 63.7938 21.6831 64.9434"
+                            fill="#F7DF1E" />
+                    </svg>
+
+                    <div class="d-flex align-items-center justify-content-center">
+                        <img src="https://plus.unsplash.com/premium_photo-1755001060420-7a561e278353?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8"
+                            width="100" height="100" style="border-radius: 50px" alt="">
+                    </div>
+
+                    <h5 class="text-center text-dark mt-4 mb-3 inter">Purchase Your Weakest Subject</h5>
+                    <p style="line-height: 1.2" class="text-center inter">
+                        Purchase the course that caused you discomfort and made it hard for you to sleep after failing.
+                    </p>
+
+                    <img src="{{ asset('public/assets/c-rec.png') }}"
+                        style="position: absolute; bottom: 0; left: 0; width: 100%" width="100%" alt="">
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 col-xl-3">
+                <div class="card h-100 course-work p-4 border-0" style="border-radius: 30px;">
+                    <svg style="position: absolute; top: 30px; left: 20px" width="22" height="75"
+                        viewBox="0 0 22 75" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="10" r="10" fill="#26235C" />
+                        <path
+                            d="M0 72.2158L2.83209 71.083C3.37839 71.7232 3.87539 72.2652 5.06758 72.2652C6.21034 72.2652 6.93083 71.9696 6.93083 70.8204L10.4088 63.0033V70.8529C10.4088 73.234 8.2975 74.3179 5.21677 74.3179C2.43455 74.3179 0.819516 73.3654 0 72.2158Z"
+                            fill="#F7DF1E" />
+                        <path
+                            d="M8.77282 62.7458C9.73088 62.7458 10.5075 62.243 10.5075 61.6229C10.5075 61.0027 9.73088 60.5 8.77282 60.5C7.81475 60.5 7.03809 61.0027 7.03809 61.6229C7.03809 62.243 7.81475 62.7458 8.77282 62.7458Z"
+                            fill="#F7DF1E" />
+                        <path
+                            d="M21.6834 64.9432L18.8511 66.076C18.3048 65.4357 17.8077 64.8938 16.6155 64.8938C15.4729 64.8938 14.7523 65.1893 14.7523 66.3387L11.2744 74.1557V66.3063C11.2744 63.9252 13.3857 62.8413 16.4665 62.8413C19.2484 62.8413 20.8634 63.7938 21.6831 64.9434"
+                            fill="#F7DF1E" />
+                    </svg>
+
+                    <div class="d-flex align-items-center justify-content-center">
+                        <img src="https://plus.unsplash.com/premium_photo-1755001060420-7a561e278353?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8"
+                            width="100" height="100" style="border-radius: 50px" alt="">
+                    </div>
+
+                    <h5 class="text-center text-dark mt-4 mb-3 inter">Learn, Connect and Discuss</h5>
+                    <p style="line-height: 1.2" class="text-center inter">
+                        Courses are organized into weeks and steps. You can connect with other students and tutors
+                        during your learning experience.
+                    </p>
+
+                    <img src="{{ asset('public/assets/c-rec.png') }}"
+                        style="position: absolute; bottom: 0; left: 0; width: 100%" width="100%" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section>
+    <div class="container px-lg-5 py-5">
+        <div class="box_header d-flex align-items-center justify-content-between flex-wrap row px-xl-5 px-3">
+            <div class="d-flex justify-content-between w-100 align-items-center mb-3 mb-md-4">
+                <h4 class="custom_small_heading inter f_w_700 ">
+                    {{ $total > 1 ? $total . ' Prep-Course' : $total . ' Prep-Course' }}
+                    {{ __(' Found') }}</h4>
+                <a class="font-weight-500 pull-bs-canvas-left filter_btn" id="filter_btn"
+                    style="cursor: pointer; text-align: center;">
+                    Show Filter
+                    <svg width="22" height="16" viewBox="0 0 22 16" xmlns="http://www.w3.org/2000/svg">
+                        <g id="icon-filter" fill-rule="nonzero" fill="none">
+                            <rect fill="#D8D8D8" y="2" width="22" height="2" rx="1">
+                            </rect>
+                            <rect fill="#D8D8D8" y="12" width="22" height="2" rx="1">
+                            </rect>
+                            <circle fill="#373737" cx="15.5" cy="13" r="2.5">
+                            </circle>
+                            <circle fill="#373737" cx="6.5" cy="3" r="2.5">
+                            </circle>
+                        </g>
+                    </svg>
+                </a>
+            </div>
+
+            <div class="box_header_right mb_30">
+                <div class="short_select d-flex align-items-center">
+                    <div class="mobile_filter mr_10">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="19.5" height="13" viewBox="0 0 19.5 13">
+                            <g transform="translate(28)">
+                                <rect id="Rectangle_1" data-name="Rectangle 1" width="19.5" height="2"
+                                    rx="1" transform="translate(-28)" fill="var(--system_primery_color)" />
+                                <rect id="Rectangle_2" data-name="Rectangle 2" width="15.5" height="2"
+                                    rx="1" transform="translate(-26 5.5)"
+                                    fill="var(--system_primery_color)" />
+                                <rect id="Rectangle_3" data-name="Rectangle 3" width="5" height="2"
+                                    rx="1" transform="translate(-20.75 11)"
+                                    fill="var(--system_primery_color)" />
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (isset($courses))
+            <div class="row px-xl-5 px-3 mt-4">
+                @foreach ($courses as $course)
+                    @php
+                        // Determine the price (respecting effectiveCoursePlan if available)
+                        if (isset($course->effectiveCoursePlan[0])) {
+                            $price = $course->effectiveCoursePlan[0]->amount;
+                        } else {
+                            $price = $course->price + $course->tax;
+                        }
+
+                        // Determine course title (parent if applicable)
+                        $courseTitle = !empty($course->parent_id) ? $course->parent->title : $course->title;
+
+                        // Determine course link
+                        $courseUrl = !empty($course->parent_id)
+                            ? courseDetailsUrl(@$course->parent->id, @$course->type, @$course->parent->slug) .
+                                '?courseType=' .
+                                $course->type
+                            : courseDetailsUrl(
+                                @$course->id,
+                                @$course->type,
+                                @$course->slug . '?courseType=' . $course->type,
+                            );
+
+                        // Determine tag text
+                        if ($course->type == 4) {
+                            $tagText = __('Full Course');
+                        } elseif ($course->type == 5) {
+                            $tagText = __('Prep-Course') . ' (On-Demand)';
+                        } elseif ($course->type == 6) {
+                            $tagText = __('Prep-Course') . ' (Live)';
+                        } elseif ($course->type == 7) {
+                            $tagText = __('Time Table');
+                        } elseif ($course->type == 2) {
+                            $tagText = __('Big Quiz');
+                        } else {
+                            $tagText = __('Course');
+                        }
+
+                        // Determine chapters / lessons count
+                        $lessonCount =
+                            $course->type == 6
+                                ? collect($course->parent->classes)
+                                    ->filter(function ($class) use ($course) {
+                                        return $class->course_types != null &&
+                                            in_array($course->type, json_decode($class->course_types));
+                                    })
+                                    ->count()
+                                : ($course->type != 7 && $course->type != 9
+                                    ? count($course->parent->chapters)
+                                    : null);
+
+                        // Duration (weeks for live courses)
+                        $duration = null;
+                        if ($course->type == 4 || $course->type == 6) {
+                            if (isset($course->effectiveCoursePlan[0])) {
+                                $duration =
+                                    round(
+                                        (strtotime($course->effectiveCoursePlan[0]->edate) -
+                                            strtotime($course->effectiveCoursePlan[0]->sdate)) /
+                                            604800,
+                                        1,
+                                    ) . ' Weeks';
+                            }
+                        }
+
+                        // Student count
+                        if ($course->type == 4 || $course->type == 6) {
+                            $studentCount = isset($course->effectiveCoursePlan[0])
+                                ? $course->effectiveCoursePlan[0]->enrolls->count()
+                                : $course->course_enrolled_count;
+                        } elseif ($course->type == 2 || $course->type == 7) {
+                            $studentCount = $course->total_enrolled;
+                        } else {
+                            $studentCount = $course->course_enrolled_count;
+                        }
+                    @endphp
+
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card p-3 p-md-4 inter border-0 h-100"
+                            style="border-radius: 10px; box-shadow: 0px 4px 30px 0px #00000026;">
+                            <a href="{{ $courseUrl }}" class="text-decoration-none text-dark">
+                                <div class="position-relative">
+                                    <img class="" src="{{ getCourseImage($course->thumbnail) }}"
+                                        alt="{{ $courseTitle }}" width="100%" height="350"
+                                        style="border-radius: 10px; object-fit: cover;">
+                                    <span class="py-2 px-4 text-white"
+                                        style="background-color: var(--footer_text_hover_color); border-radius: 7px; position: absolute; top: 30px !important; left: 30px !important">
+                                        {{ $tagText }}
+                                    </span>
+                                </div>
+
+                                <div class="mt-3">
+                                    <div class="d-flex align-items-center gap-1">
+                                        <img src="{{ asset('public/assets/star.svg') }}" width="80px"
+                                            alt="Rating">
+                                        <small class="rating">
+                                            ({{ $course->totalReview ?? 0 }} | 5)
+                                        </small>
+                                    </div>
+
+                                    <h5 class="fw-bold mt-3 inter noBrake text-dark"
+                                        style="text-transform: capitalize !important">{{ $courseTitle }}</h5>
+
+                                    <div class="d-flex align-items-center justify-content-between my-4 flex-wrap gap-2"
+                                        style="border-bottom: 2px dashed #00000075">
+                                        @if ($lessonCount)
+                                            <div class="d-flex align-items-center gap-2">
+                                                <i class="fa-solid fa-file"></i>
+                                                <small class="inter">Lessons {{ $lessonCount }}</small>
+                                            </div>
+                                        @endif
+
+                                        @if ($duration)
+                                            <div class="d-flex align-items-center gap-2">
+                                                <i class="fa-solid fa-clock"></i>
+                                                <small class="inter">{{ $duration }}</small>
+                                            </div>
+                                        @endif
+
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="fa-solid fa-user"></i>
+                                            <small class="inter">Students {{ $studentCount }}</small>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        class="d-flex align-items-center justify-content-between mt-3 flex-wrap gap-2">
+                                        <h5 class="inter fw-bold text-dark">${{ number_format($price, 2) }}</h5>
+                                        <small class="inter">{{ $tagText }}</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+
+    </div>
+</section>
+
+{{-- <div>
     <input type="hidden" class="class_route" name="class_route" value="{{ route('quizzes') }}">
-    {{-- @dd($courses) --}}
     <div class="py-lg-5 py-4 pt-md-5 pb-md-4">
         <div class="container px-lg-5">
             <div class="row px-lg-5 px-4 prep-course-padding">
-                <!-- <div class="col-lg-12 col-xl-12">
-                    <div class="row"> -->
                 <div class="col-12">
                     <div class="box_header d-flex align-items-center justify-content-between flex-wrap">
                         <div class="d-flex justify-content-between w-100 align-items-center mb-3 mb-md-4">
-                            <h5 class="custom_small_heading f_w_700 ">
+                            <h4 class="custom_small_heading f_w_700 ">
                                 {{ $total > 1 ? $total . ' Prep-Course' : $total . ' Prep-Course' }}
-                                {{ __(' Found') }}</h5>
+                                {{ __(' Found') }}</h4>
                             <a class="font-weight-500 pull-bs-canvas-left filter_btn" id="filter_btn"
                                 style="cursor: pointer; text-align: center;">
                                 Show Filter
@@ -283,7 +481,6 @@
                                     </g>
                                 </svg>
                             </a>
-                            {{-- <i class="fa fa-3x fa-filter ml-5 pull-bs-canvas-left mb_30" id="filter_btn" role="button" aria-hidden="true" ></i> --}}
                         </div>
 
                         <div class="box_header_right mb_30">
@@ -308,10 +505,11 @@
                         </div>
                     </div>
                 </div>
+
                 @if (isset($courses))
                     @foreach ($courses as $course)
                         @if ($course->type == 2)
-                            <div class="col-sm-6 col-md-4 col-lg-4 col-xl-3 d-flex justify-content-center">
+                            <div class="col-sm-6 col-md-4 col-lg-4 col-xl-3 d-flex justify-content-center p-3">
                                 <div class="quiz_wizged card rounded-card shadow mb-md-4 mb-3 w-100">
                                     <a
                                         href="{{ courseDetailsUrl(@$course->id, @$course->type, @$course->slug . '?courseType=' . $course->type) }}">
@@ -358,7 +556,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         @elseif ($course->type == 8)
                             @php
@@ -366,7 +563,6 @@
                                 $start_date = \Carbon\Carbon::parse($course->start_date)->format('Y-m-d');
                                 $end_date = \Carbon\Carbon::parse($course->end_date)->format('Y-m-d');
                             @endphp
-                            {{-- @if ($start_date <= $today && $end_date >= $today) --}}
                             <div class="col-sm-6 col-md-4 col-lg-4 col-xl-3 d-flex justify-content-center">
                                 <div class="quiz_wizged card rounded-card shadow mb-md-4 mb-3 w-100">
                                     <a href="{{ route('repeat-course') . '?course_id=' . $course->id }}">
@@ -405,17 +601,6 @@
                                             @endif
                                         </div>
                                         <div class="course_less_students d-flex justify-content-between">
-                                            {{-- <small class="small_tag_color"> <i class="ti-agenda"></i>
-                                                            @php $classcount = 0; @endphp
-                                                            @foreach ($course->parent->classes as $class)
-                                                                @if ($class->course_types != null && in_array($course->type, json_decode($class->course_types)))
-                                                                    @php $classcount++; @endphp
-                                                                @endif
-                                                            @endforeach
-
-                                                            {{ $classcount }}
-                                                            {{ __('Classes') }}
-                                                        </small> --}}
                                             <small class="small_tag_color"> <i class="ti-agenda"></i>
                                                 {{ count($course->quiz->assign) }}
                                                 {{ __('frontend.Question') }}</small>
@@ -428,7 +613,6 @@
                                     </div>
                                 </div>
                             </div>
-                            {{-- @endif --}}
                         @else
                             <div class="col-sm-6 col-md-4 col-lg-4 col-xl-3 d-flex justify-content-center">
                                 <div class="quiz_wizged card rounded-card shadow mb-md-4 mb-3 w-100">
@@ -475,7 +659,6 @@
                                         <div class="rating_cart">
                                             <div class="rateing">
                                                 <span>{{ $course->totalReview }}
-                                                    {{-- <span>{{ !empty($course->parent_id) ? $course->parent->totalReview : $course->totalReview }} --}}
                                                     | 5</span>
                                                 <i class="fas fa-star"></i>
                                             </div>
@@ -521,7 +704,6 @@
                                                 <small class="small_tag_color">
                                                     <i class="ti-user"></i>
                                                     {{ $course->effectiveCoursePlan[0]->enrolls->count() }}
-                                                    {{-- {{ $course->course_enrolled_count }} --}}
                                                     {{ __('frontend.Students') }}
                                                 </small>
                                                 @if (isset($course->effectiveCoursePlan[0]))
@@ -569,7 +751,9 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
+
+
 <div class="bs-canvas bs-canvas-left position-fixed bg-light h-100">
     <header class="border-bottom bs-canvas-header p-3">
         <h4 class="d-inline-block f_w_600 mb-0">Filter</h4>

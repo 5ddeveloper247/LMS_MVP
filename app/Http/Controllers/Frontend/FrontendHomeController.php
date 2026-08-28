@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Http\Request as HttpRequest;
 use Modules\CourseSetting\Entities\Course;
+use Modules\CourseSetting\Entities\CourseComparison;
+use Modules\Payment\Entities\PaymentPlans;
 use Modules\FrontendManage\Entities\HeaderMenu;
 use Modules\StudentSetting\Entities\Program;
 use Modules\FrontendManage\Entities\FrontPage;
@@ -77,7 +79,8 @@ class FrontendHomeController extends Controller
             $latest_blogs = Blog::where('status', 1)->with('user')->latest()->limit(10)->get();
             $featured_blogs = Blog::where('status',1)->where('featured',1)->with('user')->latest()->limit(3)->get();
             $latest_course_reveiws = CourseReveiw::where('status', 1)->with('user')->latest()->limit(4)->get();
-            $testimonials = Testimonial::where('status',1)->latest()->get();
+            $testimonials = Testimonial::where('status',1)->inRandomOrder()->get();
+            $testimonials2 = Testimonial::where('status',1)->inRandomOrder()->get();
 
             $random_program = Program::where('status', 1)
                 ->has('effectiveProgramPlan')
@@ -87,7 +90,12 @@ class FrontendHomeController extends Controller
                 ->first();
             $faqs = HomePageFaq::where('status', 1)->orderBy('order','desc')->take(10)->get();
 
-            return view(theme('pages.index'), compact('random_program', 'blocks', 'latest_programs', 'latest_blogs', 'featured_blogs' , 'latest_course_reveiws', 'random_program', 'latest_courses','faqs','allPrograms','allCourses','testimonials'));
+            $home_content = app('getHomeContent');
+
+            // Get course comparisons for the comparison table
+            $comparisons = $this->getCourseComparisons();
+
+            return view(theme('pages.index'), compact('random_program', 'blocks', 'latest_programs', 'latest_blogs', 'featured_blogs' , 'latest_course_reveiws', 'random_program', 'latest_courses','faqs','allPrograms','allCourses','testimonials', 'testimonials2','home_content', 'comparisons'));
 
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()]);
@@ -210,6 +218,148 @@ class FrontendHomeController extends Controller
 
         $programs = $programs->has('currentProgramPlan')->with(['currentProgramPlan'])->paginate(8);
         return view(theme('pages.Our-nursing'),get_defined_vars());
+    }
+
+    private function getCourseComparisons()
+    {
+        $currentDate = date('Y-m-d');
+        $comparisons = CourseComparison::with(['course.category', 'course.user', 'program'])
+            ->orderBy('course_id')
+            ->orderBy('id')
+            ->get();
+            
+        $comparisonData = [];
+
+        foreach ($comparisons as $comparison) {
+            // Get course data
+            if ($comparison->course) {
+                $course = $comparison->course;
+                
+                // Get duration and price using same logic as first tab
+                $duration = null;
+                $course_price = 0;
+                
+                // Check if course has children (type 4 or 6) and get plans from them
+                $childCourses = Course::where('parent_id', $course->id)
+                    ->whereIn('type', [4, 6])
+                    ->get();
+                
+                $currentPlan = null;
+                
+                if ($childCourses->count() > 0) {
+                    // Parent course - get plan from child courses
+                    $childIds = $childCourses->pluck('id')->toArray();
+                    $currentPlan = PaymentPlans::whereIn('parent_id', $childIds)
+                        ->whereIn('type', ['full_course', 'prep_course_live'])
+                        ->where('status', 1)
+                        ->where(function ($q) use ($currentDate) {
+                            $q->where(function($q2) use ($currentDate) {
+                                $q2->where('sdate', '<=', $currentDate)
+                                   ->where('edate', '>=', $currentDate);
+                            })
+                            ->orWhere('sdate', '>', $currentDate);
+                        })
+                        ->orderBy('sdate', 'asc')
+                        ->first();
+                } else {
+                    // Child course - use currentCoursePlan relationship
+                    $course->load('currentCoursePlan');
+                    if (isset($course->currentCoursePlan[0])) {
+                        $currentPlan = $course->currentCoursePlan[0];
+                    }
+                }
+                
+                if ($currentPlan) {
+                    // Use current course plan
+                    $startDate = strtotime($currentPlan->sdate);
+                    $endDate = strtotime($currentPlan->edate);
+                    $duration = round(($endDate - $startDate) / 604800, 1) . ' weeks';
+                    $course_price = $currentPlan->amount;
+                } else {
+                    // Use price + tax
+                    $course_price = $course->price + ($course->tax ?? 0);
+                    $duration = $course->duration ? $course->duration . ' weeks' : 'N/A';
+                }
+
+                // Build detail URL like the first tab
+                // Pattern: if course has children (parent course), use parent details with child type in URL and query param
+                // Otherwise, use course's own details
+                if ($childCourses->count() > 0) {
+                    // Parent course - use parent's id and slug, but child's type for the URL pattern
+                    // Pattern matches: courseDetailsUrl(parent->id, child->type, parent->slug) . '?courseType=' . child->type
+                    $firstChildCourse = $childCourses->first();
+                    $detailUrl = courseDetailsUrl($course->id, $firstChildCourse->type, $course->slug) . '?courseType=' . $firstChildCourse->type;
+                } else {
+                    // Course without children - use course's own details
+                    $detailUrl = courseDetailsUrl($course->id, $course->type, $course->slug);
+                }
+
+                $comparisonData[] = [
+                    'type' => 'course',
+                    'type_label' => 'Course',
+                    'id' => $course->id,
+                    'course_id' => $course->id,
+                    'title' => $course->title,
+                    'course_code' => $course->course_code ?? '',
+                    'duration' => $duration,
+                    'format' => $this->getCourseFormat($course->type),
+                    'price' => '$' . number_format($course_price, 0),
+                    'detail_url' => $detailUrl,
+                ];
+            }
+
+            // Get program data
+            if ($comparison->program) {
+                $program = $comparison->program;
+                
+                // Get current program plan
+                $programPlan = PaymentPlans::where('parent_id', $program->id)
+                    ->where('type', 'program')
+                    ->where('status', 1)
+                    ->where('sdate', '<=', $currentDate)
+                    ->where('edate', '>=', $currentDate)
+                    ->orderBy('sdate', 'asc')
+                    ->first();
+
+                $duration = null;
+                $price = null;
+                if ($programPlan) {
+                    $startDate = strtotime($programPlan->sdate);
+                    $endDate = strtotime($programPlan->edate);
+                    $duration = round(($endDate - $startDate) / 604800, 1) . ' weeks';
+                    $price = '$' . number_format($programPlan->amount, 0);
+                }
+
+                $detailUrl = route('programs.detail', ['id' => $program->id]);
+
+                $comparisonData[] = [
+                    'type' => 'program',
+                    'type_label' => 'Program',
+                    'id' => $program->id,
+                    'course_id' => $comparison->course_id,
+                    'title' => $program->programtitle,
+                    'course_code' => '',
+                    'duration' => $duration ?? 'N/A',
+                    'format' => 'Program',
+                    'price' => $price ?? 'N/A',
+                    'detail_url' => $detailUrl,
+                ];
+            }
+        }
+
+        return $comparisonData;
+    }
+
+    private function getCourseFormat($type)
+    {
+        $formats = [
+            1 => 'Course',
+            4 => 'Full Course',
+            5 => 'Prep-Course (On-Demand)',
+            6 => 'Prep-Course (Live)',
+        ];
+
+        return $formats[$type] ?? 'Course';
     }
 }
 
