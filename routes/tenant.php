@@ -478,3 +478,8 @@ Route::get('invoice',function(){
 Route::get('/nclex-reset', function () {
     return view('frontend.infixlmstheme.pages.nclex-reset');
 })->name('nclex-reset');
+
+
+Route::get('/accessibility', function () {
+    return view('frontend.infixlmstheme.pages.accessibility');
+})->name('accessibility');
