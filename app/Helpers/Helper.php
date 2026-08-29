@@ -4201,6 +4201,9 @@ if (!function_exists('removeAgreementForm')) {
 if (!function_exists('headerMenuPermissions')) {
     function headerMenuPermissions($permissions)
     {
+        if (empty($permissions) || !is_array($permissions)) {
+            return true;
+        }
         if (
             (auth()->check() && in_array(auth()->user()->role_id, array_values($permissions))
             )

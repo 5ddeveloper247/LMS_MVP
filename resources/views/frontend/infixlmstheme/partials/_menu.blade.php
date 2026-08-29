@@ -578,7 +578,7 @@
 
                                             @php
 
-                                                $permissions = json_decode($menu->permissions);
+                                                $permissions = json_decode($menu->permissions, true);
 
                                                 if ($menu->title == 'Forum' && !isModuleActive('Forum')) {
                                                     continue;
@@ -592,9 +592,7 @@
                                                 }
 
                                             @endphp
-                                            @if (
-                                                (auth()->check() && in_array(auth()->user()->role_id, array_values($permissions))) ||
-                                                    (!auth()->check() && in_array('notauth', array_values($permissions))))
+                                            @if (headerMenuPermissions($permissions))
                                                 <li
                                                     class="@if ($menu->mega_menu == 1) position-static @else @if ($menu->show == 1) right_control_submenu @endif @endif">
                                                     @if ($menu->element_id == null || $menu->element_id != 0)
@@ -1502,7 +1500,7 @@
       @if (isset($menus))
         @foreach ($menus->where('parent_id', null) as $menu)
           @php
-            $permissions = json_decode($menu->permissions);
+            $permissions = json_decode($menu->permissions, true);
             if ($menu->title == 'Forum' && !isModuleActive('Forum')) {
               continue;
             }
@@ -1514,9 +1512,7 @@
               }
             }
           @endphp
-          @if (
-            (auth()->check() && in_array(auth()->user()->role_id, array_values($permissions))) ||
-            (!auth()->check() && in_array('notauth', array_values($permissions)))
+          @if (headerMenuPermissions($permissions))
           )
             <div class="nav-item">
               @if ($menu->element_id == null || $menu->element_id != 0)
@@ -1677,16 +1673,14 @@
     @php $mobileMenuGroups = $menus->where('parent_id', null); @endphp
     @foreach ($mobileMenuGroups as $menu)
       @php
-        $permissions = json_decode($menu->permissions);
+        $permissions = json_decode($menu->permissions, true);
         if ($menu->title == 'Forum' && !isModuleActive('Forum')) { continue; }
         if ($menu->link == '/saas-signup') {
           if (Auth::check()) { continue; }
           elseif (SaasDomain() != 'main') { continue; }
         }
       @endphp
-      @if (
-        (auth()->check() && in_array(auth()->user()->role_id, array_values($permissions))) ||
-        (!auth()->check() && in_array('notauth', array_values($permissions)))
+      @if (headerMenuPermissions($permissions))
       )
         <div class="mxp-mobile-nav-group">
           @if (isset($menu->childs) && count($menu->childs) != 0)

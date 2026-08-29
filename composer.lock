@@ -10874,7 +10874,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/spn2%2Flaravel-zoom-multi-user/repository/archive.zip?sha=75c3ed3f276ed157867e53d18b7f026cf265c116",
+                "url": "file:///D:/LMS_MVP/packages/zoom.zip",
                 "reference": "75c3ed3f276ed157867e53d18b7f026cf265c116",
                 "shasum": ""
             },
@@ -10985,7 +10985,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/spn4%2Flms-service/repository/archive.zip?sha=0a386bf8cab68cd89a9b3b69b41b78527d93e47e",
+                "url": "file:///D:/LMS_MVP/packages/spondonit-lms-service.zip",
                 "reference": "0a386bf8cab68cd89a9b3b69b41b78527d93e47e",
                 "shasum": ""
             },
@@ -11028,7 +11028,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/spn4%2Fservice/repository/archive.zip?sha=db39aec1cd58b52fbb1c6b23f158e53051e2929f",
+                "url": "file:///D:/LMS_MVP/packages/spondonit-service.zip",
                 "reference": "db39aec1cd58b52fbb1c6b23f158e53051e2929f",
                 "shasum": ""
             },

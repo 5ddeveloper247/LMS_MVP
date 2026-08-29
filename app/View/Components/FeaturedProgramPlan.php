@@ -21,9 +21,12 @@ class FeaturedProgramPlan extends Component
         $home_content = app('getHomeContent');
         $featured_programplan = getRawHomeContents($home_content,'featured_programplan','en') ?? 0;
         $featured_programplan_bg = getRawHomeContents($home_content,'featured_programplan_bg','en');
+        $programplan = null;
+        if (\Illuminate\Support\Facades\Schema::hasTable('payment_plans')) {
             $programplan = PaymentPlans::where('id',$featured_programplan)
             ->where('type','program')->where('edate','>=',Carbon::today())
             ->first();
+        }
         return view(theme('components.featured-program-plan'), compact('programplan','featured_programplan_bg'));
     }
 }

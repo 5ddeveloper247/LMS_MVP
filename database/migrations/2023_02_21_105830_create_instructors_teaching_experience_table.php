@@ -20,8 +20,10 @@ class CreateInstructorsTeachingExperienceTable extends Migration
             $table->string('phone', 100)->unique();
             $table->string('employee_name', 100)->nullable();
             $table->date('date_employer')->nullable();
+            $table->date('date_employer_start')->nullable();
+            $table->date('date_employer_end')->nullable();
             $table->string('supervisor_name', 100)->nullable();
-            $table->varchar('upload_resume', 255)->nullable();
+            $table->string('upload_resume', 255)->nullable();
             $table->string('cover', 255)->nullable();
             $table->string('address', 255);
             $table->timestamps();
