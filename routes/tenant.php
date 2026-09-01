@@ -483,3 +483,19 @@ Route::get('/nclex-reset', function () {
 Route::get('/accessibility', function () {
     return view('frontend.infixlmstheme.pages.accessibility');
 })->name('accessibility');
+
+Route::get('/faq', function () {
+    return view('frontend.infixlmstheme.pages.faq');
+})->name('faq');
+
+Route::get('/cookies', function () {
+    return view('frontend.infixlmstheme.pages.cookies');
+})->name('cookies');
+
+Route::get('/disclaimer', function () {
+    return view('frontend.infixlmstheme.pages.disclaimer');
+})->name('disclaimer');
+
+Route::get('/terms', function () {
+    return view('frontend.infixlmstheme.pages.terms');
+})->name('terms');

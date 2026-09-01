@@ -1513,7 +1513,7 @@
             }
           @endphp
           @if (headerMenuPermissions($permissions))
-          )
+          
             <div class="nav-item">
               @if ($menu->element_id == null || $menu->element_id != 0)
                 <a @if ($menu->is_newtab == 1) target="_blank" @endif
