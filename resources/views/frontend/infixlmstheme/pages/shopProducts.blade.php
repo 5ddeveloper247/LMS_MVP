@@ -1,6 +1,6 @@
 @extends(theme('layouts.master'))
 @section('title')
-    {{ Settings('site_title') ? Settings('site_title') : 'Infix LMS' }} | {{ __('Courses') }}
+    {{ Settings('site_title') ? Settings('site_title') : 'Infix LMS' }} | {{ __('courses.Courses') }}
 @endsection
 <script src="https://kit.fontawesome.com/b98cad50b5.js" crossorigin="anonymous"></script>
 {{-- @section('css') --}}

@@ -121,11 +121,11 @@
 <!-- CATEGORY TABS -->
 <div class="tabs-section">
     <div class="tabs-inner">
-        <button class="tab-btn active" onclick="scrollToCategory('books')">Books &amp; Journals &amp; Study Guides</button>
-        {{-- <button class="tab-btn" onclick="scrollToCategory('study-guides')">Study Guides</button>
-        <button class="tab-btn" onclick="scrollToCategory('study-tools')">Study Tools</button>
-        <button class="tab-btn" onclick="scrollToCategory('bundles')">Bundles &amp; Savings</button> --}}
-        <button class="tab-btn" onclick="scrollToCategory('merchandise')">Merchandise</button>
+        <button class="tab-btn active" onclick="scrollToCategory('books', this)">Books &amp; Journals</button>
+        <button class="tab-btn" onclick="scrollToCategory('study-guides', this)">Study Guides</button>
+        <button class="tab-btn" onclick="scrollToCategory('study-tools', this)">Study Tools</button>
+        <button class="tab-btn" onclick="scrollToCategory('bundles', this)">Bundles &amp; Savings</button>
+        <button class="tab-btn" onclick="scrollToCategory('merchandise', this)">Merchandise</button>
     </div>
 </div>
 
@@ -160,7 +160,7 @@
                 <span class="featured-price-orig" id="remGuidePriceOrig">$87</span>
                 <span class="featured-price-save" id="remGuidePriceSave">Early Bird &mdash; Save $20</span>
             </div>
-            <a href="fl-bon-remediation-guide.html" class="featured-cta">Get the Remediation Guide &rarr;</a>
+            <a href="#" class="featured-cta">Get the Remediation Guide &rarr;</a>
             <div class="featured-trust">
                 <span>Instant download</span>
                 <span>Secure checkout</span>
@@ -254,7 +254,7 @@
             </div>
         </div>
 
-        {{-- <!-- DIGITAL STUDY GUIDES -->
+         <!-- DIGITAL STUDY GUIDES -->
         <div class="category-group" id="study-guides">
             <div class="category-header">
                 <h2>Digital Study Guides</h2>
@@ -279,7 +279,7 @@
                             calendars.</p>
                         <div class="product-footer">
                             <span class="product-price">$67</span><span class="product-price-original">$87</span>
-                            <a href="fl-bon-remediation-guide.html" class="product-action buy-now">Get It Now &rarr;</a>
+                            <a href="#" class="product-action buy-now">Get It Now &rarr;</a>
                         </div>
                     </div>
                 </div>
@@ -300,7 +300,7 @@
                             motivation.</p>
                         <div class="product-footer">
                             <span class="product-price">$47</span><span class="product-price-original">$67</span>
-                            <a href="nclex-reset-planner.html" class="product-action buy-now">Get It Now &rarr;</a>
+                            <a href="#" class="product-action buy-now">Get It Now &rarr;</a>
                         </div>
                     </div>
                 </div>
@@ -391,12 +391,12 @@
                 </div>
 
             </div>
-        </div> --}}
+        </div> 
 
     </div>
 </section>
 
-{{-- 
+
 <!-- BUNDLES -->
 <section class="bundles-section" id="bundles">
     <div class="section-header">
@@ -425,7 +425,7 @@
                 <span class="bundle-original">$154</span>
                 <span class="bundle-savings">Save $27</span>
             </div>
-            <a href="checkout.html?product=nclex-reset-bundle" class="bundle-cta primary">Get the Bundle &rarr;</a>
+            <a href="#" class="bundle-cta primary">Get the Bundle &rarr;</a>
         </div>
 
         <!-- BUNDLE 2: The Study Starter Bundle -->
@@ -446,7 +446,7 @@
                 <span class="bundle-original">$182</span>
                 <span class="bundle-savings">Save 20%</span>
             </div>
-            <a href="checkout.html?product=study-starter-bundle" class="bundle-cta primary">Get the Bundle &rarr;</a>
+            <a href="#" class="bundle-cta primary">Get the Bundle &rarr;</a>
         </div>
 
         <!-- BUNDLE 3: The Full Comeback Bundle -->
@@ -466,12 +466,12 @@
                 <span class="bundle-original">$280</span>
                 <span class="bundle-savings">Save 26%</span>
             </div>
-            <a href="checkout.html?product=full-comeback-bundle" class="bundle-cta secondary">Get the Bundle
+            <a href="#" class="bundle-cta secondary">Get the Bundle
                 &rarr;</a>
         </div>
 
     </div>
-</section> --}}
+</section> 
 
 <!-- MERCHANDISE (Coming Soon) -->
 <section class="products-section" style="background: var(--cream); padding-top: 60px;">
@@ -961,11 +961,13 @@
 
 
 <script>
-    function scrollToCategory(id) {
+    function scrollToCategory(id, btn) {
         document.getElementById(id).scrollIntoView({
             behavior: 'smooth'
         });
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        if (btn) {
+            btn.classList.add('active');
+        }
     }
 </script>

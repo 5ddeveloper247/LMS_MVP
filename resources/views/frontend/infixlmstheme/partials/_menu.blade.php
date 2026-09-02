@@ -470,7 +470,7 @@
           <div class="utility-inner">
             <div class="utility-tagline">Knowledge · Understanding · Wisdom</div>
             <div class="utility-links">
-              <a href="shop.html" class="utility-link">
+              <a href="{{ url('/shop') }}" class="utility-link">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                 Shop
               </a>
@@ -1513,7 +1513,6 @@
             }
           @endphp
           @if (headerMenuPermissions($permissions))
-          
             <div class="nav-item">
               @if ($menu->element_id == null || $menu->element_id != 0)
                 <a @if ($menu->is_newtab == 1) target="_blank" @endif
@@ -1681,7 +1680,6 @@
         }
       @endphp
       @if (headerMenuPermissions($permissions))
-      )
         <div class="mxp-mobile-nav-group">
           @if (isset($menu->childs) && count($menu->childs) != 0)
             <div class="mxp-mobile-nav-label">{{ $menu->title }}</div>
