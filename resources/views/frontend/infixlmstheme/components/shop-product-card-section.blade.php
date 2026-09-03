@@ -183,13 +183,17 @@
                     title is
                     built specifically for repeat NCLEX test-takers.</p>
             </div>
-            <div class="products-grid">
-                @php $hasBook = false; @endphp
+            <div class="products-grid" id="shop-grid-books">
+                @php
+                    $hasBook = false;
+                    $bookIndex = 0;
+                @endphp
                 @if (!empty($products) && count($products))
                     @foreach ($products as $product)
                         @if ((int) $product->type === 2)
                             @php
                                 $hasBook = true;
+                                $bookIndex++;
                                 $productImages = $product->files;
                                 $imageUrl =
                                     @$productImages[0]->file_path ?? url('public/assets/product-Placeholder.png');
@@ -198,7 +202,7 @@
                                 $originalPrice = $product->total_amount;
                             @endphp
 
-                            <div class="product-card">
+                            <div class="product-card{{ $bookIndex > 3 ? ' shop-card-hidden' : '' }}">
                                 <div class="product-image books">
                                     @if ($product->total_inventory <= 0)
                                         <span class="product-badge soon">Out of Stock</span>
@@ -245,6 +249,11 @@
                     </div>
                 @endif
             </div>
+            @if ($bookIndex > 3)
+                <div class="shop-load-more-wrap">
+                    <button type="button" class="shop-load-more" data-grid="shop-grid-books">Load More</button>
+                </div>
+            @endif
         </div>
 
          <!-- DIGITAL STUDY GUIDES -->
@@ -255,13 +264,17 @@
                     same
                     material used in our coaching and remediation programs.</p>
             </div>
-            <div class="products-grid">
-                @php $hasStudyGuide = false; @endphp
+            <div class="products-grid" id="shop-grid-guides">
+                @php
+                    $hasStudyGuide = false;
+                    $guideIndex = 0;
+                @endphp
                 @if (!empty($products) && count($products))
                     @foreach ($products as $product)
                         @if ((int) $product->type === 3)
                             @php
                                 $hasStudyGuide = true;
+                                $guideIndex++;
                                 $productImages = $product->files;
                                 $imageUrl =
                                     @$productImages[0]->file_path ?? url('public/assets/product-Placeholder.png');
@@ -271,7 +284,7 @@
                                 $originalPrice = $product->total_amount;
                             @endphp
 
-                            <div class="product-card">
+                            <div class="product-card{{ $guideIndex > 3 ? ' shop-card-hidden' : '' }}">
                                 <div class="product-image guides">
                                     <a href="{{ $detailUrl }}">
                                         <img src="{{ $imageUrl }}" alt="{{ $product->title }}"
@@ -311,6 +324,11 @@
                     </div>
                 @endif
             </div>
+            @if ($guideIndex > 3)
+                <div class="shop-load-more-wrap">
+                    <button type="button" class="shop-load-more" data-grid="shop-grid-guides">Load More</button>
+                </div>
+            @endif
         </div>
 
         <!-- STUDY TOOLS -->
@@ -321,13 +339,17 @@
                     guides and
                     coaching programs.</p>
             </div>
-            <div class="products-grid">
-                @php $hasStudyTool = false; @endphp
+            <div class="products-grid" id="shop-grid-tools">
+                @php
+                    $hasStudyTool = false;
+                    $toolIndex = 0;
+                @endphp
                 @if (!empty($products) && count($products))
                     @foreach ($products as $product)
                         @if ((int) $product->type === 4)
                             @php
                                 $hasStudyTool = true;
+                                $toolIndex++;
                                 $productImages = $product->files;
                                 $imageUrl =
                                     @$productImages[0]->file_path ?? url('public/assets/product-Placeholder.png');
@@ -336,7 +358,7 @@
                                 $originalPrice = $product->total_amount;
                             @endphp
 
-                            <div class="product-card">
+                            <div class="product-card{{ $toolIndex > 3 ? ' shop-card-hidden' : '' }}">
                                 <div class="product-image guides">
                                     <a href="{{ $detailUrl }}">
                                         <img src="{{ $imageUrl }}" alt="{{ $product->title }}"
@@ -376,6 +398,11 @@
                     </div>
                 @endif
             </div>
+            @if ($toolIndex > 3)
+                <div class="shop-load-more-wrap">
+                    <button type="button" class="shop-load-more" data-grid="shop-grid-tools">Load More</button>
+                </div>
+            @endif
         </div> 
 
     </div>
@@ -468,27 +495,21 @@
             </div>
 
             @if (!empty($products) && count($products))
-                <div class="products-grid">
+                <div class="products-grid" id="shop-grid-merch">
+                    @php $merchIndex = 0; @endphp
                     @foreach ($products as $product)
-                        @if ($product->type == 1)
+                        @if ((int) $product->type === 1)
                             @php
+                                $merchIndex++;
                                 $productImages = $product->files;
                                 $imageUrl =
                                     @$productImages[0]->file_path ?? url('public/assets/product-Placeholder.png');
-
-                                if ($product->type == 1) {
-                                    $detailUrl = route('shop.product.detail', $product->id);
-                                } elseif ($product->type == 2) {
-                                    $detailUrl = route('shop.book.detail', $product->id);
-                                } else {
-                                    $detailUrl = '#';
-                                }
-
+                                $detailUrl = route('shop.product.detail', $product->id);
                                 $discountPrice = $product->total_discount;
                                 $originalPrice = $product->total_amount;
                             @endphp
 
-                            <div class="product-card">
+                            <div class="product-card{{ $merchIndex > 3 ? ' shop-card-hidden' : '' }}">
                                 <div class="product-image merch">
                                     @if ($product->total_inventory <= 0)
                                         <span class="product-badge soon">Out of Stock</span>
@@ -528,6 +549,18 @@
                         @endif
                     @endforeach
                 </div>
+                @if ($merchIndex > 3)
+                    <div class="shop-load-more-wrap">
+                        <button type="button" class="shop-load-more" data-grid="shop-grid-merch">Load More</button>
+                    </div>
+                @endif
+                @if ($merchIndex === 0)
+                    <div class="text-center py-5">
+                        <img src="{{ asset('public/frontend/infixlmstheme/img/not-found.png') }}" alt="Not Found"
+                            style="width: 50px;">
+                        <h4 class="mt-3">No Product Found</h4>
+                    </div>
+                @endif
             @else
                 <div class="text-center py-5">
                     <img src="{{ asset('public/frontend/infixlmstheme/img/not-found.png') }}" alt="Not Found"

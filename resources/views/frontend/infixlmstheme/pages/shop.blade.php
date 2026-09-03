@@ -411,6 +411,32 @@
       gap: 28px;
     }
 
+    .shop-card-hidden {
+      display: none !important;
+    }
+
+    .shop-load-more-wrap {
+      text-align: center;
+      margin-top: 36px;
+    }
+
+    .shop-load-more {
+      background: var(--terracotta);
+      color: var(--white);
+      border: none;
+      padding: 12px 28px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: var(--sans);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .shop-load-more:hover {
+      background: var(--terracotta-deep);
+    }
+
     .product-card {
       background: var(--cream);
       border-radius: 12px;
@@ -1193,6 +1219,17 @@
                 elm.removeClass('mr-0 ml-0');
                 $('.bs-canvas-overlay').remove();
                 return false;
+            });
+
+            // Shop sections: show 3 cards, Load More reveals next 3
+            $(document).on('click', '.shop-load-more', function() {
+                var gridId = $(this).data('grid');
+                var $grid = $('#' + gridId);
+                var $hidden = $grid.find('.product-card.shop-card-hidden');
+                $hidden.slice(0, 3).removeClass('shop-card-hidden');
+                if ($grid.find('.product-card.shop-card-hidden').length === 0) {
+                    $(this).closest('.shop-load-more-wrap').hide();
+                }
             });
         });
     </script>
