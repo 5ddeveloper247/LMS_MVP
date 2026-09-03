@@ -22,16 +22,24 @@
     <section class="admin-visitor-area up_st_admin_visitor student-details">
         <div class="container-fluid p-0">
             <div class="row pt-0">
-                <div class="col-3">
-                    <ul class="nav nav-tabs no-bottom-border mt-sm-md-20 mb-10 ml-3" role="tablist">
+                <div class="col-12">
+                    <ul class="nav nav-tabs no-bottom-border mt-sm-md-20 mb-10 ml-3 flex-wrap" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" href="#shop_products" role="tab"
-                                data-toggle="tab">{{ __('Products') }}</a>
+                            <a class="nav-link active" href="#shop_books" role="tab" data-toggle="tab"
+                                id="tutors">{{ __('Books') }}</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="#shop_books" role="tab" data-toggle="tab"
-                                id="tutors">{{ __('Books') }}</a>
+                            <a class="nav-link" href="#shop_study_guides" role="tab" data-toggle="tab">{{ __('Study Guides') }}</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#shop_study_tools" role="tab" data-toggle="tab">{{ __('Study Tools') }}</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#shop_products" role="tab"
+                                data-toggle="tab">{{ __('Products') }}</a>
                         </li>
                     </ul>
                 </div>
@@ -55,8 +63,150 @@
             </div>
             <div class="tab-content mt-4">
                 <input type="hidden" name="selectTab" id="selectTab">
+                {{-- Books Listing --}}
+                <div role="tabpanel" class="tab-pane fade show active" id="shop_books">
+                    <div class="row justify-content-center">
+
+                        <div class="col-12">
+                            <div class="box_header common_table_header">
+                                <div class="main-title d-md-flex">
+                                    <h3 class="mr-30 mb_xs_15px mb_sm_20px mb-0">{{ __('Books') }}
+                                        {{ __('common.List') }}
+                                    </h3>
+                                    <ul class="d-flex">
+                                        <li>
+                                            <a class="primary-btn radius_30px mr-10 fix-gr-bg" id=""
+                                                href="{{ route('product.create') }}">
+                                                <i class="ti-plus"></i>{{ __('Add New') }}
+                                            </a>
+                                        </li>
+                                    </ul>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="QA_section QA_section_heading_custom check_box_table">
+                                <div class="QA_table">
+                                    <div class="">
+                                        <table id="lms_table2" class="Crm_table_active3 table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">{{ __('common.SL') }}</th>
+                                                    <th scope="col">{{ __('Title') }}</th>
+                                                    <th scope="col">{{ __('Sub Title') }}</th>
+                                                    <th scope="col">{{ __('Price') }}</th>
+                                                    <th scope="col">{{ __('Tax %') }}</th>
+                                                    <th scope="col">{{ __('common.Status') }}</th>
+                                                    <th scope="col">{{ __('common.Action') }}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Study Guides Listing (dynamic backend coming later) --}}
+                <div role="tabpanel" class="tab-pane fade" id="shop_study_guides">
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <div class="box_header common_table_header">
+                                <div class="main-title d-md-flex">
+                                    <h3 class="mr-30 mb_xs_15px mb_sm_20px mb-0">{{ __('Study Guides') }}
+                                        {{ __('common.List') }}
+                                    </h3>
+                                    <ul class="d-flex">
+                                        <li>
+                                            <a class="primary-btn radius_30px mr-10 fix-gr-bg"
+                                                href="{{ route('product.create') }}">
+                                                <i class="ti-plus"></i>{{ __('Add New') }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="QA_section QA_section_heading_custom check_box_table">
+                                <div class="QA_table">
+                                    <div class="">
+                                        <table id="lms_table3" class="Crm_table_active3 table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">{{ __('common.SL') }}</th>
+                                                    <th scope="col">{{ __('Title') }}</th>
+                                                    <th scope="col">{{ __('Sub Title') }}</th>
+                                                    <th scope="col">{{ __('Price') }}</th>
+                                                    <th scope="col">{{ __('Tax %') }}</th>
+                                                    <th scope="col">{{ __('common.Status') }}</th>
+                                                    <th scope="col">{{ __('common.Action') }}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Study Tools Listing (dynamic backend coming later) --}}
+                <div role="tabpanel" class="tab-pane fade" id="shop_study_tools">
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <div class="box_header common_table_header">
+                                <div class="main-title d-md-flex">
+                                    <h3 class="mr-30 mb_xs_15px mb_sm_20px mb-0">{{ __('Study Tools') }}
+                                        {{ __('common.List') }}
+                                    </h3>
+                                    <ul class="d-flex">
+                                        <li>
+                                            <a class="primary-btn radius_30px mr-10 fix-gr-bg"
+                                                href="{{ route('product.create') }}">
+                                                <i class="ti-plus"></i>{{ __('Add New') }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="QA_section QA_section_heading_custom check_box_table">
+                                <div class="QA_table">
+                                    <div class="">
+                                        <table id="lms_table4" class="Crm_table_active3 table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">{{ __('common.SL') }}</th>
+                                                    <th scope="col">{{ __('Title') }}</th>
+                                                    <th scope="col">{{ __('Sub Title') }}</th>
+                                                    <th scope="col">{{ __('Price') }}</th>
+                                                    <th scope="col">{{ __('Tax %') }}</th>
+                                                    <th scope="col">{{ __('common.Status') }}</th>
+                                                    <th scope="col">{{ __('common.Action') }}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 {{-- Products Listing --}}
-                <div role="tabpanel" class="tab-pane fade show active" id="shop_products">
+                <div role="tabpanel" class="tab-pane fade" id="shop_products">
                     <div class="row justify-content-center">
                         <div class="col-12">
                             <div class="box_header common_table_header">
@@ -102,77 +252,6 @@
 
                                             </tbody>
                                         </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Books Listing --}}
-                <div role="tabpanel" class="tab-pane fade" id="shop_books">
-                    <div class="row justify-content-center">
-                        
-                        <div class="col-12">
-                            <div class="box_header common_table_header">
-                                <div class="main-title d-md-flex">
-                                    <h3 class="mr-30 mb_xs_15px mb_sm_20px mb-0">{{ __('Books') }}
-                                        {{ __('common.List') }}
-                                    </h3>
-                                    <ul class="d-flex">
-                                        <li>
-                                            <a class="primary-btn radius_30px mr-10 fix-gr-bg" id="" 
-                                                href="{{ route('product.create') }}">
-                                                <i class="ti-plus"></i>{{__('Add New')}}
-                                            </a>
-                                        </li>
-                                    </ul>
-                            
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="QA_section QA_section_heading_custom check_box_table">
-                                <div class="QA_table">
-                                    <!-- table-responsive -->
-
-                                    <div class="">
-                                        <table id="lms_table2" class="Crm_table_active3 table">
-                                            <thead>
-                                            <tr>
-                                                    <th scope="col">{{ __('common.SL') }}</th>
-                                                    <th scope="col">{{ __('Title') }}</th>
-                                                    <th scope="col">{{ __('Sub Title') }}</th>
-                                                    <th scope="col">{{ __('Price') }}</th>
-                                                    <th scope="col">{{ __('Tax %') }}</th>
-                                                    <th scope="col">{{ __('common.Status') }}</th>
-                                                    <th scope="col">{{ __('common.Action') }}</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-
-                                            </tbody>
-                                        </table>
-                                        <!-- <table id="lms_table2" class="Crm_table_active3 table">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">{{ __('common.SL') }}</th>
-                                                    <th scope="col">{{ __('common.Image') }}</th>
-                                                    <th scope="col">{{ __('common.Name') }}</th>
-                                                    <th scope="col">{{ __('common.Email') }}</th>
-                                                    @if (isModuleActive('OrgInstructorPolicy'))
-                                                        <th scope="col">{{ __('policy.Group') }}
-                                                            {{ __('policy.Policy') }}</th>
-                                                    @endif
-                                                    <th scope="col">{{ __('common.Status') }}</th>
-                                                    <th scope="col">{{ __('common.Action') }}</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-
-                                            </tbody>
-                                        </table> -->
                                     </div>
                                 </div>
                             </div>
