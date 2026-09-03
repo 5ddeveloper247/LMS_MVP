@@ -11,11 +11,8 @@
 @endpush
 
 @section('table')
-    @php
-        $table_name = 'shop_products';
-    @endphp
-    {{ $table_name }}
-@stop
+shop_products
+@endsection
 @section('mainContent')
 
     {!! generateBreadcrumb() !!}
@@ -301,6 +298,8 @@
     @php
         $get_all_product_url = route('product.getAll');
         $get_all_book_url = route('book.getAll');
+        $get_all_study_guide_url = route('studyGuide.getAll');
+        $get_all_study_tool_url = route('studyTool.getAll');
     @endphp
     
     <script>
@@ -309,6 +308,56 @@
             let id = $(this).data("id");
             $("#productDeleteId").val(id);
             $("#deleteProduct").modal("show");
+        });
+
+        // Shop status toggle for ALL product tables (Books / Guides / Tools / Products).
+        // Dedicated shop endpoint (enum-safe). Remove plugin.js handlers so they cannot overwrite.
+        $(function () {
+            function bindShopProductStatusToggle() {
+                $("#lms_table, #lms_table2, #lms_table3, #lms_table4").off("change", ".status_enable_disable");
+
+                $(document).off("change.shopProductStatus");
+                $(document).on(
+                    "change.shopProductStatus",
+                    "#lms_table .status_enable_disable, #lms_table2 .status_enable_disable, #lms_table3 .status_enable_disable, #lms_table4 .status_enable_disable",
+                    function (e) {
+                        e.stopImmediatePropagation();
+
+                        let el = $(this);
+                        let status = el.is(":checked") ? '1' : '0';
+                        let id = el.val();
+
+                        $.ajax({
+                            type: "GET",
+                            dataType: "json",
+                            url: "{{ route('product.changeStatus') }}",
+                            data: {
+                                id: id,
+                                status: status
+                            },
+                            success: function (response) {
+                                if (response.success) {
+                                    toastr.success(response.success, "Success");
+                                } else if (response.error) {
+                                    toastr.error(response.error, "Error");
+                                    el.prop("checked", status === '0');
+                                }
+                            },
+                            error: function (xhr) {
+                                let msg = (xhr.responseJSON && xhr.responseJSON.error)
+                                    ? xhr.responseJSON.error
+                                    : "Something went wrong!";
+                                toastr.error(msg, "Failed");
+                                el.prop("checked", status === '0');
+                            }
+                        });
+                    }
+                );
+            }
+
+            bindShopProductStatusToggle();
+            // plugin.js binds on ready — unbind again shortly after
+            setTimeout(bindShopProductStatusToggle, 800);
         });
         
         // Products Table
@@ -476,6 +525,300 @@
             "ajax": $.fn.dataTable.pipeline({
                 url: '{!! $get_all_book_url !!}',
                 pages: 5 // number of pages to cache
+            }),
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'id'
+                },
+                {
+                    data: 'title',
+                    name: 'title'
+                },
+                {
+                    data: 'sub_title',
+                    name: 'sub_title'
+                },
+                {
+                    data: 'price',
+                    name: 'price',
+                    orderable: false
+                },
+                {
+                    data: 'tax_percent',
+                    name: 'tax_percent',
+                    orderable: false
+                },
+                {
+                    data: 'status',
+                    name: 'status',
+                    orderable: false
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false
+                },
+
+            ],
+            language: {
+                emptyTable: "{{ __('common.No data available in the table') }}",
+                search: "<i class='ti-search'></i>",
+                searchPlaceholder: '{{ __('common.Quick Search') }}',
+                paginate: {
+                    next: "<i class='ti-arrow-right'></i>",
+                    previous: "<i class='ti-arrow-left'></i>"
+                }
+            },
+            dom: 'Blfrtip',
+            buttons: [{
+                    extend: 'copyHtml5',
+                    text: '<i class="far fa-copy"></i>',
+                    title: $("#logo_title").val(),
+                    titleAttr: '{{ __('common.Copy') }}',
+                    exportOptions: {
+                        columns: ':visible',
+                        columns: ':not(:last-child)',
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="far fa-file-excel"></i>',
+                    titleAttr: '{{ __('common.Excel') }}',
+                    title: $("#logo_title").val(),
+                    margin: [10, 10, 10, 0],
+                    exportOptions: {
+                        columns: ':visible',
+                        columns: ':not(:last-child)',
+                    },
+
+                },
+                {
+                    extend: 'csvHtml5',
+                    text: '<i class="far fa-file-alt"></i>',
+                    titleAttr: '{{ __('common.CSV') }}',
+                    exportOptions: {
+                        columns: ':visible',
+                        columns: ':not(:last-child)',
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    text: '<i class="far fa-file-pdf"></i>',
+                    title: $("#logo_title").val(),
+                    titleAttr: '{{ __('common.PDF') }}',
+                    exportOptions: {
+                        columns: ':visible',
+                        columns: ':not(:last-child)',
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'A4',
+                    margin: [0, 0, 0, 12],
+                    alignment: 'center',
+                    header: true,
+                    customize: function(doc) {
+                        doc.content[1].table.widths =
+                            Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                    }
+
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="fa fa-print"></i>',
+                    titleAttr: '{{ __('common.Print') }}',
+                    title: $("#logo_title").val(),
+                    exportOptions: {
+                        columns: ':not(:last-child)',
+                    }
+                },
+                {
+                    extend: 'colvis',
+                    text: '<i class="fa fa-columns"></i>',
+                    postfixButtons: ['colvisRestore']
+                }
+            ],
+            columnDefs: [{
+                    visible: false
+                },
+                {
+                    responsivePriority: 1,
+                    targets: 0
+                },
+                {
+                    responsivePriority: 1,
+                    targets: 2
+                },
+                {
+                    responsivePriority: 2,
+                    targets: -2
+                },
+            ],
+            responsive: true,
+        });
+
+        // Study Guides Table
+        let table2 = $('#lms_table3').DataTable({
+            bLengthChange: true,
+            "lengthChange": true,
+            "lengthMenu": [
+                [10, 25, 50, 100],
+                [10, 25, 50, 100]
+            ],
+            "bDestroy": true,
+            processing: true,
+            serverSide: true,
+            order: [
+                [0, "desc"]
+            ],
+            "ajax": $.fn.dataTable.pipeline({
+                url: '{!! $get_all_study_guide_url !!}',
+                pages: 5
+            }),
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'id'
+                },
+                {
+                    data: 'title',
+                    name: 'title'
+                },
+                {
+                    data: 'sub_title',
+                    name: 'sub_title'
+                },
+                {
+                    data: 'price',
+                    name: 'price',
+                    orderable: false
+                },
+                {
+                    data: 'tax_percent',
+                    name: 'tax_percent',
+                    orderable: false
+                },
+                {
+                    data: 'status',
+                    name: 'status',
+                    orderable: false
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false
+                },
+
+            ],
+            language: {
+                emptyTable: "{{ __('common.No data available in the table') }}",
+                search: "<i class='ti-search'></i>",
+                searchPlaceholder: '{{ __('common.Quick Search') }}',
+                paginate: {
+                    next: "<i class='ti-arrow-right'></i>",
+                    previous: "<i class='ti-arrow-left'></i>"
+                }
+            },
+            dom: 'Blfrtip',
+            buttons: [{
+                    extend: 'copyHtml5',
+                    text: '<i class="far fa-copy"></i>',
+                    title: $("#logo_title").val(),
+                    titleAttr: '{{ __('common.Copy') }}',
+                    exportOptions: {
+                        columns: ':visible',
+                        columns: ':not(:last-child)',
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="far fa-file-excel"></i>',
+                    titleAttr: '{{ __('common.Excel') }}',
+                    title: $("#logo_title").val(),
+                    margin: [10, 10, 10, 0],
+                    exportOptions: {
+                        columns: ':visible',
+                        columns: ':not(:last-child)',
+                    },
+
+                },
+                {
+                    extend: 'csvHtml5',
+                    text: '<i class="far fa-file-alt"></i>',
+                    titleAttr: '{{ __('common.CSV') }}',
+                    exportOptions: {
+                        columns: ':visible',
+                        columns: ':not(:last-child)',
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    text: '<i class="far fa-file-pdf"></i>',
+                    title: $("#logo_title").val(),
+                    titleAttr: '{{ __('common.PDF') }}',
+                    exportOptions: {
+                        columns: ':visible',
+                        columns: ':not(:last-child)',
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'A4',
+                    margin: [0, 0, 0, 12],
+                    alignment: 'center',
+                    header: true,
+                    customize: function(doc) {
+                        doc.content[1].table.widths =
+                            Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                    }
+
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="fa fa-print"></i>',
+                    titleAttr: '{{ __('common.Print') }}',
+                    title: $("#logo_title").val(),
+                    exportOptions: {
+                        columns: ':not(:last-child)',
+                    }
+                },
+                {
+                    extend: 'colvis',
+                    text: '<i class="fa fa-columns"></i>',
+                    postfixButtons: ['colvisRestore']
+                }
+            ],
+            columnDefs: [{
+                    visible: false
+                },
+                {
+                    responsivePriority: 1,
+                    targets: 0
+                },
+                {
+                    responsivePriority: 1,
+                    targets: 2
+                },
+                {
+                    responsivePriority: 2,
+                    targets: -2
+                },
+            ],
+            responsive: true,
+        });
+
+        // Study Tools Table
+        let table3 = $('#lms_table4').DataTable({
+            bLengthChange: true,
+            "lengthChange": true,
+            "lengthMenu": [
+                [10, 25, 50, 100],
+                [10, 25, 50, 100]
+            ],
+            "bDestroy": true,
+            processing: true,
+            serverSide: true,
+            order: [
+                [0, "desc"]
+            ],
+            "ajax": $.fn.dataTable.pipeline({
+                url: '{!! $get_all_study_tool_url !!}',
+                pages: 5
             }),
             columns: [{
                     data: 'DT_RowIndex',

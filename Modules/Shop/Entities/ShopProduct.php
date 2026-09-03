@@ -9,9 +9,17 @@ class ShopProduct extends Model
     use SoftDeletes;
 
     // Accessor for type (human readable)
+    // 1 = Product, 2 = Book, 3 = Study Guide, 4 = Study Tool
     public function getTypeLabelAttribute()
     {
-        return $this->type == 1 ? 'Product' : 'Book';
+        $labels = [
+            1 => 'Product',
+            2 => 'Book',
+            3 => 'Study Guide',
+            4 => 'Study Tool',
+        ];
+
+        return $labels[$this->type] ?? 'Unknown';
     }
 
     public function files()

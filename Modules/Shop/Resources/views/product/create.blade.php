@@ -42,7 +42,7 @@
                                                             {{ __('Type') }}
                                                             <strong class="text-danger">*</strong>
                                                         </label>
-                                                        <div class="d-flex">
+                                                        <div class="d-flex flex-wrap">
                                                             <div class="mr-5">
                                                                 <label for="type_product" class="d-flex align-items-center">
                                                                     <input type="radio" id="type_product" name="type" value="1" checked>
@@ -53,6 +53,18 @@
                                                                 <label for="type_book" class="d-flex align-items-center">
                                                                     <input type="radio" id="type_book" name="type" value="2">
                                                                     <span class="checkmark mr-2"></span> Book
+                                                                </label>
+                                                            </div>
+                                                            <div class="mr-4">
+                                                                <label for="type_study_guide" class="d-flex align-items-center">
+                                                                    <input type="radio" id="type_study_guide" name="type" value="3">
+                                                                    <span class="checkmark mr-2"></span> Study Guide
+                                                                </label>
+                                                            </div>
+                                                            <div class="mr-4">
+                                                                <label for="type_study_tool" class="d-flex align-items-center">
+                                                                    <input type="radio" id="type_study_tool" name="type" value="4">
+                                                                    <span class="checkmark mr-2"></span> Study Tool
                                                                 </label>
                                                             </div>
                                                         </div>
@@ -100,7 +112,8 @@
                                         </div>
                                     </div>
 
-                                    <div class="row" id="book_related_fields">
+                                    {{-- Book-only meta (author / publisher / date) --}}
+                                    <div class="row" id="book_meta_fields" style="display:none;">
 
                                         <div class="col-xl-6">
                                             <div class="primary_input mb-25">
@@ -108,8 +121,8 @@
                                                     {{ __('Author') }}
                                                     <strong class="text-danger">*</strong>
                                                 </label>
-                                                <input class="primary_input_field" name="author" placeholder="-"
-                                                    type="text" value="{{ old('author') }}" required>
+                                                <input class="primary_input_field" name="author" id="author" placeholder="-"
+                                                    type="text" value="{{ old('author') }}">
                                             </div>
                                         </div>
                                         
@@ -119,8 +132,8 @@
                                                     {{ __('Publisher') }}
                                                     <strong class="text-danger">*</strong>
                                                 </label>
-                                                <input class="primary_input_field" name="publisher" placeholder="-"
-                                                    type="text" value="{{ old('publisher') }}" required>
+                                                <input class="primary_input_field" name="publisher" id="publisher" placeholder="-"
+                                                    type="text" value="{{ old('publisher') }}">
                                             </div>
                                         </div>
                                         
@@ -136,7 +149,7 @@
                                                             <div class="">
                                                                 <input class="primary_input_field primary-input date form-control"
                                                                     id="publication_date" type="text" name="publication_date"
-                                                                    value="" autocomplete="off">{{-- getJsDateFormat(date('m/d/Y')) --}}
+                                                                    value="" autocomplete="off">
                                                             </div>
                                                         </div>
                                                         <button class="" type="button">
@@ -146,11 +159,13 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
 
-                                        <!--======================= Book Upload ====================== -->
+                                    {{-- PDF upload for Book / Study Guide / Study Tool --}}
+                                    <div class="row" id="digital_pdf_field" style="display:none;">
                                         <div class="col-xl-6">
                                             <div class="primary_input mb-35">
-                                                <label class="primary_input_label" for="">
+                                                <label class="primary_input_label" id="digital_pdf_label" for="">
                                                     {{ __('Book') }}
                                                     <strong class="text-danger">*</strong>
                                                 </label>
@@ -165,10 +180,9 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
 
-                                    <div class="row" id="book_related_fields">
+                                    <div class="row" id="pricing_fields">
 
                                         <div class="col-xl-6">
                                             <div class="primary_input mb-25">
@@ -213,13 +227,13 @@
                                                     type="number" value="{{ old('discount') }}" required>
                                             </div>
                                         </div>
-                                        <div class="col-xl-6">
+                                        <div class="col-xl-6" id="inventory_field_wrap">
                                             <div class="primary_input mb-25">
                                                 <label class="primary_input_label" for=""> 
                                                     {{ __('Inventory') }}
                                                 </label>
-                                                <input class="primary_input_field" name="inventory" placeholder="1"
-                                                    type="number" value="{{ old('inventory') }}" required>
+                                                <input class="primary_input_field" name="inventory" id="inventory" placeholder="1"
+                                                    type="number" value="{{ old('inventory') }}">
                                             </div>
                                         </div>
 
@@ -369,20 +383,54 @@
         });
         
 
-        function toggleBookFields() {
-            if ($("#type_book").is(":checked")) {
-                $("#book_related_fields").show();
+        function toggleTypeFields() {
+            let isBook = $("#type_book").is(":checked");
+            let isStudyGuide = $("#type_study_guide").is(":checked");
+            let isStudyTool = $("#type_study_tool").is(":checked");
+            let isDigital = isBook || isStudyGuide || isStudyTool;
+
+            // Book-only: author, publisher, publication date
+            if (isBook) {
+                $("#book_meta_fields").show();
+                $("#author, #publisher, #publication_date").prop("required", true);
             } else {
-                $("#book_related_fields").hide();
+                $("#book_meta_fields").hide();
+                $("#author, #publisher, #publication_date").prop("required", false);
+            }
+
+            // PDF for book / study guide / study tool
+            if (isDigital) {
+                $("#digital_pdf_field").show();
+                if (isStudyGuide) {
+                    $("#digital_pdf_label").html('{{ __("Study Guide") }} <strong class="text-danger">*</strong>');
+                    $("#input-1").attr("placeholder", '{{ __("Upload Study Guide") }}');
+                } else if (isStudyTool) {
+                    $("#digital_pdf_label").html('{{ __("Study Tool") }} <strong class="text-danger">*</strong>');
+                    $("#input-1").attr("placeholder", '{{ __("Upload Study Tool") }}');
+                } else {
+                    $("#digital_pdf_label").html('{{ __("Book") }} <strong class="text-danger">*</strong>');
+                    $("#input-1").attr("placeholder", '{{ __("Upload Book") }}');
+                }
+            } else {
+                $("#digital_pdf_field").hide();
+            }
+
+            // Inventory: Product + Book only (hide for study guide / study tool)
+            if (isStudyGuide || isStudyTool) {
+                $("#inventory_field_wrap").hide();
+                $("#inventory").prop("required", false);
+            } else {
+                $("#inventory_field_wrap").show();
+                $("#inventory").prop("required", true);
             }
         }
 
         // Run on page load
-        toggleBookFields();
+        toggleTypeFields();
         
         // Run on change
         $("input[name='type']").on("change", function () {
-            toggleBookFields();
+            toggleTypeFields();
         });
         
         // File input change (Images only)
