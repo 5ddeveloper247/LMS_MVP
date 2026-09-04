@@ -96,21 +96,31 @@ class ShopController extends Controller
         }
     }
 
+    /**
+     * Product (1) uses product detail; Book / Study Guide / Study Tool share book detail.
+     */
+    private function shopDetailRoute(?ShopProduct $product): string
+    {
+        if ($product && (int) $product->type === 1) {
+            return 'shop.product.detail';
+        }
+
+        return 'shop.book.detail';
+    }
+
+    /** Study Guide (3) and Study Tool (4) are digital — no physical stock check. */
+    private function shopItemRequiresInventory(ShopProduct $product): bool
+    {
+        return !in_array((int) $product->type, [3, 4], true);
+    }
+
     public function addToCartShop(Request $request, $id)
     {
         try {
             
             $product = ShopProduct::where('id', $id)->first();
+            $detailUrl = $this->shopDetailRoute($product);
 
-            if ($product->type == 1) {
-                $detailUrl = 'shop.product.detail';
-            } elseif ($product->type == 2) {
-                $detailUrl = 'shop.book.detail';
-            } else {
-                $detailUrl = '';
-            }
-
-            // dd($product);
             if (!Auth::check()) {
                 Toastr::error('You must login', 'Error');
                 session(['redirectTo' => route('shop.addToCart', ['id' => $id])]);
@@ -137,7 +147,7 @@ class ShopController extends Controller
                 })->first();
 
 
-                if ($product->total_inventory <= 0) {
+                if ($this->shopItemRequiresInventory($product) && $product->total_inventory <= 0) {
 
                     Toastr::error(trans('Product out of stock...'), trans('common.Failed'));
                     return redirect()->to(route($detailUrl, $id));
@@ -197,16 +207,8 @@ class ShopController extends Controller
         try {
 
             $product = ShopProduct::where('id', $id)->first();
+            $detailUrl = $this->shopDetailRoute($product);
 
-            if ($product->type == 1) {
-                $detailUrl = 'shop.product.detail';
-            } elseif ($product->type == 2) {
-                $detailUrl = 'shop.book.detail';
-            } else {
-                $detailUrl = '';
-            }
-            
-            //dd( $product);
             if (Session::has('pre-registered-user')) {
                 if (!Auth::check()) {
                     // Toastr::error('You must register first', 'Error');
@@ -241,7 +243,7 @@ class ShopController extends Controller
                     $query->whereNotNull('product_id');
                 })->first();
 
-                if ($product->total_inventory <= 0) {
+                if ($this->shopItemRequiresInventory($product) && $product->total_inventory <= 0) {
 
                     Toastr::error(trans('Product out of stock...'), trans('common.Failed'));
                     return redirect()->to(route($detailUrl, $id));

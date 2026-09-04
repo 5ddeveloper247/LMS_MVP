@@ -87,7 +87,12 @@
                     <source src="" type="">
                 </video>
 
-                @if ($product->total_inventory <= 0)
+                @php
+                    // Study Guide / Study Tool are digital — inventory is not required
+                    $isDigitalShopItem = in_array((int) $product->type, [3, 4], true);
+                    $shopItemInStock = $isDigitalShopItem || (int) $product->total_inventory > 0;
+                @endphp
+                @if (!$shopItemInStock)
                     <span class="product-main-badge">Out of Stock</span>
                 @else
                     <span class="product-main-badge">Bestseller</span>
@@ -171,7 +176,11 @@
                 </div>
             </div>
 
-            <button class="purchase-cta" onclick="event.preventDefault();">Add to Cart →</button>
+            @if ($shopItemInStock)
+                <a href="{{ route('shop.addToCart', $product->id) }}" class="purchase-cta">Add to Cart →</a>
+            @else
+                <span class="purchase-cta" aria-disabled="true" style="opacity: 0.6; cursor: not-allowed;">Out of Stock</span>
+            @endif
             <a href="{{ url('/contact') }}" class="purchase-secondary">Have questions? Talk to an advisor</a>
 
             <div class="purchase-trust">
