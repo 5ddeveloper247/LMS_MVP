@@ -132,15 +132,13 @@
                                         </div>
                                     @elseif (!empty($cart->product_id))
                                         @php
-                                            
-                                            if ($cart->product->type == 1) {
+                                            // Product → product detail; Book / Guide / Tool → book detail page
+                                            if ((int) $cart->product->type === 1) {
                                                 $link = route('shop.product.detail', $cart->product_id);
-                                            } elseif ($cart->product->type == 2) {
-                                                $link = route('shop.book.detail', $cart->product_id);
                                             } else {
-                                                $link = '';
+                                                $link = route('shop.book.detail', $cart->product_id);
                                             }
-                                            
+
                                             $thumbnail = $cart->product->files[0]->file_path ?? 'public/assets/product-Placeholder.png';
                                             $title = $cart->product->title;
                                             $price = $cart->price;

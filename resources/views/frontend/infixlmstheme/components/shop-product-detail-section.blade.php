@@ -588,12 +588,10 @@
                             @if (!empty($relatedProducts))
                                 @foreach ($relatedProducts as $relproduct)
                                     @php
-                                        if ($relproduct->type == 1) {
+                                        if ((int) $relproduct->type === 1) {
                                             $detailUrl = route('shop.product.detail', $relproduct->id);
-                                        } elseif ($relproduct->type == 2) {
-                                            $detailUrl = route('shop.book.detail', $relproduct->id);
                                         } else {
-                                            $detailUrl = '';
+                                            $detailUrl = route('shop.book.detail', $relproduct->id);
                                         }
                                     @endphp
                                     <div class="col-xl-5 col-lg-5 col-md-6 col-4 mb-3 pl-0 pr-2 course_tabs_section">

@@ -236,6 +236,7 @@ class PaymentController extends Controller
             }
 
             // check if product is exist in cart then check available quantity then proceed
+            // Study Guide (3) / Study Tool (4) are digital — skip physical stock checks
             $cartsList = Cart::where('user_id', Auth::id())
                         ->whereNotNull('product_id')
                         ->selectRaw('product_id, COUNT(*) as quantity')
@@ -245,10 +246,18 @@ class PaymentController extends Controller
             
             if(!empty($cartsList)){
                 foreach ($cartsList as $cart) {
-                    $availableInventory = $cart->product->total_inventory ?? 0;
-                    if ($cart->quantity > $availableInventory) {
-                        Toastr::error('Insufficient products in stock.', 'Error');
+                    $product = $cart->product;
+                    if (!$product) {
+                        Toastr::error('Product not found in cart.', 'Error');
                         return redirect()->back();
+                    }
+
+                    if ($this->shopProductRequiresInventory($product)) {
+                        $availableInventory = $product->total_inventory ?? 0;
+                        if ($cart->quantity > $availableInventory) {
+                            Toastr::error('Insufficient products in stock.', 'Error');
+                            return redirect()->back();
+                        }
                     }
                 }
             }
@@ -1259,10 +1268,11 @@ class PaymentController extends Controller
             $enroll->status = 1;
             $enroll->save();
 
-            // minus product from product inventory count.
-            $currentInventory = $product->total_inventory;
-            $product->total_inventory = $currentInventory-1;
-            $product->save();
+            // Physical stock only for Product / Book — digital Guide & Tool skip decrement
+            if ($this->shopProductRequiresInventory($product)) {
+                $product->total_inventory = max(0, (int) $product->total_inventory - 1);
+                $product->save();
+            }
 
         } else {
 
@@ -1396,5 +1406,18 @@ class PaymentController extends Controller
                 }
             }
         }
+    }
+
+    /**
+     * Product (1) and Book (2) use physical inventory.
+     * Study Guide (3) and Study Tool (4) are digital — no stock gate / decrement.
+     */
+    private function shopProductRequiresInventory(?ShopProduct $product): bool
+    {
+        if (!$product) {
+            return true;
+        }
+
+        return !in_array((int) $product->type, [3, 4], true);
     }
 }

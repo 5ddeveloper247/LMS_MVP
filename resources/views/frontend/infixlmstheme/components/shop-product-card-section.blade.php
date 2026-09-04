@@ -613,12 +613,10 @@
                                 $productImages = $product->files;
                                 $imageUrl = @$productImages[0]->file_path ?? url('public/assets/product-Placeholder.png');
                 
-                                if ($product->type == 1) {
+                                if ((int) $product->type === 1) {
                                     $detailUrl = route('shop.product.detail', $product->id);
-                                } elseif ($product->type == 2) {
-                                    $detailUrl = route('shop.book.detail', $product->id);
                                 } else {
-                                    $detailUrl = '#';
+                                    $detailUrl = route('shop.book.detail', $product->id);
                                 }
                             
                                 $discountPrice = $product->total_discount;
@@ -720,12 +718,10 @@
                                 $imageUrl =
                                     @$productImages[0]->file_path ?? url('public/assets/product-Placeholder.png');
 
-                                if ($product->type == 1) {
+                                if ((int) $product->type === 1) {
                                     $detailUrl = route('shop.product.detail', $product->id);
-                                } elseif ($product->type == 2) {
-                                    $detailUrl = route('shop.book.detail', $product->id);
                                 } else {
-                                    $detailUrl = '#';
+                                    $detailUrl = route('shop.book.detail', $product->id);
                                 }
 
                                 $discountPrice = $product->total_discount;
@@ -830,12 +826,10 @@
                 @foreach ($products as $product)
                     @php
                         $productImages = $product->files;
-                        if ($product->type == 1) {
+                        if ((int) $product->type === 1) {
                             $detailUrl = route('shop.product.detail', $product->id);
-                        } elseif ($product->type == 2) {
-                            $detailUrl = route('shop.book.detail', $product->id);
                         } else {
-                            $detailUrl = '';
+                            $detailUrl = route('shop.book.detail', $product->id);
                         }
 
                     @endphp
