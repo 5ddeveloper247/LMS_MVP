@@ -410,80 +410,88 @@
 
 
 <!-- BUNDLES -->
-<section class="bundles-section" id="bundles">
-    <div class="section-header">
-        <p class="section-eyebrow">Save More</p>
-        <h2 class="section-title">Bundles &amp; Savings</h2>
-        <p class="section-subtitle">Combine study resources for the best value. Every bundle is instant download —
-            start
-            studying the minute you purchase.</p>
-    </div>
-
-    <div class="bundles-grid">
-
-        <!-- BUNDLE 1: The NCLEX Reset Bundle -->
-        <div class="bundle-card">
-            <h3 class="bundle-name">The NCLEX Reset Bundle&trade;</h3>
-            <p class="bundle-desc">Your complete comeback toolkit — the day-by-day planner paired with the full
-                remediation
-                roadmap.</p>
-            <ul class="bundle-includes">
-                <li>FL BON Remediation Guide&trade; ($87 value)</li>
-                <li>The NCLEX Reset Planner&trade; ($67 value)</li>
-                <li>Combined: All 8 Client Needs + 30-day daily structure</li>
-            </ul>
-            <div class="bundle-price-row">
-                <span class="bundle-price">$127</span>
-                <span class="bundle-original">$154</span>
-                <span class="bundle-savings">Save $27</span>
-            </div>
-            <a href="#" class="bundle-cta primary">Get the Bundle &rarr;</a>
+@php
+    $shopBundles = collect($bundles ?? []);
+    $bundleIndex = 0;
+@endphp
+@if ($shopBundles->count())
+    <section class="bundles-section" id="bundles">
+        <div class="section-header">
+            <p class="section-eyebrow">Save More</p>
+            <h2 class="section-title">Bundles &amp; Savings</h2>
+            <p class="section-subtitle">Combine study resources for the best value. Every bundle is instant download —
+                start
+                studying the minute you purchase.</p>
         </div>
 
-        <!-- BUNDLE 2: The Study Starter Bundle -->
-        <div class="bundle-card featured">
-            <span class="bundle-badge">Best Value</span>
-            <h3 class="bundle-name">The Study Starter Bundle&trade;</h3>
-            <p class="bundle-desc">Everything you need to begin your NCLEX prep with the right tools, strategy, and
-                mindset.
-            </p>
-            <ul class="bundle-includes">
-                <li>FL BON Remediation Guide&trade; ($87 value)</li>
-                <li>The NCLEX Reset Planner&trade; ($67 value)</li>
-                <li>Content Area Diagnostic Kit&trade; ($19 value)</li>
-                <li>NCLEX Day-Of Checklist &amp; Calm Kit&trade; ($9 value)</li>
-            </ul>
-            <div class="bundle-price-row">
-                <span class="bundle-price">$146</span>
-                <span class="bundle-original">$182</span>
-                <span class="bundle-savings">Save 20%</span>
-            </div>
-            <a href="#" class="bundle-cta primary">Get the Bundle &rarr;</a>
+        <div class="bundles-grid" id="shop-grid-bundles">
+            @foreach ($shopBundles as $index => $bundle)
+                @php
+                    $bundleIndex++;
+                    $components = collect([
+                        $bundle->component_1,
+                        $bundle->component_2,
+                        $bundle->component_3,
+                        $bundle->component_4,
+                    ])->map(function ($item) {
+                        return trim(strip_tags((string) $item));
+                    })->filter(function ($item) {
+                        return $item !== '';
+                    })->values();
+
+                    $description = trim(strip_tags((string) ($bundle->short_description ?? '')));
+                    $salePrice = (float) ($bundle->total_amount ?? 0);
+                    $discountAmount = (float) ($bundle->total_discount ?? 0);
+                    $originalPrice = $discountAmount > 0 ? $salePrice + $discountAmount : null;
+                    $isFeatured = (bool) ($bundle->is_featured ?? false);
+                @endphp
+
+                <div class="bundle-card{{ $isFeatured ? ' featured' : '' }}{{ $bundleIndex > 3 ? ' shop-card-hidden' : '' }}">
+                    @if ($isFeatured)
+                        <span class="bundle-badge">Best Value</span>
+                    @endif
+
+                    <h3 class="bundle-name">{{ $bundle->name }}</h3>
+
+                    @if ($description !== '')
+                        <p class="bundle-desc">{{ \Illuminate\Support\Str::limit($description, 220) }}</p>
+                    @else
+                        <p class="bundle-desc" style="visibility:hidden;min-height:44px;">&nbsp;</p>
+                    @endif
+
+                    <ul class="bundle-includes" style="min-height:120px;">
+                        @forelse ($components as $component)
+                            <li @class(['coming' => \Illuminate\Support\Str::startsWith($component, '+')])>{{ $component }}</li>
+                        @empty
+                            {{-- Keep card height stable when no components --}}
+                            <li style="visibility:hidden;">&nbsp;</li>
+                        @endforelse
+                    </ul>
+
+                    <div class="bundle-price-row">
+                        <span class="bundle-price">{{ getPriceFormat($salePrice) }}</span>
+                        @if ($originalPrice)
+                            <span class="bundle-original">{{ getPriceFormat($originalPrice) }}</span>
+                            @if ($bundle->discount_type === 'percent' && (float) $bundle->discount > 0)
+                                <span class="bundle-savings">Save {{ rtrim(rtrim(number_format((float) $bundle->discount, 2, '.', ''), '0'), '.') }}%</span>
+                            @elseif ($discountAmount > 0)
+                                <span class="bundle-savings">Save {{ getPriceFormat($discountAmount) }}</span>
+                            @endif
+                        @endif
+                    </div>
+
+                    <a href="#" class="bundle-cta primary">Get the Bundle &rarr;</a>
+                </div>
+            @endforeach
         </div>
 
-        <!-- BUNDLE 3: The Full Comeback Bundle -->
-        <div class="bundle-card">
-            <h3 class="bundle-name">The Full Comeback Bundle&trade;</h3>
-            <p class="bundle-desc">The complete MXP study toolkit — every guide, every tool, every reference. Built for
-                the
-                student going all-in.</p>
-            <ul class="bundle-includes">
-                <li>Everything in Study Starter, plus:</li>
-                <li>NCLEX PASS Method&trade; Workbook ($69 value)</li>
-                <li>Pharmacology Quick Reference&trade; ($29 value)</li>
-                <li class="coming">+ Exclusive early access to new releases</li>
-            </ul>
-            <div class="bundle-price-row">
-                <span class="bundle-price">$207</span>
-                <span class="bundle-original">$280</span>
-                <span class="bundle-savings">Save 26%</span>
+        @if ($bundleIndex > 3)
+            <div class="shop-load-more-wrap">
+                <button type="button" class="shop-load-more" data-grid="shop-grid-bundles">Load More</button>
             </div>
-            <a href="#" class="bundle-cta secondary">Get the Bundle
-                &rarr;</a>
-        </div>
-
-    </div>
-</section> 
+        @endif
+    </section>
+@endif 
 
 <!-- MERCHANDISE (Coming Soon) -->
 <section class="products-section" style="background: var(--cream); padding-top: 60px;">

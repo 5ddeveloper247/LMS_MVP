@@ -1225,9 +1225,9 @@
             $(document).on('click', '.shop-load-more', function() {
                 var gridId = $(this).data('grid');
                 var $grid = $('#' + gridId);
-                var $hidden = $grid.find('.product-card.shop-card-hidden');
+                var $hidden = $grid.find('.product-card.shop-card-hidden, .bundle-card.shop-card-hidden');
                 $hidden.slice(0, 3).removeClass('shop-card-hidden');
-                if ($grid.find('.product-card.shop-card-hidden').length === 0) {
+                if ($grid.find('.product-card.shop-card-hidden, .bundle-card.shop-card-hidden').length === 0) {
                     $(this).closest('.shop-load-more-wrap').hide();
                 }
             });
@@ -1240,7 +1240,7 @@
     @endphp
     <x-breadcrumb :banner="$frontendContent->quiz_page_banner" :title="$frontendContent->quiz_page_title" :subTitle="$frontendContent->quiz_page_sub_title" />
 
-    <x-shop-product-card-section :request="@$request" :products="@$products" />
+    <x-shop-product-card-section :request="@$request" :products="@$products" :bundles="@$bundles" />
 
     @include(theme('partials._custom_footer'))
 @endsection

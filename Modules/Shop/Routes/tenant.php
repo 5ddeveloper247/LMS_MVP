@@ -24,6 +24,16 @@ Route::group(['prefix' => 'admin/shop', 'middleware' => ['auth', 'admin']], func
     Route::post('product/file/destroy', 'ProductController@destroyFile')->name('product.file.delete');
     Route::get('product/changeStatus', 'ProductController@changeStatus')->name('product.changeStatus');
 
+    // Savings & Bundles
+    Route::get('bundle', 'BundleController@index')->name('bundle.index');
+    Route::get('bundle/create', 'BundleController@create')->name('bundle.create');
+    Route::post('bundle', 'BundleController@store')->name('bundle.store');
+    Route::post('bundle/update', 'BundleController@update')->name('bundle.update');
+    Route::get('bundle/edit/{id}', 'BundleController@edit')->name('bundle.edit');
+    Route::post('bundle/destroy', 'BundleController@destroy')->name('bundle.delete');
+    Route::get('bundle/getAll', 'BundleController@getAllData')->name('bundle.getAll');
+    Route::get('bundle/changeStatus', 'BundleController@changeStatus')->name('bundle.changeStatus');
+
     Route::get('orders', 'ShopController@index')->name('shop.orders');
     Route::get('order/getAllOrders', 'ShopController@getAllOrdersData')->name('order.getAll');
     Route::get('order/getAllRefundRequest', 'ShopController@getAllRefundRequestData')->name('order.getAllRefundReq');

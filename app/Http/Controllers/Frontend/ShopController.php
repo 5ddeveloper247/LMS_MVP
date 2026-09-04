@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
+use Modules\Shop\Entities\ShopBundle;
 use Modules\Shop\Entities\ShopProduct;
 use Modules\Payment\Entities\Cart;
 use Modules\Shop\Entities\ShopOrder;
@@ -34,8 +35,9 @@ class ShopController extends Controller
         try {
             
             $products = ShopProduct::where('status', '1')->get();
-            
-            return view(theme('pages.shop'), compact('request', 'products'));
+            $bundles = ShopBundle::forShopListing()->get();
+
+            return view(theme('pages.shop'), compact('request', 'products', 'bundles'));
         
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()]);

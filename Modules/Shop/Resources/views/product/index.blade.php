@@ -14,6 +14,9 @@
 shop_products
 @endsection
 @section('mainContent')
+    @php
+        $activeShopTab = $activeShopTab ?? 'shop_books';
+    @endphp
 
     {!! generateBreadcrumb() !!}
     <section class="admin-visitor-area up_st_admin_visitor student-details">
@@ -22,20 +25,20 @@ shop_products
                 <div class="col-12">
                     <ul class="nav nav-tabs no-bottom-border mt-sm-md-20 mb-10 ml-3 flex-wrap" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" href="#shop_books" role="tab" data-toggle="tab"
+                            <a class="nav-link {{ $activeShopTab === 'shop_books' ? 'active' : '' }}" href="#shop_books" role="tab" data-toggle="tab"
                                 id="tutors">{{ __('Books') }}</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="#shop_study_guides" role="tab" data-toggle="tab">{{ __('Study Guides') }}</a>
+                            <a class="nav-link {{ $activeShopTab === 'shop_study_guides' ? 'active' : '' }}" href="#shop_study_guides" role="tab" data-toggle="tab">{{ __('Study Guides') }}</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="#shop_study_tools" role="tab" data-toggle="tab">{{ __('Study Tools') }}</a>
+                            <a class="nav-link {{ $activeShopTab === 'shop_study_tools' ? 'active' : '' }}" href="#shop_study_tools" role="tab" data-toggle="tab">{{ __('Study Tools') }}</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="#shop_products" role="tab"
+                            <a class="nav-link {{ $activeShopTab === 'shop_products' ? 'active' : '' }}" href="#shop_products" role="tab"
                                 data-toggle="tab">{{ __('Products') }}</a>
                         </li>
                     </ul>
@@ -61,7 +64,7 @@ shop_products
             <div class="tab-content mt-4">
                 <input type="hidden" name="selectTab" id="selectTab">
                 {{-- Books Listing --}}
-                <div role="tabpanel" class="tab-pane fade show active" id="shop_books">
+                <div role="tabpanel" class="tab-pane fade {{ $activeShopTab === 'shop_books' ? 'show active' : '' }}" id="shop_books">
                     <div class="row justify-content-center">
 
                         <div class="col-12">
@@ -111,7 +114,7 @@ shop_products
                 </div>
 
                 {{-- Study Guides Listing (dynamic backend coming later) --}}
-                <div role="tabpanel" class="tab-pane fade" id="shop_study_guides">
+                <div role="tabpanel" class="tab-pane fade {{ $activeShopTab === 'shop_study_guides' ? 'show active' : '' }}" id="shop_study_guides">
                     <div class="row justify-content-center">
                         <div class="col-12">
                             <div class="box_header common_table_header">
@@ -157,7 +160,7 @@ shop_products
                 </div>
 
                 {{-- Study Tools Listing (dynamic backend coming later) --}}
-                <div role="tabpanel" class="tab-pane fade" id="shop_study_tools">
+                <div role="tabpanel" class="tab-pane fade {{ $activeShopTab === 'shop_study_tools' ? 'show active' : '' }}" id="shop_study_tools">
                     <div class="row justify-content-center">
                         <div class="col-12">
                             <div class="box_header common_table_header">
@@ -203,7 +206,7 @@ shop_products
                 </div>
 
                 {{-- Products Listing --}}
-                <div role="tabpanel" class="tab-pane fade" id="shop_products">
+                <div role="tabpanel" class="tab-pane fade {{ $activeShopTab === 'shop_products' ? 'show active' : '' }}" id="shop_products">
                     <div class="row justify-content-center">
                         <div class="col-12">
                             <div class="box_header common_table_header">

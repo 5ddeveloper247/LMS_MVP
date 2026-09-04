@@ -31,4 +31,17 @@ class ShopProduct extends Model
     {
         return $this->hasMany(ShopProductFile::class, 'product_id')->whereIn('file_type', ['mp4','avi','mov','webm','mkv','flv','wmv','m4v'])->orderBy('created_at', 'desc');
     }
+
+    /**
+     * Bundles that include this product.
+     */
+    public function bundles()
+    {
+        return $this->belongsToMany(
+            ShopBundle::class,
+            'shop_bundle_products',
+            'product_id',
+            'bundle_id'
+        )->withTimestamps();
+    }
 }
