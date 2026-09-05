@@ -124,67 +124,42 @@
         </div>
 
         <div class="detail-panel active" id="bundle-panel-description">
-            <div class="detail-prose">
-                <p>The NCLEX PASS Method™ Workbook is the companion study guide used in all Merkaii Xcellence Prep
-                    coaching
-                    programs. It contains the complete three-pillar framework — Content Mastery, Process Training, and
-                    Confidence Building — broken into practical exercises you can work through on your own or alongside
-                    a
-                    program.</p>
-                <p>This isn't a question bank or a content review textbook. It's a system workbook — designed to change
-                    the
-                    way you think about NCLEX questions, organize your study time, and track your progress with
-                    measurable
-                    benchmarks instead of vague anxiety.</p>
-                <h3>Who This Is For</h3>
-                <p>Repeat test-takers who need a different approach. First-time test-takers who want to study smarter
-                    from the
-                    start. Nursing students preparing for finals or the NCLEX. Anyone enrolled in an MXP coaching
-                    program who
-                    wants the physical workbook companion.</p>
-                <h3>What Makes This Different</h3>
-                <p>Most NCLEX prep books give you more content. This workbook gives you a process. Every chapter builds
-                    a
-                    specific skill — from reading question stems to managing test-day anxiety — and every exercise has a
-                    clear
-                    purpose tied to measurable improvement.</p>
+            <div class="detail-prose ck-content">
+                @if (!empty($bundle->short_description))
+                    {!! $bundle->short_description !!}
+                @else
+                    <p>{{ __('No description available.') }}</p>
+                @endif
             </div>
         </div>
 
+        {{-- What's Inside: products included in this bundle --}}
         <div class="detail-panel" id="bundle-panel-contents">
             <div class="contents-grid">
-                <div class="contents-item">
-                    <h4>Chapter 1: The Diagnostic</h4>
-                    <p>Content area self-assessment, baseline scoring, and study plan template.</p>
-                </div>
-                <div class="contents-item">
-                    <h4>Chapter 2: Content Mastery</h4>
-                    <p>Systems-based review organized by NCLEX test plan domains with priority-weighted notes.</p>
-                </div>
-                <div class="contents-item">
-                    <h4>Chapter 3: Process Training</h4>
-                    <p>Question stem decoding, distractor elimination, and the clinical judgment decision tree.</p>
-                </div>
-                <div class="contents-item">
-                    <h4>Chapter 4: NGN Scenarios</h4>
-                    <p>Next-Generation NCLEX case studies with extended drag-and-drop, highlight, and matrix exercises.</p>
-                </div>
-                <div class="contents-item">
-                    <h4>Chapter 5: Confidence Protocol</h4>
-                    <p>Test-day mindset exercises, anxiety management, and the 72-hour pre-exam routine.</p>
-                </div>
-                <div class="contents-item">
-                    <h4>Chapter 6: Practice Sets</h4>
-                    <p>200+ practice scenarios with detailed rationales — organized by difficulty and content area.</p>
-                </div>
-                <div class="contents-item">
-                    <h4>Appendix A: Study Planner</h4>
-                    <p>Blank templates for 4-week, 6-week, and 8-week study plans you can customize.</p>
-                </div>
-                <div class="contents-item">
-                    <h4>Appendix B: Quick Reference</h4>
-                    <p>Lab values, drug classifications, priority frameworks, and delegation rules on tear-out cards.</p>
-                </div>
+                @forelse ($bundle->products as $item)
+                    @php
+                        $itemBlurb = trim(strip_tags((string) ($item->short_description ?? '')));
+                        if ($itemBlurb === '') {
+                            $itemBlurb = \Illuminate\Support\Str::limit(
+                                trim(strip_tags((string) ($item->description ?? ''))),
+                                180
+                            );
+                        }
+                        $typeLabel = $item->type_label ?? '';
+                    @endphp
+                    <div class="contents-item">
+                        <h4>{{ $item->title }}</h4>
+                        @if ($typeLabel !== '')
+                            <p style="margin-bottom:6px;font-size:12px;color:var(--charcoal-soft,#4A4A4A);">{{ $typeLabel }}</p>
+                        @endif
+                        <p>{{ $itemBlurb !== '' ? $itemBlurb : __('Included in this bundle.') }}</p>
+                    </div>
+                @empty
+                    <div class="contents-item">
+                        <h4>{{ __('No items') }}</h4>
+                        <p>{{ __('This bundle has no products yet.') }}</p>
+                    </div>
+                @endforelse
             </div>
         </div>
 
@@ -236,7 +211,7 @@
                 <h3>Digital Version</h3>
                 <p>A downloadable PDF version of this workbook is not currently available. The workbook is designed to
                     be written in — the physical format is intentional. If you need a digital resource, check out our
-                    <a href="{{ url('/programs') }}" style="color: var(--teal-mid);">Prep-Courses</a> for on-screen
+                    <a href="{{ route('courses') }}" style="color: var(--teal-mid);">Prep-Courses</a> for on-screen
                     learning.</p>
             </div>
         </div>
