@@ -480,7 +480,7 @@
                         @endif
                     </div>
 
-                    <a href="#" class="bundle-cta primary">Get the Bundle &rarr;</a>
+                    <a href="{{ route('shop.bundle.detail', $bundle->id) }}" class="bundle-cta primary">Get the Bundle &rarr;</a>
                 </div>
             @endforeach
         </div>

@@ -25,13 +25,19 @@
                                     
                                 </div>
                                 <div class="col-6 text-right">
-                                    @if ($orderDetail->status != 5)
-                                        <a type="button" class="btn btn-rounded btn-warning admin-view-add" 
-                                            onclick="cancelOrderSubmit('{{ route('myOrderCancel', $orderDetail->id) }}')">Cancel</a>
-                                    @endif
-                                    @if ($orderDetail->status == 5 && $orderDetail->payment_status == 1)
-                                        <a type="button" class="btn btn-rounded btn-warning admin-view-add" 
-                                            onclick="refundReqOrderSubmit('{{ route('myOrderRefundReq', $orderDetail->id) }}')">Refund Request</a>
+                                    @if (empty($orderDetail->shop_bundle_id))
+                                        @if ($orderDetail->status != 5)
+                                            <a type="button" class="btn btn-rounded btn-warning admin-view-add" 
+                                                onclick="cancelOrderSubmit('{{ route('myOrderCancel', $orderDetail->id) }}')">Cancel</a>
+                                        @endif
+                                        @if ($orderDetail->status == 5 && $orderDetail->payment_status == 1)
+                                            <a type="button" class="btn btn-rounded btn-warning admin-view-add" 
+                                                onclick="refundReqOrderSubmit('{{ route('myOrderRefundReq', $orderDetail->id) }}')">Refund Request</a>
+                                        @endif
+                                    @else
+                                        <a href="{{ route('myOrder.bundleDetail', [$orderDetail->tracking, $orderDetail->shop_bundle_id]) }}" class="btn btn-rounded btn-info admin-view-add">
+                                            {{ __('View Full Bundle') }}
+                                        </a>
                                     @endif
                                     
                                 </div>

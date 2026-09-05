@@ -173,6 +173,46 @@
                                             <div class="f_w_400">{{ getPriceFormat($price) }}</div>
 
                                         </div>
+                                    @elseif (!empty($cart->shop_bundle_id))
+                                        @php
+                                            $shopBundle = $cart->shopBundle;
+                                            $link = route('shop.bundle.detail', $cart->shop_bundle_id);
+                                            $firstProduct = $shopBundle ? $shopBundle->products->first() : null;
+                                            $thumbnail = ($firstProduct && $firstProduct->files->first())
+                                                ? $firstProduct->files->first()->file_path
+                                                : 'public/assets/product-Placeholder.png';
+                                            $title = $shopBundle->name ?? 'Bundle';
+                                            $price = $cart->price;
+                                        @endphp
+
+                                        <div class="single_cart">
+                                            <div class="product_name d-flex align-items-center">
+                                                <a href="{{ route('removeItem', [$cart->id]) }}">
+                                                    <div class="">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                            height="16" viewBox="0 0 16 16">
+                                                            <path data-name="Path 174" d="M0,0H16V16H0Z"
+                                                                fill="none" />
+                                                            <path data-name="Path 175"
+                                                                d="M14.95,6l-1-1L9.975,8.973,6,5,5,6,8.973,9.975,5,13.948l1,1,3.973-3.973,3.973,3.973,1-1L10.977,9.975Z"
+                                                                transform="translate(-1.975 -1.975)"
+                                                                fill="var(--system_primery_color)" />
+                                                        </svg>
+                                                    </div>
+                                                </a>
+                                                <div class="thumb">
+                                                    <img src="{{ asset($thumbnail) }}" alt="">
+                                                </div>
+                                                <span>
+                                                    <a href="{{ $link }}">
+                                                        <h5>{{ $title }}</h5>
+                                                    </a>
+                                                </span>
+                                            </div>
+
+                                            <div class="f_w_400">{{ getPriceFormat($price) }}</div>
+
+                                        </div>
                                     @endif
                                 @endforeach
                             @endif

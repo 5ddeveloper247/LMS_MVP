@@ -366,6 +366,26 @@
                                     {{ getPriceFormat($price) }}
                                 </span>
                             </div>
+                        @elseif (!empty($cart->shop_bundle_id))
+                            @php
+                                $title = $cart->shopBundle->name ?? 'Bundle';
+                                $price = $cart->price;
+                                $firstFile = optional(optional($cart->shopBundle)->products)->first();
+                                $thumb = ($firstFile && $firstFile->files && $firstFile->files->first())
+                                    ? $firstFile->files->first()->file_path
+                                    : '';
+                            @endphp
+                            <div class="single_ordered_product">
+                                <div class="product_name d-flex align-items-center">
+                                    <div class="thumb">
+                                        <img src="{{ getCourseImage($thumb) }}" class="h-100" alt="">
+                                    </div>
+                                    <span>{{ @$title }}</span>
+                                </div>
+                                <span class="order_prise f_w_500 font_16">
+                                    {{ getPriceFormat($price) }}
+                                </span>
+                            </div>
                         @endif
                     @endforeach
                 @endif

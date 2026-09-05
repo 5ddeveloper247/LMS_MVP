@@ -19,6 +19,7 @@ use Rennokki\QueryCache\Traits\QueryCacheable;
 
 use Modules\BundleSubscription\Entities\BundleCoursePlan;
 use Modules\Shop\Entities\ShopProduct;
+use Modules\Shop\Entities\ShopBundle;
 
 
 
@@ -97,6 +98,14 @@ use Tenantable;
 
         return $this->belongsTo(ShopProduct::class, 'product_id', 'id');
 
+    }
+
+    /**
+     * Shop Savings & Bundles (not course BundleCoursePlan).
+     */
+    public function shopBundle()
+    {
+        return $this->belongsTo(ShopBundle::class, 'shop_bundle_id', 'id');
     }
 
 }

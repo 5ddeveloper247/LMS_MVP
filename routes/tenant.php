@@ -54,6 +54,9 @@ Route::group(['namespace' => 'Frontend'], function () {
     Route::get('/shop', 'ShopController@index')->name('shop.index');
     Route::get('/shop/product/detail/{id}', 'ShopController@productDetail')->name('shop.product.detail');
     Route::get('/shop/book/detail/{id}', 'ShopController@bookDetail')->name('shop.book.detail');
+    Route::get('/shop/bundle/detail/{id}', 'ShopController@bundleDetail')->name('shop.bundle.detail');
+    Route::get('/shop/bundle/addToCart/{id}', 'ShopController@addToCartBundle')->name('shop.bundle.addToCart');
+    Route::get('/shop/bundle/buyNow/{id}', 'ShopController@buyNowBundle')->name('shop.bundle.buyNow');
     Route::get('/shop/addToCart/{id}', 'ShopController@addToCartShop')->name('shop.addToCart');
     Route::get('/shop/buyNow/{id}', 'ShopController@buyNowShop')->name('shop.buyNow');
 
@@ -254,6 +257,8 @@ Route::group(['namespace' => 'Frontend', 'middleware' => ['student']], function 
 
     Route::get('my-orders', 'ShopController@myOrders')->name('myOrders');
     Route::get('my-orders/detail/{id}', 'ShopController@myOrderDetail')->name('myOrder.detail');
+    Route::get('my-orders/bundle/{tracking}/{bundleId}', 'ShopController@myBundleOrderDetail')->name('myOrder.bundleDetail');
+    Route::post('my-orders/bundle/{tracking}/{bundleId}/cancel', 'ShopController@cancelBundleOrder')->name('myOrder.bundleCancel');
     Route::post('my-orders/cancelOrder/{id}', 'ShopController@cancelOrder')->name('myOrderCancel');
     Route::post('my-orders/refundRequestOrder/{id}', 'ShopController@orderRefundRequest')->name('myOrderRefundReq');
 });

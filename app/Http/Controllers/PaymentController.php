@@ -39,6 +39,7 @@ use Modules\AuthorizeNetPayment\Http\Controllers\DoAuthorizeNetPaymentController
 use Illuminate\Support\Facades\Validator;
 use Modules\Shop\Entities\ShopProduct;
 use Modules\Shop\Entities\ShopOrder;
+use Modules\Shop\Entities\ShopBundle;
 
 class PaymentController extends Controller
 {
@@ -258,6 +259,27 @@ class PaymentController extends Controller
                             Toastr::error('Insufficient products in stock.', 'Error');
                             return redirect()->back();
                         }
+                    }
+                }
+            }
+
+            // Shop bundles: physical items inside the bundle must be in stock
+            $bundleCarts = Cart::where('user_id', Auth::id())
+                ->whereNotNull('shop_bundle_id')
+                ->with(['shopBundle.products'])
+                ->get();
+
+            foreach ($bundleCarts as $bundleCart) {
+                $shopBundle = $bundleCart->shopBundle;
+                if (!$shopBundle) {
+                    Toastr::error('Bundle not found in cart.', 'Error');
+                    return redirect()->back();
+                }
+                foreach ($shopBundle->products as $bundleProduct) {
+                    if ($this->shopProductRequiresInventory($bundleProduct)
+                        && (int) ($bundleProduct->total_inventory ?? 0) <= 0) {
+                        Toastr::error('A product in bundle "' . $shopBundle->name . '" is out of stock.', 'Error');
+                        return redirect()->back();
                     }
                 }
             }
@@ -1272,6 +1294,48 @@ class PaymentController extends Controller
             if ($this->shopProductRequiresInventory($product)) {
                 $product->total_inventory = max(0, (int) $product->total_inventory - 1);
                 $product->save();
+            }
+
+        } else if (!empty($cart->shop_bundle_id)) {
+            // Shop Savings & Bundles — create an order line per included product
+            $shopBundle = ShopBundle::with('products')->find($cart->shop_bundle_id);
+            if ($shopBundle && $shopBundle->products->count()) {
+                if ($discount != 0 || !empty($discount)) {
+                    $itemPrice = $cart->price - ($discount / count($carts));
+                    $discount_amount = $cart->price - $itemPrice;
+                } else {
+                    $itemPrice = $cart->price;
+                    $discount_amount = 0.00;
+                }
+
+                $responseObj = is_string($response) ? json_decode($response) : $response;
+                $products = $shopBundle->products;
+                $count = max(1, $products->count());
+                $share = round($itemPrice / $count, 2);
+                $allocated = 0;
+
+                foreach ($products as $index => $product) {
+                    $linePrice = ($index === $count - 1)
+                        ? round($itemPrice - $allocated, 2)
+                        : $share;
+                    $allocated += $share;
+
+                    $enroll = new ShopOrder();
+                    $enroll->user_id = $user->id;
+                    $enroll->tracking = $responseObj->id ?? 0;
+                    $enroll->product_id = $product->id;
+                    $enroll->shop_bundle_id = $shopBundle->id;
+                    $enroll->purchase_price = $linePrice;
+                    $enroll->coupon = null;
+                    $enroll->discount_amount = ($index === 0) ? $discount_amount : 0;
+                    $enroll->status = 1;
+                    $enroll->save();
+
+                    if ($this->shopProductRequiresInventory($product)) {
+                        $product->total_inventory = max(0, (int) $product->total_inventory - 1);
+                        $product->save();
+                    }
+                }
             }
 
         } else {
