@@ -1,235 +1,256 @@
-<div>
-    <div class="cart_wrapper">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-xl-10">
-                    <div class="new_cart_wrapper">
-                        <h4>{{ __('coupons.My Cart') }}</h4>
+@php
+    $cartLines = [];
+    $totalSum = 0;
+    $taxSum = 0;
 
-                        @if (count($carts) == 0)
-                            <div class="col-lg-12">
-                                <h3 class="text-secondary text-center"> {{ __('common.No Item found') }} <i
-                                        class="fa fa-shopping-cart" aria-hidden="true"></i>
-                                </h3>
-                            </div>
-                        @else
-                            @php $totalSum=0; @endphp
+    foreach ($carts as $cart) {
+        $link = '#';
+        $title = 'Item';
+        $thumbnail = 'public/assets/product-Placeholder.png';
+        $meta = '';
+        $price = (float) ($cart->price ?? 0);
+        $lineTax = 0;
+        $imageClass = '';
+        $resolvedPrice = $price;
 
-                            @if (isset($carts))
-                                @foreach ($carts as $key => $cart)
-                                    @if (!empty($cart->course_id))
-                                        @php
-                                            if (isset($cart->course->parent)) {
-                                                $course_title = $cart->course->parent->title;
-                                            } else {
-                                                $course_title = $cart->course->title;
-                                            }
-                                            if (count($cart->course->children)) {
-                                                foreach ($cart->course->children as $child) {
-                                                    if ($cart->course_type == $child->type) {
-                                                        $thumbnail = $child->thumbnail;
-                                                        break;
-                                                    } else {
-                                                        $thumbnail = $cart->course->thumbnail;
-                                                    }
-                                                }
-                                            } else {
-                                                $thumbnail = $cart->course->thumbnail;
-                                            }
-                                            
-                                            $link = courseDetailsUrl($cart->course->id, $cart->course->type, $cart->course->slug);
-                                            $title = $course_title;
-                                            if ($cart->course->discount_price > 0) {
-                                                $price = $cart->course->discount_price;
-                                            } else {
-                                                $price = $cart->price;
-                                            }
-                                            
-                                            $totalSum = $totalSum + $price;
-                                            
-                                        @endphp
+        if (!empty($cart->course_id) && $cart->course) {
+            if (isset($cart->course->parent)) {
+                $title = $cart->course->parent->title;
+            } else {
+                $title = $cart->course->title;
+            }
+            if (count($cart->course->children)) {
+                foreach ($cart->course->children as $child) {
+                    if ($cart->course_type == $child->type) {
+                        $thumbnail = $child->thumbnail;
+                        break;
+                    }
+                    $thumbnail = $cart->course->thumbnail;
+                }
+            } else {
+                $thumbnail = $cart->course->thumbnail;
+            }
+            $link = courseDetailsUrl($cart->course->id, $cart->course->type, $cart->course->slug);
+            if ($cart->course->discount_price > 0) {
+                $resolvedPrice = (float) $cart->course->discount_price;
+            } elseif ($resolvedPrice <= 0) {
+                $resolvedPrice = (float) ($cart->course->price ?? 0);
+            }
+            $meta = __('Course');
+        } elseif (!empty($cart->program_id) && $cart->program) {
+            $thumbnail = $cart->program->icon ?: $thumbnail;
+            $link = route('programs.detail', $cart->program->id);
+            $title = $cart->program->programtitle;
+            if ($cart->program->discount_price > 0) {
+                $resolvedPrice = (float) $cart->program->discount_price;
+            } elseif ($resolvedPrice <= 0) {
+                $resolvedPrice = (float) ($cart->program->price ?? $cart->price ?? 0);
+            }
+            $meta = __('Program');
+        } elseif (!empty($cart->product_id) && $cart->product) {
+            $product = $cart->product;
+            if ((int) $product->type === 1) {
+                $link = route('shop.product.detail', $cart->product_id);
+            } else {
+                $link = route('shop.book.detail', $cart->product_id);
+            }
+            $thumbnail = $product->files[0]->file_path ?? $thumbnail;
+            $title = $product->title;
+            $meta = $product->type_label ?? __('Product');
+            if (!empty($product->sub_title)) {
+                $meta .= ' · ' . $product->sub_title;
+            }
+            $imageClass = ((int) $product->type === 1) ? 'merch' : 'tools';
 
-                                        <div class="single_cart">
-                                            <div class="product_name d-flex align-items-center">
-                                                <a href="{{ route('removeItem', [$cart->id]) }}">
-                                                    <div class="">
+            // Same formula as addToCart when cart row has 0 / stale price
+            $catalogPrice = (float) ($product->total_amount ?? 0) - (float) ($product->total_discount ?? 0);
+            if ($catalogPrice <= 0) {
+                $catalogPrice = (float) ($product->price ?? 0);
+            }
+            if ($resolvedPrice <= 0 && $catalogPrice > 0) {
+                $resolvedPrice = $catalogPrice;
+                // Heal cart so checkout / payment also see the correct amount
+                $cart->price = $resolvedPrice;
+                $cart->save();
+            }
 
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16"
-                                                            height="16" viewBox="0 0 16 16">
-                                                            <path data-name="Path 174" d="M0,0H16V16H0Z"
-                                                                fill="none" />
-                                                            <path data-name="Path 175"
-                                                                d="M14.95,6l-1-1L9.975,8.973,6,5,5,6,8.973,9.975,5,13.948l1,1,3.973-3.973,3.973,3.973,1-1L10.977,9.975Z"
-                                                                transform="translate(-1.975 -1.975)"
-                                                                fill="var(--system_primery_color)" />
-                                                        </svg>
-                                                    </div>
-                                                </a>
-                                                <div class="thumb">
-                                                    <img src="{{ asset($thumbnail) }}" alt="">
-                                                </div>
-                                                <span>
-                                                    <a href="{{ $link }}">
-                                                        <h5>{{ $title }}</h5>
-                                                    </a>
-                                                </span>
-                                            </div>
+            // Frontend cart: tax hardcoded to 0 (do not use product DB tax)
+            $lineTax = 0;
+        } elseif (!empty($cart->shop_bundle_id) && $cart->shopBundle) {
+            $shopBundle = $cart->shopBundle;
+            $link = route('shop.bundle.detail', $cart->shop_bundle_id);
+            $firstProduct = $shopBundle->products->first();
+            if ($firstProduct && $firstProduct->files->first()) {
+                $thumbnail = $firstProduct->files->first()->file_path;
+            }
+            $title = $shopBundle->name ?? __('Bundle');
+            $bundleItemCount = $shopBundle->products->count();
+            $meta = __('Bundle') . ($bundleItemCount ? ' · ' . $bundleItemCount . ' ' . __('items') : '');
 
-                                            <div class="f_w_400">{{ getPriceFormat($price) }}</div>
+            $catalogPrice = (float) ($shopBundle->total_amount ?? 0);
+            if ($catalogPrice <= 0) {
+                $catalogPrice = (float) ($shopBundle->price ?? 0);
+            }
+            if ($resolvedPrice <= 0 && $catalogPrice > 0) {
+                $resolvedPrice = $catalogPrice;
+                $cart->price = $resolvedPrice;
+                $cart->save();
+            }
 
-                                        </div>
-                                    @elseif (!empty($cart->program_id))
-                                        @php
-                                            
-                                            // if (isset($cart->bundle_course_id) && $cart->bundle_course_id!=0){
-                                            //$thumbnail=$cart->bundle->thumbnail;
-                                            // $price=$cart->bundle->price;
-                                            //$link=route('bundle.show').'?id='.$cart->bundle_course_id;
-                                            //$title =$cart->bundle->title;
-                                            // }else{
-                                            $thumbnail = $cart->program->icon;
-                                            $link = route('programs.detail', $cart->program->id);
-                                            $title = $cart->program->programtitle;
-                                            if ($cart->program->discount_price > 0) {
-                                                $price = $cart->program->discount_price;
-                                            } else {
-                                                $price = $cart->price;
-                                            }
-                                            //}
-                                            
-                                            $totalSum = $totalSum + $price;
-                                            
-                                        @endphp
+            // Frontend cart: tax hardcoded to 0 (do not use bundle DB tax)
+            $lineTax = 0;
+        } else {
+            continue;
+        }
 
-                                        <div class="single_cart">
-                                            <div class="product_name d-flex align-items-center">
-                                                <a href="{{ route('removeItem', [$cart->id]) }}">
-                                                    <div class="">
+        $price = $resolvedPrice;
+        $totalSum += $price;
+        $taxSum += $lineTax;
 
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16"
-                                                            height="16" viewBox="0 0 16 16">
-                                                            <path data-name="Path 174" d="M0,0H16V16H0Z"
-                                                                fill="none" />
-                                                            <path data-name="Path 175"
-                                                                d="M14.95,6l-1-1L9.975,8.973,6,5,5,6,8.973,9.975,5,13.948l1,1,3.973-3.973,3.973,3.973,1-1L10.977,9.975Z"
-                                                                transform="translate(-1.975 -1.975)"
-                                                                fill="var(--system_primery_color)" />
-                                                        </svg>
-                                                    </div>
-                                                </a>
-                                                <div class="thumb">
-                                                    <img src="{{ asset($thumbnail) }}" alt="">
-                                                </div>
-                                                <span>
-                                                    <a href="{{ $link }}">
-                                                        <h5>{{ $title }}</h5>
-                                                    </a>
-                                                </span>
-                                            </div>
+        $cartLines[] = (object) [
+            'id' => $cart->id,
+            'link' => $link,
+            'title' => $title,
+            'thumbnail' => $thumbnail,
+            'meta' => $meta,
+            'price' => $price,
+            'tax' => $lineTax,
+            'imageClass' => $imageClass,
+        ];
+    }
 
-                                            <div class="f_w_400">{{ getPriceFormat($price) }}</div>
+    $itemCount = count($cartLines);
+    $taxSum = 0; // hardcode — never show DB tax on cart frontend
+    $grandTotal = $totalSum + $taxSum;
+@endphp
 
-                                        </div>
-                                    @elseif (!empty($cart->product_id))
-                                        @php
-                                            // Product → product detail; Book / Guide / Tool → book detail page
-                                            if ((int) $cart->product->type === 1) {
-                                                $link = route('shop.product.detail', $cart->product_id);
-                                            } else {
-                                                $link = route('shop.book.detail', $cart->product_id);
-                                            }
+<div class="mxp-cart">
+    <div class="mxp-breadcrumb">
+        <div class="mxp-breadcrumb-inner">
+            <a href="{{ url('/') }}">{{ __('Home') }}</a>
+            <span>›</span>
+            <a href="{{ route('shop.index') }}">{{ __('Shop') }}</a>
+            <span>›</span>
+            {{ __('Cart') }}
+        </div>
+    </div>
 
-                                            $thumbnail = $cart->product->files[0]->file_path ?? 'public/assets/product-Placeholder.png';
-                                            $title = $cart->product->title;
-                                            $price = $cart->price;
-                                        @endphp
+    <div class="mxp-page-header">
+        <div class="mxp-page-header-inner">
+            <h1>{{ __('Your Cart') }}</h1>
+            <span class="mxp-cart-count">
+                {{ $itemCount }} {{ $itemCount === 1 ? __('item') : __('items') }}
+            </span>
+        </div>
+    </div>
 
-                                        <div class="single_cart">
-                                            <div class="product_name d-flex align-items-center">
-                                                <a href="{{ route('removeItem', [$cart->id]) }}">
-                                                    <div class="">
-
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16"
-                                                            height="16" viewBox="0 0 16 16">
-                                                            <path data-name="Path 174" d="M0,0H16V16H0Z"
-                                                                fill="none" />
-                                                            <path data-name="Path 175"
-                                                                d="M14.95,6l-1-1L9.975,8.973,6,5,5,6,8.973,9.975,5,13.948l1,1,3.973-3.973,3.973,3.973,1-1L10.977,9.975Z"
-                                                                transform="translate(-1.975 -1.975)"
-                                                                fill="var(--system_primery_color)" />
-                                                        </svg>
-                                                    </div>
-                                                </a>
-                                                <div class="thumb">
-                                                    <img src="{{ asset($thumbnail) }}" alt="">
-                                                </div>
-                                                <span>
-                                                    <a href="{{ $link }}">
-                                                        <h5>{{ $title }}</h5>
-                                                    </a>
-                                                </span>
-                                            </div>
-
-                                            <div class="f_w_400">{{ getPriceFormat($price) }}</div>
-
-                                        </div>
-                                    @elseif (!empty($cart->shop_bundle_id))
-                                        @php
-                                            $shopBundle = $cart->shopBundle;
-                                            $link = route('shop.bundle.detail', $cart->shop_bundle_id);
-                                            $firstProduct = $shopBundle ? $shopBundle->products->first() : null;
-                                            $thumbnail = ($firstProduct && $firstProduct->files->first())
-                                                ? $firstProduct->files->first()->file_path
-                                                : 'public/assets/product-Placeholder.png';
-                                            $title = $shopBundle->name ?? 'Bundle';
-                                            $price = $cart->price;
-                                        @endphp
-
-                                        <div class="single_cart">
-                                            <div class="product_name d-flex align-items-center">
-                                                <a href="{{ route('removeItem', [$cart->id]) }}">
-                                                    <div class="">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16"
-                                                            height="16" viewBox="0 0 16 16">
-                                                            <path data-name="Path 174" d="M0,0H16V16H0Z"
-                                                                fill="none" />
-                                                            <path data-name="Path 175"
-                                                                d="M14.95,6l-1-1L9.975,8.973,6,5,5,6,8.973,9.975,5,13.948l1,1,3.973-3.973,3.973,3.973,1-1L10.977,9.975Z"
-                                                                transform="translate(-1.975 -1.975)"
-                                                                fill="var(--system_primery_color)" />
-                                                        </svg>
-                                                    </div>
-                                                </a>
-                                                <div class="thumb">
-                                                    <img src="{{ asset($thumbnail) }}" alt="">
-                                                </div>
-                                                <span>
-                                                    <a href="{{ $link }}">
-                                                        <h5>{{ $title }}</h5>
-                                                    </a>
-                                                </span>
-                                            </div>
-
-                                            <div class="f_w_400">{{ getPriceFormat($price) }}</div>
-
-                                        </div>
-                                    @endif
-                                @endforeach
-                            @endif
-                        @endif
-                    </div>
-                    <div class="cart_table_wrapper mb-0">
-                        @if (count($carts) != 0)
-                            <div class="row mt_30">
-                                <div class="col-12 text-right">
-                                    <a href="{{ route('CheckOut') }}"
-                                        class="theme_btn">{{ __('student.Proceed to checkout') }}</a>
-                                </div>
-                            </div>
-                        @endif
-                    </div>
-                </div>
+    <div class="mxp-progress-bar">
+        <div class="mxp-progress-inner">
+            <div class="mxp-progress-step is-active">
+                <div class="mxp-progress-dot">1</div>
+                <div class="mxp-progress-label">{{ __('Cart') }}</div>
+            </div>
+            <div class="mxp-progress-step">
+                <div class="mxp-progress-dot">2</div>
+                <div class="mxp-progress-label">{{ __('Checkout') }}</div>
+            </div>
+            <div class="mxp-progress-step">
+                <div class="mxp-progress-dot">3</div>
+                <div class="mxp-progress-label">{{ __('Confirmation') }}</div>
             </div>
         </div>
     </div>
+
+    <section class="mxp-cart-section">
+        <div class="mxp-cart-grid">
+            <div class="mxp-cart-items">
+                @if ($itemCount === 0)
+                    <div class="mxp-cart-empty">
+                        <h2>{{ __('Your cart is empty.') }}</h2>
+                        <p>{{ __('Looks like you haven’t added anything yet. Browse our study tools, books, and resources to get started.') }}</p>
+                        <a href="{{ route('shop.index') }}" class="mxp-checkout-cta" style="max-width:300px;margin:0 auto;">
+                            {{ __('Browse the Shop') }} →
+                        </a>
+                    </div>
+                @else
+                    @foreach ($cartLines as $line)
+                        <div class="mxp-cart-item">
+                            <div class="mxp-item-image {{ $line->imageClass }}">
+                                <img src="{{ asset($line->thumbnail) }}" alt="{{ $line->title }}">
+                            </div>
+                            <div class="mxp-item-details">
+                                <h3>
+                                    <a href="{{ $line->link }}">{{ $line->title }}</a>
+                                </h3>
+                                @if ($line->meta)
+                                    <p class="mxp-item-meta">{{ $line->meta }}</p>
+                                @endif
+                                <div class="mxp-item-controls">
+                                    <div class="mxp-qty-control" title="{{ __('Quantity is fixed per cart line') }}">
+                                        <button type="button" class="mxp-qty-btn" disabled aria-hidden="true">−</button>
+                                        <input type="text" class="mxp-qty-val" value="1" readonly aria-label="{{ __('Quantity') }}">
+                                        <button type="button" class="mxp-qty-btn" disabled aria-hidden="true">+</button>
+                                    </div>
+                                    <a class="mxp-item-remove" href="{{ route('removeItem', [$line->id]) }}">
+                                        {{ __('Remove') }}
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="mxp-item-right">
+                                <span class="mxp-item-price">{{ getPriceFormat($line->price) }}</span>
+                            </div>
+                        </div>
+                    @endforeach
+                @endif
+            </div>
+
+            @if ($itemCount > 0)
+                <aside class="mxp-order-summary">
+                    <h3 class="mxp-summary-title">{{ __('Order Summary') }}</h3>
+
+                    <div class="mxp-summary-row">
+                        <span>{{ __('Subtotal') }}</span>
+                        <span class="mxp-summary-val">{{ getPriceFormat($totalSum) }}</span>
+                    </div>
+                    <div class="mxp-summary-row">
+                        <span>{{ __('Shipping') }}</span>
+                        <span class="mxp-summary-val">{{ __('At checkout') }}</span>
+                    </div>
+                    <p class="mxp-summary-note">{{ __('Shipping is confirmed at checkout.') }}</p>
+                    <div class="mxp-summary-row">
+                        <span>{{ __('Estimated Tax') }}</span>
+                        <span class="mxp-summary-val">{{ getPriceFormat($taxSum) }}</span>
+                    </div>
+                    <div class="mxp-summary-row is-total">
+                        <span>{{ __('Total') }}</span>
+                        <span class="mxp-summary-val">{{ getPriceFormat($grandTotal) }}</span>
+                    </div>
+
+                    <div class="mxp-promo-section">
+                        <p class="mxp-promo-label">{{ __('Promo Code') }}</p>
+                        <p class="mxp-promo-hint">{{ __('You can apply a promo code on the checkout page.') }}</p>
+                    </div>
+
+                    <a href="{{ route('CheckOut') }}" class="mxp-checkout-cta">
+                        {{ __('Proceed to Checkout') }} →
+                    </a>
+                    <a href="{{ route('shop.index') }}" class="mxp-continue-shopping">
+                        ← {{ __('Continue Shopping') }}
+                    </a>
+
+                    <div class="mxp-trust-row">
+                        <div class="mxp-trust-item"><span class="mxp-trust-check">✓</span> {{ __('Secure checkout') }}</div>
+                        <div class="mxp-trust-item"><span class="mxp-trust-check">✓</span> {{ __('Trusted payment') }}</div>
+                        <div class="mxp-trust-item"><span class="mxp-trust-check">✓</span> {{ __('Shop with confidence') }}</div>
+                    </div>
+                </aside>
+            @endif
+        </div>
+    </section>
+
+    <section class="mxp-explore">
+        <p class="mxp-explore-eyebrow">{{ __('Keep exploring') }}</p>
+        <h2>{{ __('Find your next study tool.') }}</h2>
+        <a href="{{ route('shop.index') }}" class="mxp-explore-cta">{{ __('Browse the Shop') }} →</a>
+    </section>
 </div>

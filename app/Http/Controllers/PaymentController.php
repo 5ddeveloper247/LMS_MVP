@@ -141,9 +141,27 @@ class PaymentController extends Controller
                     return redirect('/');
                 }
                 return redirect(route('studentDashboard'));
-            } else {
-                return redirect()->route('orderPayment');
             }
+
+            // Paid orders: charge on checkout (same Authorize.Net flow as /payment)
+            $walletBalance = Auth::user()->balance ?? 0;
+            $chargeAmount = ($checkout_info->purchase_price > $walletBalance)
+                ? ($checkout_info->purchase_price - $walletBalance)
+                : 0;
+            $remainingBalance = ($checkout_info->purchase_price > $walletBalance)
+                ? 0
+                : ($walletBalance - $checkout_info->purchase_price);
+            $chargeAmountUsd = convertCurrency(Settings('currency_code') ?? 'BDT', 'USD', $chargeAmount);
+
+            $request->merge([
+                'user_id' => Auth::id(),
+                'tracking_id' => $checkout_info->tracking,
+                'id' => $checkout_info->id,
+                'amount' => $chargeAmountUsd * 100,
+                'remaining_balance' => $remainingBalance,
+            ]);
+
+            return $this->paymentSubmit($request);
         } else {
             Toastr::error("Something Went Wrong", 'Failed');
             return \redirect()->back();
@@ -356,18 +374,169 @@ class PaymentController extends Controller
 
                     send_email(Auth::user(), 'Program_Plans', $shortCodes);
                 }
+
+                // Snapshot order for confirmation page before clearing cart
+                $this->storeOrderConfirmationSession($request, $checkout_info);
+
                 $delete_cart = Cart::where('user_id', Auth::id())->delete();
 
                 session()->forget('user');
 
                 Toastr::success('Payment Successfully Done', 'Success');
-                return redirect()->route('frontendHomePage');
+                return redirect()->route('orderConfirmation');
             } else {
                 Toastr::error('Something Went Wrong', 'Error');
                 return redirect()->back();
             }
         }
 
+    }
+
+    /**
+     * Build confirmation payload while cart rows still exist.
+     */
+    protected function storeOrderConfirmationSession(Request $request, $checkout_info): void
+    {
+        if (!$checkout_info) {
+            $checkout_info = Checkout::where('user_id', Auth::id())->latest()->first();
+        }
+        if (!$checkout_info) {
+            return;
+        }
+
+        $items = [];
+        $carts = Cart::where('user_id', Auth::id())
+            ->with(['product.files', 'shopBundle.products.files', 'course', 'program'])
+            ->get();
+
+        foreach ($carts as $cart) {
+            if (!empty($cart->product_id) && $cart->product) {
+                $product = $cart->product;
+                $typeLabels = [1 => 'Product', 2 => 'Book', 3 => 'Guide', 4 => 'Tool'];
+                $thumbLabel = $typeLabels[(int) ($product->type ?? 1)] ?? 'Item';
+                $image = ($product->files && $product->files->first())
+                    ? $product->files->first()->file_path
+                    : '';
+                $items[] = [
+                    'title' => $product->title ?? 'Product',
+                    'meta' => 'Qty: 1',
+                    'price' => (float) $cart->price,
+                    'thumb_label' => $thumbLabel,
+                    'image' => $image,
+                ];
+            } elseif (!empty($cart->shop_bundle_id) && $cart->shopBundle) {
+                $bundle = $cart->shopBundle;
+                $first = $bundle->products->first();
+                $image = ($first && $first->files && $first->files->first())
+                    ? $first->files->first()->file_path
+                    : '';
+                $items[] = [
+                    'title' => $bundle->name ?? 'Bundle',
+                    'meta' => 'Bundle · Qty: 1',
+                    'price' => (float) $cart->price,
+                    'thumb_label' => 'Bundle',
+                    'image' => $image,
+                ];
+            } elseif (!empty($cart->course_id) && $cart->course) {
+                $course = $cart->course;
+                $title = isset($course->parent) && $course->parent
+                    ? $course->parent->title
+                    : ($course->title ?? 'Course');
+                $items[] = [
+                    'title' => $title,
+                    'meta' => 'Course · Qty: 1',
+                    'price' => (float) $cart->price,
+                    'thumb_label' => 'Course',
+                    'image' => $course->thumbnail ?? '',
+                ];
+            } elseif (!empty($cart->program_id) && $cart->program) {
+                $items[] = [
+                    'title' => $cart->program->programtitle ?? 'Program',
+                    'meta' => 'Program · Qty: 1',
+                    'price' => (float) $cart->price,
+                    'thumb_label' => 'Program',
+                    'image' => $cart->program->icon ?? '',
+                ];
+            }
+        }
+
+        $cardLast4 = '';
+        if ($request->filled('cardNumber')) {
+            $cardLast4 = substr(preg_replace('/\D/', '', (string) $request->cardNumber), -4);
+        }
+
+        $billing = $checkout_info->billing
+            ?? BillingDetails::where('id', $checkout_info->billing_detail_id)->first()
+            ?? BillingDetails::where('tracking_id', $checkout_info->tracking)->latest()->first();
+
+        $addressParts = [];
+        if ($billing) {
+            foreach (['address1', 'address2', 'city'] as $field) {
+                if (!empty($billing->{$field})) {
+                    $addressParts[] = $billing->{$field};
+                }
+            }
+            $stateName = '';
+            try {
+                $stateName = optional($billing->stateDetails)->name ?? '';
+            } catch (\Throwable $e) {
+                $stateName = '';
+            }
+            if ($stateName !== '') {
+                $addressParts[] = $stateName;
+            }
+            if (!empty($billing->zip_code)) {
+                $addressParts[] = $billing->zip_code;
+            }
+        }
+
+        $tax = 0;
+        if (function_exists('hasTax') && hasTax() && function_exists('taxAmount')) {
+            $tax = (float) taxAmount($checkout_info->price);
+        }
+
+        session([
+            'order_confirmation' => [
+                'checkout_id' => $checkout_info->id,
+                'tracking' => $checkout_info->tracking,
+                'order_number' => 'MXP-' . now()->format('Y') . '-' . str_pad((string) $checkout_info->id, 5, '0', STR_PAD_LEFT),
+                'email' => $billing->email ?? (Auth::user()->email ?? ''),
+                'card_last4' => $cardLast4,
+                'payment_label' => $cardLast4 !== '' ? ('Card ending in ' . $cardLast4) : 'Authorize.Net',
+                'shipping_label' => 'Standard (5–7 business days)',
+                'shipping_address' => implode(', ', $addressParts),
+                'items' => $items,
+                'subtotal' => (float) $checkout_info->price,
+                'discount' => (float) ($checkout_info->discount ?? 0),
+                'tax' => $tax,
+                'total' => (float) $checkout_info->purchase_price,
+                'paid_at' => now()->toDateTimeString(),
+                'delivery_estimate' => now()->addWeekdays(5)->format('M j') . '–' . now()->addWeekdays(7)->format('M j, Y'),
+            ],
+        ]);
+    }
+
+    public function orderConfirmation()
+    {
+        $data = session('order_confirmation');
+        if (empty($data) || empty($data['checkout_id'])) {
+            Toastr::warning('No recent order confirmation found.', 'Notice');
+            return redirect()->route('myOrders');
+        }
+
+        $checkout = Checkout::where('user_id', Auth::id())
+            ->where('id', $data['checkout_id'])
+            ->first();
+
+        if (!$checkout) {
+            Toastr::warning('Order not found.', 'Notice');
+            return redirect()->route('myOrders');
+        }
+
+        return view(theme('pages.orderConfirmation'), [
+            'confirmation' => $data,
+            'checkout' => $checkout,
+        ]);
     }
 
     public function directEnroll($id, $tracking = null)

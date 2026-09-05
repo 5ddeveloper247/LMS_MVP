@@ -274,6 +274,7 @@ Route::group(['prefix' => 'order', 'middleware' => ['auth']], function () {
     Route::post('submit', 'PaymentController@makePlaceOrder')->name('makePlaceOrder');
     Route::get('/payment', 'PaymentController@payment')->name('orderPayment');
     Route::post('/paymentSubmit', 'PaymentController@paymentSubmit')->name('paymentSubmit');
+    Route::get('/confirmation', 'PaymentController@orderConfirmation')->name('orderConfirmation');
     //paypal url
     Route::get('paypal/success', 'PaymentController@paypalSuccess')->name('paypalSuccess');
     Route::get('paypal/failed', 'PaymentController@paypalFailed')->name('paypalFailed');
