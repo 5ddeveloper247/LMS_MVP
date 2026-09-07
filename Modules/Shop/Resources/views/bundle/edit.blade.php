@@ -30,6 +30,30 @@
             </div>
         </div>
     </section>
+
+    <div class="modal fade admin-query" id="deleteBundleFile">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form action="{{ route('bundle.file.delete') }}" method="POST">
+                    @csrf
+                    <div class="modal-header">
+                        <h4 class="modal-title">{{ __('common.Delete') }} {{ __('File') }}</h4>
+                        <button type="button" class="close" data-dismiss="modal"><i class="ti-close"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="text-center">
+                            <h4>{{ __('common.Are you sure to delete ?') }}</h4>
+                        </div>
+                        <input type="hidden" name="id" value="" id="bundleFileDeleteId">
+                        <div class="d-flex justify-content-between mt-40">
+                            <button type="button" class="primary-btn tr-bg" data-dismiss="modal">{{ __('common.Cancel') }}</button>
+                            <button class="primary-btn fix-gr-bg" type="submit">{{ __('common.Delete') }}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('scripts')

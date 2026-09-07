@@ -130,3 +130,86 @@
         </div>
     @endforeach
 </div>
+
+{{-- Bundle Images (required on create; optional add-more on edit) --}}
+<div class="row mt-4">
+    <div class="col-xl-12">
+        <label class="primary_input_label">
+            {{ __('Bundle Images') }} (Max Image Size 2MB)
+            @if (!isset($bundle) || empty($bundle->id))
+                <strong class="text-danger">*</strong>
+            @endif
+        </label>
+    </div>
+    <div class="col-xl-6">
+        <div class="primary_input mb-35">
+            <div class="primary_file_uploader">
+                <input class="primary-input filePlaceholder placeholder_txt" type="text"
+                    placeholder="Browse Image file" readonly>
+                <button type="button">
+                    <label class="primary-btn small fix-gr-bg" for="bundle_images_input">Browse</label>
+                    <input type="file" class="d-none fileUpload" id="bundle_images_input"
+                        accept="image/jpeg,image/jpg,image/png" multiple>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-10 text-center">
+        <div class="row" id="bundle-preview-container">
+            @if (isset($bundle) && $bundle->files && $bundle->files->count())
+                @foreach ($bundle->files as $index => $file)
+                    <div class="col-sm-2 preview-item" data-index="{{ $index }}">
+                        <div class="position-relative d-inline-block">
+                            <img src="{{ url($file->file_path) }}" class="img-thumbnail"
+                                style="width:100px;height:100px;object-fit:cover;">
+                            <span class="deleteBundleFile" data-id="{{ $file->id }}"
+                                style="position:absolute;top:0px;right:0px;cursor:pointer;color:red;background:white;border-radius:50%;padding:0px 6px;font-size:12px;">&times;</span>
+                        </div>
+                    </div>
+                @endforeach
+            @endif
+        </div>
+    </div>
+</div>
+
+{{-- Bundle Video (optional) --}}
+<div class="row mt-4">
+    <div class="col-xl-12">
+        <label class="primary_input_label">
+            {{ __('Bundle Video') }} (Max Video Size 1MB)
+        </label>
+    </div>
+    <div class="col-xl-6">
+        <div class="primary_input mb-35">
+            <div class="primary_file_uploader">
+                <input class="primary-input filePlaceholder placeholder_txt" type="text"
+                    id="bundle_video_placeholder" placeholder="Browse Video file" readonly>
+                <button type="button">
+                    <label class="primary-btn small fix-gr-bg" for="bundle_video_input">Browse</label>
+                    <input type="file" class="d-none fileUpload" id="bundle_video_input"
+                        accept="video/*">
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-10 text-center">
+        <div class="row" id="bundle-video-preview-container">
+            @php
+                $existingBundleVideo = isset($bundle) ? optional($bundle->videos)->first() : null;
+            @endphp
+            @if (!empty($existingBundleVideo))
+                <div class="col-sm-4 video-preview-item" data-file-id="{{ $existingBundleVideo->id }}">
+                    <div class="position-relative d-inline-block">
+                        <video width="200" height="150" controls style="object-fit:cover;">
+                            <source src="{{ url($existingBundleVideo->file_path) }}"
+                                type="video/{{ $existingBundleVideo->file_type }}">
+                            Your browser does not support the video tag.
+                        </video>
+                        <span class="deleteBundleFile" data-id="{{ $existingBundleVideo->id }}"
+                            style="position:absolute;top:0px;right:0px;cursor:pointer;color:red;background:white;border-radius:50%;padding:0px 6px;font-size:12px;">&times;</span>
+                    </div>
+                </div>
+            @endif
+        </div>
+    </div>
+</div>

@@ -31,6 +31,7 @@ Route::group(['prefix' => 'admin/shop', 'middleware' => ['auth', 'admin']], func
     Route::post('bundle/update', 'BundleController@update')->name('bundle.update');
     Route::get('bundle/edit/{id}', 'BundleController@edit')->name('bundle.edit');
     Route::post('bundle/destroy', 'BundleController@destroy')->name('bundle.delete');
+    Route::post('bundle/file/destroy', 'BundleController@destroyFile')->name('bundle.file.delete');
     Route::get('bundle/getAll', 'BundleController@getAllData')->name('bundle.getAll');
     Route::get('bundle/changeStatus', 'BundleController@changeStatus')->name('bundle.changeStatus');
 

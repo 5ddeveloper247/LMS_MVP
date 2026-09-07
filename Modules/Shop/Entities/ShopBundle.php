@@ -38,6 +38,26 @@ class ShopBundle extends Model
     }
 
     /**
+     * Gallery images (excludes video extensions).
+     */
+    public function files()
+    {
+        return $this->hasMany(ShopBundleFile::class, 'bundle_id')
+            ->whereNotIn('file_type', ['mp4', 'avi', 'mov', 'webm', 'mkv', 'flv', 'wmv', 'm4v'])
+            ->orderBy('created_at', 'desc');
+    }
+
+    /**
+     * Video files only.
+     */
+    public function videos()
+    {
+        return $this->hasMany(ShopBundleFile::class, 'bundle_id')
+            ->whereIn('file_type', ['mp4', 'avi', 'mov', 'webm', 'mkv', 'flv', 'wmv', 'm4v'])
+            ->orderBy('created_at', 'desc');
+    }
+
+    /**
      * Frontend: only active bundles, newest first.
      */
     public function scopeForShopListing($query)

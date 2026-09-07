@@ -2,17 +2,23 @@
 
 namespace Modules\Shop\Http\Controllers;
 
+use App\Traits\ImageStore;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
 use Brian2694\Toastr\Facades\Toastr;
 use Modules\Shop\Entities\ShopBundle;
+use Modules\Shop\Entities\ShopBundleFile;
 use Modules\Shop\Entities\ShopProduct;
 use Yajra\DataTables\Facades\DataTables;
 
 class BundleController extends Controller
 {
+    use ImageStore;
+
+    private const VIDEO_EXTENSIONS = ['mp4', 'avi', 'mov', 'webm', 'mkv', 'flv', 'wmv', 'm4v'];
+
     /**
      * Shop sidebar entry — same Products screen with Savings & Bundles tab open.
      */
@@ -30,7 +36,7 @@ class BundleController extends Controller
 
     public function edit($id)
     {
-        $bundle = ShopBundle::with('products')->findOrFail($id);
+        $bundle = ShopBundle::with(['products', 'files', 'videos'])->findOrFail($id);
         $selectableProducts = $this->selectableProducts();
         $selectedProductIds = $bundle->products->pluck('id')->all();
 
@@ -54,6 +60,8 @@ class BundleController extends Controller
         $bundle->save();
         $this->syncFeaturedFlag($bundle);
         $bundle->products()->sync($request->input('product_ids', []));
+        $this->storeBundleImages($bundle, $request);
+        $this->storeBundleVideo($bundle, $request);
 
         return response()->json([
             'status' => 200,
@@ -78,6 +86,11 @@ class BundleController extends Controller
         $bundle->save();
         $this->syncFeaturedFlag($bundle);
         $bundle->products()->sync($request->input('product_ids', []));
+        $this->storeBundleImages($bundle, $request);
+
+        if ($request->hasFile('bundle_video')) {
+            $this->replaceBundleVideo($bundle, $request);
+        }
 
         return response()->json([
             'status' => 200,
@@ -97,13 +110,54 @@ class BundleController extends Controller
             return redirect()->back();
         }
 
-        $bundle = ShopBundle::findOrFail($request->id);
+        $bundle = ShopBundle::with(['files', 'videos'])->findOrFail($request->id);
+
+        foreach ($bundle->files->merge($bundle->videos) as $file) {
+            if ($file->file_path) {
+                $this->deleteImage($file->file_path);
+            }
+            $file->delete();
+        }
+
         $bundle->products()->detach();
         $bundle->delete();
 
         Toastr::success('Deleted successfully', 'Success');
 
         return redirect()->route('bundle.index');
+    }
+
+    public function destroyFile(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|exists:shop_bundle_files,id',
+        ], [
+            'id.required' => 'File Id is required.',
+        ]);
+
+        if ($validator->fails()) {
+            Toastr::error($validator->errors()->first(), 'Error');
+            return redirect()->back();
+        }
+
+        try {
+            $bundleFile = ShopBundleFile::find($request->id);
+
+            if (empty($bundleFile)) {
+                Toastr::error('Record Not Found...', 'Error');
+                return redirect()->back();
+            }
+
+            if ($bundleFile->file_path) {
+                $this->deleteImage($bundleFile->file_path);
+            }
+            $bundleFile->delete();
+
+            Toastr::success(trans('common.Operation successful'), trans('common.Success'));
+            return redirect()->back();
+        } catch (\Exception $e) {
+            GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
+        }
     }
 
     public function changeStatus(Request $request)
@@ -190,10 +244,16 @@ class BundleController extends Controller
             'product_ids.*' => 'exists:shop_products,id',
             'status' => 'nullable|in:0,1',
             'is_featured' => 'nullable|in:0,1',
+            'bundle_video' => 'nullable|file|mimes:mp4,avi,mov,webm,mkv,flv,wmv,m4v|max:1024',
         ];
 
         if ($isUpdate) {
             $rules['id'] = 'required|exists:shop_bundles,id';
+            $rules['bundle_images'] = 'nullable|array|min:1';
+            $rules['bundle_images.*'] = 'file|mimes:jpeg,jpg,png|max:2048';
+        } else {
+            $rules['bundle_images'] = 'required|array|min:1';
+            $rules['bundle_images.*'] = 'file|mimes:jpeg,jpg,png|max:2048';
         }
 
         if ($request->input('discount_type') === 'percent') {
@@ -206,6 +266,12 @@ class BundleController extends Controller
             'tax_percent.required' => 'The Tax Percent field is required.',
             'product_ids.required' => 'Please select at least one product.',
             'product_ids.min' => 'Please select at least one product.',
+            'bundle_images.required' => 'Please upload at least one bundle image.',
+            'bundle_images.min' => 'Please upload at least one bundle image.',
+            'bundle_images.*.mimes' => 'Only JPEG and PNG images are allowed.',
+            'bundle_images.*.max' => 'Each Bundle Image may not be greater than 2MB.',
+            'bundle_video.mimes' => 'Only video files (mp4, avi, mov, webm, mkv, flv, wmv, m4v) are allowed.',
+            'bundle_video.max' => 'Bundle Video may not be greater than 1MB.',
         ]);
     }
 
@@ -263,5 +329,58 @@ class BundleController extends Controller
             ->where('id', '!=', $bundle->id)
             ->where('is_featured', 1)
             ->update(['is_featured' => 0]);
+    }
+
+    private function storeBundleImages(ShopBundle $bundle, Request $request): void
+    {
+        if (!$request->hasFile('bundle_images')) {
+            return;
+        }
+
+        foreach ($request->file('bundle_images') as $image) {
+            $path = $this->saveImage($image);
+
+            ShopBundleFile::create([
+                'bundle_id' => $bundle->id,
+                'file_name' => $image->getClientOriginalName(),
+                'file_path' => $path,
+                'file_type' => $image->getClientOriginalExtension(),
+                'is_primary' => false,
+            ]);
+        }
+    }
+
+    private function storeBundleVideo(ShopBundle $bundle, Request $request): void
+    {
+        if (!$request->hasFile('bundle_video')) {
+            return;
+        }
+
+        $video = $request->file('bundle_video');
+        $path = $this->saveFile($video);
+
+        ShopBundleFile::create([
+            'bundle_id' => $bundle->id,
+            'file_name' => $video->getClientOriginalName(),
+            'file_path' => $path,
+            'file_type' => $video->getClientOriginalExtension(),
+            'is_primary' => false,
+        ]);
+    }
+
+    private function replaceBundleVideo(ShopBundle $bundle, Request $request): void
+    {
+        $existingVideos = ShopBundleFile::where('bundle_id', $bundle->id)
+            ->whereIn('file_type', self::VIDEO_EXTENSIONS)
+            ->get();
+
+        foreach ($existingVideos as $existingVideo) {
+            if ($existingVideo->file_path) {
+                $this->deleteImage($existingVideo->file_path);
+            }
+            $existingVideo->delete();
+        }
+
+        $this->storeBundleVideo($bundle, $request);
     }
 }

@@ -104,7 +104,7 @@ class ShopController extends Controller
     public function bundleDetail(Request $request, $id)
     {
         try {
-            $bundle = ShopBundle::with(['products.files'])
+            $bundle = ShopBundle::with(['files', 'videos', 'products.files'])
                 ->where('id', $id)
                 ->where('status', 1)
                 ->first();

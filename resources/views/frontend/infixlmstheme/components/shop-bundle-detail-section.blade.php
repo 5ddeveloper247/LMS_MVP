@@ -1,12 +1,24 @@
 @php
     $bundleProducts = $bundle->products ?? collect();
-    $primaryProduct = $bundleProducts->first();
-    $primaryImage = $primaryProduct && $primaryProduct->files
-        ? $primaryProduct->files->first()
-        : null;
-    $mainImageUrl = $primaryImage
-        ? url($primaryImage->file_path)
-        : asset('public/assets/product-Placeholder.png');
+    $bundleImages = $bundle->files ?? collect();
+    $bundleVideos = $bundle->videos ?? collect();
+
+    $firstBundleImage = $bundleImages->first();
+    $firstProductImage = null;
+    foreach ($bundleProducts as $product) {
+        $firstProductImage = optional($product->files)->first();
+        if ($firstProductImage) {
+            break;
+        }
+    }
+
+    $mainImageUrl = $firstBundleImage
+        ? url($firstBundleImage->file_path)
+        : ($firstProductImage
+            ? url($firstProductImage->file_path)
+            : asset('public/assets/product-Placeholder.png'));
+
+    $hasGalleryThumbs = $bundleVideos->count() || $bundleImages->count() || $bundleProducts->count();
 
     $components = collect([
         $bundle->component_1,
@@ -34,6 +46,11 @@
                     style="width: 100%; height: 100%; object-fit: cover; display: block;"
                     alt="{{ $bundle->name }}">
 
+                <video id="main-preview-video" width="100%" height="auto" controls
+                    style="display: none; max-width: 100%; border-radius: 10px;">
+                    <source src="" type="">
+                </video>
+
                 @if ($bundle->is_featured)
                     <span class="product-main-badge">Best Value</span>
                 @else
@@ -41,16 +58,53 @@
                 @endif
             </div>
 
-            @if ($bundleProducts->count())
+            @if ($hasGalleryThumbs)
                 <div class="product-thumbs">
-                    @foreach ($bundleProducts as $index => $product)
+                    {{-- 1) Bundle videos --}}
+                    @foreach ($bundleVideos as $video)
+                        <div class="product-thumb video-thumbnail-wrapper"
+                            data-type="video"
+                            data-src="{{ url($video->file_path) }}"
+                            data-video-type="{{ $video->file_type }}"
+                            style="position: relative; cursor: pointer;"
+                            title="{{ __('Bundle Video') }}">
+                            <video width="100%" height="100%" muted preload="metadata"
+                                style="object-fit: cover; display: block; width: 100%; height: 100%;">
+                                <source src="{{ url($video->file_path) }}" type="video/{{ $video->file_type }}">
+                            </video>
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                                width: 30px; height: 30px; background-color: rgba(44,166,164,0.9); border-radius: 50%;
+                                display: flex; align-items: center; justify-content: center; pointer-events: none; z-index: 10;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="white" style="margin-left: 2px;">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
+                            </div>
+                        </div>
+                    @endforeach
+
+                    {{-- 2) All bundle images (first is default active when present) --}}
+                    @foreach ($bundleImages as $index => $file)
+                        <div class="product-thumb {{ $index === 0 ? 'active' : '' }}"
+                            data-type="image"
+                            data-src="{{ url($file->file_path) }}"
+                            style="cursor: pointer;"
+                            title="{{ $bundle->name }}">
+                            <img src="{{ url($file->file_path) }}"
+                                style="width: 100%; height: 100%; object-fit: cover;"
+                                alt="{{ $bundle->name }}">
+                        </div>
+                    @endforeach
+
+                    {{-- 3) One main image per included product --}}
+                    @foreach ($bundleProducts as $pIndex => $product)
                         @php
-                            $thumb = $product->files->first();
+                            $thumb = optional($product->files)->first();
                             $thumbUrl = $thumb
                                 ? url($thumb->file_path)
                                 : asset('public/assets/product-Placeholder.png');
+                            $isFirstActive = $bundleImages->isEmpty() && $pIndex === 0;
                         @endphp
-                        <div class="product-thumb {{ $index === 0 ? 'active' : '' }}"
+                        <div class="product-thumb {{ $isFirstActive ? 'active' : '' }}"
                             data-type="image"
                             data-src="{{ $thumbUrl }}"
                             style="cursor: pointer;"
@@ -287,17 +341,34 @@
         }
     }
 
-    document.querySelectorAll('.product-thumb[data-type="image"]').forEach(function (thumb) {
+    document.querySelectorAll('.product-thumb').forEach(function (thumb) {
         thumb.addEventListener('click', function () {
+            var type = this.getAttribute('data-type');
             var src = this.getAttribute('data-src');
-            var main = document.getElementById('main-preview-image');
-            if (main && src) {
-                main.src = src;
-            }
+            var mainImage = document.getElementById('main-preview-image');
+            var mainVideo = document.getElementById('main-preview-video');
+
             document.querySelectorAll('.product-thumb').forEach(function (t) {
                 t.classList.remove('active');
             });
             this.classList.add('active');
+
+            if (!mainImage || !mainVideo || !src) {
+                return;
+            }
+
+            if (type === 'video') {
+                mainImage.style.display = 'none';
+                mainVideo.style.display = 'block';
+                mainVideo.querySelector('source').src = src;
+                mainVideo.querySelector('source').type = 'video/' + (this.getAttribute('data-video-type') || 'mp4');
+                mainVideo.load();
+            } else {
+                mainVideo.pause();
+                mainVideo.style.display = 'none';
+                mainImage.style.display = 'block';
+                mainImage.src = src;
+            }
         });
     });
 </script>
