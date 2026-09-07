@@ -160,7 +160,7 @@
                 <span class="featured-price-orig" id="remGuidePriceOrig">$87</span>
                 <span class="featured-price-save" id="remGuidePriceSave">Early Bird &mdash; Save $20</span>
             </div>
-            <a href="#" class="featured-cta">Get the Remediation Guide &rarr;</a>
+            <a href="{{ route('floridaPrograms') }}" class="featured-cta">Get the Remediation Guide &rarr;</a>
             <div class="featured-trust">
                 <span>Instant download</span>
                 <span>Secure checkout</span>

@@ -293,15 +293,15 @@
 
       <!-- AUTH TOGGLE: Sign In / Create Account -->
       <div class="auth-toggle">
-        <button class="auth-btn active" onclick="switchAuth('signin')">Sign In</button>
-        <button class="auth-btn" onclick="switchAuth('create')">Create Account</button>
+        <button type="button" class="auth-btn{{ ($errors->any() && old('signup_source') === 'login_create') ? '' : ' active' }}" onclick="switchAuth('signin')">Sign In</button>
+        <button type="button" class="auth-btn{{ ($errors->any() && old('signup_source') === 'login_create') ? ' active' : '' }}" onclick="switchAuth('create')">Create Account</button>
       </div>
 
       <!-- ==========================================
            SIGN IN (Universal — same for all portals)
            Wired to existing POST /login — backend redirect by role_id
            ========================================== -->
-      <div class="auth-panel active" id="auth-signin">
+      <div class="auth-panel{{ ($errors->any() && old('signup_source') === 'login_create') ? '' : ' active' }}" id="auth-signin">
         <form action="{{ route('login') }}" method="POST" id="loginForm">
           @csrf
           @if ($errors->any())
@@ -345,23 +345,36 @@
 
       <!-- ==========================================
            CREATE ACCOUNT (fields change by portal)
+           Student portal posts to preRegister; CE/Instructor UI only for now
            ========================================== -->
-      <div class="auth-panel" id="auth-create">
+      <div class="auth-panel{{ ($errors->any() && old('signup_source') === 'login_create') ? ' active' : '' }}" id="auth-create">
+        <form action="{{ route('preRegister') }}" method="POST" id="createAccountForm">
+          @csrf
+          <input type="hidden" name="signup_source" value="login_create">
+          <input type="hidden" name="name" id="createFullName" value="{{ old('name') }}">
+
+          @if ($errors->any() && old('signup_source') === 'login_create')
+            <div class="form-group" style="margin-bottom:12px;">
+              @foreach ($errors->all() as $error)
+                <p class="hint" style="color:var(--terracotta);font-size:12px;margin:0 0 4px;">{{ $error }}</p>
+              @endforeach
+            </div>
+          @endif
 
         <!-- Shared fields: Name + Email -->
         <div class="form-row">
           <div class="form-group">
             <label>First Name <span class="req">*</span></label>
-            <input type="text" placeholder="First name">
+            <input type="text" name="first_name" value="{{ old('first_name') }}" placeholder="First name" required autocomplete="given-name">
           </div>
           <div class="form-group">
             <label>Last Name <span class="req">*</span></label>
-            <input type="text" placeholder="Last name">
+            <input type="text" name="last_name" value="{{ old('last_name') }}" placeholder="Last name" required autocomplete="family-name">
           </div>
         </div>
         <div class="form-group">
           <label>Email Address <span class="req">*</span></label>
-          <input type="email" placeholder="you@example.com">
+          <input type="email" name="email" value="{{ old('email') }}" placeholder="you@example.com" required autocomplete="email">
         </div>
 
         <!-- STUDENT-SPECIFIC FIELDS -->
@@ -369,36 +382,36 @@
           <div class="form-row">
             <div class="form-group">
               <label>I am studying for <span class="req">*</span></label>
-              <select id="studentCredential" onchange="handleStudentCredential(this.value)">
-                <option value="" disabled selected>Select credential</option>
-                <option value="rn">RN (Registered Nurse)</option>
-                <option value="pn">PN (Practical Nurse)</option>
-                <option value="cna">CNA (Certified Nursing Assistant)</option>
+              <select id="studentCredential" name="studying_for" onchange="handleStudentCredential(this.value)" required>
+                <option value="" disabled {{ old('studying_for') ? '' : 'selected' }}>Select credential</option>
+                <option value="rn" {{ old('studying_for') === 'rn' ? 'selected' : '' }}>RN (Registered Nurse)</option>
+                <option value="pn" {{ old('studying_for') === 'pn' ? 'selected' : '' }}>PN (Practical Nurse)</option>
+                <option value="cna" {{ old('studying_for') === 'cna' ? 'selected' : '' }}>CNA (Certified Nursing Assistant)</option>
               </select>
             </div>
-            <div class="form-group student-journey-field" id="studentJourneyGroup" style="display:none">
+            <div class="form-group student-journey-field" id="studentJourneyGroup" style="{{ in_array(old('studying_for'), ['rn', 'pn'], true) ? 'display:block' : 'display:none' }}">
               <label>Where are you in your journey? <span class="req">*</span></label>
-              <select id="studentJourney">
-                <option value="" disabled selected>Select your situation</option>
-                <option value="nursing-school">Currently in Nursing School</option>
-                <option value="repeat-tester">Repeat Test-Taker (Failed NCLEX)</option>
-                <option value="reentry">Re-Entry (Dismissed &amp; Coming Back)</option>
+              <select id="studentJourney" name="student_journey">
+                <option value="" disabled {{ old('student_journey') ? '' : 'selected' }}>Select your situation</option>
+                <option value="nursing-school" {{ old('student_journey') === 'nursing-school' ? 'selected' : '' }}>Currently in Nursing School</option>
+                <option value="repeat-tester" {{ old('student_journey') === 'repeat-tester' ? 'selected' : '' }}>Repeat Test-Taker (Failed NCLEX)</option>
+                <option value="reentry" {{ old('student_journey') === 'reentry' ? 'selected' : '' }}>Re-Entry (Dismissed &amp; Coming Back)</option>
               </select>
             </div>
           </div>
         </div>
 
-        <!-- CE-SPECIFIC FIELDS -->
+        <!-- CE-SPECIFIC FIELDS (UI only — not submitted for student signup) -->
         <div class="ce-fields">
           <div class="form-row">
             <div class="form-group">
               <label>FL License Number <span class="req">*</span></label>
-              <input type="text" inputmode="numeric" pattern="[0-9]*" placeholder="e.g. 1234567" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+              <input type="text" inputmode="numeric" pattern="[0-9]*" placeholder="e.g. 1234567" oninput="this.value=this.value.replace(/[^0-9]/g,'')" disabled>
               <p class="hint">Numbers only â€” do not include RN, LPN, or APRN prefix</p>
             </div>
             <div class="form-group">
               <label>License Type <span class="req">*</span></label>
-              <select id="licenseType" onchange="handleLicenseType(this.value)">
+              <select id="licenseType" onchange="handleLicenseType(this.value)" disabled>
                 <option value="" disabled selected>Select type</option>
                 <option value="rn">Registered Nurse (RN)</option>
                 <option value="lpn">Licensed Practical Nurse (LPN)</option>
@@ -413,11 +426,11 @@
             <div class="radio-group">
               <label>Are you a Nationally Certified APRN? <span class="req">*</span></label>
               <label class="radio-option">
-                <input type="radio" name="aprn_certified" value="yes" onchange="handleCertified(true)">
+                <input type="radio" name="aprn_certified_ui" value="yes" onchange="handleCertified(true)" disabled>
                 <span>Yes, I hold an active national certification (ANCC, AANP, NCC, NBCRNA, etc.)</span>
               </label>
               <label class="radio-option">
-                <input type="radio" name="aprn_certified" value="no" onchange="handleCertified(false)">
+                <input type="radio" name="aprn_certified_ui" value="no" onchange="handleCertified(false)" disabled>
                 <span>No</span>
               </label>
               <div class="promo-banner" id="certifiedPromo">
@@ -428,11 +441,11 @@
             <div class="radio-group">
               <label>Are you registered as an Autonomous APRN in Florida? <span class="req">*</span></label>
               <label class="radio-option">
-                <input type="radio" name="aprn_autonomous" value="yes" onchange="handleAutonomous(true)">
+                <input type="radio" name="aprn_autonomous_ui" value="yes" onchange="handleAutonomous(true)" disabled>
                 <span>Yes, I practice without a supervisory protocol</span>
               </label>
               <label class="radio-option">
-                <input type="radio" name="aprn_autonomous" value="no" onchange="handleAutonomous(false)">
+                <input type="radio" name="aprn_autonomous_ui" value="no" onchange="handleAutonomous(false)" disabled>
                 <span>No</span>
               </label>
               <div class="flag-banner" id="autonomousFlag">
@@ -447,33 +460,33 @@
             <p class="consent-label">Legal &amp; Reporting Consents</p>
 
             <label class="consent-item">
-              <input type="checkbox" class="consent-mandatory" onchange="checkConsents()">
+              <input type="checkbox" class="consent-mandatory" onchange="checkConsents()" disabled>
               <span><span class="consent-tag required">Required</span> I certify that the nursing license information provided above is accurate, active, and belongs to me. I understand that typographical errors may result in credit reporting delays or failures with <a href="https://cebroker.com" target="_blank">CE Broker</a>.</span>
             </label>
 
             <label class="consent-item">
-              <input type="checkbox" class="consent-mandatory" onchange="checkConsents()">
+              <input type="checkbox" class="consent-mandatory" onchange="checkConsents()" disabled>
               <span><span class="consent-tag required">Required</span> I authorize Merkaii Xcellence Prep to electronically transmit my course completion data, license number, and registration details to CE Broker and the Florida Department of Health for licensure compliance tracking.</span>
             </label>
 
             <label class="consent-item optional">
-              <input type="checkbox">
+              <input type="checkbox" disabled>
               <span><span class="consent-tag opt">Optional</span> Send me email updates regarding upcoming Florida nursing renewal deadlines, new pharmacology electives, and bundle discounts.</span>
             </label>
           </div>
         </div>
 
-        <!-- INSTRUCTOR-SPECIFIC FIELDS -->
+        <!-- INSTRUCTOR-SPECIFIC FIELDS (UI only) -->
         <div class="instructor-fields">
           <div class="form-row">
             <div class="form-group">
               <label>Credentials / Certification <span class="req">*</span></label>
-              <input type="text" placeholder="e.g. MSN, RN, CNE">
+              <input type="text" placeholder="e.g. MSN, RN, CNE" disabled>
               <p class="hint">Your professional credentials</p>
             </div>
             <div class="form-group">
               <label>Specialty Area <span class="req">*</span></label>
-              <select>
+              <select disabled>
                 <option value="" disabled selected>Select specialty</option>
                 <option value="medsurg">Medical-Surgical</option>
                 <option value="pharm">Pharmacology</option>
@@ -489,17 +502,17 @@
           <div class="form-row">
             <div class="form-group">
               <label>College / University Attended <span class="req">*</span></label>
-              <input type="text" placeholder="e.g. University of Central Florida">
+              <input type="text" placeholder="e.g. University of Central Florida" disabled>
             </div>
             <div class="form-group">
               <label>Year Graduated <span class="req">*</span></label>
-              <input type="text" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" placeholder="e.g. 2018" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+              <input type="text" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" placeholder="e.g. 2018" oninput="this.value=this.value.replace(/[^0-9]/g,'')" disabled>
             </div>
           </div>
           <div class="form-group">
             <label>Upload Resume / CV <span class="req">*</span></label>
             <div class="file-upload">
-              <input type="file" id="resumeUpload" accept=".pdf,.doc,.docx" onchange="handleFileUpload(this)">
+              <input type="file" id="resumeUpload" accept=".pdf,.doc,.docx" onchange="handleFileUpload(this)" disabled>
               <div class="file-upload-display" id="fileDisplay">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                 <span>Click to upload or drag &amp; drop</span>
@@ -513,16 +526,30 @@
         <div class="form-row">
           <div class="form-group">
             <label>Password <span class="req">*</span></label>
-            <input type="password" placeholder="Create a password">
+            <input type="password" name="password" placeholder="Create a password" required minlength="8" autocomplete="new-password">
           </div>
           <div class="form-group">
             <label>Confirm Password <span class="req">*</span></label>
-            <input type="password" placeholder="Confirm password">
+            <input type="password" name="password_confirmation" placeholder="Confirm password" required minlength="8" autocomplete="new-password">
           </div>
         </div>
 
-        <button class="btn-submit student-btn" id="createBtn">CREATE MY ACCOUNT &amp; PROCEED TO COURSES &rarr;</button>
+        @php
+          $createCaptchaKey = saasEnv('NOCAPTCHA_SITEKEY') ?: env('NOCAPTCHA_SITEKEY');
+        @endphp
+        @if (!empty($createCaptchaKey))
+          <div class="form-group" id="createCaptchaWrap">
+            @if (saasEnv('NOCAPTCHA_IS_INVISIBLE') == 'true')
+              {!! NoCaptcha::display(['data-size' => 'invisible']) !!}
+            @else
+              {!! NoCaptcha::display() !!}
+            @endif
+          </div>
+        @endif
+
+        <button type="submit" class="btn-submit student-btn" id="createBtn">CREATE MY ACCOUNT &amp; CONTINUE REGISTRATION &rarr;</button>
         <p class="form-legal">By creating an account you agree to our <a href="{{ route('terms') }}">Terms of Service</a> and <a href="{{ route('customer-help') }}#v-pills-profile-tab-1">Privacy Policy</a>.</p>
+        </form>
       </div>
 
     </div>
@@ -565,6 +592,7 @@ function switchPortal(portal) {
   // Update button styles and consent state
   updateButtons();
   checkConsents();
+  syncStudentFieldRequirements();
 }
 
 function switchAuth(mode) {
@@ -598,8 +626,8 @@ function handleLicenseType(value) {
   } else {
     aprnFields.classList.remove('visible');
     // Reset radio buttons and banners
-    document.querySelectorAll('input[name="aprn_certified"]').forEach(r => r.checked = false);
-    document.querySelectorAll('input[name="aprn_autonomous"]').forEach(r => r.checked = false);
+    document.querySelectorAll('input[name="aprn_certified_ui"]').forEach(r => r.checked = false);
+    document.querySelectorAll('input[name="aprn_autonomous_ui"]').forEach(r => r.checked = false);
     document.getElementById('certifiedPromo').classList.remove('visible');
     document.getElementById('autonomousFlag').classList.remove('visible');
   }
@@ -628,11 +656,29 @@ function handleAutonomous(isAutonomous) {
 // Student credential â€” show journey dropdown for RN/PN, hide for CNA
 function handleStudentCredential(value) {
   const journeyGroup = document.getElementById('studentJourneyGroup');
+  const journey = document.getElementById('studentJourney');
   if (value === 'rn' || value === 'pn') {
     journeyGroup.style.display = 'block';
+    if (journey) journey.required = currentPortal === 'student';
   } else {
     journeyGroup.style.display = 'none';
-    document.getElementById('studentJourney').selectedIndex = 0;
+    if (journey) {
+      journey.required = false;
+      journey.selectedIndex = 0;
+    }
+  }
+}
+
+function syncStudentFieldRequirements() {
+  const cred = document.getElementById('studentCredential');
+  const journey = document.getElementById('studentJourney');
+  if (!cred) return;
+  if (currentPortal === 'student') {
+    cred.required = true;
+    handleStudentCredential(cred.value);
+  } else {
+    cred.required = false;
+    if (journey) journey.required = false;
   }
 }
 
@@ -664,7 +710,25 @@ function checkConsents() {
 }
 
 // Initialize consent state on load
-document.addEventListener('DOMContentLoaded', checkConsents);
+document.addEventListener('DOMContentLoaded', function () {
+  checkConsents();
+  syncStudentFieldRequirements();
+
+  const createForm = document.getElementById('createAccountForm');
+  if (createForm) {
+    createForm.addEventListener('submit', function (e) {
+      if (currentPortal !== 'student') {
+        e.preventDefault();
+        alert('CE Professional and Instructor signup will be available soon. Please use the Student portal to create an account.');
+        return false;
+      }
+      const first = (createForm.querySelector('[name="first_name"]') || {}).value || '';
+      const last = (createForm.querySelector('[name="last_name"]') || {}).value || '';
+      const fullName = document.getElementById('createFullName');
+      if (fullName) fullName.value = (first + ' ' + last).trim();
+    });
+  }
+});
 
 // Same site preloader hide behavior as other frontend pages
 (function () {
@@ -689,7 +753,7 @@ document.addEventListener('DOMContentLoaded', checkConsents);
 <script src="{{ asset('public/js/jquery-3.5.1.min.js') }}{{ assetVersion() }}"></script>
 <script src="{{ asset('public/js/toastr.min.js') }}{{ assetVersion() }}"></script>
 {!! Toastr::message() !!}
-@if (saasEnv('NOCAPTCHA_FOR_LOGIN') == 'true')
+@if (saasEnv('NOCAPTCHA_FOR_LOGIN') == 'true' || !empty(saasEnv('NOCAPTCHA_SITEKEY') ?: env('NOCAPTCHA_SITEKEY')))
   {!! NoCaptcha::renderJs() !!}
   <script>
     function onLoginSubmit(token) {
