@@ -395,6 +395,46 @@
   }
   .mxp-confirm .mxp-share-btn svg { width: 18px; height: 18px; }
 
+  .mxp-confirm .mxp-footer-minimal {
+    background: var(--mxp-teal-darkest);
+    padding: 30px 0;
+  }
+  .mxp-confirm .mxp-footer-minimal-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .mxp-confirm .mxp-footer-minimal-info {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .mxp-confirm .mxp-footer-minimal-info a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+  }
+  .mxp-confirm .mxp-footer-minimal-info a:hover {
+    color: var(--mxp-terracotta);
+  }
+  .mxp-confirm .mxp-footer-minimal-links {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .mxp-confirm .mxp-footer-minimal-links a {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5) !important;
+    text-decoration: none !important;
+    transition: color 0.2s;
+  }
+  .mxp-confirm .mxp-footer-minimal-links a:hover {
+    color: var(--mxp-terracotta) !important;
+  }
+
   @media (max-width: 900px) {
     .mxp-confirm .mxp-confirm-grid { grid-template-columns: 1fr; }
     .mxp-confirm .mxp-order-summary { position: static; }
@@ -411,5 +451,10 @@
     .mxp-confirm .mxp-btn-primary,
     .mxp-confirm .mxp-btn-secondary { text-align: center; }
     .mxp-confirm .mxp-progress-line { width: 28px; margin: 0 8px; }
+    .mxp-confirm .mxp-footer-minimal-inner {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 0 16px;
+    }
   }
 </style>

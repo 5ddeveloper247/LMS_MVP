@@ -6,13 +6,16 @@
     <link href="{{ asset('public/frontend/infixlmstheme/css/select2.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('public/frontend/infixlmstheme/css/checkout.css') }}" rel="stylesheet" />
     @include(theme('partials.shop-checkout-styles'))
+    {{-- Hide master default footer on checkout only; shop-flow footer is included below --}}
+    <style>.aoraeditor-footer { display: none !important; }</style>
 @endsection
 @section('mainContent')
     <x-checkout-page-section :request="$request" />
+    @include(theme('partials.shop-flow-footer'))
 @endsection
+
 @section('js')
     <script src="{{ asset('public/frontend/infixlmstheme/js/select2.min.js') }}"></script>
     <script src="{{ asset('public/frontend/infixlmstheme/js/checkout.js') }}"></script>
     <script src="{{ asset('public/frontend/infixlmstheme/js/city.js') }}"></script>
-    @include(theme('partials._custom_footer'))
 @endsection

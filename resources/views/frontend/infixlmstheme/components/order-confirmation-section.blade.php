@@ -180,4 +180,19 @@
             </div>
         </div>
     </section>
+
+    <footer class="mxp-footer-minimal" role="contentinfo">
+        <div class="mxp-footer-minimal-inner">
+            <div class="mxp-footer-minimal-info">
+                &copy; Merakii International Societe, Inc ·
+                <a href="tel:8632508764">(863) 250-8764</a> ·
+                <a href="mailto:contact@merkaiixcelprep.com">contact@merkaiixcelprep.com</a>
+            </div>
+            <div class="mxp-footer-minimal-links">
+                <a href="{{ route('customer-help') }}#v-pills-profile-tab-1">{{ __('Privacy') }}</a>
+                <a href="{{ route('terms') }}">{{ __('Terms') }}</a>
+                <a href="{{ route('disclaimer') }}">{{ __('Disclaimer') }}</a>
+            </div>
+        </div>
+    </footer>
 </div>
