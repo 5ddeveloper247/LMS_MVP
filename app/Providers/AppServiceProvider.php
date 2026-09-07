@@ -191,6 +191,7 @@ class AppServiceProvider extends ServiceProvider
                 theme('pages.courses'),
                 theme('pages.free_courses'),
                 theme('partials._menu'),
+                theme('authnew.login'),
                 theme('pages.quizzes'),
                 theme('pages.classes'),
                 theme('pages.search'),
