@@ -458,16 +458,32 @@
 
     .product-image {
       aspect-ratio: 4/3;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 100%;
       color: var(--white);
       font-family: var(--serif);
       font-style: italic;
       font-size: 15px;
       text-align: center;
-      padding: 24px;
+      padding: 8px;
       position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-sizing: border-box;
+    }
+
+    .product-image > a {
+      position: absolute;
+      inset: 8px;
+      display: block;
+      overflow: hidden;
+    }
+
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
     }
 
     .product-image.guides {
