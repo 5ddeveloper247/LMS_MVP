@@ -449,84 +449,88 @@
     $shopBundles = collect($bundles ?? []);
     $bundleIndex = 0;
 @endphp
-@if ($shopBundles->count())
-    <section class="bundles-section" id="bundles">
-        <div class="section-header">
-            <p class="section-eyebrow">Save More</p>
-            <h2 class="section-title">Bundles &amp; Savings</h2>
-            <p class="section-subtitle">Combine study resources for the best value. Every bundle is instant download —
-                start
-                studying the minute you purchase.</p>
-        </div>
+<section class="bundles-section" id="bundles">
+    <div class="section-header">
+        <p class="section-eyebrow">Save More</p>
+        <h2 class="section-title">Bundles &amp; Savings</h2>
+        <p class="section-subtitle">Combine study resources for the best value. Every bundle is instant download —
+            start
+            studying the minute you purchase.</p>
+    </div>
 
-        <div class="bundles-grid" id="shop-grid-bundles">
-            @foreach ($shopBundles as $index => $bundle)
-                @php
-                    $bundleIndex++;
-                    $components = collect([
-                        $bundle->component_1,
-                        $bundle->component_2,
-                        $bundle->component_3,
-                        $bundle->component_4,
-                    ])->map(function ($item) {
-                        return trim(strip_tags((string) $item));
-                    })->filter(function ($item) {
-                        return $item !== '';
-                    })->values();
+    <div class="bundles-grid" id="shop-grid-bundles">
+        @forelse ($shopBundles as $index => $bundle)
+            @php
+                $bundleIndex++;
+                $components = collect([
+                    $bundle->component_1,
+                    $bundle->component_2,
+                    $bundle->component_3,
+                    $bundle->component_4,
+                ])->map(function ($item) {
+                    return trim(strip_tags((string) $item));
+                })->filter(function ($item) {
+                    return $item !== '';
+                })->values();
 
-                    $description = trim(strip_tags((string) ($bundle->short_description ?? '')));
-                    $salePrice = (float) ($bundle->total_amount ?? 0);
-                    $discountAmount = (float) ($bundle->total_discount ?? 0);
-                    $originalPrice = $discountAmount > 0 ? $salePrice + $discountAmount : null;
-                    $isFeatured = (bool) ($bundle->is_featured ?? false);
-                @endphp
+                $description = trim(strip_tags((string) ($bundle->short_description ?? '')));
+                $salePrice = (float) ($bundle->total_amount ?? 0);
+                $discountAmount = (float) ($bundle->total_discount ?? 0);
+                $originalPrice = $discountAmount > 0 ? $salePrice + $discountAmount : null;
+                $isFeatured = (bool) ($bundle->is_featured ?? false);
+            @endphp
 
-                <div class="bundle-card{{ $isFeatured ? ' featured' : '' }}{{ $bundleIndex > 3 ? ' shop-card-hidden' : '' }}">
-                    @if ($isFeatured)
-                        <span class="bundle-badge">Best Value</span>
-                    @endif
+            <div class="bundle-card{{ $isFeatured ? ' featured' : '' }}{{ $bundleIndex > 3 ? ' shop-card-hidden' : '' }}">
+                @if ($isFeatured)
+                    <span class="bundle-badge">Best Value</span>
+                @endif
 
-                    <h3 class="bundle-name">{{ $bundle->name }}</h3>
+                <h3 class="bundle-name">{{ $bundle->name }}</h3>
 
-                    @if ($description !== '')
-                        <p class="bundle-desc">{{ \Illuminate\Support\Str::limit($description, 220) }}</p>
-                    @else
-                        <p class="bundle-desc" style="visibility:hidden;min-height:44px;">&nbsp;</p>
-                    @endif
+                @if ($description !== '')
+                    <p class="bundle-desc">{{ \Illuminate\Support\Str::limit($description, 220) }}</p>
+                @else
+                    <p class="bundle-desc" style="visibility:hidden;min-height:44px;">&nbsp;</p>
+                @endif
 
-                    <ul class="bundle-includes" style="min-height:120px;">
-                        @forelse ($components as $component)
-                            <li @class(['coming' => \Illuminate\Support\Str::startsWith($component, '+')])>{{ $component }}</li>
-                        @empty
-                            {{-- Keep card height stable when no components --}}
-                            <li style="visibility:hidden;">&nbsp;</li>
-                        @endforelse
-                    </ul>
+                <ul class="bundle-includes" style="min-height:120px;">
+                    @forelse ($components as $component)
+                        <li @class(['coming' => \Illuminate\Support\Str::startsWith($component, '+')])>{{ $component }}</li>
+                    @empty
+                        {{-- Keep card height stable when no components --}}
+                        <li style="visibility:hidden;">&nbsp;</li>
+                    @endforelse
+                </ul>
 
-                    <div class="bundle-price-row">
-                        <span class="bundle-price">{{ getPriceFormat($salePrice) }}</span>
-                        @if ($originalPrice)
-                            <span class="bundle-original">{{ getPriceFormat($originalPrice) }}</span>
-                            @if ($bundle->discount_type === 'percent' && (float) $bundle->discount > 0)
-                                <span class="bundle-savings">Save {{ rtrim(rtrim(number_format((float) $bundle->discount, 2, '.', ''), '0'), '.') }}%</span>
-                            @elseif ($discountAmount > 0)
-                                <span class="bundle-savings">Save {{ getPriceFormat($discountAmount) }}</span>
-                            @endif
+                <div class="bundle-price-row">
+                    <span class="bundle-price">{{ getPriceFormat($salePrice) }}</span>
+                    @if ($originalPrice)
+                        <span class="bundle-original">{{ getPriceFormat($originalPrice) }}</span>
+                        @if ($bundle->discount_type === 'percent' && (float) $bundle->discount > 0)
+                            <span class="bundle-savings">Save {{ rtrim(rtrim(number_format((float) $bundle->discount, 2, '.', ''), '0'), '.') }}%</span>
+                        @elseif ($discountAmount > 0)
+                            <span class="bundle-savings">Save {{ getPriceFormat($discountAmount) }}</span>
                         @endif
-                    </div>
-
-                    <a href="{{ route('shop.bundle.detail', $bundle->id) }}" class="bundle-cta primary">Get the Bundle &rarr;</a>
+                    @endif
                 </div>
-            @endforeach
-        </div>
 
-        @if ($bundleIndex > 3)
-            <div class="shop-load-more-wrap">
-                <button type="button" class="shop-load-more" data-grid="shop-grid-bundles">Load More</button>
+                <a href="{{ route('shop.bundle.detail', $bundle->id) }}" class="bundle-cta primary">Get the Bundle &rarr;</a>
             </div>
-        @endif
-    </section>
-@endif 
+        @empty
+            <div class="text-center py-5" style="grid-column: 1 / -1;">
+                <img src="{{ asset('public/frontend/infixlmstheme/img/not-found.png') }}" alt="Not Found"
+                    style="width: 50px;">
+                <h4 class="mt-3">No Product Found</h4>
+            </div>
+        @endforelse
+    </div>
+
+    @if ($bundleIndex > 3)
+        <div class="shop-load-more-wrap">
+            <button type="button" class="shop-load-more" data-grid="shop-grid-bundles">Load More</button>
+        </div>
+    @endif
+</section> 
 
 <!-- MERCHANDISE (Coming Soon) -->
 <section class="products-section" style="background: var(--cream); padding-top: 60px;">
