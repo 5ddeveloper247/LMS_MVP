@@ -46,13 +46,13 @@
                                                             <div class="mr-5">
                                                                 <label for="type_product" class="d-flex align-items-center">
                                                                     <input type="radio" id="type_product" name="type" value="1" checked>
-                                                                    <span class="checkmark mr-2"></span> Product
+                                                                    <span class="checkmark mr-2"></span> Merchandise
                                                                 </label>
                                                             </div>
                                                             <div class="mr-4">
                                                                 <label for="type_book" class="d-flex align-items-center">
                                                                     <input type="radio" id="type_book" name="type" value="2">
-                                                                    <span class="checkmark mr-2"></span> Book
+                                                                    <span class="checkmark mr-2"></span> Books and Journals
                                                                 </label>
                                                             </div>
                                                             <div class="mr-4">

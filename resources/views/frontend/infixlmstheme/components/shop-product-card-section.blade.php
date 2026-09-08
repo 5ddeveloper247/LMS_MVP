@@ -215,6 +215,9 @@
                                 <div class="product-body">
                                     <p class="product-tag">{{ $product->sub_title }}</p>
                                     <h3>{{ $product->title }}</h3>
+                                    @if (!empty($product->short_description))
+                                        <p>{{ \Illuminate\Support\Str::limit(strip_tags($product->short_description), 140) }}</p>
+                                    @endif
 
                                     <div class="product-footer">
                                         @if ($discountPrice > 0)
@@ -294,6 +297,9 @@
                                 <div class="product-body">
                                     <p class="product-tag">{{ $product->sub_title }}</p>
                                     <h3>{{ $product->title }}</h3>
+                                    @if (!empty($product->short_description))
+                                        <p>{{ \Illuminate\Support\Str::limit(strip_tags($product->short_description), 140) }}</p>
+                                    @endif
 
                                     <div class="product-footer">
                                         @if ($discountPrice > 0)
@@ -368,6 +374,9 @@
                                 <div class="product-body">
                                     <p class="product-tag">{{ $product->sub_title }}</p>
                                     <h3>{{ $product->title }}</h3>
+                                    @if (!empty($product->short_description))
+                                        <p>{{ \Illuminate\Support\Str::limit(strip_tags($product->short_description), 140) }}</p>
+                                    @endif
 
                                     <div class="product-footer">
                                         @if ($discountPrice > 0)
@@ -530,6 +539,9 @@
                                 <div class="product-body">
                                     <p class="product-tag">{{ $product->sub_title }}</p>
                                     <h3>{{ $product->title }}</h3>
+                                    @if (!empty($product->short_description))
+                                        <p>{{ \Illuminate\Support\Str::limit(strip_tags($product->short_description), 140) }}</p>
+                                    @endif
 
                                     <div class="product-footer">
                                         @if ($discountPrice > 0)
@@ -641,7 +653,10 @@
                                 <div class="product-body">
                                     <p class="product-tag">{{ $product->sub_title }}</p>
                                     <h3>{{ $product->title }}</h3>
-                                
+                                    @if (!empty($product->short_description))
+                                        <p>{{ \Illuminate\Support\Str::limit(strip_tags($product->short_description), 140) }}</p>
+                                    @endif
+
                                     <div class="product-footer">
                                         @if ($discountPrice > 0)
                                             <div>
