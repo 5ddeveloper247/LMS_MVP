@@ -26,10 +26,11 @@
 .nav-home{background:var(--teal-darkest);color:var(--white);padding:10px 22px;border-radius:6px;text-decoration:none;font-size:14px;font-weight:600;transition:background .2s;white-space:nowrap}
 .nav-home:hover{background:var(--teal-deep)}
 
-.login-page{flex:1;display:flex;align-items:center;justify-content:center;padding:50px 24px}
-.login-container{max-width:1060px;width:100%;display:grid;grid-template-columns:380px 1fr;border-radius:24px;overflow:hidden;box-shadow:var(--shadow-lg);background:var(--white);min-height:640px}
+.login-page{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:50px 24px;overflow:hidden}
+.login-container{max-width:1060px;width:100%;display:grid;grid-template-columns:380px 1fr;border-radius:24px;overflow:hidden;box-shadow:var(--shadow-lg);background:var(--white);height:700px}
 
 .brand-panel{padding:52px 40px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--teal-darkest) 0%,var(--teal-deep) 100%)}
+
 .brand-panel::before{content:'';position:absolute;top:-80px;right:-80px;width:280px;height:280px;background:radial-gradient(circle,rgba(245,237,224,.12) 0%,transparent 70%);border-radius:50%}
 .brand-panel>*{position:relative;z-index:1}
 .brand-icon{width:52px;height:52px;border-radius:14px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;margin-bottom:24px}
@@ -43,7 +44,8 @@
 .brand-tagline{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--cream);opacity:.65}
 .brand-motto{font-family:var(--serif);font-style:italic;font-size:12px;color:rgba(245,237,224,.45);margin-top:4px}
 
-.form-panel{padding:44px 44px;display:flex;flex-direction:column;max-height:calc(100vh - 140px);overflow-y:auto}
+.form-panel{padding:44px 44px;display:flex;flex-direction:column;height:100%;overflow-y:auto}
+
 .form-panel-title{font-family:var(--serif);font-size:28px;color:var(--teal-darkest);margin-bottom:6px}
 .form-panel-sub{font-size:13px;color:var(--charcoal-soft);margin-bottom:22px}
 
