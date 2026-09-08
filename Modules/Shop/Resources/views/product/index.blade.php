@@ -26,7 +26,7 @@ shop_products
                     <ul class="nav nav-tabs no-bottom-border mt-sm-md-20 mb-10 ml-3 flex-wrap" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link {{ $activeShopTab === 'shop_books' ? 'active' : '' }}" href="#shop_books" role="tab" data-toggle="tab"
-                                id="tutors">{{ __('Books') }}</a>
+                                id="tutors">{{ __('Books and Journals') }}</a>
                         </li>
 
                         <li class="nav-item">
@@ -39,7 +39,7 @@ shop_products
 
                         <li class="nav-item">
                             <a class="nav-link {{ $activeShopTab === 'shop_products' ? 'active' : '' }}" href="#shop_products" role="tab"
-                                data-toggle="tab">{{ __('Products') }}</a>
+                                data-toggle="tab">{{ __('Merchandise') }}</a>
                         </li>
                     </ul>
                 </div>
@@ -70,7 +70,7 @@ shop_products
                         <div class="col-12">
                             <div class="box_header common_table_header">
                                 <div class="main-title d-md-flex">
-                                    <h3 class="mr-30 mb_xs_15px mb_sm_20px mb-0">{{ __('Books') }}
+                                    <h3 class="mr-30 mb_xs_15px mb_sm_20px mb-0">{{ __('Books and Journals') }}
                                         {{ __('common.List') }}
                                     </h3>
                                     <ul class="d-flex">
@@ -211,7 +211,7 @@ shop_products
                         <div class="col-12">
                             <div class="box_header common_table_header">
                                 <div class="main-title d-md-flex">
-                                    <h3 class="mr-30 mb_xs_15px mb_sm_20px mb-0">{{ __('Products') }}
+                                    <h3 class="mr-30 mb_xs_15px mb_sm_20px mb-0">{{ __('Merchandise') }}
                                         {{ __('common.List') }}
                                     </h3>
 
