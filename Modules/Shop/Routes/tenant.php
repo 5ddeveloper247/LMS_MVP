@@ -39,6 +39,7 @@ Route::group(['prefix' => 'admin/shop', 'middleware' => ['auth', 'admin']], func
     Route::get('order/getAllOrders', 'ShopController@getAllOrdersData')->name('order.getAll');
     Route::get('order/getAllRefundRequest', 'ShopController@getAllRefundRequestData')->name('order.getAllRefundReq');
     Route::get('order/view/{id}', 'ShopController@viewOrderDetail')->name('order.view');
+    Route::get('order/view-bundle/{tracking}/{bundleId}', 'ShopController@viewBundleOrderDetail')->name('order.view.bundle');
     Route::post('order/changeStatus', 'ShopController@changeOrderStatus')->name('order.update_status');
     Route::post('order/changePaymentStatus', 'ShopController@changeOrderPaymentStatus')->name('order.update_payment_status');
 

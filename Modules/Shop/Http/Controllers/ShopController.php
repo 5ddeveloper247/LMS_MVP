@@ -92,9 +92,55 @@ class ShopController extends Controller
 
     public function viewOrderDetail($id)
     {
-        $orderDetail = ShopOrder::where('id', $id)->with('product')->first();
+        $orderDetail = ShopOrder::where('id', $id)
+            ->with(['product.files', 'shopBundle', 'checkout.billing.countryDetails', 'user'])
+            ->first();
+
+        if (empty($orderDetail)) {
+            Toastr::error(trans('Order not found'), trans('common.Failed'));
+            return redirect()->route('shop.orders');
+        }
+
+        // Bundle line items are viewed as one order (same as student portal)
+        if (!empty($orderDetail->shop_bundle_id)) {
+            return redirect()->route('order.view.bundle', [
+                $orderDetail->tracking,
+                $orderDetail->shop_bundle_id,
+            ]);
+        }
 
         return view('shop::order_detail', get_defined_vars());
+    }
+
+    public function viewBundleOrderDetail($tracking, $bundleId)
+    {
+        $orderLines = ShopOrder::where('tracking', $tracking)
+            ->where('shop_bundle_id', $bundleId)
+            ->with(['product.files', 'shopBundle', 'checkout.billing.countryDetails', 'user'])
+            ->orderBy('id')
+            ->get();
+
+        if ($orderLines->isEmpty()) {
+            Toastr::error(trans('Order not found'), trans('common.Failed'));
+            return redirect()->route('shop.orders');
+        }
+
+        $orderDetail = $orderLines->first();
+        $bundle = $orderDetail->shopBundle;
+        $subtotal = $orderLines->sum(function ($line) {
+            return (float) $line->purchase_price + (float) $line->discount_amount;
+        });
+        $discountTotal = $orderLines->sum('discount_amount');
+        $grandTotal = $orderLines->sum('purchase_price');
+
+        return view('shop::order_bundle_detail', compact(
+            'orderLines',
+            'orderDetail',
+            'bundle',
+            'subtotal',
+            'discountTotal',
+            'grandTotal'
+        ));
     }
     
     public function changeOrderStatus(Request $request)
@@ -126,17 +172,34 @@ class ShopController extends Controller
                 return redirect()->back();
             }
 
-            $order->status = $request->order_status;
-            $order->save();
+            // Bundle purchases: update every line that shares tracking + shop_bundle_id
+            if (!empty($order->shop_bundle_id)) {
+                ShopOrder::where('tracking', $order->tracking)
+                    ->where('shop_bundle_id', $order->shop_bundle_id)
+                    ->update(['status' => $request->order_status]);
+                $order->refresh();
+            } else {
+                $order->status = $request->order_status;
+                $order->save();
+            }
 
             $user = $order->user ?? '';
             // $user->email = 'hamzawaheed195@gmail.com';
             // dd($user);
             if(!empty($user) && !empty($order)){
+                $title = !empty($order->shop_bundle_id)
+                    ? ($order->shopBundle->name ?? 'Bundle')
+                    : ($order->product->title ?? '');
+                $amount = !empty($order->shop_bundle_id)
+                    ? ShopOrder::where('tracking', $order->tracking)
+                        ->where('shop_bundle_id', $order->shop_bundle_id)
+                        ->sum('purchase_price')
+                    : ($order->purchase_price ?? 0);
+
                 $codes = [
                     'order_no' => 'order#'.$order->id,
-                    'title' => $order->product->title ?? '',
-                    'amount' =>  number_format($order->purchase_price ?? 0, 2),
+                    'title' => $title,
+                    'amount' =>  number_format($amount ?? 0, 2),
                     'currency' => '$',
                     'payment_status' => $order->payment_status_label ?? 'N/A',
                     'order_status' => $order->status_label ?? '',
@@ -225,13 +288,34 @@ class ShopController extends Controller
 
             $order->save();
 
+            // Bundle purchases: keep payment_status in sync on all lines
+            if (!empty($order->shop_bundle_id)) {
+                $bundleUpdate = [
+                    'payment_status' => $order->payment_status,
+                    'refund_cancel_reason' => $order->refund_cancel_reason,
+                ];
+                ShopOrder::where('tracking', $order->tracking)
+                    ->where('shop_bundle_id', $order->shop_bundle_id)
+                    ->where('id', '!=', $order->id)
+                    ->update($bundleUpdate);
+            }
+
             $user = $order->user ?? '';
             // $user->email = 'hamzawaheed195@gmail.com';
             if(!empty($user) && !empty($order)){
+                $title = !empty($order->shop_bundle_id)
+                    ? ($order->shopBundle->name ?? 'Bundle')
+                    : ($order->product->title ?? '');
+                $amount = !empty($order->shop_bundle_id)
+                    ? ShopOrder::where('tracking', $order->tracking)
+                        ->where('shop_bundle_id', $order->shop_bundle_id)
+                        ->sum('purchase_price')
+                    : ($order->purchase_price ?? 0);
+
                 $codes = [
                     'order_no' => 'order#'.$order->id,
-                    'title' => $order->product->title ?? '',
-                    'amount' =>  number_format($order->purchase_price ?? 0, 2),
+                    'title' => $title,
+                    'amount' =>  number_format($amount ?? 0, 2),
                     'currency' => '$',
                     'payment_status' => $order->payment_status_label ?? 'N/A',
                     'order_status' => $order->status_label ?? '',
@@ -303,64 +387,47 @@ class ShopController extends Controller
 
     public function getAllOrdersData(Request $request)
     {
-        
-        $query = ShopOrder::query();
-        $query->whereIn('payment_status', [0,1]);
-        
-        return Datatables::of($query)
-            ->addIndexColumn()
-            ->editColumn('order_number', function ($query) {
-                return 'order#'.$query->id ?? '';
-            })
-            ->editColumn('username', function ($query) {
-                $firstname = $query->checkout->billing->first_name ?? '';
-                $lastname = $query->checkout->billing->last_name ?? '';
-                return $firstname . ' ' . $lastname;
-            })
-            ->addColumn('product_title', function ($query) {
-                return $query->product->title ?? '';
-            })
-            ->addColumn('product_sub_title', function ($query) {
-                return $query->product->sub_title ?? '';
-            })
-            ->addColumn('purchase_price', function ($query) {
-                return '$' . number_format($query->purchase_price ?? 0, 2);
-            })
-            ->addColumn('discount', function ($query) {
-                return '$' . number_format($query->discount_amount ?? 0, 2);
-            })
-            ->addColumn('order_status', function ($query) {
-                return $query->status_label  ?? '';
-            })
-            ->addColumn('payment_status', function ($query) {
-                return view('shop::partials._td_status_order', compact('query'));
-            })
-            ->addColumn('action', function ($query) {
-                return view('shop::partials._td_action_order', compact('query'));
-            })
-            ->rawColumns(['order_number', 'username', 'product_title', 'product_sub_title','order_amount','discount','order_status','payment_status','action'])->make(true);
+        return $this->makeOrdersDataTable([0, 1]);
     }
 
     public function getAllRefundRequestData(Request $request)
     {
-        
-        $query = ShopOrder::query();
-        $query->whereIn('payment_status', [2,3,4]);
-        
-        return Datatables::of($query)
+        return $this->makeOrdersDataTable([2, 3, 4]);
+    }
+
+    /**
+     * One DataTable row per standalone product order, or one row per bundle purchase
+     * (grouped by tracking + shop_bundle_id), matching the student My Orders behaviour.
+     */
+    protected function makeOrdersDataTable(array $paymentStatuses)
+    {
+        $rows = $this->buildGroupedAdminOrderRows($paymentStatuses);
+
+        return Datatables::of($rows)
             ->addIndexColumn()
             ->editColumn('order_number', function ($query) {
-                return 'order#'.$query->id ?? '';
+                if (!empty($query->is_bundle)) {
+                    return 'bundle#' . ($query->id ?? '');
+                }
+                return 'order#' . ($query->id ?? '');
             })
             ->editColumn('username', function ($query) {
                 $firstname = $query->checkout->billing->first_name ?? '';
                 $lastname = $query->checkout->billing->last_name ?? '';
-                return $firstname . ' ' . $lastname;
+                return trim($firstname . ' ' . $lastname);
             })
             ->addColumn('product_title', function ($query) {
+                if (!empty($query->is_bundle)) {
+                    $name = $query->bundle_name ?? 'Bundle';
+                    $count = (int) ($query->items_count ?? 0);
+                    return e($name) . ' <span class="badge badge-info">Bundle · ' . $count . ' items</span>';
+                }
                 return $query->product->title ?? '';
             })
             ->addColumn('product_sub_title', function ($query) {
+                if (!empty($query->is_bundle)) {
+                    return '';
+                }
                 return $query->product->sub_title ?? '';
             })
             ->addColumn('purchase_price', function ($query) {
@@ -378,6 +445,54 @@ class ShopController extends Controller
             ->addColumn('action', function ($query) {
                 return view('shop::partials._td_action_order', compact('query'));
             })
-            ->rawColumns(['order_number', 'username', 'product_title', 'product_sub_title','order_amount','discount','order_status','payment_status','action'])->make(true);
+            ->rawColumns(['order_number', 'username', 'product_title', 'product_sub_title', 'order_amount', 'discount', 'order_status', 'payment_status', 'action'])
+            ->make(true);
+    }
+
+    protected function buildGroupedAdminOrderRows(array $paymentStatuses)
+    {
+        $orders = ShopOrder::query()
+            ->whereIn('payment_status', $paymentStatuses)
+            ->with(['product', 'shopBundle', 'checkout.billing', 'user'])
+            ->latest('id')
+            ->get();
+
+        $standalone = $orders->filter(function ($order) {
+            return empty($order->shop_bundle_id);
+        })->values();
+
+        $bundleRows = $orders->filter(function ($order) {
+            return !empty($order->shop_bundle_id);
+        })->groupBy(function ($order) {
+            return ($order->tracking ?? '') . '|' . $order->shop_bundle_id;
+        })->map(function ($lines) {
+            $first = $lines->sortBy('id')->first();
+            $row = new \stdClass();
+            $row->id = $first->id;
+            $row->is_bundle = true;
+            $row->tracking = $first->tracking;
+            $row->shop_bundle_id = $first->shop_bundle_id;
+            $row->user_id = $first->user_id;
+            $row->purchase_price = $lines->sum('purchase_price');
+            $row->discount_amount = $lines->sum('discount_amount');
+            $row->status = $first->status;
+            $row->payment_status = $first->payment_status;
+            $row->status_label = $first->status_label;
+            $row->payment_status_label = $first->payment_status_label;
+            $row->checkout = $first->checkout;
+            $row->user = $first->user;
+            $row->product = $first->product;
+            $row->shopBundle = $first->shopBundle;
+            $row->bundle_name = $first->shopBundle->name ?? 'Bundle';
+            $row->items_count = $lines->count();
+            $row->created_at = $first->created_at;
+            return $row;
+        })->values();
+
+        return $standalone->concat($bundleRows)
+            ->sortByDesc(function ($row) {
+                return $row->id ?? 0;
+            })
+            ->values();
     }
 }
