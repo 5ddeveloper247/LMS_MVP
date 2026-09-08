@@ -464,7 +464,7 @@
       font-style: italic;
       font-size: 15px;
       text-align: center;
-      padding: 8px;
+      padding: 0;
       position: relative;
       overflow: hidden;
       flex-shrink: 0;
@@ -473,7 +473,7 @@
 
     .product-image > a {
       position: absolute;
-      inset: 8px;
+      inset: 0;
       display: block;
       overflow: hidden;
     }
