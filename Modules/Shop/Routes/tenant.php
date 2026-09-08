@@ -17,9 +17,23 @@ Route::group(['prefix' => 'admin/shop', 'middleware' => ['auth', 'admin']], func
     Route::get('product/create', 'ProductController@create')->name('product.create');
     Route::get('product/getAllProducts', 'ProductController@getAllProductsData')->name('product.getAll');
     Route::get('product/getAllBooks', 'ProductController@getAllBooksData')->name('book.getAll');
+    Route::get('product/getAllStudyGuides', 'ProductController@getAllStudyGuidesData')->name('studyGuide.getAll');
+    Route::get('product/getAllStudyTools', 'ProductController@getAllStudyToolsData')->name('studyTool.getAll');
     Route::get('product/edit/{id}', 'ProductController@edit')->name('product.edit');
     Route::post('product/destroy', 'ProductController@destroy')->name('product.delete');
     Route::post('product/file/destroy', 'ProductController@destroyFile')->name('product.file.delete');
+    Route::get('product/changeStatus', 'ProductController@changeStatus')->name('product.changeStatus');
+
+    // Savings & Bundles
+    Route::get('bundle', 'BundleController@index')->name('bundle.index');
+    Route::get('bundle/create', 'BundleController@create')->name('bundle.create');
+    Route::post('bundle', 'BundleController@store')->name('bundle.store');
+    Route::post('bundle/update', 'BundleController@update')->name('bundle.update');
+    Route::get('bundle/edit/{id}', 'BundleController@edit')->name('bundle.edit');
+    Route::post('bundle/destroy', 'BundleController@destroy')->name('bundle.delete');
+    Route::post('bundle/file/destroy', 'BundleController@destroyFile')->name('bundle.file.delete');
+    Route::get('bundle/getAll', 'BundleController@getAllData')->name('bundle.getAll');
+    Route::get('bundle/changeStatus', 'BundleController@changeStatus')->name('bundle.changeStatus');
 
     Route::get('orders', 'ShopController@index')->name('shop.orders');
     Route::get('order/getAllOrders', 'ShopController@getAllOrdersData')->name('order.getAll');

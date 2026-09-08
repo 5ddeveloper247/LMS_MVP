@@ -39,6 +39,7 @@ use Modules\AuthorizeNetPayment\Http\Controllers\DoAuthorizeNetPaymentController
 use Illuminate\Support\Facades\Validator;
 use Modules\Shop\Entities\ShopProduct;
 use Modules\Shop\Entities\ShopOrder;
+use Modules\Shop\Entities\ShopBundle;
 
 class PaymentController extends Controller
 {
@@ -140,9 +141,27 @@ class PaymentController extends Controller
                     return redirect('/');
                 }
                 return redirect(route('studentDashboard'));
-            } else {
-                return redirect()->route('orderPayment');
             }
+
+            // Paid orders: charge on checkout (same Authorize.Net flow as /payment)
+            $walletBalance = Auth::user()->balance ?? 0;
+            $chargeAmount = ($checkout_info->purchase_price > $walletBalance)
+                ? ($checkout_info->purchase_price - $walletBalance)
+                : 0;
+            $remainingBalance = ($checkout_info->purchase_price > $walletBalance)
+                ? 0
+                : ($walletBalance - $checkout_info->purchase_price);
+            $chargeAmountUsd = convertCurrency(Settings('currency_code') ?? 'BDT', 'USD', $chargeAmount);
+
+            $request->merge([
+                'user_id' => Auth::id(),
+                'tracking_id' => $checkout_info->tracking,
+                'id' => $checkout_info->id,
+                'amount' => $chargeAmountUsd * 100,
+                'remaining_balance' => $remainingBalance,
+            ]);
+
+            return $this->paymentSubmit($request);
         } else {
             Toastr::error("Something Went Wrong", 'Failed');
             return \redirect()->back();
@@ -236,6 +255,7 @@ class PaymentController extends Controller
             }
 
             // check if product is exist in cart then check available quantity then proceed
+            // Study Guide (3) / Study Tool (4) are digital — skip physical stock checks
             $cartsList = Cart::where('user_id', Auth::id())
                         ->whereNotNull('product_id')
                         ->selectRaw('product_id, COUNT(*) as quantity')
@@ -245,9 +265,38 @@ class PaymentController extends Controller
             
             if(!empty($cartsList)){
                 foreach ($cartsList as $cart) {
-                    $availableInventory = $cart->product->total_inventory ?? 0;
-                    if ($cart->quantity > $availableInventory) {
-                        Toastr::error('Insufficient products in stock.', 'Error');
+                    $product = $cart->product;
+                    if (!$product) {
+                        Toastr::error('Product not found in cart.', 'Error');
+                        return redirect()->back();
+                    }
+
+                    if ($this->shopProductRequiresInventory($product)) {
+                        $availableInventory = $product->total_inventory ?? 0;
+                        if ($cart->quantity > $availableInventory) {
+                            Toastr::error('Insufficient products in stock.', 'Error');
+                            return redirect()->back();
+                        }
+                    }
+                }
+            }
+
+            // Shop bundles: physical items inside the bundle must be in stock
+            $bundleCarts = Cart::where('user_id', Auth::id())
+                ->whereNotNull('shop_bundle_id')
+                ->with(['shopBundle.products'])
+                ->get();
+
+            foreach ($bundleCarts as $bundleCart) {
+                $shopBundle = $bundleCart->shopBundle;
+                if (!$shopBundle) {
+                    Toastr::error('Bundle not found in cart.', 'Error');
+                    return redirect()->back();
+                }
+                foreach ($shopBundle->products as $bundleProduct) {
+                    if ($this->shopProductRequiresInventory($bundleProduct)
+                        && (int) ($bundleProduct->total_inventory ?? 0) <= 0) {
+                        Toastr::error('A product in bundle "' . $shopBundle->name . '" is out of stock.', 'Error');
                         return redirect()->back();
                     }
                 }
@@ -325,18 +374,169 @@ class PaymentController extends Controller
 
                     send_email(Auth::user(), 'Program_Plans', $shortCodes);
                 }
+
+                // Snapshot order for confirmation page before clearing cart
+                $this->storeOrderConfirmationSession($request, $checkout_info);
+
                 $delete_cart = Cart::where('user_id', Auth::id())->delete();
 
                 session()->forget('user');
 
                 Toastr::success('Payment Successfully Done', 'Success');
-                return redirect()->route('frontendHomePage');
+                return redirect()->route('orderConfirmation');
             } else {
                 Toastr::error('Something Went Wrong', 'Error');
                 return redirect()->back();
             }
         }
 
+    }
+
+    /**
+     * Build confirmation payload while cart rows still exist.
+     */
+    protected function storeOrderConfirmationSession(Request $request, $checkout_info): void
+    {
+        if (!$checkout_info) {
+            $checkout_info = Checkout::where('user_id', Auth::id())->latest()->first();
+        }
+        if (!$checkout_info) {
+            return;
+        }
+
+        $items = [];
+        $carts = Cart::where('user_id', Auth::id())
+            ->with(['product.files', 'shopBundle.products.files', 'course', 'program'])
+            ->get();
+
+        foreach ($carts as $cart) {
+            if (!empty($cart->product_id) && $cart->product) {
+                $product = $cart->product;
+                $typeLabels = [1 => 'Product', 2 => 'Book', 3 => 'Guide', 4 => 'Tool'];
+                $thumbLabel = $typeLabels[(int) ($product->type ?? 1)] ?? 'Item';
+                $image = ($product->files && $product->files->first())
+                    ? $product->files->first()->file_path
+                    : '';
+                $items[] = [
+                    'title' => $product->title ?? 'Product',
+                    'meta' => 'Qty: 1',
+                    'price' => (float) $cart->price,
+                    'thumb_label' => $thumbLabel,
+                    'image' => $image,
+                ];
+            } elseif (!empty($cart->shop_bundle_id) && $cart->shopBundle) {
+                $bundle = $cart->shopBundle;
+                $first = $bundle->products->first();
+                $image = ($first && $first->files && $first->files->first())
+                    ? $first->files->first()->file_path
+                    : '';
+                $items[] = [
+                    'title' => $bundle->name ?? 'Bundle',
+                    'meta' => 'Bundle · Qty: 1',
+                    'price' => (float) $cart->price,
+                    'thumb_label' => 'Bundle',
+                    'image' => $image,
+                ];
+            } elseif (!empty($cart->course_id) && $cart->course) {
+                $course = $cart->course;
+                $title = isset($course->parent) && $course->parent
+                    ? $course->parent->title
+                    : ($course->title ?? 'Course');
+                $items[] = [
+                    'title' => $title,
+                    'meta' => 'Course · Qty: 1',
+                    'price' => (float) $cart->price,
+                    'thumb_label' => 'Course',
+                    'image' => $course->thumbnail ?? '',
+                ];
+            } elseif (!empty($cart->program_id) && $cart->program) {
+                $items[] = [
+                    'title' => $cart->program->programtitle ?? 'Program',
+                    'meta' => 'Program · Qty: 1',
+                    'price' => (float) $cart->price,
+                    'thumb_label' => 'Program',
+                    'image' => $cart->program->icon ?? '',
+                ];
+            }
+        }
+
+        $cardLast4 = '';
+        if ($request->filled('cardNumber')) {
+            $cardLast4 = substr(preg_replace('/\D/', '', (string) $request->cardNumber), -4);
+        }
+
+        $billing = $checkout_info->billing
+            ?? BillingDetails::where('id', $checkout_info->billing_detail_id)->first()
+            ?? BillingDetails::where('tracking_id', $checkout_info->tracking)->latest()->first();
+
+        $addressParts = [];
+        if ($billing) {
+            foreach (['address1', 'address2', 'city'] as $field) {
+                if (!empty($billing->{$field})) {
+                    $addressParts[] = $billing->{$field};
+                }
+            }
+            $stateName = '';
+            try {
+                $stateName = optional($billing->stateDetails)->name ?? '';
+            } catch (\Throwable $e) {
+                $stateName = '';
+            }
+            if ($stateName !== '') {
+                $addressParts[] = $stateName;
+            }
+            if (!empty($billing->zip_code)) {
+                $addressParts[] = $billing->zip_code;
+            }
+        }
+
+        $tax = 0;
+        if (function_exists('hasTax') && hasTax() && function_exists('taxAmount')) {
+            $tax = (float) taxAmount($checkout_info->price);
+        }
+
+        session([
+            'order_confirmation' => [
+                'checkout_id' => $checkout_info->id,
+                'tracking' => $checkout_info->tracking,
+                'order_number' => 'MXP-' . now()->format('Y') . '-' . str_pad((string) $checkout_info->id, 5, '0', STR_PAD_LEFT),
+                'email' => $billing->email ?? (Auth::user()->email ?? ''),
+                'card_last4' => $cardLast4,
+                'payment_label' => $cardLast4 !== '' ? ('Card ending in ' . $cardLast4) : 'Authorize.Net',
+                'shipping_label' => 'Standard (5–7 business days)',
+                'shipping_address' => implode(', ', $addressParts),
+                'items' => $items,
+                'subtotal' => (float) $checkout_info->price,
+                'discount' => (float) ($checkout_info->discount ?? 0),
+                'tax' => $tax,
+                'total' => (float) $checkout_info->purchase_price,
+                'paid_at' => now()->toDateTimeString(),
+                'delivery_estimate' => now()->addWeekdays(5)->format('M j') . '–' . now()->addWeekdays(7)->format('M j, Y'),
+            ],
+        ]);
+    }
+
+    public function orderConfirmation()
+    {
+        $data = session('order_confirmation');
+        if (empty($data) || empty($data['checkout_id'])) {
+            Toastr::warning('No recent order confirmation found.', 'Notice');
+            return redirect()->route('myOrders');
+        }
+
+        $checkout = Checkout::where('user_id', Auth::id())
+            ->where('id', $data['checkout_id'])
+            ->first();
+
+        if (!$checkout) {
+            Toastr::warning('Order not found.', 'Notice');
+            return redirect()->route('myOrders');
+        }
+
+        return view(theme('pages.orderConfirmation'), [
+            'confirmation' => $data,
+            'checkout' => $checkout,
+        ]);
     }
 
     public function directEnroll($id, $tracking = null)
@@ -1259,10 +1459,53 @@ class PaymentController extends Controller
             $enroll->status = 1;
             $enroll->save();
 
-            // minus product from product inventory count.
-            $currentInventory = $product->total_inventory;
-            $product->total_inventory = $currentInventory-1;
-            $product->save();
+            // Physical stock only for Product / Book — digital Guide & Tool skip decrement
+            if ($this->shopProductRequiresInventory($product)) {
+                $product->total_inventory = max(0, (int) $product->total_inventory - 1);
+                $product->save();
+            }
+
+        } else if (!empty($cart->shop_bundle_id)) {
+            // Shop Savings & Bundles — create an order line per included product
+            $shopBundle = ShopBundle::with('products')->find($cart->shop_bundle_id);
+            if ($shopBundle && $shopBundle->products->count()) {
+                if ($discount != 0 || !empty($discount)) {
+                    $itemPrice = $cart->price - ($discount / count($carts));
+                    $discount_amount = $cart->price - $itemPrice;
+                } else {
+                    $itemPrice = $cart->price;
+                    $discount_amount = 0.00;
+                }
+
+                $responseObj = is_string($response) ? json_decode($response) : $response;
+                $products = $shopBundle->products;
+                $count = max(1, $products->count());
+                $share = round($itemPrice / $count, 2);
+                $allocated = 0;
+
+                foreach ($products as $index => $product) {
+                    $linePrice = ($index === $count - 1)
+                        ? round($itemPrice - $allocated, 2)
+                        : $share;
+                    $allocated += $share;
+
+                    $enroll = new ShopOrder();
+                    $enroll->user_id = $user->id;
+                    $enroll->tracking = $responseObj->id ?? 0;
+                    $enroll->product_id = $product->id;
+                    $enroll->shop_bundle_id = $shopBundle->id;
+                    $enroll->purchase_price = $linePrice;
+                    $enroll->coupon = null;
+                    $enroll->discount_amount = ($index === 0) ? $discount_amount : 0;
+                    $enroll->status = 1;
+                    $enroll->save();
+
+                    if ($this->shopProductRequiresInventory($product)) {
+                        $product->total_inventory = max(0, (int) $product->total_inventory - 1);
+                        $product->save();
+                    }
+                }
+            }
 
         } else {
 
@@ -1396,5 +1639,18 @@ class PaymentController extends Controller
                 }
             }
         }
+    }
+
+    /**
+     * Product (1) and Book (2) use physical inventory.
+     * Study Guide (3) and Study Tool (4) are digital — no stock gate / decrement.
+     */
+    private function shopProductRequiresInventory(?ShopProduct $product): bool
+    {
+        if (!$product) {
+            return true;
+        }
+
+        return !in_array((int) $product->type, [3, 4], true);
     }
 }

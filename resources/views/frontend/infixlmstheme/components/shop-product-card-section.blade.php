@@ -121,11 +121,11 @@
 <!-- CATEGORY TABS -->
 <div class="tabs-section">
     <div class="tabs-inner">
-        <button class="tab-btn active" onclick="scrollToCategory('books')">Books &amp; Journals &amp; Study Guides</button>
-        {{-- <button class="tab-btn" onclick="scrollToCategory('study-guides')">Study Guides</button>
-        <button class="tab-btn" onclick="scrollToCategory('study-tools')">Study Tools</button>
-        <button class="tab-btn" onclick="scrollToCategory('bundles')">Bundles &amp; Savings</button> --}}
-        <button class="tab-btn" onclick="scrollToCategory('merchandise')">Merchandise</button>
+        <button class="tab-btn active" onclick="scrollToCategory('books', this)">Books &amp; Journals</button>
+        <button class="tab-btn" onclick="scrollToCategory('study-guides', this)">Study Guides</button>
+        <button class="tab-btn" onclick="scrollToCategory('study-tools', this)">Study Tools</button>
+        <button class="tab-btn" onclick="scrollToCategory('bundles', this)">Bundles &amp; Savings</button>
+        <button class="tab-btn" onclick="scrollToCategory('merchandise', this)">Merchandise</button>
     </div>
 </div>
 
@@ -160,7 +160,7 @@
                 <span class="featured-price-orig" id="remGuidePriceOrig">$87</span>
                 <span class="featured-price-save" id="remGuidePriceSave">Early Bird &mdash; Save $20</span>
             </div>
-            <a href="fl-bon-remediation-guide.html" class="featured-cta">Get the Remediation Guide &rarr;</a>
+            <a href="{{ route('floridaPrograms') }}" class="featured-cta">Get the Remediation Guide &rarr;</a>
             <div class="featured-trust">
                 <span>Instant download</span>
                 <span>Secure checkout</span>
@@ -183,78 +183,80 @@
                     title is
                     built specifically for repeat NCLEX test-takers.</p>
             </div>
-            <div class="products-grid">
+            <div class="products-grid" id="shop-grid-books">
+                @php
+                    $hasBook = false;
+                    $bookIndex = 0;
+                @endphp
                 @if (!empty($products) && count($products))
-                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 60px">
-                        @foreach ($products as $product)
-                            @if ($product->type == 2)
-                                @php
-                                    $productImages = $product->files;
-                                    $imageUrl =
-                                        @$productImages[0]->file_path ?? url('public/assets/product-Placeholder.png');
+                    @foreach ($products as $product)
+                        @if ((int) $product->type === 2)
+                            @php
+                                $hasBook = true;
+                                $bookIndex++;
+                                $productImages = $product->files;
+                                $imageUrl =
+                                    @$productImages[0]->file_path ?? url('public/assets/product-Placeholder.png');
+                                $detailUrl = route('shop.book.detail', $product->id);
+                                $discountPrice = $product->total_discount;
+                                $originalPrice = $product->total_amount;
+                            @endphp
 
-                                    if ($product->type == 1) {
-                                        $detailUrl = route('shop.product.detail', $product->id);
-                                    } elseif ($product->type == 2) {
-                                        $detailUrl = route('shop.book.detail', $product->id);
-                                    } else {
-                                        $detailUrl = '#';
-                                    }
+                            <div class="product-card{{ $bookIndex > 3 ? ' shop-card-hidden' : '' }}">
+                                <div class="product-image books">
+                                    @if ($product->total_inventory <= 0)
+                                        <span class="product-badge soon">Out of Stock</span>
+                                    @endif
+                                    <a href="{{ $detailUrl }}">
+                                        <img src="{{ $imageUrl }}" alt="{{ $product->title }}"
+                                            style="width: 100%; height: 100%; object-fit: cover;">
+                                    </a>
+                                </div>
+                                <div class="product-body">
+                                    <p class="product-tag">{{ $product->sub_title }}</p>
+                                    <h3>{{ $product->title }}</h3>
 
-                                    $discountPrice = $product->total_discount;
-                                    $originalPrice = $product->total_amount;
-                                @endphp
-
-                                <div class="product-card">
-                                    <div class="product-image books">
-                                        @if ($product->total_inventory <= 0)
-                                            <span class="product-badge soon">Out of Stock</span>
-                                        @endif
-                                        <a href="{{ $detailUrl }}">
-                                            <img src="{{ $imageUrl }}" alt="{{ $product->title }}"
-                                                style="width: 100%; height: 100%; object-fit: cover;">
-                                        </a>
-                                    </div>
-                                    <div class="product-body">
-                                        <p class="product-tag">{{ $product->sub_title }}</p>
-                                        <h3>{{ $product->title }}</h3>
-
-                                        <div class="product-footer">
-                                            @if ($discountPrice > 0)
-                                                <div>
-                                                    <span
-                                                        class="product-price">{{ getPriceFormat($originalPrice) }}</span>
-                                                    <span class="text-muted text-decoration-line-through ms-2">
-                                                        <del>{{ getPriceFormat($originalPrice + $discountPrice) }}</del>
-                                                    </span>
-                                                </div>
-                                            @else
+                                    <div class="product-footer">
+                                        @if ($discountPrice > 0)
+                                            <div>
                                                 <span
-                                                    class="product-price">{{ getPriceFormat($originalPrice - $discountPrice) }}</span>
-                                            @endif
+                                                    class="product-price">{{ getPriceFormat($originalPrice) }}</span>
+                                                <span class="text-muted text-decoration-line-through ms-2">
+                                                    <del>{{ getPriceFormat($originalPrice + $discountPrice) }}</del>
+                                                </span>
+                                            </div>
+                                        @else
+                                            <span
+                                                class="product-price">{{ getPriceFormat($originalPrice - $discountPrice) }}</span>
+                                        @endif
 
-                                            @if ($product->total_inventory > 0)
-                                                <a href="{{ $detailUrl }}" class="product-action">Buy Now &rarr;</a>
-                                            @else
-                                                <a href="#" class="product-action">Notify Me &rarr;</a>
-                                            @endif
-                                        </div>
+                                        @if ($product->total_inventory > 0)
+                                            <a href="{{ $detailUrl }}" class="product-action">Buy Now &rarr;</a>
+                                        @else
+                                            <a href="#" class="product-action">Notify Me &rarr;</a>
+                                        @endif
                                     </div>
                                 </div>
-                            @endif
-                        @endforeach
-                    </div>
-                @else
-                    <div class="text-center py-5">
+                            </div>
+                        @endif
+                    @endforeach
+                @endif
+                @if (!$hasBook)
+                    <div class="text-center py-5" style="grid-column: 1 / -1;">
                         <img src="{{ asset('public/frontend/infixlmstheme/img/not-found.png') }}" alt="Not Found"
                             style="width: 50px;">
                         <h4 class="mt-3">No Product Found</h4>
                     </div>
                 @endif
             </div>
+            @if ($bookIndex > 3)
+                <div class="shop-load-more-wrap">
+                    <button type="button" class="shop-load-more" data-grid="shop-grid-books">Load More</button>
+                </div>
+            @endif
         </div>
 
-        {{-- <!-- DIGITAL STUDY GUIDES -->
+         <!-- DIGITAL STUDY GUIDES -->
         <div class="category-group" id="study-guides">
             <div class="category-header">
                 <h2>Digital Study Guides</h2>
@@ -262,69 +264,71 @@
                     same
                     material used in our coaching and remediation programs.</p>
             </div>
-            <div class="products-grid">
+            <div class="products-grid" id="shop-grid-guides">
+                @php
+                    $hasStudyGuide = false;
+                    $guideIndex = 0;
+                @endphp
+                @if (!empty($products) && count($products))
+                    @foreach ($products as $product)
+                        @if ((int) $product->type === 3)
+                            @php
+                                $hasStudyGuide = true;
+                                $guideIndex++;
+                                $productImages = $product->files;
+                                $imageUrl =
+                                    @$productImages[0]->file_path ?? url('public/assets/product-Placeholder.png');
+                                // Piece 1: reuse book detail until dedicated route (piece 2)
+                                $detailUrl = route('shop.book.detail', $product->id);
+                                $discountPrice = $product->total_discount;
+                                $originalPrice = $product->total_amount;
+                            @endphp
 
-                <!-- REAL: FL BON Remediation Guide -->
-                <div class="product-card featured-product">
-                    <div class="product-image guides">
-                        <span class="product-badge">New</span>
-                        Product image<br>coming soon
-                    </div>
-                    <div class="product-body">
-                        <p class="product-tag">Digital Download &middot; Remediation</p>
-                        <h3>FL BON Remediation Guide&trade;</h3>
-                        <p>The complete remediation roadmap for repeat NCLEX test-takers. Covers all 8 Client Needs
-                            categories,
-                            SATA strategy, delegation mastery, CJMM walkthrough templates, and 8- and 12-week study
-                            calendars.</p>
-                        <div class="product-footer">
-                            <span class="product-price">$67</span><span class="product-price-original">$87</span>
-                            <a href="fl-bon-remediation-guide.html" class="product-action buy-now">Get It Now &rarr;</a>
-                        </div>
-                    </div>
-                </div>
+                            <div class="product-card{{ $guideIndex > 3 ? ' shop-card-hidden' : '' }}">
+                                <div class="product-image guides">
+                                    <a href="{{ $detailUrl }}">
+                                        <img src="{{ $imageUrl }}" alt="{{ $product->title }}"
+                                            style="width: 100%; height: 100%; object-fit: cover;">
+                                    </a>
+                                </div>
+                                <div class="product-body">
+                                    <p class="product-tag">{{ $product->sub_title }}</p>
+                                    <h3>{{ $product->title }}</h3>
 
-                <!-- REAL: NCLEX Reset Planner -->
-                <div class="product-card featured-product">
-                    <div class="product-image guides">
-                        <span class="product-badge">Bestseller</span>
-                        Product image<br>coming soon
-                    </div>
-                    <div class="product-body">
-                        <p class="product-tag">Digital Download &middot; 54 Pages</p>
-                        <h3>The NCLEX Reset Planner&trade;</h3>
-                        <p>A 30-day recovery and success planner for repeat test-takers. Daily study pages, weekly
-                            schedules,
-                            confidence journal, SATA strategy guide, priority &amp; delegation cheat sheet, and 30 days
-                            of
-                            motivation.</p>
-                        <div class="product-footer">
-                            <span class="product-price">$47</span><span class="product-price-original">$67</span>
-                            <a href="nclex-reset-planner.html" class="product-action buy-now">Get It Now &rarr;</a>
-                        </div>
-                    </div>
-                </div>
+                                    <div class="product-footer">
+                                        @if ($discountPrice > 0)
+                                            <div>
+                                                <span
+                                                    class="product-price">{{ getPriceFormat($originalPrice) }}</span>
+                                                <span class="text-muted text-decoration-line-through ms-2">
+                                                    <del>{{ getPriceFormat($originalPrice + $discountPrice) }}</del>
+                                                </span>
+                                            </div>
+                                        @else
+                                            <span
+                                                class="product-price">{{ getPriceFormat($originalPrice - $discountPrice) }}</span>
+                                        @endif
 
-                <!-- PLANNED: NCLEX PASS Method Workbook -->
-                <div class="product-card">
-                    <div class="product-image coming-soon">
-                        <span class="product-badge soon">Coming Soon</span>
-                        Product image<br>coming soon
+                                        <a href="{{ $detailUrl }}" class="product-action">Buy Now &rarr;</a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
+                @endif
+                @if (!$hasStudyGuide)
+                    <div class="text-center py-5" style="grid-column: 1 / -1;">
+                        <img src="{{ asset('public/frontend/infixlmstheme/img/not-found.png') }}" alt="Not Found"
+                            style="width: 50px;">
+                        <h4 class="mt-3">No Product Found</h4>
                     </div>
-                    <div class="product-body">
-                        <p class="product-tag">Study Guide &middot; Coming Soon</p>
-                        <h3>The NCLEX PASS Method&trade; Workbook</h3>
-                        <p>The complete workbook companion to our coaching program. Clinical judgment exercises, content
-                            area
-                            diagnostics, and the full PASS framework with practice scenarios.</p>
-                        <div class="product-footer">
-                            <span class="product-price">$49</span><span class="product-price-original">$69</span>
-                            <a href="#" class="product-action">Notify Me &rarr;</a>
-                        </div>
-                    </div>
-                </div>
-
+                @endif
             </div>
+            @if ($guideIndex > 3)
+                <div class="shop-load-more-wrap">
+                    <button type="button" class="shop-load-more" data-grid="shop-grid-guides">Load More</button>
+                </div>
+            @endif
         </div>
 
         <!-- STUDY TOOLS -->
@@ -335,143 +339,159 @@
                     guides and
                     coaching programs.</p>
             </div>
-            <div class="products-grid">
+            <div class="products-grid" id="shop-grid-tools">
+                @php
+                    $hasStudyTool = false;
+                    $toolIndex = 0;
+                @endphp
+                @if (!empty($products) && count($products))
+                    @foreach ($products as $product)
+                        @if ((int) $product->type === 4)
+                            @php
+                                $hasStudyTool = true;
+                                $toolIndex++;
+                                $productImages = $product->files;
+                                $imageUrl =
+                                    @$productImages[0]->file_path ?? url('public/assets/product-Placeholder.png');
+                                $detailUrl = route('shop.book.detail', $product->id);
+                                $discountPrice = $product->total_discount;
+                                $originalPrice = $product->total_amount;
+                            @endphp
 
-                <div class="product-card">
-                    <div class="product-image coming-soon">
-                        <span class="product-badge soon">Coming Soon</span>
-                        Product image<br>coming soon
-                    </div>
-                    <div class="product-body">
-                        <p class="product-tag">Digital Download</p>
-                        <h3>Pharmacology Quick Reference&trade;</h3>
-                        <p>Drug classifications, nursing implications, and safety checks organized by body system.
-                            Designed for
-                            fast review during clinical rotations and exam prep.</p>
-                        <div class="product-footer">
-                            <span class="product-price">$29</span>
-                            <a href="#" class="product-action">Notify Me &rarr;</a>
-                        </div>
-                    </div>
-                </div>
+                            <div class="product-card{{ $toolIndex > 3 ? ' shop-card-hidden' : '' }}">
+                                <div class="product-image guides">
+                                    <a href="{{ $detailUrl }}">
+                                        <img src="{{ $imageUrl }}" alt="{{ $product->title }}"
+                                            style="width: 100%; height: 100%; object-fit: cover;">
+                                    </a>
+                                </div>
+                                <div class="product-body">
+                                    <p class="product-tag">{{ $product->sub_title }}</p>
+                                    <h3>{{ $product->title }}</h3>
 
-                <div class="product-card">
-                    <div class="product-image coming-soon">
-                        <span class="product-badge soon">Coming Soon</span>
-                        Product image<br>coming soon
-                    </div>
-                    <div class="product-body">
-                        <p class="product-tag">Digital Download</p>
-                        <h3>Content Area Diagnostic Kit&trade;</h3>
-                        <p>The same diagnostic tool used in our coaching programs. Identifies your weakest NCLEX content
-                            areas so
-                            you can target your study time effectively. Includes scoring guide.</p>
-                        <div class="product-footer">
-                            <span class="product-price">$19</span>
-                            <a href="#" class="product-action">Notify Me &rarr;</a>
-                        </div>
-                    </div>
-                </div>
+                                    <div class="product-footer">
+                                        @if ($discountPrice > 0)
+                                            <div>
+                                                <span
+                                                    class="product-price">{{ getPriceFormat($originalPrice) }}</span>
+                                                <span class="text-muted text-decoration-line-through ms-2">
+                                                    <del>{{ getPriceFormat($originalPrice + $discountPrice) }}</del>
+                                                </span>
+                                            </div>
+                                        @else
+                                            <span
+                                                class="product-price">{{ getPriceFormat($originalPrice - $discountPrice) }}</span>
+                                        @endif
 
-                <div class="product-card">
-                    <div class="product-image coming-soon">
-                        <span class="product-badge soon">Coming Soon</span>
-                        Product image<br>coming soon
+                                        <a href="{{ $detailUrl }}" class="product-action">Buy Now &rarr;</a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
+                @endif
+                @if (!$hasStudyTool)
+                    <div class="text-center py-5" style="grid-column: 1 / -1;">
+                        <img src="{{ asset('public/frontend/infixlmstheme/img/not-found.png') }}" alt="Not Found"
+                            style="width: 50px;">
+                        <h4 class="mt-3">No Product Found</h4>
                     </div>
-                    <div class="product-body">
-                        <p class="product-tag">Digital Download</p>
-                        <h3>NCLEX Day-Of Checklist &amp; Calm Kit&trade;</h3>
-                        <p>A printable exam-day preparation guide with timeline, what to bring, breathing exercises, and
-                            last-minute confidence-building prompts.</p>
-                        <div class="product-footer">
-                            <span class="product-price">$9</span>
-                            <a href="#" class="product-action">Notify Me &rarr;</a>
-                        </div>
-                    </div>
-                </div>
-
+                @endif
             </div>
-        </div> --}}
+            @if ($toolIndex > 3)
+                <div class="shop-load-more-wrap">
+                    <button type="button" class="shop-load-more" data-grid="shop-grid-tools">Load More</button>
+                </div>
+            @endif
+        </div> 
 
     </div>
 </section>
 
-{{-- 
+
 <!-- BUNDLES -->
-<section class="bundles-section" id="bundles">
-    <div class="section-header">
-        <p class="section-eyebrow">Save More</p>
-        <h2 class="section-title">Bundles &amp; Savings</h2>
-        <p class="section-subtitle">Combine study resources for the best value. Every bundle is instant download —
-            start
-            studying the minute you purchase.</p>
-    </div>
-
-    <div class="bundles-grid">
-
-        <!-- BUNDLE 1: The NCLEX Reset Bundle -->
-        <div class="bundle-card">
-            <h3 class="bundle-name">The NCLEX Reset Bundle&trade;</h3>
-            <p class="bundle-desc">Your complete comeback toolkit — the day-by-day planner paired with the full
-                remediation
-                roadmap.</p>
-            <ul class="bundle-includes">
-                <li>FL BON Remediation Guide&trade; ($87 value)</li>
-                <li>The NCLEX Reset Planner&trade; ($67 value)</li>
-                <li>Combined: All 8 Client Needs + 30-day daily structure</li>
-            </ul>
-            <div class="bundle-price-row">
-                <span class="bundle-price">$127</span>
-                <span class="bundle-original">$154</span>
-                <span class="bundle-savings">Save $27</span>
-            </div>
-            <a href="checkout.html?product=nclex-reset-bundle" class="bundle-cta primary">Get the Bundle &rarr;</a>
+@php
+    $shopBundles = collect($bundles ?? []);
+    $bundleIndex = 0;
+@endphp
+@if ($shopBundles->count())
+    <section class="bundles-section" id="bundles">
+        <div class="section-header">
+            <p class="section-eyebrow">Save More</p>
+            <h2 class="section-title">Bundles &amp; Savings</h2>
+            <p class="section-subtitle">Combine study resources for the best value. Every bundle is instant download —
+                start
+                studying the minute you purchase.</p>
         </div>
 
-        <!-- BUNDLE 2: The Study Starter Bundle -->
-        <div class="bundle-card featured">
-            <span class="bundle-badge">Best Value</span>
-            <h3 class="bundle-name">The Study Starter Bundle&trade;</h3>
-            <p class="bundle-desc">Everything you need to begin your NCLEX prep with the right tools, strategy, and
-                mindset.
-            </p>
-            <ul class="bundle-includes">
-                <li>FL BON Remediation Guide&trade; ($87 value)</li>
-                <li>The NCLEX Reset Planner&trade; ($67 value)</li>
-                <li>Content Area Diagnostic Kit&trade; ($19 value)</li>
-                <li>NCLEX Day-Of Checklist &amp; Calm Kit&trade; ($9 value)</li>
-            </ul>
-            <div class="bundle-price-row">
-                <span class="bundle-price">$146</span>
-                <span class="bundle-original">$182</span>
-                <span class="bundle-savings">Save 20%</span>
-            </div>
-            <a href="checkout.html?product=study-starter-bundle" class="bundle-cta primary">Get the Bundle &rarr;</a>
+        <div class="bundles-grid" id="shop-grid-bundles">
+            @foreach ($shopBundles as $index => $bundle)
+                @php
+                    $bundleIndex++;
+                    $components = collect([
+                        $bundle->component_1,
+                        $bundle->component_2,
+                        $bundle->component_3,
+                        $bundle->component_4,
+                    ])->map(function ($item) {
+                        return trim(strip_tags((string) $item));
+                    })->filter(function ($item) {
+                        return $item !== '';
+                    })->values();
+
+                    $description = trim(strip_tags((string) ($bundle->short_description ?? '')));
+                    $salePrice = (float) ($bundle->total_amount ?? 0);
+                    $discountAmount = (float) ($bundle->total_discount ?? 0);
+                    $originalPrice = $discountAmount > 0 ? $salePrice + $discountAmount : null;
+                    $isFeatured = (bool) ($bundle->is_featured ?? false);
+                @endphp
+
+                <div class="bundle-card{{ $isFeatured ? ' featured' : '' }}{{ $bundleIndex > 3 ? ' shop-card-hidden' : '' }}">
+                    @if ($isFeatured)
+                        <span class="bundle-badge">Best Value</span>
+                    @endif
+
+                    <h3 class="bundle-name">{{ $bundle->name }}</h3>
+
+                    @if ($description !== '')
+                        <p class="bundle-desc">{{ \Illuminate\Support\Str::limit($description, 220) }}</p>
+                    @else
+                        <p class="bundle-desc" style="visibility:hidden;min-height:44px;">&nbsp;</p>
+                    @endif
+
+                    <ul class="bundle-includes" style="min-height:120px;">
+                        @forelse ($components as $component)
+                            <li @class(['coming' => \Illuminate\Support\Str::startsWith($component, '+')])>{{ $component }}</li>
+                        @empty
+                            {{-- Keep card height stable when no components --}}
+                            <li style="visibility:hidden;">&nbsp;</li>
+                        @endforelse
+                    </ul>
+
+                    <div class="bundle-price-row">
+                        <span class="bundle-price">{{ getPriceFormat($salePrice) }}</span>
+                        @if ($originalPrice)
+                            <span class="bundle-original">{{ getPriceFormat($originalPrice) }}</span>
+                            @if ($bundle->discount_type === 'percent' && (float) $bundle->discount > 0)
+                                <span class="bundle-savings">Save {{ rtrim(rtrim(number_format((float) $bundle->discount, 2, '.', ''), '0'), '.') }}%</span>
+                            @elseif ($discountAmount > 0)
+                                <span class="bundle-savings">Save {{ getPriceFormat($discountAmount) }}</span>
+                            @endif
+                        @endif
+                    </div>
+
+                    <a href="{{ route('shop.bundle.detail', $bundle->id) }}" class="bundle-cta primary">Get the Bundle &rarr;</a>
+                </div>
+            @endforeach
         </div>
 
-        <!-- BUNDLE 3: The Full Comeback Bundle -->
-        <div class="bundle-card">
-            <h3 class="bundle-name">The Full Comeback Bundle&trade;</h3>
-            <p class="bundle-desc">The complete MXP study toolkit — every guide, every tool, every reference. Built for
-                the
-                student going all-in.</p>
-            <ul class="bundle-includes">
-                <li>Everything in Study Starter, plus:</li>
-                <li>NCLEX PASS Method&trade; Workbook ($69 value)</li>
-                <li>Pharmacology Quick Reference&trade; ($29 value)</li>
-                <li class="coming">+ Exclusive early access to new releases</li>
-            </ul>
-            <div class="bundle-price-row">
-                <span class="bundle-price">$207</span>
-                <span class="bundle-original">$280</span>
-                <span class="bundle-savings">Save 26%</span>
+        @if ($bundleIndex > 3)
+            <div class="shop-load-more-wrap">
+                <button type="button" class="shop-load-more" data-grid="shop-grid-bundles">Load More</button>
             </div>
-            <a href="checkout.html?product=full-comeback-bundle" class="bundle-cta secondary">Get the Bundle
-                &rarr;</a>
-        </div>
-
-    </div>
-</section> --}}
+        @endif
+    </section>
+@endif 
 
 <!-- MERCHANDISE (Coming Soon) -->
 <section class="products-section" style="background: var(--cream); padding-top: 60px;">
@@ -483,27 +503,21 @@
             </div>
 
             @if (!empty($products) && count($products))
-                <div class="products-grid">
+                <div class="products-grid" id="shop-grid-merch">
+                    @php $merchIndex = 0; @endphp
                     @foreach ($products as $product)
-                        @if ($product->type == 1)
+                        @if ((int) $product->type === 1)
                             @php
+                                $merchIndex++;
                                 $productImages = $product->files;
                                 $imageUrl =
                                     @$productImages[0]->file_path ?? url('public/assets/product-Placeholder.png');
-
-                                if ($product->type == 1) {
-                                    $detailUrl = route('shop.product.detail', $product->id);
-                                } elseif ($product->type == 2) {
-                                    $detailUrl = route('shop.book.detail', $product->id);
-                                } else {
-                                    $detailUrl = '#';
-                                }
-
+                                $detailUrl = route('shop.product.detail', $product->id);
                                 $discountPrice = $product->total_discount;
                                 $originalPrice = $product->total_amount;
                             @endphp
 
-                            <div class="product-card">
+                            <div class="product-card{{ $merchIndex > 3 ? ' shop-card-hidden' : '' }}">
                                 <div class="product-image merch">
                                     @if ($product->total_inventory <= 0)
                                         <span class="product-badge soon">Out of Stock</span>
@@ -543,6 +557,18 @@
                         @endif
                     @endforeach
                 </div>
+                @if ($merchIndex > 3)
+                    <div class="shop-load-more-wrap">
+                        <button type="button" class="shop-load-more" data-grid="shop-grid-merch">Load More</button>
+                    </div>
+                @endif
+                @if ($merchIndex === 0)
+                    <div class="text-center py-5">
+                        <img src="{{ asset('public/frontend/infixlmstheme/img/not-found.png') }}" alt="Not Found"
+                            style="width: 50px;">
+                        <h4 class="mt-3">No Product Found</h4>
+                    </div>
+                @endif
             @else
                 <div class="text-center py-5">
                     <img src="{{ asset('public/frontend/infixlmstheme/img/not-found.png') }}" alt="Not Found"
@@ -595,12 +621,10 @@
                                 $productImages = $product->files;
                                 $imageUrl = @$productImages[0]->file_path ?? url('public/assets/product-Placeholder.png');
                 
-                                if ($product->type == 1) {
+                                if ((int) $product->type === 1) {
                                     $detailUrl = route('shop.product.detail', $product->id);
-                                } elseif ($product->type == 2) {
-                                    $detailUrl = route('shop.book.detail', $product->id);
                                 } else {
-                                    $detailUrl = '#';
+                                    $detailUrl = route('shop.book.detail', $product->id);
                                 }
                             
                                 $discountPrice = $product->total_discount;
@@ -702,12 +726,10 @@
                                 $imageUrl =
                                     @$productImages[0]->file_path ?? url('public/assets/product-Placeholder.png');
 
-                                if ($product->type == 1) {
+                                if ((int) $product->type === 1) {
                                     $detailUrl = route('shop.product.detail', $product->id);
-                                } elseif ($product->type == 2) {
-                                    $detailUrl = route('shop.book.detail', $product->id);
                                 } else {
-                                    $detailUrl = '#';
+                                    $detailUrl = route('shop.book.detail', $product->id);
                                 }
 
                                 $discountPrice = $product->total_discount;
@@ -812,12 +834,10 @@
                 @foreach ($products as $product)
                     @php
                         $productImages = $product->files;
-                        if ($product->type == 1) {
+                        if ((int) $product->type === 1) {
                             $detailUrl = route('shop.product.detail', $product->id);
-                        } elseif ($product->type == 2) {
-                            $detailUrl = route('shop.book.detail', $product->id);
                         } else {
-                            $detailUrl = '';
+                            $detailUrl = route('shop.book.detail', $product->id);
                         }
 
                     @endphp
@@ -961,11 +981,13 @@
 
 
 <script>
-    function scrollToCategory(id) {
+    function scrollToCategory(id, btn) {
         document.getElementById(id).scrollIntoView({
             behavior: 'smooth'
         });
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        if (btn) {
+            btn.classList.add('active');
+        }
     }
 </script>

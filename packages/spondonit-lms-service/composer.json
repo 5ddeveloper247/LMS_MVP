@@ -1,0 +1,21 @@
+{
+    "name": "spondonit/lms-service",
+    "description": "Local stub of Infix LMS service provider for localhost development",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "spondonit/service": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "SpondonIt\\LmsService\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "SpondonIt\\LmsService\\SpondonItLmsServiceProvider"
+            ]
+        }
+    }
+}

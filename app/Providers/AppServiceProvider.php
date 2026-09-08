@@ -35,6 +35,16 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register()
     {
+        $this->app->singleton('getHomeContent', function () {
+            try {
+                if (!Schema::hasTable('home_contents')) {
+                    return collect();
+                }
+                return HomeContent::select(['key', 'value'])->get();
+            } catch (\Throwable $e) {
+                return collect();
+            }
+        });
 
         if (isModuleActive('Chat')) {
             $this->app->singleton('general_settings', function () {
@@ -181,6 +191,7 @@ class AppServiceProvider extends ServiceProvider
                 theme('pages.courses'),
                 theme('pages.free_courses'),
                 theme('partials._menu'),
+                theme('authnew.login'),
                 theme('pages.quizzes'),
                 theme('pages.classes'),
                 theme('pages.search'),

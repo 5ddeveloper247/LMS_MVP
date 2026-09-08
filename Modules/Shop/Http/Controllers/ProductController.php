@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 use Modules\Shop\Entities\ShopProduct;
 use Modules\Shop\Entities\ShopProductFile;
 use App\Traits\ImageStore;
@@ -43,7 +44,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'type'              => 'required|in:1,2', // 1=product, 2=book
+            'type'              => 'required|in:1,2,3,4', // 1=product, 2=book, 3=study guide, 4=study tool
             'title'             => 'required|string|max:255',
             'sub_title'         => 'required|string|max:255',
             'short_description' => 'required|string|max:500',
@@ -51,7 +52,7 @@ class ProductController extends Controller
             'price'             => 'required|numeric|min:0',
             'tax_percent'       => 'required|numeric|min:0|max:100',
             'discount_type'     => 'nullable|in:fixed,percent',
-            'inventory'         => 'required|numeric|min:1',
+            'inventory'         => 'nullable|numeric|min:1',
             // 'discount'          => [
             //                         'nullable',
             //                         'numeric',
@@ -75,18 +76,29 @@ class ProductController extends Controller
 
         $rules['discount'] = $discountRules;
 
-        // Extra validations if type is "book"
-        if ($request->type == 2) {
+        $type = (int) $request->type;
+
+        // Inventory required for Product + Book only
+        if (in_array($type, [1, 2])) {
+            $rules['inventory'] = 'required|numeric|min:1';
+        }
+
+        // Book-only meta fields
+        if ($type === 2) {
             $rules = array_merge($rules, [
                 'author'           => 'required|string|max:255',
                 'publisher'        => 'required|string|max:255',
                 'publication_date' => 'required|date',
-                'book_pdf'         => 'required|mimes:pdf|max:20480', // 20MB max
             ]);
         }
 
+        // PDF required for Book / Study Guide / Study Tool
+        if (in_array($type, [2, 3, 4])) {
+            $rules['book_pdf'] = 'required|mimes:pdf|max:20480'; // 20MB max
+        }
+
         $messages = [
-            'type.required'         => 'Please select a type (Product or Book).',
+            'type.required'         => 'Please select a type.',
             'type.in'               => 'Invalid type selected.',
         
             'title.required'        => 'The Title field is required.',
@@ -172,11 +184,11 @@ class ProductController extends Controller
         $product->price         = $request->price;
         $product->tax_percent   = $request->tax_percent;
         $product->discount_type     = $request->discount_type;
-        $product->total_inventory   = $request->inventory;
+        $product->total_inventory   = $request->inventory ?? 0;
         $product->discount          = $request->discount;
         $product->author            = $request->author;
         $product->publisher         = $request->publisher;
-        $product->publication_date  = $request->publication_date;
+        $product->publication_date  = $this->toMysqlDate($request->publication_date);
 
         $product->total_amount      = $totalAmount; // calculated total amount exculsive of tax and discount
         $product->total_tax         = $totalTax;    // calculated total tax ammount on discounted total
@@ -257,7 +269,7 @@ class ProductController extends Controller
     {
         $rules = [
             'product_id'        => 'required|exists:shop_products,id',
-            'type'              => 'required|in:1,2', // 1=product, 2=book
+            'type'              => 'required|in:1,2,3,4', // 1=product, 2=book, 3=study guide, 4=study tool
             'title'             => 'required|string|max:255',
             'sub_title'         => 'required|string|max:255',
             'short_description' => 'required|string|max:500',
@@ -265,7 +277,7 @@ class ProductController extends Controller
             'price'             => 'required|numeric|min:0',
             'tax_percent'       => 'required|numeric|min:0|max:100',
             'discount_type'     => 'nullable|in:fixed,percent',
-            'inventory'         => 'required|numeric|min:1',
+            'inventory'         => 'nullable|numeric|min:1',
             // 'discount'          => ['nullable', 'numeric', 'min:0',
             //                         Rule::when($request->discount_type === 'percent', ['max:100']),],
             // Product images (array of files)
@@ -284,18 +296,29 @@ class ProductController extends Controller
 
         $rules['discount'] = $discountRules;
 
-        // Extra validations if type is "book"
-        if ($request->type == 2) {
+        $type = (int) $request->type;
+
+        // Inventory required for Product + Book only
+        if (in_array($type, [1, 2])) {
+            $rules['inventory'] = 'required|numeric|min:1';
+        }
+
+        // Book-only meta fields
+        if ($type === 2) {
             $rules = array_merge($rules, [
                 'author'           => 'required|string|max:255',
                 'publisher'        => 'required|string|max:255',
                 'publication_date' => 'required|date',
-                'book_pdf'         => 'nullable|mimes:pdf|max:20480', // 20MB max
             ]);
+        }
+
+        // PDF optional on update for Book / Study Guide / Study Tool
+        if (in_array($type, [2, 3, 4])) {
+            $rules['book_pdf'] = 'nullable|mimes:pdf|max:20480'; // 20MB max
         }
         
         $messages = [
-            'type.required'         => 'Please select a type (Product or Book).',
+            'type.required'         => 'Please select a type.',
             'type.in'               => 'Invalid type selected.',
             'product_id.required'   => 'The Product Id is required.',
             'title.required'        => 'The Title field is required.',
@@ -381,10 +404,10 @@ class ProductController extends Controller
         $product->tax_percent   = $request->tax_percent;
         $product->discount_type     = $request->discount_type;
         $product->discount          = $request->discount;
-        $product->total_inventory   = $request->inventory;
+        $product->total_inventory   = $request->inventory ?? 0;
         $product->author            = $request->author;
         $product->publisher         = $request->publisher;
-        $product->publication_date  = $request->publication_date;
+        $product->publication_date  = $this->toMysqlDate($request->publication_date);
 
         $product->total_amount      = $totalAmount; // calculated total amount exculsive of tax and discount
         $product->total_tax         = $totalTax;    // calculated total tax ammount on discounted total
@@ -453,6 +476,44 @@ class ProductController extends Controller
             'message'   => 'Updated successfully',
             'goto'    => route('product.index')
         ], 200);
+    }
+
+    /**
+     * Toggle shop product status (enum '0'/'1').
+     * Dedicated endpoint so MySQL enum is updated reliably for all product types.
+     */
+    public function changeStatus(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id'     => 'required|exists:shop_products,id',
+            'status' => 'required|in:0,1',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors()->first(),
+            ], 400);
+        }
+
+        try {
+            $product = ShopProduct::find($request->id);
+            if (!$product) {
+                return response()->json(['error' => 'Product not found.'], 404);
+            }
+
+            // Force string for enum('0','1')
+            $product->status = ((string) $request->status === '1') ? '1' : '0';
+            $product->save();
+
+            return response()->json([
+                'success' => trans('common.Status has been changed'),
+                'status'  => $product->status,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 400);
+        }
     }
 
     /**
@@ -595,6 +656,34 @@ class ProductController extends Controller
                 return $query->sub_title;
             })
             ->addColumn('price', function ($query) {
+                return $query->price;   
+            })
+            ->addColumn('tax_percent', function ($query) {
+                return $query->tax_percent;
+            })
+            ->addColumn('status', function ($query) {
+                return view('shop::partials._td_status', compact('query'));
+            })
+            ->addColumn('action', function ($query) {
+                return view('shop::partials._td_action', compact('query'));
+            })
+            ->rawColumns(['title', 'sub_title', 'price', 'tax_percent','status','action'])->make(true);
+    }
+
+    public function getAllStudyGuidesData(Request $request)
+    {
+        $query = ShopProduct::query();
+        $query->where('type', 3);
+
+        return Datatables::of($query)
+            ->addIndexColumn()
+            ->editColumn('title', function ($query) {
+                return $query->title;
+            })
+            ->editColumn('sub_title', function ($query) {
+                return $query->sub_title;
+            })
+            ->addColumn('price', function ($query) {
                 return $query->price;
             })
             ->addColumn('tax_percent', function ($query) {
@@ -607,5 +696,55 @@ class ProductController extends Controller
                 return view('shop::partials._td_action', compact('query'));
             })
             ->rawColumns(['title', 'sub_title', 'price', 'tax_percent','status','action'])->make(true);
+    }
+
+    public function getAllStudyToolsData(Request $request)
+    {
+        $query = ShopProduct::query();
+        $query->where('type', 4);
+
+        return Datatables::of($query)
+            ->addIndexColumn()
+            ->editColumn('title', function ($query) {
+                return $query->title;
+            })
+            ->editColumn('sub_title', function ($query) {
+                return $query->sub_title;
+            })
+            ->addColumn('price', function ($query) {
+                return $query->price;
+            })
+            ->addColumn('tax_percent', function ($query) {
+                return $query->tax_percent;
+            })
+            ->addColumn('status', function ($query) {
+                return view('shop::partials._td_status', compact('query'));
+            })
+            ->addColumn('action', function ($query) {
+                return view('shop::partials._td_action', compact('query'));
+            })
+            ->rawColumns(['title', 'sub_title', 'price', 'tax_percent','status','action'])->make(true);
+    }
+
+    /**
+     * Convert the admin datepicker value (active LMS format) to MySQL DATE (Y-m-d).
+     * Empty / unparseable values become null so MySQL does not store 0000-00-00.
+     */
+    private function toMysqlDate($value): ?string
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        $mdy = getPhpDateFormat($value);
+        if ($mdy !== '') {
+            return Carbon::createFromFormat('m/d/Y', $mdy)->format('Y-m-d');
+        }
+
+        try {
+            return Carbon::parse($value)->format('Y-m-d');
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 }

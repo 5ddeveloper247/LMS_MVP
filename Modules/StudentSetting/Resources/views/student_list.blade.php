@@ -63,7 +63,7 @@
                                             <th scope="col">{{ __('common.Name') }}</th>
                                             <th scope="col">{{ __('common.Email') }}</th>
                                             <th scope="col">{{ __('student.Phone') }}</th>
-                                            <th scope="col">{{ __('Courses') }}</th>
+                                            <th scope="col">{{ __('courses.Courses') }}</th>
                                             <th scope="col">{{ __('Programs') }}</th>
                                             <th scope="col">{{ __('common.gender') }}</th>
                                             <th scope="col">{{ __('common.Date of Birth') }}</th>

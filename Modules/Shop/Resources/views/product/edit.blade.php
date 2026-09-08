@@ -43,7 +43,7 @@
                                                             {{ __('Type') }}
                                                             <strong class="text-danger">*</strong>
                                                         </label>
-                                                        <div class="d-flex">
+                                                        <div class="d-flex flex-wrap">
                                                             <div class="mr-5">
                                                                 <label for="type_product" class="d-flex align-items-center">
                                                                     <input type="radio" id="type_product" name="type" value="1" {{@$product->type == 1 ? 'checked' : ''}} disabled>
@@ -54,6 +54,18 @@
                                                                 <label for="type_book" class="d-flex align-items-center">
                                                                     <input type="radio" id="type_book" name="type" value="2" {{@$product->type == 2 ? 'checked' : ''}} disabled>
                                                                     <span class="checkmark mr-2"></span> Book
+                                                                </label>
+                                                            </div>
+                                                            <div class="mr-4">
+                                                                <label for="type_study_guide" class="d-flex align-items-center">
+                                                                    <input type="radio" id="type_study_guide" name="type" value="3" {{@$product->type == 3 ? 'checked' : ''}} disabled>
+                                                                    <span class="checkmark mr-2"></span> Study Guide
+                                                                </label>
+                                                            </div>
+                                                            <div class="mr-4">
+                                                                <label for="type_study_tool" class="d-flex align-items-center">
+                                                                    <input type="radio" id="type_study_tool" name="type" value="4" {{@$product->type == 4 ? 'checked' : ''}} disabled>
+                                                                    <span class="checkmark mr-2"></span> Study Tool
                                                                 </label>
                                                             </div>
                                                         </div>
@@ -101,7 +113,8 @@
                                         </div>
                                     </div>
 
-                                    <div class="row" id="book_related_fields">
+                                    {{-- Book-only meta (author / publisher / date) --}}
+                                    <div class="row" id="book_meta_fields" style="{{ (int)@$product->type === 2 ? '' : 'display:none;' }}">
 
                                         <div class="col-xl-6">
                                             <div class="primary_input mb-25">
@@ -109,8 +122,8 @@
                                                     {{ __('Author') }}
                                                     <strong class="text-danger">*</strong>
                                                 </label>
-                                                <input class="primary_input_field" name="author" placeholder="-"
-                                                    type="text" value="{{ @$product->author }}" required>
+                                                <input class="primary_input_field" name="author" id="author" placeholder="-"
+                                                    type="text" value="{{ @$product->author }}" {{ (int)@$product->type === 2 ? 'required' : '' }}>
                                             </div>
                                         </div>
                                         
@@ -120,8 +133,8 @@
                                                     {{ __('Publisher') }}
                                                     <strong class="text-danger">*</strong>
                                                 </label>
-                                                <input class="primary_input_field" name="publisher" placeholder="-"
-                                                    type="text" value="{{ @$product->publisher }}" required>
+                                                <input class="primary_input_field" name="publisher" id="publisher" placeholder="-"
+                                                    type="text" value="{{ @$product->publisher }}" {{ (int)@$product->type === 2 ? 'required' : '' }}>
                                             </div>
                                         </div>
                                         
@@ -137,7 +150,8 @@
                                                             <div class="">
                                                                 <input class="primary_input_field primary-input date form-control"
                                                                     id="publication_date" type="text" name="publication_date"
-                                                                    value="{{@$product->publication_date}}" autocomplete="off">{{-- getJsDateFormat(date('m/d/Y')) --}}
+                                                                    value="{{ ($product->publication_date && $product->publication_date != '0000-00-00' && strtotime($product->publication_date)) ? getJsDateFormat(date('m/d/Y', strtotime($product->publication_date))) : '' }}" autocomplete="off"
+                                                                    {{ (int)@$product->type === 2 ? 'required' : '' }}>
                                                             </div>
                                                         </div>
                                                         <button class="" type="button">
@@ -147,16 +161,29 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
 
-                                        <!--======================= Book Upload ====================== -->
+                                    {{-- PDF upload for Book / Study Guide / Study Tool --}}
+                                    @php
+                                        $digitalPdfLabel = 'Book';
+                                        $digitalPdfPlaceholder = @$product->book_pdf ?: __('Upload Book');
+                                        if ((int)@$product->type === 3) {
+                                            $digitalPdfLabel = 'Study Guide';
+                                            $digitalPdfPlaceholder = @$product->book_pdf ?: __('Upload Study Guide');
+                                        } elseif ((int)@$product->type === 4) {
+                                            $digitalPdfLabel = 'Study Tool';
+                                            $digitalPdfPlaceholder = @$product->book_pdf ?: __('Upload Study Tool');
+                                        }
+                                    @endphp
+                                    <div class="row" id="digital_pdf_field" style="{{ in_array((int)@$product->type, [2, 3, 4]) ? '' : 'display:none;' }}">
                                         <div class="col-xl-6">
                                             <div class="primary_input mb-35">
-                                                <label class="primary_input_label" for="">
-                                                    {{ __('Book') }}
+                                                <label class="primary_input_label" id="digital_pdf_label" for="">
+                                                    {{ __($digitalPdfLabel) }}
                                                     <strong class="text-danger">*</strong>
                                                 </label>
                                                 <div class="primary_file_uploader">
-                                                    <input class="primary-input filePlaceholder placeholder_txt" type="text" id="input-1" placeholder="{{ @$product->book_pdf }}" readonly="">
+                                                    <input class="primary-input filePlaceholder placeholder_txt" type="text" id="input-1" placeholder="{{ $digitalPdfPlaceholder }}" readonly="">
                                                     <button class="" type="button">
                                                         <label class="primary-btn small fix-gr-bg"
                                                             for="document_file_thumb_1">{{ __('common.Browse') }}</label>
@@ -166,10 +193,9 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
 
-                                    <div class="row" id="">
+                                    <div class="row" id="pricing_fields">
 
                                         <div class="col-xl-6">
                                             <div class="primary_input mb-25">
@@ -214,13 +240,13 @@
                                                     type="number" value="{{ @$product->discount }}" required>
                                             </div>
                                         </div>
-                                        <div class="col-xl-6">
+                                        <div class="col-xl-6" id="inventory_field_wrap" style="{{ in_array((int)@$product->type, [3, 4]) ? 'display:none;' : '' }}">
                                             <div class="primary_input mb-25">
                                                 <label class="primary_input_label" for=""> 
                                                     {{ __('Inventory') }}
                                                 </label>
-                                                <input class="primary_input_field" name="inventory" placeholder="1"
-                                                    type="number" value="{{ @$product->total_inventory }}" required>
+                                                <input class="primary_input_field" name="inventory" id="inventory" placeholder="1"
+                                                    type="number" value="{{ @$product->total_inventory }}" {{ in_array((int)@$product->type, [3, 4]) ? '' : 'required' }}>
                                             </div>
                                         </div>
 
@@ -325,18 +351,8 @@
                                         <div class="col-xl-10 text-center">
                                             <div class="row" id="video-preview-container">
                                                 @php
-                                                    // Get existing video file (if any)
-                                                    $existingVideoFile = null;
-                                                    if(!empty($files)) {
-                                                        $videoExtensions = ['mp4', 'avi', 'mov', 'webm', 'mkv', 'flv', 'wmv', 'm4v'];
-                                                        foreach($files as $file) {
-                                                            $extension = strtolower($file->file_type ?? '');
-                                                            if(in_array($extension, $videoExtensions)) {
-                                                                $existingVideoFile = $file;
-                                                                break; // Only one video allowed
-                                                            }
-                                                        }
-                                                    }
+                                                    // videos() relation returns only video files (files() excludes them)
+                                                    $existingVideoFile = $product->videos->first();
                                                 @endphp
                                                 @if (!empty($existingVideoFile))
                                                     <div class="col-sm-4 video-preview-item" data-file-id="{{$existingVideoFile->id}}">
@@ -504,20 +520,48 @@
         });
         
 
-        function toggleBookFields() {
-            if ($("#type_book").is(":checked")) {
-                $("#book_related_fields").show();
+        function toggleTypeFields() {
+            let isBook = $("#type_book").is(":checked");
+            let isStudyGuide = $("#type_study_guide").is(":checked");
+            let isStudyTool = $("#type_study_tool").is(":checked");
+            let isDigital = isBook || isStudyGuide || isStudyTool;
+
+            if (isBook) {
+                $("#book_meta_fields").show();
+                $("#author, #publisher, #publication_date").prop("required", true);
             } else {
-                $("#book_related_fields").hide();
+                $("#book_meta_fields").hide();
+                $("#author, #publisher, #publication_date").prop("required", false);
+            }
+
+            if (isDigital) {
+                $("#digital_pdf_field").show();
+                if (isStudyGuide) {
+                    $("#digital_pdf_label").html('{{ __("Study Guide") }} <strong class="text-danger">*</strong>');
+                } else if (isStudyTool) {
+                    $("#digital_pdf_label").html('{{ __("Study Tool") }} <strong class="text-danger">*</strong>');
+                } else {
+                    $("#digital_pdf_label").html('{{ __("Book") }} <strong class="text-danger">*</strong>');
+                }
+            } else {
+                $("#digital_pdf_field").hide();
+            }
+
+            if (isStudyGuide || isStudyTool) {
+                $("#inventory_field_wrap").hide();
+                $("#inventory").prop("required", false);
+            } else {
+                $("#inventory_field_wrap").show();
+                $("#inventory").prop("required", true);
             }
         }
 
         // Run on page load
-        toggleBookFields();
+        toggleTypeFields();
 
         // Run on change
         $("input[name='type']").on("change", function () {
-            toggleBookFields();
+            toggleTypeFields();
         });
         
         // File input change (Images only)

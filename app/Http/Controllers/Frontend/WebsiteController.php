@@ -59,6 +59,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
 use Modules\FrontendManage\Entities\RequirementSlider;
 use Modules\Shop\Entities\ShopProduct;
+use Modules\Shop\Entities\ShopBundle;
 use Modules\SystemSetting\Entities\Testimonial;
 
 class WebsiteController extends Controller
@@ -2447,7 +2448,15 @@ class WebsiteController extends Controller
         $carts = [];
         if (Auth::check()) {
 
-            $items = Cart::where('user_id', Auth::id())->with(['course', 'course.parent', 'course.user', 'course.children', 'program', 'program.user'])->when(isModuleActive('Invoice'), function ($query) {
+            $items = Cart::where('user_id', Auth::id())->with([
+                'course',
+                'course.parent',
+                'course.user',
+                'course.children',
+                'program',
+                'program.user',
+                'shopBundle.products.files',
+            ])->when(isModuleActive('Invoice'), function ($query) {
                 $query->whereNull('type');
             })->get();
 
@@ -2517,6 +2526,30 @@ class WebsiteController extends Controller
                         $carts[$key]['image'] = getCourseImage($check->files[0]->file_path ?? '');
                         $carts[$key]['price'] = getPriceFormat($cart->price);
                         
+                    }
+
+                    // Shop Savings & Bundles — header mini-cart
+                    if (!empty($cart['shop_bundle_id'])) {
+                        $shopBundle = $cart->shopBundle
+                            ?? ShopBundle::with('products.files')->find($cart['shop_bundle_id']);
+                        if ($shopBundle) {
+                            $firstProduct = $shopBundle->products->first();
+                            $thumb = '';
+                            if ($firstProduct && $firstProduct->files && $firstProduct->files->first()) {
+                                $thumb = $firstProduct->files->first()->file_path;
+                            }
+                            $displayPrice = (float) ($cart->price ?? 0);
+                            if ($displayPrice <= 0) {
+                                $displayPrice = (float) ($shopBundle->total_amount ?? 0);
+                            }
+                            $carts[$key]['id'] = $cart['id'];
+                            $carts[$key]['shop_bundle_id'] = $shopBundle->id;
+                            $carts[$key]['instructor_id'] = $cart['instructor_id'] ?? null;
+                            $carts[$key]['title'] = $shopBundle->name;
+                            $carts[$key]['instructor_name'] = '';
+                            $carts[$key]['image'] = getCourseImage($thumb);
+                            $carts[$key]['price'] = getPriceFormat($displayPrice);
+                        }
                     }
 
                     //                    if (isModuleActive('BundleSubscription')) {

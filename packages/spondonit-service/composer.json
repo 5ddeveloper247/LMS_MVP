@@ -1,0 +1,21 @@
+{
+    "name": "spondonit/service",
+    "description": "Local stub of Spondonit service provider for localhost development",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "files": [
+            "helpers/helper.php"
+        ],
+        "psr-4": {
+            "SpondonIt\\Service\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "SpondonIt\\Service\\SpondonItServiceProvider"
+            ]
+        }
+    }
+}

@@ -87,7 +87,12 @@
                     <source src="" type="">
                 </video>
 
-                @if ($product->total_inventory <= 0)
+                @php
+                    // Study Guide / Study Tool are digital — inventory is not required
+                    $isDigitalShopItem = in_array((int) $product->type, [3, 4], true);
+                    $shopItemInStock = $isDigitalShopItem || (int) $product->total_inventory > 0;
+                @endphp
+                @if (!$shopItemInStock)
                     <span class="product-main-badge">Out of Stock</span>
                 @else
                     <span class="product-main-badge">Bestseller</span>
@@ -171,7 +176,11 @@
                 </div>
             </div>
 
-            <button class="purchase-cta" onclick="event.preventDefault();">Add to Cart →</button>
+            @if ($shopItemInStock)
+                <a href="{{ route('shop.addToCart', $product->id) }}" class="purchase-cta">Add to Cart →</a>
+            @else
+                <span class="purchase-cta" aria-disabled="true" style="opacity: 0.6; cursor: not-allowed;">Out of Stock</span>
+            @endif
             <a href="{{ url('/contact') }}" class="purchase-secondary">Have questions? Talk to an advisor</a>
 
             <div class="purchase-trust">
@@ -190,41 +199,27 @@
 
         <div class="details-tabs">
             <button class="detail-tab active" onclick="switchTab('description')">Description</button>
+            {{-- What's Inside: hidden for products/books (static looked irrelevant). Re-enable later if needed.
             <button class="detail-tab" onclick="switchTab('contents')">What's Inside</button>
+            --}}
             <button class="detail-tab" onclick="switchTab('reviews')">Reviews (47)</button>
             <button class="detail-tab" onclick="switchTab('shipping')">Shipping &amp; Returns</button>
         </div>
 
-        <!-- Description -->
+        <!-- Description (from DB) -->
         <div class="detail-panel active" id="panel-description">
-            <div class="detail-prose">
-                <p>The NCLEX PASS Method™ Workbook is the companion study guide used in all Merkaii Xcellence Prep
-                    coaching
-                    programs. It contains the complete three-pillar framework — Content Mastery, Process Training, and
-                    Confidence Building — broken into practical exercises you can work through on your own or alongside
-                    a
-                    program.</p>
-                <p>This isn't a question bank or a content review textbook. It's a system workbook — designed to change
-                    the
-                    way you think about NCLEX questions, organize your study time, and track your progress with
-                    measurable
-                    benchmarks instead of vague anxiety.</p>
-                <h3>Who This Is For</h3>
-                <p>Repeat test-takers who need a different approach. First-time test-takers who want to study smarter
-                    from the
-                    start. Nursing students preparing for finals or the NCLEX. Anyone enrolled in an MXP coaching
-                    program who
-                    wants the physical workbook companion.</p>
-                <h3>What Makes This Different</h3>
-                <p>Most NCLEX prep books give you more content. This workbook gives you a process. Every chapter builds
-                    a
-                    specific skill — from reading question stems to managing test-day anxiety — and every exercise has a
-                    clear
-                    purpose tied to measurable improvement.</p>
+            <div class="detail-prose ck-content">
+                @if (!empty($product->description))
+                    {!! $product->description !!}
+                @elseif (!empty($product->short_description))
+                    {!! nl2br(e($product->short_description)) !!}
+                @else
+                    <p>{{ __('No description available.') }}</p>
+                @endif
             </div>
         </div>
 
-        <!-- What's Inside -->
+        {{-- What's Inside: hidden for products/books until we have real content. Bundles keep dynamic What's Inside.
         <div class="detail-panel" id="panel-contents">
             <div class="contents-grid">
                 <div class="contents-item">
@@ -263,6 +258,7 @@
                 </div>
             </div>
         </div>
+        --}}
 
         <!-- Reviews -->
         <div class="detail-panel" id="panel-reviews">
@@ -327,7 +323,7 @@
                 <p>A downloadable PDF version of this workbook is not currently available. The workbook is designed to
                     be
                     written in — the physical format is intentional. If you need a digital resource, check out our <a
-                        href="courses.html" style="color: var(--teal-mid);">Prep-Courses</a> for on-screen learning.</p>
+                        href="{{ route('courses') }}" style="color: var(--teal-mid);">Prep-Courses</a> for on-screen learning.</p>
             </div>
         </div>
 
@@ -579,12 +575,10 @@
                             @if (!empty($relatedProducts))
                                 @foreach ($relatedProducts as $relproduct)
                                     @php
-                                        if ($relproduct->type == 1) {
+                                        if ((int) $relproduct->type === 1) {
                                             $detailUrl = route('shop.product.detail', $relproduct->id);
-                                        } elseif ($relproduct->type == 2) {
-                                            $detailUrl = route('shop.book.detail', $relproduct->id);
                                         } else {
-                                            $detailUrl = '';
+                                            $detailUrl = route('shop.book.detail', $relproduct->id);
                                         }
                                     @endphp
                                     <div class="col-xl-5 col-lg-5 col-md-6 col-4 mb-3 pl-0 pr-2 course_tabs_section">

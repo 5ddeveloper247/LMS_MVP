@@ -1,6 +1,6 @@
 @extends(theme('layouts.master'))
 @section('title')
-    {{ Settings('site_title') ? Settings('site_title') : 'Infix LMS' }} | {{ __('Courses') }}
+    {{ Settings('site_title') ? Settings('site_title') : 'Infix LMS' }} | {{ __('courses.Courses') }}
 @endsection
 <script src="https://kit.fontawesome.com/b98cad50b5.js" crossorigin="anonymous"></script>
 {{-- @section('css') --}}
@@ -411,6 +411,32 @@
       gap: 28px;
     }
 
+    .shop-card-hidden {
+      display: none !important;
+    }
+
+    .shop-load-more-wrap {
+      text-align: center;
+      margin-top: 36px;
+    }
+
+    .shop-load-more {
+      background: var(--terracotta);
+      color: var(--white);
+      border: none;
+      padding: 12px 28px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: var(--sans);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .shop-load-more:hover {
+      background: var(--terracotta-deep);
+    }
+
     .product-card {
       background: var(--cream);
       border-radius: 12px;
@@ -432,16 +458,32 @@
 
     .product-image {
       aspect-ratio: 4/3;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 100%;
       color: var(--white);
       font-family: var(--serif);
       font-style: italic;
       font-size: 15px;
       text-align: center;
-      padding: 24px;
+      padding: 0;
       position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-sizing: border-box;
+    }
+
+    .product-image > a {
+      position: absolute;
+      inset: 0;
+      display: block;
+      overflow: hidden;
+    }
+
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
     }
 
     .product-image.guides {
@@ -1194,6 +1236,17 @@
                 $('.bs-canvas-overlay').remove();
                 return false;
             });
+
+            // Shop sections: show 3 cards, Load More reveals next 3
+            $(document).on('click', '.shop-load-more', function() {
+                var gridId = $(this).data('grid');
+                var $grid = $('#' + gridId);
+                var $hidden = $grid.find('.product-card.shop-card-hidden, .bundle-card.shop-card-hidden');
+                $hidden.slice(0, 3).removeClass('shop-card-hidden');
+                if ($grid.find('.product-card.shop-card-hidden, .bundle-card.shop-card-hidden').length === 0) {
+                    $(this).closest('.shop-load-more-wrap').hide();
+                }
+            });
         });
     </script>
 @endsection
@@ -1203,7 +1256,7 @@
     @endphp
     <x-breadcrumb :banner="$frontendContent->quiz_page_banner" :title="$frontendContent->quiz_page_title" :subTitle="$frontendContent->quiz_page_sub_title" />
 
-    <x-shop-product-card-section :request="@$request" :products="@$products" />
+    <x-shop-product-card-section :request="@$request" :products="@$products" :bundles="@$bundles" />
 
     @include(theme('partials._custom_footer'))
 @endsection

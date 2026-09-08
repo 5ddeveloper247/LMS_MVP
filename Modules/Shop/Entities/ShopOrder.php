@@ -25,6 +25,11 @@ class ShopOrder extends Model
         return $this->belongsTo(ShopProduct::class, 'product_id');
     }
 
+    public function shopBundle()
+    {
+        return $this->belongsTo(ShopBundle::class, 'shop_bundle_id');
+    }
+
     // Accessor for status label
     public function getStatusLabelAttribute()
     {   

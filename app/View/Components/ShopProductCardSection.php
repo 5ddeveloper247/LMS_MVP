@@ -6,13 +6,13 @@ use Illuminate\View\Component;
 
 class ShopProductCardSection extends Component
 {
-    public $request, $products;
+    public $request, $products, $bundles;
 
-    public function __construct($request, $products = null)
+    public function __construct($request, $products = null, $bundles = null)
     {
-
         $this->request = $request;
         $this->products = $products;
+        $this->bundles = $bundles;
     }
 
 

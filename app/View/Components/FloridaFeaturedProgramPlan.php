@@ -21,9 +21,12 @@ class FloridaFeaturedProgramPlan extends Component
         $home_content = app('getHomeContent');
         $florida_programplan = getRawHomeContents($home_content,'florida_programplan','en') ?? 0;
         $florida_programplan_bg = getRawHomeContents($home_content,'florida_programplan_bg','en');
+        $programplan = null;
+        if (\Illuminate\Support\Facades\Schema::hasTable('payment_plans')) {
             $programplan = PaymentPlans::where('id',$florida_programplan)
             ->where('type','program')->where('edate','>=',Carbon::today())
             ->first();
+        }
         return view(theme('components.florida-featured-program-plan'), compact('programplan','florida_programplan_bg'));
     }
 }

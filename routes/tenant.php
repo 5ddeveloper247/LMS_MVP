@@ -54,6 +54,9 @@ Route::group(['namespace' => 'Frontend'], function () {
     Route::get('/shop', 'ShopController@index')->name('shop.index');
     Route::get('/shop/product/detail/{id}', 'ShopController@productDetail')->name('shop.product.detail');
     Route::get('/shop/book/detail/{id}', 'ShopController@bookDetail')->name('shop.book.detail');
+    Route::get('/shop/bundle/detail/{id}', 'ShopController@bundleDetail')->name('shop.bundle.detail');
+    Route::get('/shop/bundle/addToCart/{id}', 'ShopController@addToCartBundle')->name('shop.bundle.addToCart');
+    Route::get('/shop/bundle/buyNow/{id}', 'ShopController@buyNowBundle')->name('shop.bundle.buyNow');
     Route::get('/shop/addToCart/{id}', 'ShopController@addToCartShop')->name('shop.addToCart');
     Route::get('/shop/buyNow/{id}', 'ShopController@buyNowShop')->name('shop.buyNow');
 
@@ -254,6 +257,8 @@ Route::group(['namespace' => 'Frontend', 'middleware' => ['student']], function 
 
     Route::get('my-orders', 'ShopController@myOrders')->name('myOrders');
     Route::get('my-orders/detail/{id}', 'ShopController@myOrderDetail')->name('myOrder.detail');
+    Route::get('my-orders/bundle/{tracking}/{bundleId}', 'ShopController@myBundleOrderDetail')->name('myOrder.bundleDetail');
+    Route::post('my-orders/bundle/{tracking}/{bundleId}/cancel', 'ShopController@cancelBundleOrder')->name('myOrder.bundleCancel');
     Route::post('my-orders/cancelOrder/{id}', 'ShopController@cancelOrder')->name('myOrderCancel');
     Route::post('my-orders/refundRequestOrder/{id}', 'ShopController@orderRefundRequest')->name('myOrderRefundReq');
 });
@@ -269,6 +274,7 @@ Route::group(['prefix' => 'order', 'middleware' => ['auth']], function () {
     Route::post('submit', 'PaymentController@makePlaceOrder')->name('makePlaceOrder');
     Route::get('/payment', 'PaymentController@payment')->name('orderPayment');
     Route::post('/paymentSubmit', 'PaymentController@paymentSubmit')->name('paymentSubmit');
+    Route::get('/confirmation', 'PaymentController@orderConfirmation')->name('orderConfirmation');
     //paypal url
     Route::get('paypal/success', 'PaymentController@paypalSuccess')->name('paypalSuccess');
     Route::get('paypal/failed', 'PaymentController@paypalFailed')->name('paypalFailed');
@@ -483,3 +489,19 @@ Route::get('/nclex-reset', function () {
 Route::get('/accessibility', function () {
     return view('frontend.infixlmstheme.pages.accessibility');
 })->name('accessibility');
+
+Route::get('/faq', function () {
+    return view('frontend.infixlmstheme.pages.faq');
+})->name('faq');
+
+Route::get('/cookies', function () {
+    return view('frontend.infixlmstheme.pages.cookies');
+})->name('cookies');
+
+Route::get('/disclaimer', function () {
+    return view('frontend.infixlmstheme.pages.disclaimer');
+})->name('disclaimer');
+
+Route::get('/terms', function () {
+    return view('frontend.infixlmstheme.pages.terms');
+})->name('terms');

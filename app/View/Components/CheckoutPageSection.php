@@ -68,7 +68,7 @@ class CheckoutPageSection extends Component
         $checkout->coupon_id = null;
         $checkout->save();
         $methods = PaymentMethod::where('active_status', 1)->get(['method', 'logo']);
-        $carts = Cart::where('user_id', Auth::id())->with(['course', 'course.user', 'course.children', 'program', 'program.user'])->get();
+        $carts = Cart::where('user_id', Auth::id())->with(['course', 'course.user', 'course.children', 'program', 'program.user', 'product.files', 'shopBundle.products.files'])->get();
 
         return view(theme('components.checkout-page-section'), compact('checkout', 'carts', 'methods', 'current', 'bills', 'countries', 'cities', 'profile', 'states'));
     }

@@ -7,6 +7,7 @@ use Modules\Blog\Entities\Blog;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Http\Request as HttpRequest;
 use Modules\CourseSetting\Entities\Course;
@@ -60,34 +61,35 @@ class FrontendHomeController extends Controller
             $blocks = Cache::rememberForever('homepage_block_positions' . $domain, function () {
                 return DB::table('homepage_block_positions')->select(['id', 'block_name', 'order'])->orderBy('order', 'asc')->get();
             });
-            $latest_programs = Program::where('status', 1)->where('featured',1)->has('effectiveProgramPlan')->with('effectiveProgramPlan')->latest()->take(1)->get();
-            $latest_courses = Course::where('featured',1)
-            ->has('parent')
-            ->where(function($query){
-                $query->whereNotIn('type',[4,6])
-                    ->orHas('effectiveCoursePlan');
-            })
-            // ->where(function($query){
-            //     $query->whereHas('parent', function ($q) {
-            //         $q->where('featured', 1);
-            //     })->orWhere('featured',1);
-            // })
-            ->with('parent','effectiveCoursePlan')->latest()->take(7)->get();
-            $allPrograms = Program::where('status',1)->latest()->get();
+            $latest_programs = collect();
+            $allPrograms = collect();
+            $random_program = null;
+            if (Schema::hasTable('programs') && Schema::hasTable('payment_plans')) {
+                $latest_programs = Program::where('status', 1)->where('featured',1)->has('effectiveProgramPlan')->with('effectiveProgramPlan')->latest()->take(1)->get();
+                $allPrograms = Program::where('status',1)->latest()->get();
+                $random_program = Program::where('status', 1)
+                    ->has('effectiveProgramPlan')
+                    ->with('effectiveProgramPlan')
+                    ->inRandomOrder()
+                    ->select(['id', 'programtitle', 'totalcost', 'icon', 'subtitle', 'discription'])
+                    ->first();
+            }
+            $latest_courses = Course::where('featured',1)->has('parent');
+            if (Schema::hasTable('payment_plans')) {
+                $latest_courses = $latest_courses->where(function($query){
+                    $query->whereNotIn('type',[4,6])
+                        ->orHas('effectiveCoursePlan');
+                })->with('parent','effectiveCoursePlan');
+            } else {
+                $latest_courses = $latest_courses->whereNotIn('type',[4,6])->with('parent');
+            }
+            $latest_courses = $latest_courses->latest()->take(7)->get();
             $allCourses = Course::whereNull('parent_id')->where('type','<>',3)->latest()->get();
-            //dd($latest_courses);
             $latest_blogs = Blog::where('status', 1)->with('user')->latest()->limit(10)->get();
             $featured_blogs = Blog::where('status',1)->where('featured',1)->with('user')->latest()->limit(3)->get();
             $latest_course_reveiws = CourseReveiw::where('status', 1)->with('user')->latest()->limit(4)->get();
             $testimonials = Testimonial::where('status',1)->inRandomOrder()->get();
             $testimonials2 = Testimonial::where('status',1)->inRandomOrder()->get();
-
-            $random_program = Program::where('status', 1)
-                ->has('effectiveProgramPlan')
-                ->with('effectiveProgramPlan')
-                ->inRandomOrder()
-                ->select(['id', 'programtitle', 'totalcost', 'icon', 'subtitle', 'discription'])
-                ->first();
             $faqs = HomePageFaq::where('status', 1)->orderBy('order','desc')->take(10)->get();
 
             $home_content = app('getHomeContent');

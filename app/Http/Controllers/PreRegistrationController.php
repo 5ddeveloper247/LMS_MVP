@@ -34,12 +34,33 @@ class PreRegistrationController extends Controller{
 
   public function preRegister(Request $request){
 
-    $request->validate([
-        'name' => 'required|string',
+    if ($request->filled('first_name') || $request->filled('last_name')) {
+        $request->merge([
+            'name' => trim(($request->first_name ?? '') . ' ' . ($request->last_name ?? '')),
+        ]);
+    }
+
+    $rules = [
+        'name' => 'required|string|max:255',
         'email' => 'required|email|unique:pre-registration,email|unique:users,email',
         'password' => 'required|confirmed',
-        'g-recaptcha-response' => 'required|captcha'
-    ]);
+        'studying_for' => 'nullable|in:rn,pn,cna',
+        'student_journey' => 'nullable|in:nursing-school,repeat-tester,reentry',
+    ];
+
+    if ($request->input('signup_source') === 'login_create') {
+        $rules['studying_for'] = 'required|in:rn,pn,cna';
+        if (in_array($request->input('studying_for'), ['rn', 'pn'], true)) {
+            $rules['student_journey'] = 'required|in:nursing-school,repeat-tester,reentry';
+        }
+    }
+
+    $captchaKey = saasEnv('NOCAPTCHA_SITEKEY') ?: env('NOCAPTCHA_SITEKEY');
+    if (!empty($captchaKey)) {
+        $rules['g-recaptcha-response'] = 'required|captcha';
+    }
+
+    $request->validate($rules);
 
     // PreRegistration::create([
     //     'name' => $request->name,
@@ -63,6 +84,8 @@ class PreRegistrationController extends Controller{
         'dob' => null,
         'gender' => null,
         'student_type' => null,
+        'studying_for' => $request->studying_for ?? null,
+        'student_journey' => $request->student_journey ?? null,
         'job_title' => null,
         'identification_number' => null,
         'company' => null,
