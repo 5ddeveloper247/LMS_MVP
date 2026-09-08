@@ -53,6 +53,7 @@ class ProductController extends Controller
             'tax_percent'       => 'required|numeric|min:0|max:100',
             'discount_type'     => 'nullable|in:fixed,percent',
             'inventory'         => 'nullable|numeric|min:1',
+            'is_flagship'       => 'nullable|in:0,1',
             // 'discount'          => [
             //                         'nullable',
             //                         'numeric',
@@ -189,6 +190,7 @@ class ProductController extends Controller
         $product->author            = $request->author;
         $product->publisher         = $request->publisher;
         $product->publication_date  = $this->toMysqlDate($request->publication_date);
+        $product->is_flagship       = ((string) $request->input('is_flagship', '0') === '1');
 
         $product->total_amount      = $totalAmount; // calculated total amount exculsive of tax and discount
         $product->total_tax         = $totalTax;    // calculated total tax ammount on discounted total
@@ -202,6 +204,7 @@ class ProductController extends Controller
         }
 
         $product->save();
+        $this->syncFlagshipFlag($product);
 
         // Handle Product Images (multiple files)
         if ($request->hasFile('product_images')) {
@@ -278,6 +281,7 @@ class ProductController extends Controller
             'tax_percent'       => 'required|numeric|min:0|max:100',
             'discount_type'     => 'nullable|in:fixed,percent',
             'inventory'         => 'nullable|numeric|min:1',
+            'is_flagship'       => 'nullable|in:0,1',
             // 'discount'          => ['nullable', 'numeric', 'min:0',
             //                         Rule::when($request->discount_type === 'percent', ['max:100']),],
             // Product images (array of files)
@@ -408,6 +412,7 @@ class ProductController extends Controller
         $product->author            = $request->author;
         $product->publisher         = $request->publisher;
         $product->publication_date  = $this->toMysqlDate($request->publication_date);
+        $product->is_flagship       = ((string) $request->input('is_flagship', '0') === '1');
 
         $product->total_amount      = $totalAmount; // calculated total amount exculsive of tax and discount
         $product->total_tax         = $totalTax;    // calculated total tax ammount on discounted total
@@ -426,6 +431,7 @@ class ProductController extends Controller
         }
 
         $product->save();
+        $this->syncFlagshipFlag($product);
 
         // Handle Product Images (multiple files)
         if ($request->hasFile('product_images')) {
@@ -746,5 +752,20 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             return null;
         }
+    }
+
+    /**
+     * Only one shop product can be the Flagship Resource (any of the 4 categories).
+     */
+    private function syncFlagshipFlag(ShopProduct $product): void
+    {
+        if (!$product->is_flagship) {
+            return;
+        }
+
+        ShopProduct::query()
+            ->where('id', '!=', $product->id)
+            ->where('is_flagship', 1)
+            ->update(['is_flagship' => 0]);
     }
 }

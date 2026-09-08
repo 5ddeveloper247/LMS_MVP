@@ -73,6 +73,16 @@
                                                 </div>
                                                 <div class="col-xl-6">
                                                     <div class="primary_input mb-25">
+                                                        <label class="primary_input_label" for="is_flagship">{{ __('Flagship Resource') }}</label>
+                                                        <select class="primary_select" name="is_flagship" id="is_flagship">
+                                                            <option value="0" {{ (string) old('is_flagship', isset($product) && $product->is_flagship ? '1' : '0') === '0' ? 'selected' : '' }}>No</option>
+                                                            <option value="1" {{ (string) old('is_flagship', isset($product) && $product->is_flagship ? '1' : '0') === '1' ? 'selected' : '' }}>Yes — show as Flagship on shop</option>
+                                                        </select>
+                                                        <small class="text-muted">Only one product across all categories can be Flagship. Selecting Yes replaces the current Flagship.</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xl-6">
+                                                    <div class="primary_input mb-25">
                                                         <label class="primary_input_label" for="">
                                                             {{ __('Title') }}
                                                             <strong class="text-danger">*</strong>

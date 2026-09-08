@@ -3,6 +3,7 @@
 namespace App\View\Components;
 
 use Illuminate\View\Component;
+use Modules\Shop\Entities\ShopProduct;
 
 class ShopProductCardSection extends Component
 {
@@ -18,6 +19,17 @@ class ShopProductCardSection extends Component
 
     public function render()
     {
-        return view(theme('components.shop-product-card-section'));
+        $flagshipProduct = null;
+
+        try {
+            $flagshipProduct = ShopProduct::where('is_flagship', 1)
+                ->where('status', '1')
+                ->with('files')
+                ->first();
+        } catch (\Throwable $e) {
+            $flagshipProduct = null;
+        }
+
+        return view(theme('components.shop-product-card-section'), compact('flagshipProduct'));
     }
 }
