@@ -22,6 +22,10 @@ class ShopProduct extends Model
         return $labels[$this->type] ?? 'Unknown';
     }
 
+    protected $casts = [
+        'is_flagship' => 'boolean',
+    ];
+
     public function files()
     {
         return $this->hasMany(ShopProductFile::class, 'product_id')->whereNotIn('file_type', ['mp4','avi','mov','webm','mkv','flv','wmv','m4v'])->orderBy('created_at', 'desc');

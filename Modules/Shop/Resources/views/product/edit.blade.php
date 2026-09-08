@@ -47,13 +47,13 @@
                                                             <div class="mr-5">
                                                                 <label for="type_product" class="d-flex align-items-center">
                                                                     <input type="radio" id="type_product" name="type" value="1" {{@$product->type == 1 ? 'checked' : ''}} disabled>
-                                                                    <span class="checkmark mr-2"></span> Product
+                                                                    <span class="checkmark mr-2"></span> Merchandise
                                                                 </label>
                                                             </div>
                                                             <div class="mr-4">
                                                                 <label for="type_book" class="d-flex align-items-center">
                                                                     <input type="radio" id="type_book" name="type" value="2" {{@$product->type == 2 ? 'checked' : ''}} disabled>
-                                                                    <span class="checkmark mr-2"></span> Book
+                                                                    <span class="checkmark mr-2"></span> Books and Journals
                                                                 </label>
                                                             </div>
                                                             <div class="mr-4">
@@ -69,6 +69,16 @@
                                                                 </label>
                                                             </div>
                                                         </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xl-6">
+                                                    <div class="primary_input mb-25">
+                                                        <label class="primary_input_label" for="is_flagship">{{ __('Flagship Resource') }}</label>
+                                                        <select class="primary_select" name="is_flagship" id="is_flagship">
+                                                            <option value="0" {{ (string) old('is_flagship', isset($product) && $product->is_flagship ? '1' : '0') === '0' ? 'selected' : '' }}>No</option>
+                                                            <option value="1" {{ (string) old('is_flagship', isset($product) && $product->is_flagship ? '1' : '0') === '1' ? 'selected' : '' }}>Yes — show as Flagship on shop</option>
+                                                        </select>
+                                                        <small class="text-muted">Only one product across all categories can be Flagship. Selecting Yes replaces the current Flagship.</small>
                                                     </div>
                                                 </div>
                                                 <div class="col-xl-6">

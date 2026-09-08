@@ -17,11 +17,11 @@
                                 <ul class="nav nav-tabs no-bottom-border mt-sm-md-20 mb-10 ml-3" role="tablist">
                                     <li class="nav-item">
                                         <a class="nav-link active" href="#shop_products" role="tab"
-                                            data-toggle="tab">{{ __('Products') }}</a>
+                                            data-toggle="tab">{{ __('Merchandise') }}</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="#shop_books" role="tab"
-                                            data-toggle="tab">{{ __('Books') }}</a>
+                                            data-toggle="tab">{{ __('Books and Journals') }}</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="#shop_guides" role="tab"
@@ -33,7 +33,7 @@
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="#shop_bundles" role="tab"
-                                            data-toggle="tab">{{ __('Bundles') }}</a>
+                                            data-toggle="tab">{{ __('Savings and Bundles') }}</a>
                                     </li>
                                 </ul>
                             </div>

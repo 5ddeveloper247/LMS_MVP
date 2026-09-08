@@ -129,38 +129,63 @@
     </div>
 </div>
 
-<!-- FEATURED PRODUCT: FL BON REMEDIATION GUIDE -->
+<!-- FEATURED PRODUCT: FLAGSHIP RESOURCE (admin-selected; design unchanged) -->
+@if (!empty($flagshipProduct))
+    @php
+        $flagship = $flagshipProduct;
+        $flagshipImage = isset($flagship->files[0]->file_path)
+            ? url($flagship->files[0]->file_path)
+            : null;
+        $flagshipDiscount = (float) ($flagship->total_discount ?? 0);
+        $flagshipSalePrice = (float) ($flagship->total_amount ?? 0);
+        $flagshipOriginalPrice = $flagshipSalePrice + $flagshipDiscount;
+        $flagshipDetailRoute = ((int) $flagship->type === 1) ? 'shop.product.detail' : 'shop.book.detail';
+        $flagshipDetailUrl = route($flagshipDetailRoute, $flagship->id);
+        $flagshipIncludes = [];
+        if (!empty($flagship->description) && preg_match_all('/<li[^>]*>(.*?)<\/li>/is', $flagship->description, $matches)) {
+            foreach ($matches[1] as $item) {
+                $text = trim(html_entity_decode(strip_tags($item)));
+                if ($text !== '') {
+                    $flagshipIncludes[] = $text;
+                }
+            }
+        }
+        $flagshipEyebrow = in_array((int) $flagship->type, [2, 3, 4], true)
+            ? 'New Release · Digital Download'
+            : 'New Release · ' . ($flagship->type_label ?? 'Product');
+    @endphp
 <section class="featured-section">
     <div class="featured-inner">
         <div class="featured-visual">
             <span class="featured-visual-badge">Flagship Resource</span>
-            <p class="featured-visual-eyebrow">Merkaii Xcellence Prep</p>
-            <h3>FL BON Remediation Guide&trade;</h3>
-            <p>NCLEX-RN Preparation for Repeat Test-Takers</p>
-            <div class="placeholder">Product image<br>coming soon</div>
+            <p class="featured-visual-eyebrow">{{ Settings('site_title') ?: 'Merkaii Xcellence Prep' }}</p>
+            <h3>{{ $flagship->title }}</h3>
+            <p>{{ $flagship->sub_title }}</p>
+            @if ($flagshipImage)
+                <img src="{{ $flagshipImage }}" alt="{{ $flagship->title }}" style="width:100%;max-height:220px;object-fit:cover;border-radius:8px;">
+            @else
+                <div class="placeholder">Product image<br>coming soon</div>
+            @endif
         </div>
         <div class="featured-content">
-            <p class="featured-eyebrow">New Release &middot; Digital Download</p>
-            <h2>The FL BON <em>Remediation Guide&trade;</em></h2>
-            <p class="featured-desc">The complete remediation roadmap used in our instructor-led program — now available
-                as
-                a standalone digital guide. Built on The NCLEX Pass Method&trade; framework with 13+ years of nursing
-                education expertise.</p>
-            <ul class="featured-includes">
-                <li>The NCLEX Pass Method&trade; framework (Content &middot; Process &middot; Confidence)</li>
-                <li>All 8 NCLEX Client Needs categories with study plans</li>
-                <li>SATA, Prioritization &amp; Delegation strategy guides</li>
-                <li>Clinical Judgment (CJMM) walkthrough templates</li>
-                <li>8-Week &amp; 12-Week study calendars</li>
-                <li>Mistake Log, Reflection Journal &amp; Mastery Tracker templates</li>
-                <li>Test-Day preparation strategy sheet</li>
-            </ul>
+            <p class="featured-eyebrow">{{ $flagshipEyebrow }}</p>
+            <h2>{{ $flagship->title }}</h2>
+            <p class="featured-desc">{{ $flagship->short_description }}</p>
+            @if (!empty($flagshipIncludes))
+                <ul class="featured-includes">
+                    @foreach ($flagshipIncludes as $include)
+                        <li>{{ $include }}</li>
+                    @endforeach
+                </ul>
+            @endif
             <div class="featured-price-row">
-                <span class="featured-price" id="remGuidePrice">$67</span>
-                <span class="featured-price-orig" id="remGuidePriceOrig">$87</span>
-                <span class="featured-price-save" id="remGuidePriceSave">Early Bird &mdash; Save $20</span>
+                <span class="featured-price">{{ getPriceFormat($flagshipSalePrice) }}</span>
+                @if ($flagshipDiscount > 0)
+                    <span class="featured-price-orig">{{ getPriceFormat($flagshipOriginalPrice) }}</span>
+                    <span class="featured-price-save">Save {{ getPriceFormat($flagshipDiscount) }}</span>
+                @endif
             </div>
-            <a href="{{ route('floridaPrograms') }}" class="featured-cta">Get the Remediation Guide &rarr;</a>
+            <a href="{{ $flagshipDetailUrl }}" class="featured-cta">Get {{ $flagship->title }} &rarr;</a>
             <div class="featured-trust">
                 <span>Instant download</span>
                 <span>Secure checkout</span>
@@ -169,6 +194,7 @@
         </div>
     </div>
 </section>
+@endif
 
 <section class="products-section">
     <div class="products-inner">
@@ -215,6 +241,9 @@
                                 <div class="product-body">
                                     <p class="product-tag">{{ $product->sub_title }}</p>
                                     <h3>{{ $product->title }}</h3>
+                                    @if (!empty($product->short_description))
+                                        <p>{{ \Illuminate\Support\Str::limit(strip_tags($product->short_description), 140) }}</p>
+                                    @endif
 
                                     <div class="product-footer">
                                         @if ($discountPrice > 0)
@@ -294,6 +323,9 @@
                                 <div class="product-body">
                                     <p class="product-tag">{{ $product->sub_title }}</p>
                                     <h3>{{ $product->title }}</h3>
+                                    @if (!empty($product->short_description))
+                                        <p>{{ \Illuminate\Support\Str::limit(strip_tags($product->short_description), 140) }}</p>
+                                    @endif
 
                                     <div class="product-footer">
                                         @if ($discountPrice > 0)
@@ -368,6 +400,9 @@
                                 <div class="product-body">
                                     <p class="product-tag">{{ $product->sub_title }}</p>
                                     <h3>{{ $product->title }}</h3>
+                                    @if (!empty($product->short_description))
+                                        <p>{{ \Illuminate\Support\Str::limit(strip_tags($product->short_description), 140) }}</p>
+                                    @endif
 
                                     <div class="product-footer">
                                         @if ($discountPrice > 0)
@@ -530,6 +565,9 @@
                                 <div class="product-body">
                                     <p class="product-tag">{{ $product->sub_title }}</p>
                                     <h3>{{ $product->title }}</h3>
+                                    @if (!empty($product->short_description))
+                                        <p>{{ \Illuminate\Support\Str::limit(strip_tags($product->short_description), 140) }}</p>
+                                    @endif
 
                                     <div class="product-footer">
                                         @if ($discountPrice > 0)
@@ -641,7 +679,10 @@
                                 <div class="product-body">
                                     <p class="product-tag">{{ $product->sub_title }}</p>
                                     <h3>{{ $product->title }}</h3>
-                                
+                                    @if (!empty($product->short_description))
+                                        <p>{{ \Illuminate\Support\Str::limit(strip_tags($product->short_description), 140) }}</p>
+                                    @endif
+
                                     <div class="product-footer">
                                         @if ($discountPrice > 0)
                                             <div>

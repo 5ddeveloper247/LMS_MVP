@@ -310,7 +310,7 @@
                     <div class="main-title">
                         <h3 class="">
 
-                            {{ __('Student') }} | {{ $student->name ?? null }}
+                            {{ __('student.Student') }} | {{ $student->name ?? null }}
                         </h3>
                     </div>
 

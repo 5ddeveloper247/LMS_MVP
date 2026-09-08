@@ -3,12 +3,14 @@
         {{ trans('common.Action') }}
     </button>
     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
-        
-        <a class="dropdown-item text-center" href="{{ route('order.view', [$query->id]) }}">
-            View
-        </a>
-        <!-- <button class="dropdown-item deleteProduct" data-id="{{ $query->id }}"
-            type="button">{{ trans('common.Delete') }}
-        </button> -->
+        @if (!empty($query->is_bundle) && !empty($query->tracking) && !empty($query->shop_bundle_id))
+            <a class="dropdown-item text-center" href="{{ route('order.view.bundle', [$query->tracking, $query->shop_bundle_id]) }}">
+                View
+            </a>
+        @else
+            <a class="dropdown-item text-center" href="{{ route('order.view', [$query->id]) }}">
+                View
+            </a>
+        @endif
     </div>
 </div>

@@ -64,7 +64,7 @@
                                                     <th scope="col">{{ __('common.SL') }}</th>
                                                     <th scope="col">{{ __('Order#') }}</th>
                                                     <th scope="col">{{ __('Username') }}</th>
-                                                    <th scope="col">{{ __('Product Title') }}</th>
+                                                    <th scope="col">{{ __('Product / Bundle') }}</th>
                                                     <th scope="col">{{ __('Purchase Amount') }}</th>
                                                     <th scope="col">{{ __('Discount') }}</th>
                                                     <th scope="col">{{ __('common.Status') }}</th>
@@ -106,7 +106,7 @@
                                                     <th scope="col">{{ __('common.SL') }}</th>
                                                     <th scope="col">{{ __('Order#') }}</th>
                                                     <th scope="col">{{ __('Username') }}</th>
-                                                    <th scope="col">{{ __('Product Title') }}</th>
+                                                    <th scope="col">{{ __('Product / Bundle') }}</th>
                                                     <th scope="col">{{ __('Purchase Amount') }}</th>
                                                     <th scope="col">{{ __('Discount') }}</th>
                                                     <th scope="col">{{ __('common.Status') }}</th>

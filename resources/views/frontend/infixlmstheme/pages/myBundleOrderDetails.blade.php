@@ -165,17 +165,38 @@
         </div>
     </div>
 
-    <form id="bundleStatusForm" method="POST" action="" style="display:none;">
-        @csrf
-    </form>
+    <div class="modal fade admin-query" id="cancelBundleConfirmationModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="bundleStatusForm" method="POST" action="">
+                    @csrf
+                    <div class="modal-header">
+                        <h4 class="modal-title">{{ __('Confirmation') }}</h4>
+                        <button type="button" class="close" data-dismiss="modal"><i class="ti-close"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="text-center">
+                            <h4>{{ __('Are you sure you want to change order status ?') }}</h4>
+                            <p class="mb-0 mt-2">{{ __('Cancel the entire bundle order? Individual items cannot be cancelled separately.') }}</p>
+                        </div>
+                        <div class="d-flex justify-content-between mt-40">
+                            <button type="button" class="theme_line_btn small_btn2" data-dismiss="modal">{{ __('No') }}</button>
+                            <button class="theme_btn small_btn2" type="submit">{{ __('Yes') }}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <script>
         function cancelBundleOrderSubmit(actionUrl) {
-            if (actionUrl != '' && confirm('Cancel the entire bundle order? Individual items cannot be cancelled separately.')) {
-                let form = document.getElementById('bundleStatusForm');
-                form.action = actionUrl;
-                form.submit();
+            if (!actionUrl) {
+                return;
             }
+            var form = document.getElementById('bundleStatusForm');
+            form.action = actionUrl;
+            $('#cancelBundleConfirmationModal').modal('show');
         }
     </script>
 @endsection
