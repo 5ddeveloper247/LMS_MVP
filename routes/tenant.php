@@ -68,6 +68,7 @@ Route::group(['namespace' => 'Frontend'], function () {
 
     //    Route::get('/footer/page/{slug}', 'WebsiteController@page')->name('dynamic.page');
     Route::get('/about-us', 'WebsiteController@aboutData')->name('about');
+    Route::get('/our-team', 'TeamPageController@index')->name('ourTeam');
     Route::get('/contact-us', 'WebsiteController@contact')->name('contact')->middleware('HeaderMenuPermissions');
     Route::post('/contact-login', 'WebsiteController@contactLogin')->name('contactLogin')->middleware('HeaderMenuPermissions');
     Route::get('/contact', 'WebsiteController@contactUs')->name('contact-us')->middleware('HeaderMenuPermissions');
@@ -501,6 +502,7 @@ Route::get('/cookies', function () {
 Route::get('/disclaimer', function () {
     return view('frontend.infixlmstheme.pages.disclaimer');
 })->name('disclaimer');
+
 
 Route::get('/terms', function () {
     return view('frontend.infixlmstheme.pages.terms');
