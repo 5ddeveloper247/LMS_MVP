@@ -137,8 +137,8 @@
             ? url($flagship->files[0]->file_path)
             : null;
         $flagshipDiscount = (float) ($flagship->total_discount ?? 0);
-        $flagshipSalePrice = (float) ($flagship->total_amount ?? 0);
-        $flagshipOriginalPrice = $flagshipSalePrice + $flagshipDiscount;
+        $flagshipSalePrice = $flagship->salePrice();
+        $flagshipOriginalPrice = $flagship->originalPriceWithTax();
         $flagshipDetailRoute = ((int) $flagship->type === 1) ? 'shop.product.detail' : 'shop.book.detail';
         $flagshipDetailUrl = route($flagshipDetailRoute, $flagship->id);
         $flagshipIncludes = [];
@@ -180,9 +180,9 @@
             @endif
             <div class="featured-price-row">
                 <span class="featured-price">{{ getPriceFormat($flagshipSalePrice) }}</span>
-                @if ($flagshipDiscount > 0)
+                @if ($flagship->hasShopDiscount())
                     <span class="featured-price-orig">{{ getPriceFormat($flagshipOriginalPrice) }}</span>
-                    <span class="featured-price-save">Save {{ getPriceFormat($flagshipDiscount) }}</span>
+                    <span class="featured-price-save">Save {{ getPriceFormat($flagshipOriginalPrice - $flagshipSalePrice) }}</span>
                 @endif
             </div>
             <a href="{{ $flagshipDetailUrl }}" class="featured-cta">Get {{ $flagship->title }} &rarr;</a>
@@ -246,18 +246,7 @@
                                     @endif
 
                                     <div class="product-footer">
-                                        @if ($discountPrice > 0)
-                                            <div>
-                                                <span
-                                                    class="product-price">{{ getPriceFormat($originalPrice) }}</span>
-                                                <span class="text-muted text-decoration-line-through ms-2">
-                                                    <del>{{ getPriceFormat($originalPrice + $discountPrice) }}</del>
-                                                </span>
-                                            </div>
-                                        @else
-                                            <span
-                                                class="product-price">{{ getPriceFormat($originalPrice - $discountPrice) }}</span>
-                                        @endif
+                                        @include(theme('partials.shop-product-price'), ['product' => $product])
 
                                         @if ($product->total_inventory > 0)
                                             <a href="{{ $detailUrl }}" class="product-action">Buy Now &rarr;</a>
@@ -328,18 +317,7 @@
                                     @endif
 
                                     <div class="product-footer">
-                                        @if ($discountPrice > 0)
-                                            <div>
-                                                <span
-                                                    class="product-price">{{ getPriceFormat($originalPrice) }}</span>
-                                                <span class="text-muted text-decoration-line-through ms-2">
-                                                    <del>{{ getPriceFormat($originalPrice + $discountPrice) }}</del>
-                                                </span>
-                                            </div>
-                                        @else
-                                            <span
-                                                class="product-price">{{ getPriceFormat($originalPrice - $discountPrice) }}</span>
-                                        @endif
+                                        @include(theme('partials.shop-product-price'), ['product' => $product])
 
                                         <a href="{{ $detailUrl }}" class="product-action">Buy Now &rarr;</a>
                                     </div>
@@ -405,18 +383,7 @@
                                     @endif
 
                                     <div class="product-footer">
-                                        @if ($discountPrice > 0)
-                                            <div>
-                                                <span
-                                                    class="product-price">{{ getPriceFormat($originalPrice) }}</span>
-                                                <span class="text-muted text-decoration-line-through ms-2">
-                                                    <del>{{ getPriceFormat($originalPrice + $discountPrice) }}</del>
-                                                </span>
-                                            </div>
-                                        @else
-                                            <span
-                                                class="product-price">{{ getPriceFormat($originalPrice - $discountPrice) }}</span>
-                                        @endif
+                                        @include(theme('partials.shop-product-price'), ['product' => $product])
 
                                         <a href="{{ $detailUrl }}" class="product-action">Buy Now &rarr;</a>
                                     </div>
@@ -574,18 +541,7 @@
                                     @endif
 
                                     <div class="product-footer">
-                                        @if ($discountPrice > 0)
-                                            <div>
-                                                <span
-                                                    class="product-price">{{ getPriceFormat($originalPrice - $discountPrice) }}</span>
-                                                <span class="text-muted text-decoration-line-through ms-2">
-                                                    <del>{{ getPriceFormat($originalPrice) }}</del>
-                                                </span>
-                                            </div>
-                                        @else
-                                            <span
-                                                class="product-price">{{ getPriceFormat($originalPrice - $discountPrice) }}</span>
-                                        @endif
+                                        @include(theme('partials.shop-product-price'), ['product' => $product])
 
                                         @if ($product->total_inventory > 0)
                                             <a href="{{ $detailUrl }}" class="product-action">Buy Now

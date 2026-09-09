@@ -127,11 +127,15 @@ class ShopController extends Controller
 
         $orderDetail = $orderLines->first();
         $bundle = $orderDetail->shopBundle;
-        $subtotal = $orderLines->sum(function ($line) {
-            return (float) $line->purchase_price + (float) $line->discount_amount;
-        });
-        $discountTotal = $orderLines->sum('discount_amount');
-        $grandTotal = $orderLines->sum('purchase_price');
+        $grandTotal = (float) $orderLines->sum('purchase_price');
+        $discountTotal = (float) $orderLines->sum('discount_amount');
+        if ($discountTotal <= 0 && $bundle) {
+            $discountTotal = (float) ($bundle->total_discount ?? 0);
+            if ($discountTotal <= 0) {
+                $discountTotal = (float) $bundle->discountAmount();
+            }
+        }
+        $subtotal = $grandTotal + $discountTotal;
 
         return view('shop::order_bundle_detail', compact(
             'orderLines',
@@ -406,6 +410,10 @@ class ShopController extends Controller
         return Datatables::of($rows)
             ->addIndexColumn()
             ->editColumn('order_number', function ($query) {
+                $tracking = trim((string) ($query->tracking ?? ''));
+                if ($tracking !== '' && $tracking !== '0') {
+                    return e($tracking);
+                }
                 if (!empty($query->is_bundle)) {
                     return 'bundle#' . ($query->id ?? '');
                 }
@@ -434,7 +442,12 @@ class ShopController extends Controller
                 return '$' . number_format($query->purchase_price ?? 0, 2);
             })
             ->addColumn('discount', function ($query) {
-                return '$' . number_format($query->discount_amount ?? 0, 2);
+                if (!empty($query->is_bundle)) {
+                    $amount = (float) ($query->discount_amount ?? 0);
+                } else {
+                    $amount = (float) ($query->display_discount ?? 0);
+                }
+                return '$' . number_format($amount, 2);
             })
             ->addColumn('order_status', function ($query) {
                 return $query->status_label ?? '';
@@ -474,7 +487,14 @@ class ShopController extends Controller
             $row->shop_bundle_id = $first->shop_bundle_id;
             $row->user_id = $first->user_id;
             $row->purchase_price = $lines->sum('purchase_price');
-            $row->discount_amount = $lines->sum('discount_amount');
+            $discountSum = (float) $lines->sum('discount_amount');
+            if ($discountSum <= 0 && $first->shopBundle) {
+                $discountSum = (float) ($first->shopBundle->total_discount ?? 0);
+                if ($discountSum <= 0) {
+                    $discountSum = (float) $first->shopBundle->discountAmount();
+                }
+            }
+            $row->discount_amount = $discountSum;
             $row->status = $first->status;
             $row->payment_status = $first->payment_status;
             $row->status_label = $first->status_label;

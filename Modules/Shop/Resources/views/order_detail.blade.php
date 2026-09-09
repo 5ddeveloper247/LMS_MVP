@@ -83,7 +83,9 @@
                                             <tbody>
                                                 <tr>
                                                     <td class="text-main text-bold"><strong>Order #</strong></td>
-                                                    <td class="text-right text-info text-bold"> Order#{{ $orderDetail->id}}</td>
+                                                    <td class="text-right text-info text-bold">
+                                                        {{ (!empty($orderDetail->tracking) && $orderDetail->tracking !== '0' && $orderDetail->tracking !== 0) ? $orderDetail->tracking : ('Order#' . $orderDetail->id) }}
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td class="text-main text-bold"><strong>Order status</strong></td>
@@ -129,6 +131,18 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @php
+                                            $paid = (float) ($orderDetail->purchase_price ?? 0);
+                                            $discount = (float) ($orderDetail->display_discount ?? 0);
+                                            $original = $paid + $discount;
+                                            if ($orderDetail->product) {
+                                                $liveOriginal = (float) $orderDetail->product->originalPriceWithTax();
+                                                if ($liveOriginal > $original) {
+                                                    $original = $liveOriginal;
+                                                    $discount = max(0, round($original - $paid, 2));
+                                                }
+                                            }
+                                        @endphp
                                         <tr>
                                             <td class="center">1</td>
                                             <td class="left strong">{{ $orderDetail->product->title ?? 'N/A' }}</td>
@@ -137,9 +151,9 @@
                                                     src="{{isset($orderDetail->product->files[0]->file_path) ? url($orderDetail->product->files[0]->file_path) : url('public/assets/product-Placeholder.png')}}">
                                             </td>
                                             <td class="left">{{ $orderDetail->product->sub_title ?? 'N/A' }}</td>
-                                            <td class="right">${{ number_format($orderDetail->purchase_price + $orderDetail->discount_amount, 2) }}</td>
-                                            <td class="center">${{ number_format($orderDetail->discount_amount, 2) }}</td>
-                                            <td class="right">${{ number_format($orderDetail->purchase_price - $orderDetail->discount_amount, 2)}}</td>
+                                            <td class="right">${{ number_format($original, 2) }}</td>
+                                            <td class="center">${{ number_format($discount, 2) }}</td>
+                                            <td class="right">${{ number_format($paid, 2)}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -151,15 +165,15 @@
                                         <tbody>
                                             <tr>
                                                 <td class="text-left"><strong>Subtotal</strong></td>
-                                                <td class="text-right">${{ number_format($orderDetail->purchase_price + $orderDetail->discount_amount, 2) }}</td>
+                                                <td class="text-right">${{ number_format($original, 2) }}</td>
                                             </tr>
                                             <tr>
                                                 <td class="text-left"><strong>Discount:</strong></td>
-                                                <td class="text-right">${{ number_format($orderDetail->discount_amount, 2) }}</td>
+                                                <td class="text-right">${{ number_format($discount, 2) }}</td>
                                             </tr>
                                             <tr>
                                                 <td class="text-left"><strong>Total</strong></td>
-                                                <td class="text-right"><strong>${{ number_format($orderDetail->purchase_price, 2) }}</strong></td>
+                                                <td class="text-right"><strong>${{ number_format($paid, 2) }}</strong></td>
                                             </tr>
                                         </tbody>
                                     </table>

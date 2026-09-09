@@ -288,7 +288,7 @@ $clover = DB::table('clover_details')->first();
                         </div>
                     </div>
 
-                    {{-- Shipping Method (UI only — charges not applied yet) --}}
+                    {{-- Shipping Method (static UI — hidden until dynamic shipping is ready)
                     <div class="mxp-form-card">
                         <label class="mxp-ship-label">{{ __('Shipping Method') }}</label>
                         <div class="mxp-shipping-options" id="mxpShippingOptions">
@@ -310,6 +310,7 @@ $clover = DB::table('clover_details')->first();
                             </div>
                         </div>
                     </div>
+                    --}}
 
                     {{-- Payment (Authorize.Net — charged on Place Order) --}}
                     @php
@@ -622,7 +623,7 @@ $clover = DB::table('clover_details')->first();
             });
     });
 
-    // Shipping method UI only — does not change totals / purchase_price yet
+    {{-- Shipping method UI only — does not change totals / purchase_price yet
     (function () {
         var options = document.getElementById('mxpShippingOptions');
         if (!options) return;
@@ -642,6 +643,7 @@ $clover = DB::table('clover_details')->first();
             });
         });
     })();
+    --}}
 
     $(document).ready(function () {
         if ($('#cardNumber').length) {

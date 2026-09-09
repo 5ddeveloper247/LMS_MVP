@@ -52,12 +52,19 @@ class MyOrderPageSection extends Component
             })
             ->map(function ($lines) {
                 $first = $lines->first();
+                $discountSum = (float) $lines->sum('discount_amount');
+                if ($discountSum <= 0 && $first->shopBundle) {
+                    $discountSum = (float) ($first->shopBundle->total_discount ?? 0);
+                    if ($discountSum <= 0) {
+                        $discountSum = (float) $first->shopBundle->discountAmount();
+                    }
+                }
                 return (object) [
                     'tracking' => $first->tracking,
                     'shop_bundle_id' => $first->shop_bundle_id,
                     'bundle' => $first->shopBundle,
                     'purchase_price' => $lines->sum('purchase_price'),
-                    'discount_amount' => $lines->sum('discount_amount'),
+                    'discount_amount' => $discountSum,
                     'status' => $first->status,
                     'status_label' => $first->status_label,
                     'payment_status' => $first->payment_status,

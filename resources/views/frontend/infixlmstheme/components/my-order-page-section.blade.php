@@ -71,7 +71,7 @@
                                                                 <td>{{ $order->product->title ?? 'N/A' }}</td>
                                                                 <td>{{ $order->product->sub_title ?? 'N/A' }}</td>
                                                                 <td class="text-center">{{ number_format($order->purchase_price ?? 0, 2) }}</td>
-                                                                <td class="text-center">{{ number_format($order->discount_amount ?? 0, 2) }}</td>
+                                                                <td class="text-center">{{ number_format($order->display_discount ?? 0, 2) }}</td>
                                                                 <td class="text-center">{{ $order->status_label ?? 'N/A' }}</td>
                                                                 <td class="text-center">
                                                                     @if (in_array($order->payment_status, [0,4]))
@@ -129,7 +129,7 @@
                                                                 <td>{{ $order->product->title ?? 'N/A' }}</td>
                                                                 <td>{{ $order->product->sub_title ?? 'N/A' }}</td>
                                                                 <td class="text-center">{{ number_format($order->purchase_price ?? 0, 2) }}</td>
-                                                                <td class="text-center">{{ number_format($order->discount_amount ?? 0, 2) }}</td>
+                                                                <td class="text-center">{{ number_format($order->display_discount ?? 0, 2) }}</td>
                                                                 <td class="text-center">{{ $order->status_label ?? 'N/A' }}</td>
                                                                 <td class="text-center">
                                                                     <span class="badge rounded-pill bg-success" style="padding:10px 20px; color:white;">Paid</span>
@@ -185,7 +185,7 @@
                                                                 <td>{{ $order->product->title ?? 'N/A' }}</td>
                                                                 <td>{{ $order->product->sub_title ?? 'N/A' }}</td>
                                                                 <td class="text-center">{{ number_format($order->purchase_price ?? 0, 2) }}</td>
-                                                                <td class="text-center">{{ number_format($order->discount_amount ?? 0, 2) }}</td>
+                                                                <td class="text-center">{{ number_format($order->display_discount ?? 0, 2) }}</td>
                                                                 <td class="text-center">{{ $order->status_label ?? 'N/A' }}</td>
                                                                 <td class="text-center">
                                                                     <span class="badge rounded-pill bg-success" style="padding:10px 20px; color:white;">Paid</span>
@@ -241,7 +241,7 @@
                                                                 <td>{{ $order->product->title ?? 'N/A' }}</td>
                                                                 <td>{{ $order->product->sub_title ?? 'N/A' }}</td>
                                                                 <td class="text-center">{{ number_format($order->purchase_price ?? 0, 2) }}</td>
-                                                                <td class="text-center">{{ number_format($order->discount_amount ?? 0, 2) }}</td>
+                                                                <td class="text-center">{{ number_format($order->display_discount ?? 0, 2) }}</td>
                                                                 <td class="text-center">{{ $order->status_label ?? 'N/A' }}</td>
                                                                 <td class="text-center">
                                                                     <span class="badge rounded-pill bg-success" style="padding:10px 20px; color:white;">Paid</span>

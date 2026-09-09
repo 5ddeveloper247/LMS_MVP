@@ -62,20 +62,20 @@
             }
             $imageClass = ((int) $product->type === 1) ? 'merch' : 'tools';
 
-            // Same formula as addToCart when cart row has 0 / stale price
-            $catalogPrice = (float) ($product->total_amount ?? 0) - (float) ($product->total_discount ?? 0);
+            // Sale price already includes discount + tax on discounted base
+            $catalogPrice = (float) $product->salePrice();
             if ($catalogPrice <= 0) {
                 $catalogPrice = (float) ($product->price ?? 0);
             }
-            if ($resolvedPrice <= 0 && $catalogPrice > 0) {
+            if ($catalogPrice > 0 && abs($resolvedPrice - $catalogPrice) > 0.009) {
                 $resolvedPrice = $catalogPrice;
                 // Heal cart so checkout / payment also see the correct amount
                 $cart->price = $resolvedPrice;
                 $cart->save();
             }
 
-            // Frontend cart: tax hardcoded to 0 (do not use product DB tax)
-            $lineTax = 0;
+            // Tax amount included in sale (for Estimated Tax display only — not added again to Total)
+            $lineTax = (float) $product->taxAmount();
         } elseif (!empty($cart->shop_bundle_id) && $cart->shopBundle) {
             $shopBundle = $cart->shopBundle;
             $link = route('shop.bundle.detail', $cart->shop_bundle_id);
@@ -97,8 +97,8 @@
                 $cart->save();
             }
 
-            // Frontend cart: tax hardcoded to 0 (do not use bundle DB tax)
-            $lineTax = 0;
+            // Bundle has its own tax_percent / total_tax (not sum of included products)
+            $lineTax = (float) $shopBundle->taxAmount();
         } else {
             continue;
         }
@@ -120,8 +120,9 @@
     }
 
     $itemCount = count($cartLines);
-    $taxSum = 0; // hardcode — never show DB tax on cart frontend
-    $grandTotal = $totalSum + $taxSum;
+    // Line prices / Total stay tax-inclusive. Subtotal shows amount before tax (display only).
+    $grandTotal = $totalSum;
+    $subtotalExTax = max($grandTotal - $taxSum, 0);
 @endphp
 
 <div class="mxp-cart">
@@ -210,17 +211,19 @@
 
                     <div class="mxp-summary-row">
                         <span>{{ __('Subtotal') }}</span>
-                        <span class="mxp-summary-val">{{ getPriceFormat($totalSum) }}</span>
+                        <span class="mxp-summary-val">{{ getPriceFormat($subtotalExTax) }}</span>
                     </div>
                     <div class="mxp-summary-row">
                         <span>{{ __('Shipping') }}</span>
                         <span class="mxp-summary-val">{{ __('At checkout') }}</span>
                     </div>
                     <p class="mxp-summary-note">{{ __('Shipping is confirmed at checkout.') }}</p>
-                    <div class="mxp-summary-row">
-                        <span>{{ __('Estimated Tax') }}</span>
-                        <span class="mxp-summary-val">{{ getPriceFormat($taxSum) }}</span>
-                    </div>
+                    @if ($taxSum > 0)
+                        <div class="mxp-summary-row">
+                            <span>{{ __('Estimated Tax') }}</span>
+                            <span class="mxp-summary-val">{{ getPriceFormat($taxSum) }}</span>
+                        </div>
+                    @endif
                     <div class="mxp-summary-row is-total">
                         <span>{{ __('Total') }}</span>
                         <span class="mxp-summary-val">{{ getPriceFormat($grandTotal) }}</span>

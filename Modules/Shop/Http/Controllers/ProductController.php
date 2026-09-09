@@ -160,21 +160,13 @@ class ProductController extends Controller
         }
     
         $price     = $request->price;
-        $discount  = 0;
 
-        // Calculate discount
-        if ($request->discount_type === 'fixed') {
-            $discount = min($request->discount, $price); // avoid negative
-        } elseif ($request->discount_type === 'percent') {
-            $discount = ($price * $request->discount) / 100;
-        }
-
-        // Calculate tax on (price - discount)
-        $taxableAmount = $price - $discount;
-        $totalTax      = ($taxableAmount * $request->tax_percent) / 100;
-
-        // Final total amount (exclusive of tax/discount)
-        $totalAmount   = $taxableAmount + $totalTax;
+        $totals = ShopProduct::calculatePricing(
+            $price,
+            $request->discount_type,
+            $request->discount,
+            $request->tax_percent
+        );
 
         $product = new ShopProduct();
         $product->type      = $request->type;
@@ -192,9 +184,9 @@ class ProductController extends Controller
         $product->publication_date  = $this->toMysqlDate($request->publication_date);
         $product->is_flagship       = ((string) $request->input('is_flagship', '0') === '1');
 
-        $product->total_amount      = $totalAmount; // calculated total amount exculsive of tax and discount
-        $product->total_tax         = $totalTax;    // calculated total tax ammount on discounted total
-        $product->total_discount    = $discount;    // calculated total discount amount on actual price
+        $product->total_amount      = $totals['total_amount'];
+        $product->total_tax         = $totals['total_tax'];
+        $product->total_discount    = $totals['total_discount'];
 
         // Upload Book PDF (if provided)
         if ($request->hasFile('book_pdf')) {
@@ -381,22 +373,12 @@ class ProductController extends Controller
         }
 
         
-        $price     = $request->price;
-        $discount  = 0;
-
-        // Calculate discount
-        if ($request->discount_type === 'fixed') {
-            $discount = min($request->discount, $price); // avoid negative
-        } elseif ($request->discount_type === 'percent') {
-            $discount = ($price * $request->discount) / 100;
-        }
-
-        // Calculate tax on (price - discount)
-        $taxableAmount = $price - $discount;
-        $totalTax      = ($taxableAmount * $request->tax_percent) / 100;
-
-        // Final total amount (exclusive of tax/discount)
-        $totalAmount   = $price + $totalTax;
+        $totals = ShopProduct::calculatePricing(
+            $request->price,
+            $request->discount_type,
+            $request->discount,
+            $request->tax_percent
+        );
 
         $product            = ShopProduct::where('id', @$request->product_id)->first();
         // $product->type      = $request->type;
@@ -414,9 +396,9 @@ class ProductController extends Controller
         $product->publication_date  = $this->toMysqlDate($request->publication_date);
         $product->is_flagship       = ((string) $request->input('is_flagship', '0') === '1');
 
-        $product->total_amount      = $totalAmount; // calculated total amount exculsive of tax and discount
-        $product->total_tax         = $totalTax;    // calculated total tax ammount on discounted total
-        $product->total_discount    = $discount;    // calculated total discount amount on actual price
+        $product->total_amount      = $totals['total_amount'];
+        $product->total_tax         = $totals['total_tax'];
+        $product->total_discount    = $totals['total_discount'];
 
         // Upload Book PDF (if provided)
         if ($request->hasFile('book_pdf')) {
@@ -632,7 +614,7 @@ class ProductController extends Controller
                 return $query->sub_title;
             })
             ->addColumn('price', function ($query) {
-                return $query->price;
+                return view('shop::partials._td_price', compact('query'));
             })
             ->addColumn('tax_percent', function ($query) {
                 return $query->tax_percent;
@@ -662,7 +644,7 @@ class ProductController extends Controller
                 return $query->sub_title;
             })
             ->addColumn('price', function ($query) {
-                return $query->price;   
+                return view('shop::partials._td_price', compact('query'));
             })
             ->addColumn('tax_percent', function ($query) {
                 return $query->tax_percent;
@@ -690,7 +672,7 @@ class ProductController extends Controller
                 return $query->sub_title;
             })
             ->addColumn('price', function ($query) {
-                return $query->price;
+                return view('shop::partials._td_price', compact('query'));
             })
             ->addColumn('tax_percent', function ($query) {
                 return $query->tax_percent;
@@ -718,7 +700,7 @@ class ProductController extends Controller
                 return $query->sub_title;
             })
             ->addColumn('price', function ($query) {
-                return $query->price;
+                return view('shop::partials._td_price', compact('query'));
             })
             ->addColumn('tax_percent', function ($query) {
                 return $query->tax_percent;

@@ -374,10 +374,32 @@ switch ($enroll->type) {
                 @endif
                 {{--========================Products Details=========================--}}
                 @if (isset($enroll->orders) && count($enroll->orders))
-                
+                    @php $renderedShopBundles = []; @endphp
                     @foreach ($enroll->orders as $key => $item)
-                        
-                        @if (!empty($item->product_id))
+                        @if (!empty($item->shop_bundle_id))
+                            @php
+                                $bundleKey = ($item->tracking ?? '') . '|' . $item->shop_bundle_id;
+                            @endphp
+                            @if (!empty($renderedShopBundles[$bundleKey]))
+                                @continue
+                            @endif
+                            @php
+                                $renderedShopBundles[$bundleKey] = true;
+                                $bundleLines = $enroll->orders
+                                    ->where('shop_bundle_id', $item->shop_bundle_id)
+                                    ->when(!empty($item->tracking), function ($c) use ($item) {
+                                        return $c->where('tracking', $item->tracking);
+                                    });
+                                $bundle = $item->shopBundle;
+                                $linePaid = (float) $bundleLines->sum('purchase_price');
+                                $lineOriginal = $bundle
+                                    ? (float) $bundle->originalPriceWithTax()
+                                    : max($linePaid, $linePaid + (float) $bundleLines->sum('discount_amount'));
+                                if ($lineOriginal < $linePaid) {
+                                    $lineOriginal = $linePaid;
+                                }
+                                $total = $total + $lineOriginal;
+                            @endphp
                             <tr>
                                 <td class="black_color">
                                     <span class="pl-3">
@@ -386,26 +408,61 @@ switch ($enroll->type) {
                                 </td>
                                 <td colspan="2">
                                     <h5 class="black_color">
-                                        {{ @$item->product->title }}
+                                        {{ $bundle->name ?? __('Bundle') }}
+                                        <small>({{ __('Bundle') }} · {{ $bundleLines->count() }} {{ __('items') }})</small>
+                                    </h5>
+                                </td>
+                                <td class="black_color">
+                                    {{ getPriceFormat($lineOriginal) }}
+                                </td>
+                            </tr>
+                        @elseif (!empty($item->product_id))
+                            @php
+                                $product = $item->product;
+                                $linePaid = (float) ($item->purchase_price ?? 0);
+                                $lineOriginal = $product
+                                    ? (float) $product->originalPriceWithTax()
+                                    : max($linePaid, $linePaid + (float) ($item->discount_amount ?? 0));
+                                if ($lineOriginal < $linePaid) {
+                                    $lineOriginal = $linePaid;
+                                }
+                                $total = $total + $lineOriginal;
+                            @endphp
+                            <tr>
+                                <td class="black_color">
+                                    <span class="pl-3">
+                                        {{ ++$key }}
+                                    </span>
+                                </td>
+                                <td colspan="2">
+                                    <h5 class="black_color">
+                                        {{ @$product->title }}
                                         <small></small>
                                     </h5>
                                 </td>
                                 <td class="black_color">
-                                    {{ getPriceFormat($item->purchase_price) }}
+                                    {{ getPriceFormat($lineOriginal) }}
                                 </td>
                             </tr>
                         @endif
                     @endforeach
                 @endif
             @endif
-            @if($total != $enroll->purchase_price)
+            @php
+                $paidTotal = (float) (
+                    (empty($enroll->purchase_price) || $enroll->purchase_price == '0.00')
+                        ? ($enroll->price ?? 0)
+                        : $enroll->purchase_price
+                );
+                $invoiceDiscount = max(0, round((float) $total - $paidTotal, 2));
+            @endphp
+            @if ($invoiceDiscount > 0.009)
             <tr>
                 <td></td>
                 <td></td>
                 <td class="font-weight-bold text-right">{{ __('Discount') }}</td>
                 <td class="">
-                    
-                        {{ getPriceFormat($enroll->purchase_price - $total) }}
+                        {{ getPriceFormat($invoiceDiscount) }}
                 </td>
             </tr>
             @endif
@@ -414,12 +471,7 @@ switch ($enroll->type) {
                 <td></td>
                 <td class="font-weight-bold text-right">{{ __('student.Total') }}</td>
                 <td class="font-weight-bold">
-                    @if (empty($enroll->purchase_price) || $enroll->purchase_price == '0.00')
-                        {{ getPriceFormat($enroll->price) }}
-                    @else
-                    
-                        {{ getPriceFormat($enroll->purchase_price) }}
-                    @endif
+                    {{ getPriceFormat($paidTotal) }}
                 </td>
             </tr>
         </tbody>
