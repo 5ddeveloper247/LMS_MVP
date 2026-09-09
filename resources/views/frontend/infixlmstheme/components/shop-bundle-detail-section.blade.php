@@ -299,7 +299,7 @@
                         <h3>{{ \Illuminate\Support\Str::limit($relproduct->title, 50, '...') }}</h3>
                         <div class="related-footer">
                             <span class="related-price">
-                                {{ getPriceFormat($relproduct->total_amount - $relproduct->total_discount) }}
+                                {{ getPriceFormat($relproduct->salePrice()) }}
                             </span>
                             <a href="{{ $relUrl }}" class="related-link">View &rarr;</a>
                         </div>

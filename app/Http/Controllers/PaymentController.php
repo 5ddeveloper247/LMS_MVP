@@ -499,7 +499,7 @@ class PaymentController extends Controller
             'order_confirmation' => [
                 'checkout_id' => $checkout_info->id,
                 'tracking' => $checkout_info->tracking,
-                'order_number' => 'MXP-' . now()->format('Y') . '-' . str_pad((string) $checkout_info->id, 5, '0', STR_PAD_LEFT),
+                'order_number' => $checkout_info->tracking,
                 'email' => $billing->email ?? (Auth::user()->email ?? ''),
                 'card_last4' => $cardLast4,
                 'payment_label' => $cardLast4 !== '' ? ('Card ending in ' . $cardLast4) : 'Authorize.Net',
@@ -1440,13 +1440,23 @@ class PaymentController extends Controller
             //==========================End Referral========================
             
             //======================Shop Order Entry Add===================
+            // Catalog discount (product) + any checkout coupon share
+            $catalogDiscount = (float) ShopProduct::calculatePricing(
+                $product->price,
+                $product->discount_type,
+                $product->discount,
+                $product->tax_percent
+            )['total_discount'];
+
+            $couponShare = 0.00;
             if ($discount != 0 || !empty($discount)) {
                 $itemPrice = $cart->price - ($discount / count($carts));
-                $discount_amount = $cart->price - $itemPrice;
+                $couponShare = (float) ($cart->price - $itemPrice);
             } else {
                 $itemPrice = $cart->price;
-                $discount_amount = 0.00;
             }
+            $discount_amount = round($catalogDiscount + $couponShare, 2);
+
             $response = json_decode($response);// (a) string to std object
             // dd($response->id);
             $enroll = new ShopOrder();
@@ -1469,13 +1479,20 @@ class PaymentController extends Controller
             // Shop Savings & Bundles — create an order line per included product
             $shopBundle = ShopBundle::with('products')->find($cart->shop_bundle_id);
             if ($shopBundle && $shopBundle->products->count()) {
+                // Bundle catalog discount + any checkout coupon share (stored on first line)
+                $catalogDiscount = (float) ($shopBundle->total_discount ?? 0);
+                if ($catalogDiscount <= 0) {
+                    $catalogDiscount = (float) $shopBundle->discountAmount();
+                }
+
+                $couponShare = 0.00;
                 if ($discount != 0 || !empty($discount)) {
                     $itemPrice = $cart->price - ($discount / count($carts));
-                    $discount_amount = $cart->price - $itemPrice;
+                    $couponShare = (float) ($cart->price - $itemPrice);
                 } else {
                     $itemPrice = $cart->price;
-                    $discount_amount = 0.00;
                 }
+                $discount_amount = round($catalogDiscount + $couponShare, 2);
 
                 $responseObj = is_string($response) ? json_decode($response) : $response;
                 $products = $shopBundle->products;

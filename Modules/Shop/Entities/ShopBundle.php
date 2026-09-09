@@ -38,6 +38,52 @@ class ShopBundle extends Model
     }
 
     /**
+     * Tax included in bundle total_amount (bundle-level tax, not sum of product taxes).
+     */
+    public function taxAmount(): float
+    {
+        $price = (float) $this->price;
+        $discountInput = (float) ($this->discount ?? 0);
+        $taxPercent = (float) ($this->tax_percent ?? 0);
+        $discountAmount = 0.0;
+
+        if ($this->discount_type === 'fixed') {
+            $discountAmount = min($discountInput, $price);
+        } elseif ($this->discount_type === 'percent') {
+            $discountAmount = ($price * $discountInput) / 100;
+        }
+
+        $taxable = max($price - $discountAmount, 0);
+
+        return round(($taxable * $taxPercent) / 100, 2);
+    }
+
+    /** Catalog discount amount (before tax). */
+    public function discountAmount(): float
+    {
+        $price = (float) $this->price;
+        $discountInput = (float) ($this->discount ?? 0);
+        $discountAmount = 0.0;
+
+        if ($this->discount_type === 'fixed') {
+            $discountAmount = min($discountInput, $price);
+        } elseif ($this->discount_type === 'percent') {
+            $discountAmount = ($price * $discountInput) / 100;
+        }
+
+        return round($discountAmount, 2);
+    }
+
+    /** Original bundle price with tax (before discount). */
+    public function originalPriceWithTax(): float
+    {
+        $price = (float) $this->price;
+        $taxPercent = (float) ($this->tax_percent ?? 0);
+
+        return round($price + (($price * $taxPercent) / 100), 2);
+    }
+
+    /**
      * Gallery images (excludes video extensions).
      */
     public function files()

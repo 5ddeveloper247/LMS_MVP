@@ -30,6 +30,37 @@ class ShopOrder extends Model
         return $this->belongsTo(ShopBundle::class, 'shop_bundle_id');
     }
 
+    /**
+     * Discount to show in My Orders / admin: stored value, else product catalog discount.
+     * Bundle lines keep stored only (bundle-level fallback is applied when grouping).
+     */
+    public function getDisplayDiscountAttribute(): float
+    {
+        $stored = (float) ($this->discount_amount ?? 0);
+        if ($stored > 0) {
+            return $stored;
+        }
+
+        if (!empty($this->shop_bundle_id)) {
+            return 0.0;
+        }
+
+        if ($this->relationLoaded('product') && $this->product) {
+            $productDiscount = (float) ($this->product->total_discount ?? 0);
+            if ($productDiscount <= 0) {
+                $productDiscount = (float) ShopProduct::calculatePricing(
+                    $this->product->price,
+                    $this->product->discount_type,
+                    $this->product->discount,
+                    $this->product->tax_percent
+                )['total_discount'];
+            }
+            return $productDiscount;
+        }
+
+        return 0.0;
+    }
+
     // Accessor for status label
     public function getStatusLabelAttribute()
     {   

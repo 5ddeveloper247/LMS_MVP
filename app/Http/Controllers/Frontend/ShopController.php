@@ -194,7 +194,7 @@ class ShopController extends Controller
                 
                 } else {
                     
-                    $total_amount = $product->total_amount - $product->total_discount;
+                    $total_amount = $product->salePrice();
 
                     if (isset($oldCart)) {
 
@@ -290,7 +290,7 @@ class ShopController extends Controller
 
                 } else {
 
-                    $total_amount = $product->total_amount - $product->total_discount;
+                    $total_amount = $product->salePrice();
 
                     if (isset($oldCart)) {
 

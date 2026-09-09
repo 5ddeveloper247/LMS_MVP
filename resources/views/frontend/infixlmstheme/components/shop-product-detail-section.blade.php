@@ -94,8 +94,6 @@
                 @endphp
                 @if (!$shopItemInStock)
                     <span class="product-main-badge">Out of Stock</span>
-                @else
-                    <span class="product-main-badge">Bestseller</span>
                 @endif
 
             </div>
@@ -137,19 +135,31 @@
         <div class="purchase-card">
             <p class="purchase-tag">{{ $product->sub_title }}</p>
             <h1>{{ $product->title }}</h1>
-            <p class="purchase-author">By <a href="tutor-profile.html">Paula Martin, LPN</a></p>
+            @if ((int) $product->type === 2 && !empty($product->publisher))
+                <p class="purchase-author">{{ $product->publisher }}</p>
+            @endif
+            {{-- <p class="purchase-author">By <a href="tutor-profile.html">Paula Martin, LPN</a></p> --}}
 
-            <div class="purchase-rating">
+            {{-- <div class="purchase-rating">
                 <span class="purchase-stars">★★★★★</span>
                 <span class="purchase-rating-text">4.9 out of 5 · 47 reviews</span>
-            </div>
+            </div> --}}
 
+            @php
+                $salePrice = $product->salePrice();
+                $originalWithTax = $product->originalPriceWithTax();
+            @endphp
             <div class="purchase-price-row">
                 <span class="purchase-price">
-                    {{ getPriceFormat($product->total_amount - $product->total_discount) }}
+                    {{ getPriceFormat($salePrice) }}
                 </span>
+                @if ($product->hasShopDiscount())
+                    <span class="purchase-price-orig">
+                        <del>{{ getPriceFormat($originalWithTax) }}</del>
+                    </span>
+                @endif
             </div>
-            <p class="purchase-format">Paperback · 186 pages · 8.5" × 11"</p>
+            {{-- <p class="purchase-format">Paperback · 186 pages · 8.5" × 11"</p> --}}
 
             @if (!empty($product->features) && is_array($product->features))
                 <ul class="purchase-features">
@@ -358,7 +368,7 @@
                         <h3>{{ Str::limit($relproduct->title, 50, '...') }}</h3>
                         <div class="related-footer">
                             <span class="related-price">
-                                {{ getPriceFormat($relproduct->total_amount - $relproduct->total_discount) }}
+                                {{ getPriceFormat($relproduct->salePrice()) }}
                             </span>
                             <a href="{{ $relUrl }}" class="related-link">View &rarr;</a>
                         </div>
@@ -408,7 +418,10 @@
                 <h2 class="mb-4">{{ $product->title }}</h2>
 
                 <h2 class="" style="color: #1E3A5F">
-                    {{ getPriceFormat($product->total_amount - $product->total_discount) }}
+                    {{ getPriceFormat($product->salePrice()) }}
+                    @if ($product->hasShopDiscount())
+                        <small class="text-muted"><del>{{ getPriceFormat($product->originalPriceWithTax()) }}</del></small>
+                    @endif
                 </h2>
 
                 <h5 class="mb-3">DESCRIPTION:</h5>
@@ -504,7 +517,7 @@
                                 <h6 style="color: #393280">{{ $relproduct->title }}</h6>
                                 <span>{{ $relproduct->type_label }}</span>
                                 <h5 class="fw-bold" style="color: #ED553B">
-                                    {{ getPriceFormat($relproduct->total_amount - $relproduct->total_discount) }}
+                                    {{ getPriceFormat($relproduct->salePrice()) }}
                                 </h5>
                             </div>
                         </div>
@@ -543,7 +556,10 @@
                             <div class="sidebar__title text-right">
                                 <h2 class="custom_small_heading font-weight-bold custom_heading_1 mb-0"
                                     style="color: #ff6700;">
-                                    {{ getPriceFormat($product->total_amount - $product->total_discount) }}
+                                    {{ getPriceFormat($product->salePrice()) }}
+                                    @if ($product->hasShopDiscount())
+                                        <small class="text-muted"><del>{{ getPriceFormat($product->originalPriceWithTax()) }}</del></small>
+                                    @endif
                                 </h2>
                             </div>
                         </div>
@@ -597,7 +613,7 @@
                                         <p class="color course-span">{{ $relproduct->type_label }}</p>
 
                                         <p class="course-span" style="color: #ff6700;">
-                                            {{ getPriceFormat($relproduct->total_amount - $relproduct->total_discount) }}
+                                            {{ getPriceFormat($relproduct->salePrice()) }}
                                         </p>
                                     </div>
                                 @endforeach

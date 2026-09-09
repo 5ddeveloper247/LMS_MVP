@@ -3,7 +3,10 @@
     $c = $confirmation ?? [];
     $items = $c['items'] ?? [];
     $email = $c['email'] ?? (Auth::user()->email ?? '');
-    $orderNumber = $c['order_number'] ?? ('MXP-' . ($checkout->id ?? ''));
+    // Prefer real DB tracking (session may still hold old MXP- display value)
+    $orderNumber = $checkout->tracking
+        ?? ($c['tracking'] ?? null)
+        ?? ($c['order_number'] ?? '');
     $paidAt = !empty($c['paid_at'])
         ? \Carbon\Carbon::parse($c['paid_at'])->format('F j, Y')
         : now()->format('F j, Y');

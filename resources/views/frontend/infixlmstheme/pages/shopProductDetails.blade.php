@@ -392,6 +392,16 @@
       color: var(--teal-darkest);
     }
 
+    .purchase-price-orig {
+      font-size: 20px;
+      color: var(--charcoal-soft);
+      font-family: var(--sans) !important;
+    }
+
+    .purchase-price-orig del {
+      text-decoration: line-through;
+    }
+
     .purchase-format {
       font-size: 13px;
       color: var(--charcoal-soft);

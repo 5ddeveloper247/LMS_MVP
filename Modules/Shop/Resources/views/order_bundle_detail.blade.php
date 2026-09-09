@@ -139,6 +139,10 @@
                                                 $imageSrc = isset($product->files[0]->file_path)
                                                     ? url($product->files[0]->file_path)
                                                     : url('public/assets/product-Placeholder.png');
+                                                $linePaid = (float) ($line->purchase_price ?? 0);
+                                                $lineDiscount = (float) ($line->discount_amount ?? 0);
+                                                // Bundle discount is order-level — show stored line discount only in rows
+                                                $linePrice = $linePaid + $lineDiscount;
                                             @endphp
                                             <tr>
                                                 <td class="center">{{ $index + 1 }}</td>
@@ -148,9 +152,9 @@
                                                     <img class="round-product-img" style="height:50px; width:50px;" src="{{ $imageSrc }}" alt="">
                                                 </td>
                                                 <td class="left">{{ $product->sub_title ?? 'N/A' }}</td>
-                                                <td class="right">${{ number_format($line->purchase_price + $line->discount_amount, 2) }}</td>
-                                                <td class="center">${{ number_format($line->discount_amount, 2) }}</td>
-                                                <td class="right">${{ number_format($line->purchase_price, 2) }}</td>
+                                                <td class="right">${{ number_format($linePrice, 2) }}</td>
+                                                <td class="center">${{ number_format($lineDiscount, 2) }}</td>
+                                                <td class="right">${{ number_format($linePaid, 2) }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
