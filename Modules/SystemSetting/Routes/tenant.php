@@ -90,6 +90,29 @@ Route::group(['prefix' => 'admin/systemsetting', 'middleware' => ['auth', 'admin
     Route::get('/resume/{id}', 'InstructorSettingController@downloadResume')->name('instructor.resume.download');
     Route::post('update/view/', 'InstructorSettingController@updateView')->name('instructor.update.view');
 
+    // Tutor Session Packages (Tutoring page pricing)
+    Route::get('/session-packages', 'TutorSessionPackageController@index')
+        ->name('tutorSessionPackages.index')
+        ->middleware('RoutePermissionCheck:tutorSessionPackages.index');
+    Route::get('/session-packages/create', 'TutorSessionPackageController@create')
+        ->name('tutorSessionPackages.create')
+        ->middleware('RoutePermissionCheck:tutorSessionPackages.index');
+    Route::post('/session-packages/store', 'TutorSessionPackageController@store')
+        ->name('tutorSessionPackages.store')
+        ->middleware('RoutePermissionCheck:tutorSessionPackages.index');
+    Route::get('/session-packages/edit/{id}', 'TutorSessionPackageController@edit')
+        ->name('tutorSessionPackages.edit')
+        ->middleware('RoutePermissionCheck:tutorSessionPackages.index');
+    Route::post('/session-packages/update/{id}', 'TutorSessionPackageController@update')
+        ->name('tutorSessionPackages.update')
+        ->middleware('RoutePermissionCheck:tutorSessionPackages.index');
+    Route::get('/session-packages/delete/{id}', 'TutorSessionPackageController@destroy')
+        ->name('tutorSessionPackages.destroy')
+        ->middleware('RoutePermissionCheck:tutorSessionPackages.index');
+    Route::get('/session-packages/status/{id}', 'TutorSessionPackageController@status')
+        ->name('tutorSessionPackages.status')
+        ->middleware('RoutePermissionCheck:tutorSessionPackages.index');
+
     //    turing
     Route::get('/hired/tutors', 'TutorsSettingController@hiredTutors')->name('hired.tutors')->middleware('RoutePermissionCheck:hired.tutors');
     Route::get('/tutor/slots', 'TutorsSettingController@tutorSlots')->name('tutor.slots');
