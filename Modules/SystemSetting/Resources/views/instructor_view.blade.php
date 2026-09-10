@@ -7,19 +7,21 @@
         }
 
         textarea {
-            height: 150px !important;
+            height: 120px !important;
         }
     </style>
 @endpush
 @php
     if ($user_data->role_id == 9) {
         $url = route('getTutorAllPackages', $user_data->id);
-        $section_1_heading = 'Become an Individual Tutor';
         $instructor = 'Individual Tutor';
     } else {
-        $section_1_heading = 'Become an Instructor';
         $instructor = 'Instructor';
     }
+    $personal = $instructors_personal_info ?? null;
+    $experience = $instructors_teaching_experience ?? null;
+    $resumePath = optional($experience)->upload_resume;
+    $hasResume = !empty($resumePath);
 @endphp
 @section('mainContent')
     {!! generateBreadcrumb() !!}
@@ -29,8 +31,9 @@
                 <div class="col-md-12">
                     <div class="main-title">
                         <h3 class="">
-                            {{ $instructor }} | {{ $instructors_personal_info->first_name ?? null }}
-                            {{ $instructors_personal_info->last_name ?? null }}
+                            {{ $instructor }} |
+                            {{ optional($personal)->first_name }}
+                            {{ optional($personal)->last_name }}
                         </h3>
                     </div>
 
@@ -38,289 +41,106 @@
                         <div class="row mt_0_sm">
                             <div class="col-md-12">
                                 <h2 class="hit my-3 text-center">
-                                    {{ $section_1_heading }}
+                                    {{ __('Become a Tutor Application') }}
                                 </h2>
                             </div>
-                            <div class="col-md-4">
-                                <label>What position are you applying?*</label>
-                                <select disabled name="instructor_position_id" class="form-select form-control"
-                                    aria-label="Default select example">
-                                    <option value="" selected>--SELECT--</option>
-                                    @foreach ($postions as $postion)
-                                    	@if(isset($become_instructors_form_data->instructor_position_id))
-                                        <option value="{{ $postion->id }}"
-                                            {{ $postion->id == $become_instructors_form_data->instructor_position_id ? 'selected' : '' }}>
-                                            {{ $postion->name }}</option>
-                                       	@else
-                                       	<option value="{{ $postion->id }}">{{ $postion->name }}</option>
-                                       	@endif
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <label>How did you hear about us ?*</label>
-                                <select disabled name="instructor_hear_id" class="form-select form-control"
-                                    aria-label="Default select example">
-                                    <option value="" selected>
-                                        --SELECT--
-                                    </option>
-                                    @foreach ($hears as $hear)
-                                    	@if(isset($become_instructors_form_data->instructor_hear_id))
-                                        <option value="{{ $hear->id }}"
-                                            {{ $hear->id == $become_instructors_form_data->instructor_hear_id ? 'selected' : '' }}>
-                                            {{ $hear->name }}</option>
-                                       	@else
-                                       	<option value="{{ $hear->id }}">
-                                            {{ $hear->name }}</option>
-                                       	@endif
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <label>Start Date
-                                </label>
-                                <input name="start_date" class="input--style-1 js-datepicker form-control" type="date"
-                                    readonly placeholder="BIRTHDATE"
-                                    value="{{ isset($become_instructors_form_data->start_date) ? $become_instructors_form_data->start_date : '' }}">
 
-
-                            </div>
                             <div class="col-md-12">
-                                <h2 class="my-3 text-center">
-                                    Personal Information
-                                </h2>
+                                <h2 class="my-3 text-center">{{ __('Personal Information') }}</h2>
                             </div>
-                            <div class="col-md-3">
-                                <label>First Name*</label>
-                                <input class="form-control" type="text" readonly placeholder="" name="first_name"
-                                    value="{{ isset($instructors_personal_info->first_name) ? $instructors_personal_info->first_name : '' }}">
+                            <div class="col-md-4">
+                                <label>{{ __('First Name') }}</label>
+                                <input class="form-control" type="text" readonly
+                                    value="{{ optional($personal)->first_name }}">
                             </div>
-                            <div class="col-md-3">
-                                <label>Middle Name</label>
-                                <input class="form-control" type="text" readonly placeholder="" name="middle_name"
-                                    value="{{ isset($instructors_personal_info->middle_name) ? $instructors_personal_info->middle_name : '' }}">
+                            <div class="col-md-4">
+                                <label>{{ __('Last Name') }}</label>
+                                <input class="form-control" type="text" readonly
+                                    value="{{ optional($personal)->last_name }}">
                             </div>
-                            <div class="col-md-3">
-                                <label>Last Name*</label>
-                                <input class="form-control" type="text" readonly placeholder="" name="last_name"
-                                    value="{{ isset($instructors_personal_info->last_name) ? $instructors_personal_info->last_name : '' }}">
+                            <div class="col-md-4">
+                                <label>{{ __('Email') }}</label>
+                                <input class="form-control" type="text" readonly
+                                    value="{{ optional($personal)->email ?: optional($user_data)->email }}">
+                            </div>
+                            <div class="col-md-4 mt-2">
+                                <label>{{ __('Phone') }}</label>
+                                <input class="form-control" type="text" readonly
+                                    value="{{ optional($personal)->phone ?: optional($user_data)->phone }}">
+                            </div>
+                            <div class="col-md-8 mt-2">
+                                <label>{{ __('Location') }}</label>
+                                <input class="form-control" type="text" readonly
+                                    value="{{ optional($personal)->address ?: optional($user_data)->address }}">
                             </div>
 
-                            <div class="col-md-3">
-                                <label>Gender*</label>
-                                <select disabled name="gender" class="form-select form-control"
-                                    aria-label="Default select example">
-                                    <option value="" selected disabled>--SELECT--</option>
-                                    <option value="male"
-                                        {{ 'male' == $instructors_personal_info->gender ? 'selected' : '' }}>
-                                        Male
-                                    </option>
-                                    <option value="female"
-                                        {{ 'female' == $instructors_personal_info->gender ? 'selected' : '' }}>
-                                        Female
-                                    </option>
-                                    <option value="other"
-                                        {{ 'other' == $instructors_personal_info->gender ? 'selected' : '' }}>
-                                        Other
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="col-md-3 mt-2">
-                                <label>Date of Birth*</label>
-                                <input class="form-control" type="date" readonly placeholder="" name="date_of_birth"
-                                    value="{{ $instructors_personal_info->date_of_birth }}">
-                            </div>
-                            <div class="col-md-3 mt-2">
-                                <label>Email*</label>
-                                <input class="form-control" type="text" readonly placeholder="" name="email"
-                                    value="{{ $instructors_personal_info->email }}">
-                            </div>
-                            <div class="col-md-3 mt-2">
-                                <label>Phone (Home)</label>
-                                <input class="form-control" type="text" readonly placeholder="" name="phone"
-                                    value="{{ $instructors_personal_info->phone }}">
-                            </div>
-                            <div class="col-md-3 mt-2">
-                                <label>Cell*</label>
-                                <input class="form-control" type="text" readonly placeholder="" name="cell"
-                                    value="{{ $instructors_personal_info->cell }}">
-                            </div>
-                            <div class="col-md-3 mt-2">
-                                <label>Work</label>
-                                <textarea readonly name="work" class="form-control">{{ $instructors_personal_info->work }}</textarea>
-                            </div>
-                            <div class="col-md-9 mt-2">
-                                <label>Address*</label>
-                                <textarea readonly name="address" class="form-control">{{ $instructors_personal_info->address }}</textarea>
-                            </div>
                             <div class="col-md-12">
-                                <h2 class="my-3 text-center">
-                                    School Information
-                                </h2>
-                            </div>
-                            <div class="col-md-3">
-                                <label>High School/GED*</label>
-                                <input class="form-control" type="text" readonly placeholder="" name="high_school"
-                                    value="{{ $instructors_school_info->high_school }}">
-                            </div>
-                            <div class="col-md-3">
-                                <label>Years Attended*</label>
-                                <input class="form-control" type="date" readonly placeholder=""
-                                    name="school_years_attended"
-                                    value="{{ $instructors_school_info->school_years_attended }}">
-                            </div>
-                            <div class="col-md-3">
-                                <label>Graduates*</label>
-                                <select disabled name="school_year_graduate" class="form-select form-control"
-                                    aria-label="Default select example">
-                                    <option value="" selected>
-                                        --SELECT--
-                                    </option>
-                                    <option value="yes"
-                                        {{ 'yes' == $instructors_school_info->school_year_graduate ? 'selected' : '' }}>
-                                        Yes
-                                    </option>
-                                    <option value="no"
-                                        {{ 'no' == $instructors_school_info->school_year_graduate ? 'selected' : '' }}>
-                                        No
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <label>Degree/Major*</label>
-                                <input class="form-control" type="text" readonly placeholder="" name="school_degree"
-                                    value="{{ $instructors_school_info->school_degree }}">
+                                <h2 class="my-3 text-center">{{ __('Teaching Profile') }}</h2>
                             </div>
                             <div class="col-md-4 mt-2">
-                                <label>College*</label>
-                                <input class="form-control" type="text" readonly placeholder="" name="college"
-                                    value="{{ $instructors_school_info->college }}">
+                                <label>{{ __('Highest Nursing Credential') }}</label>
+                                <input class="form-control" type="text" readonly
+                                    value="{{ optional($personal)->nursing_credential }}">
                             </div>
                             <div class="col-md-4 mt-2">
-                                <label>Years Attended*</label>
-                                <input class="form-control" type="date" readonly placeholder="" name="college_email"
-                                    value="{{ $instructors_school_info->email }}">
+                                <label>{{ __('Years of Nursing Experience') }}</label>
+                                <input class="form-control" type="text" readonly
+                                    value="{{ optional($personal)->years_experience }}">
                             </div>
                             <div class="col-md-4 mt-2">
-                                <label>Graduates*</label>
-                                <select disabled name="college_graduate" class="form-select form-control"
-                                    aria-label="Default select example">
-                                    <option value="" selected>
-                                        --SELECT--
-                                    </option>
-                                    <option value="yes"
-                                        {{ 'yes' == $instructors_school_info->college_graduate ? 'selected' : '' }}>
-                                        Yes
-                                    </option>
-                                    <option value="no"
-                                        {{ 'no' == $instructors_school_info->college_graduate ? 'selected' : '' }}>
-                                        No
-                                    </option>
-                                </select>
+                                <label>{{ __('Taught before?') }}</label>
+                                <input class="form-control" type="text" readonly
+                                    value="{{ optional($personal)->taught_before }}">
                             </div>
-                            <div class="col-md-3 mt-2">
-                                <label class="nowrap">Trade or Correspondence School*</label>
-                                <input class="form-control" type="text" readonly placeholder="" name="trade_school"
-                                    value="{{ $instructors_school_info->trade_school }}">
+                            <div class="col-md-6 mt-2">
+                                <label>{{ __('Clinical Specialty Areas') }}</label>
+                                <textarea readonly class="form-control">@php
+                                    $specs = optional($personal)->specialties;
+                                    if (is_string($specs) && $specs !== '') {
+                                        $decoded = json_decode($specs, true);
+                                        echo is_array($decoded) ? e(implode(', ', $decoded)) : e($specs);
+                                    }
+                                @endphp</textarea>
                             </div>
-                            <div class="col-md-3 mt-2">
-                                <label>Degree/Major*</label>
-                                <input class="form-control" type="text" readonly placeholder="" name="trade_degree"
-                                    value="{{ $instructors_school_info->trade_degree }}">
-
-                            </div>
-                            <div class="col-md-3 mt-2">
-                                <label>Years Attended*</label>
-                                <input class="form-control" type="date" readonly placeholder=""
-                                    name="trade_years_attended"
-                                    value="{{ $instructors_school_info->trade_years_attended }}">
-                            </div>
-
-                            <div class="col-md-3 mt-2">
-                                <label>Graduates*</label>
-                                <select disabled name="trade_year_graduate" class="form-select form-control"
-                                    aria-label="Default select example">
-                                    <option value="" selected>--SELECT--</option>
-                                    <option value="yes"
-                                        {{ 'yes' == $instructors_school_info->trade_year_graduate ? 'selected' : '' }}>
-                                        Yes
-                                    </option>
-                                    <option value="no"
-                                        {{ 'no' == $instructors_school_info->trade_year_graduate ? 'selected' : '' }}>
-                                        No
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="col-md-12">
-                                <h2 class="my-3 text-center">
-                                    Teaching Experience
-                                </h2>
-                            </div>
-
-                            <div class="col-md-4">
-                                <label>Current Position*</label>
-                                <input class="form-control" type="text" readonly placeholder=""
-                                    name="current_position"
-                                    value="{{ $instructors_teaching_experience->current_position }}">
-                            </div>
-                            <div class="col-md-4">
-                                <label>Phone No*</label>
-                                <input class="form-control" type="text" placeholder="" name="Teach_phone"
-                                    value="{{ $instructors_teaching_experience->phone }}" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label>Employer Name*</label>
-                                <input class="form-control" type="text" readonly placeholder="" name="employee_name"
-                                    value="{{ $instructors_teaching_experience->employee_name }}">
-                            </div>
-                            <div class="col-md-4 mt-2">
-                                <label>Position Start Date*</label>
-                                <input class="form-control" type="date" readonly placeholder="" name="date_employer"
-                                    value="{{ $instructors_teaching_experience->date_employer_start }}">
-                            </div>
-                            <div class="col-md-4 mt-2">
-                                @if (
-                                    !empty($instructors_teaching_experience->date_employer_end) &&
-                                        $instructors_teaching_experience->date_employer_end != '0000-00-00')
-                                    <label>Position End Date*</label>
-                                    <input class="form-control" type="date" readonly placeholder=""
-                                        name="date_employer"
-                                        value="{{ $instructors_teaching_experience->date_employer_end }}">
-                                @endif
-                            </div>
-                            <div class="col-md-4 mt-auto">
-                                @if (empty($instructors_teaching_experience->date_employer_end) ||
-                                        $instructors_teaching_experience->date_employer_end == '0000-00-00')
-                                    <input class="mr-2" type="checkbox" readonly checked><label>Currently Employed?
-                                    </label>
-                                @endif
-                            </div>
-
-                            <div class="col-md-4 mt-2">
-                                <label>Supervisor Name*</label>
-                                <input class="form-control" type="text" readonly placeholder=""
-                                    name="supervisor_name"
-                                    value="{{ $instructors_teaching_experience->supervisor_name }}">
-                            </div>
-
-                            <div class="col-md-4 d-flex flex-column mt-2">
-                                <label>Download Coverletter*</label>
-                                <a href="{{ asset($instructors_teaching_experience->upload_resume) }}"
-                                    class="primary-btn fix-gr-bg" download="">Download</a>
-                            </div>
-                            <div class="col-md-4 d-flex flex-column mt-2">
-                                <label>Download Resume*</label>
-                                <a href="{{ asset($instructors_teaching_experience->cover) }}"
-                                    class="primary-btn fix-gr-bg" download="">Download</a>
+                            <div class="col-md-6 mt-2">
+                                <label>{{ __('Availability') }}</label>
+                                <textarea readonly class="form-control">@php
+                                    $avail = optional($personal)->availability;
+                                    if (is_string($avail) && $avail !== '') {
+                                        $decoded = json_decode($avail, true);
+                                        echo is_array($decoded) ? e(implode(', ', $decoded)) : e($avail);
+                                    }
+                                @endphp</textarea>
                             </div>
                             <div class="col-md-12 mt-2">
-                                <label>Address*</label>
-                                <textarea readonly name="employer_address" class="form-control">{{ $instructors_teaching_experience->address }}</textarea>
+                                <label>{{ __('Why teach with MXP?') }}</label>
+                                <textarea readonly class="form-control">{{ optional($user_data)->about }}</textarea>
                             </div>
 
+                            <div class="col-md-12 mt-3">
+                                <h2 class="my-3 text-center">{{ __('Resume / CV') }}</h2>
+                            </div>
+                            <div class="col-md-6 d-flex flex-column mt-2">
+                                <label>{{ __('Download Resume') }}</label>
+                                @if ($hasResume)
+                                    <a href="{{ route('instructor.resume.download', $user_data->id) }}"
+                                        class="primary-btn fix-gr-bg">
+                                        {{ __('Download Resume') }}
+                                    </a>
+                                    <small class="text-muted mt-2">{{ basename($resumePath) }}</small>
+                                @else
+                                    <span class="text-muted">{{ __('No resume uploaded') }}</span>
+                                @endif
+                            </div>
+                            <div class="col-md-6 mt-2">
+                                <label>{{ __('Status') }}</label>
+                                <input class="form-control" type="text" readonly
+                                    value="{{ (int) optional($user_data)->status === 1 ? __('Active') : __('Inactive') }}">
+                            </div>
                         </div>
                     </div>
                 </div>
+
                 @if ($user_data->role_id == 9)
                     <div class="col-md-12 my-4">
                         <h2>Package(s) Bought By This Tutor</h2>
@@ -328,7 +148,6 @@
                     <div class="col-md-12">
                         <div class="QA_section QA_section_heading_custom check_box_table">
                             <div class="QA_table">
-                                <!-- table-responsive -->
                                 <div class="">
                                     <table id="lms_table" class="classList table table-responsive">
                                         <thead>
@@ -340,9 +159,6 @@
                                                 <th scope="col">{{ __('Buying Date') }}</th>
                                             </tr>
                                         </thead>
-                                        {{-- <tbody>
-
-                                    </tbody> --}}
                                     </table>
                                 </div>
                             </div>
@@ -378,16 +194,13 @@
                 createdRow: function(row, data, dataIndex) {
                     $(row).attr('data-seq_no', (data.seq_no));
                     $(row).attr('data-course_id', (data.id));
-                    // console.log(row);
                 },
                 "lengthMenu": [
                     [10, 25, 50, 100],
                     [10, 25, 50, 100]
                 ],
-
                 "ajax": $.fn.dataTable.pipeline({
                     url: '{!! $url !!}',
-                    // pages: 5 // number of pages to cache
                 }),
                 columns: [{
                         data: 'DT_RowIndex',
@@ -443,7 +256,6 @@
                             columns: ':visible',
                             columns: ':not(:last-child)',
                         },
-
                     },
                     {
                         extend: 'csvHtml5',
@@ -472,7 +284,6 @@
                             doc.content[1].table.widths =
                                 Array(doc.content[1].table.body[0].length + 1).join('*').split('');
                         }
-
                     },
                     {
                         extend: 'print',

@@ -42,16 +42,57 @@ class InstructorController extends Controller
             if (isInstructor()) {
                 $instructors = $instructors->where('id', '!=', Auth::id());
             }
-            $instructors = $instructors->where('role_id', 2)->where('status', '1')->whereNotNull('total_hours')->orderBy('total_rating', 'desc')->paginate(8);
-            $themes = [
-                'edume',
-                'teachery'
+            // Public directory: active tutors with hours set (same rule as Tutor Yes)
+            $instructors = $instructors
+                ->where('role_id', 2)
+                ->where('status', '1')
+                ->whereNotNull('total_hours')
+                ->where('total_hours', '>', 0)
+                ->orderBy('total_rating', 'desc')
+                ->get();
+
+            $personalByUserId = collect();
+            if ($instructors->isNotEmpty()) {
+                $personalByUserId = DB::table('instructors_personal_info')
+                    ->whereIn('user_id', $instructors->pluck('id'))
+                    ->get()
+                    ->keyBy('user_id');
+            }
+
+            $specialtySet = [];
+            foreach ($personalByUserId as $info) {
+                $raw = $info->specialties ?? null;
+                if (!is_string($raw) || $raw === '') {
+                    continue;
+                }
+                $decoded = json_decode($raw, true);
+                $list = is_array($decoded) ? $decoded : preg_split('/[,|]/', $raw);
+                foreach ($list as $item) {
+                    $label = trim((string) $item);
+                    if ($label !== '') {
+                        $specialtySet[mb_strtolower($label)] = true;
+                    }
+                }
+            }
+
+            $stats = [
+                'active_instructors' => $instructors->count(),
+                'subjects_covered' => count($specialtySet),
+                'students_served' => User::where('role_id', 3)->where('status', '1')->count(),
+                'pass_rate' => '95%', // marketing figure — no backend field
             ];
 
             $postions = DB::table('instructor_positions')->get();
             $hears = DB::table('instructor_hears')->get();
 
-            return view(theme('pages.instructors'), compact('instructors', 'postions', 'hears','home_content'));
+            return view(theme('pages.instructors'), compact(
+                'instructors',
+                'personalByUserId',
+                'stats',
+                'postions',
+                'hears',
+                'home_content'
+            ));
         } catch (\Exception $e) {
             GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
         }

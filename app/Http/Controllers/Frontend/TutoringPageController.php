@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 /**
- * Isolated controller for the public Our Team page.
- * Keep team-page logic here so other frontend controllers stay untouched.
+ * Isolated controller for the public Tutoring landing page.
  */
-class TeamPageController extends Controller
+class TutoringPageController extends Controller
 {
     public function __construct()
     {
@@ -19,7 +19,6 @@ class TeamPageController extends Controller
 
     public function index()
     {
-        // Our Team grid: only featured instructors (admin is_featured), max 3
         $tutors = User::query()
             ->where('role_id', 2)
             ->where('status', '1')
@@ -35,16 +34,14 @@ class TeamPageController extends Controller
             ->limit(3)
             ->get();
 
-        $paulaImage = null;
-        try {
-            if (Schema::hasTable('home_contents')) {
-                $paulaImage = \Modules\FrontendManage\Entities\HomeContent::where('key', 'home_tile1_image')
-                    ->value('value');
-            }
-        } catch (\Throwable $e) {
-            $paulaImage = null;
+        $personalByUserId = collect();
+        if ($tutors->isNotEmpty()) {
+            $personalByUserId = DB::table('instructors_personal_info')
+                ->whereIn('user_id', $tutors->pluck('id'))
+                ->get()
+                ->keyBy('user_id');
         }
 
-        return view(theme('pages.team'), compact('tutors', 'paulaImage'));
+        return view(theme('pages.tutoring'), compact('tutors', 'personalByUserId'));
     }
 }

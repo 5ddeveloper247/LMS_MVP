@@ -563,8 +563,18 @@
 
 <script>
 let currentPortal = 'student';
+const becomeTutorUrl = @json(route('becomeATutor') . '#apply');
 
 function switchPortal(portal) {
+  // Instructor/Tutor "Create Account" → Become a Tutor form (no local create form)
+  if (portal === 'instructor') {
+    const createPanel = document.getElementById('auth-create');
+    if (createPanel && createPanel.classList.contains('active')) {
+      window.location.href = becomeTutorUrl;
+      return;
+    }
+  }
+
   currentPortal = portal;
   // Update portal tabs
   document.querySelectorAll('.portal-tab').forEach(t => t.classList.remove('active'));
@@ -596,6 +606,12 @@ function switchPortal(portal) {
 }
 
 function switchAuth(mode) {
+  // Instructor/Tutor Create Account → Become a Tutor page form section
+  if (mode === 'create' && currentPortal === 'instructor') {
+    window.location.href = becomeTutorUrl;
+    return;
+  }
+
   document.querySelectorAll('.auth-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('active'));
   if (mode === 'signin') {

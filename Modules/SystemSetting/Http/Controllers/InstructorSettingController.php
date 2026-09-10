@@ -61,6 +61,43 @@ class InstructorSettingController extends Controller
         }
     }
 
+    public function downloadResume($id)
+    {
+        try {
+            $experience = DB::table('instructors_teaching_experience')->where('user_id', $id)->first();
+            $relativePath = optional($experience)->upload_resume;
+
+            if (empty($relativePath)) {
+                Toastr::error('No resume uploaded', trans('common.Failed'));
+                return redirect()->back();
+            }
+
+            $relativePath = ltrim(str_replace('\\', '/', $relativePath), '/');
+            $candidates = [
+                base_path($relativePath),
+                public_path(preg_replace('#^public/#', '', $relativePath)),
+            ];
+
+            $absolutePath = null;
+            foreach ($candidates as $candidate) {
+                if (is_file($candidate)) {
+                    $absolutePath = $candidate;
+                    break;
+                }
+            }
+
+            if (!$absolutePath) {
+                Toastr::error('Resume file not found', trans('common.Failed'));
+                return redirect()->back();
+            }
+
+            return response()->download($absolutePath, basename($absolutePath));
+        } catch (\Exception $e) {
+            Toastr::error(trans('common.Operation failed'), trans('common.Failed'));
+            return redirect()->back();
+        }
+    }
+
 
     public function getTutorAllPackages($id)
     {
@@ -397,10 +434,10 @@ class InstructorSettingController extends Controller
 
         $rules = [
             'name' => 'required',
-            'phone' => 'string|regex:/^([0-9\s\-\+\(\)]*)$/|min:11|max:14',
+            'phone' => 'nullable|string|regex:/^([0-9\s\-\+\(\)]*)$/|max:20',
             'email' => 'required|email|unique:users,email,' . $request->id,
             'password' => ($user->password == null ? 'required' : 'nullable') . '|bail|min:8|confirmed',
-            'gender' => 'required',
+            'gender' => 'nullable',
             'facebook' => 'nullable|url',
             'twitter' => 'nullable|url',
             'linkedin' => 'nullable|url',
@@ -416,13 +453,25 @@ class InstructorSettingController extends Controller
         try {
             $user->name = $request->name;
             $user->email = $request->email;
-            $user->facebook = $request->facebook;
-            $user->twitter = $request->twitter;
-            $user->linkedin = $request->linkedin;
-            $user->instagram = $request->instagram;
+            if ($request->filled('facebook')) {
+                $user->facebook = $request->facebook;
+            }
+            if ($request->filled('twitter')) {
+                $user->twitter = $request->twitter;
+            }
+            if ($request->filled('linkedin')) {
+                $user->linkedin = $request->linkedin;
+            }
+            if ($request->filled('instagram')) {
+                $user->instagram = $request->instagram;
+            }
             $user->about = $request->about;
-            $user->gender = $request->gender;
-            $user->dob = getPhpDateFormat($request->dob);
+            if ($request->filled('gender')) {
+                $user->gender = $request->gender;
+            }
+            if ($request->filled('dob')) {
+                $user->dob = getPhpDateFormat($request->dob);
+            }
             if (empty($request->phone)) {
                 $user->phone = null;
             } else {
@@ -599,6 +648,12 @@ class InstructorSettingController extends Controller
                 return $query->name;
             })->editColumn('email', function ($query) {
                 return $query->email;
+            })->addColumn('tutor', function ($query) {
+                return (!is_null($query->total_hours) && (int) $query->total_hours > 0)
+                    ? '<span class="text-success">' . __('Yes') . '</span>'
+                    : '<span class="text-muted">' . __('No') . '</span>';
+            })->addColumn('is_featured', function ($query) {
+                return view('systemsetting::partials._td_featured', compact('query'));
             })->addColumn('group_policy', function ($query) {
                 $policy = '';
                 if (isModuleActive('OrgInstructorPolicy')) {
@@ -610,7 +665,56 @@ class InstructorSettingController extends Controller
                 return view('systemsetting::partials._td_status', compact('query', 'route'));
             })->addColumn('action', function ($query) {
                 return view('systemsetting::partials._td_action', compact('query'));
-            })->rawColumns(['status', 'image', 'type', 'action'])->make(true);
+            })->rawColumns(['status', 'image', 'type', 'action', 'tutor', 'is_featured'])->make(true);
+    }
+
+    /**
+     * Toggle featured instructor for Our Team page. Max 3 featured at a time.
+     */
+    public function toggleFeatured(Request $request)
+    {
+        if (demoCheck()) {
+            return response()->json([
+                'success' => false,
+                'message' => trans('common.For the demo version, you cannot change this'),
+            ], 403);
+        }
+
+        $user = User::where('role_id', 2)->find($request->id);
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => trans('common.Not Found'),
+            ], 404);
+        }
+
+        $wantFeatured = (int) $request->status === 1;
+
+        if ($wantFeatured) {
+            $featuredCount = User::where('role_id', 2)
+                ->where('is_featured', 1)
+                ->where('id', '!=', $user->id)
+                ->count();
+
+            if ($featuredCount >= 3) {
+                return response()->json([
+                    'success' => false,
+                    'message' => __('Only 3 featured instructors are allowed at a time.'),
+                ], 422);
+            }
+
+            $user->is_featured = 1;
+        } else {
+            $user->is_featured = 0;
+        }
+
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Updated successfully',
+            'is_featured' => (int) $user->is_featured,
+        ]);
     }
 
     public function getAllIndividualTutorsData(Request $request)

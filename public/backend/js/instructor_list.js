@@ -7,6 +7,30 @@ $(".toggle-password").click(function () {
         input.attr("type", "password");
     }
 });
+
+$(document).on(
+    "click",
+    "#lms_table .switch_toggle, #lms_table2 .switch_toggle",
+    function (e) {
+        var input = $(this).find("input.status_enable_disable");
+        if (!input.length) {
+            return;
+        }
+        if (parseInt(input.data("has-password"), 10) !== 0) {
+            return;
+        }
+        // Block only when trying to activate (currently inactive)
+        if (!input.is(":checked")) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            toastr.warning(
+                "Please set the password first from the Action button, then activate the user.",
+                "Warning"
+            );
+            return false;
+        }
+    }
+);
 $(".imgBrowse").change(function (e) {
     e.preventDefault();
     var file = $(this).closest(".primary_file_uploader").find(".imgName");
@@ -33,20 +57,31 @@ $(document).on("click", ".editInstructor", function () {
             $("#instructorId").val(instructor.id);
             $("#instructorRoleId").val(instructor.role_id);
             $("#instructorName").val(instructor.name);
-            $("#instructorGender").val(instructor.gender);
-            $("#instructorGender").niceSelect("update");
-            // $("#instructorAbout").summernote("code", instructor.about);
+            if ($("#instructorGender").length) {
+                $("#instructorGender").val(instructor.gender);
+                $("#instructorGender").niceSelect("update");
+            }
             $('#instructorAbout').val(instructor.about);
-            $("#instructorDob").val(instructor.dob);
+            if ($("#instructorDob").length) {
+                $("#instructorDob").val(instructor.dob);
+            }
             $("#instructorPhone").val(instructor.phone);
             $("#instructorEmail").val(instructor.email);
             $("#instructorImage").val(instructor.image);
             $("#image_preview-1").attr("src", instructor.assetimage);
             $("#image_preview-1-old").val(instructor.assetimage);
-            $("#instructorFacebook").val(instructor.facebook);
-            $("#instructorTwitter").val(instructor.twitter);
-            $("#instructorLinkedin").val(instructor.linkedin);
-            $("#instructorInstragram").val(instructor.instagram);
+            if ($("#instructorFacebook").length) {
+                $("#instructorFacebook").val(instructor.facebook);
+            }
+            if ($("#instructorTwitter").length) {
+                $("#instructorTwitter").val(instructor.twitter);
+            }
+            if ($("#instructorLinkedin").length) {
+                $("#instructorLinkedin").val(instructor.linkedin);
+            }
+            if ($("#instructorInstragram").length) {
+                $("#instructorInstragram").val(instructor.instagram);
+            }
             $("#editInstructor").modal("show");
         },
         error: function (data) {

@@ -682,7 +682,8 @@
                             <p class="founder-stat-label">{{ __('Pass Rate') }}</p>
                         </div>
                     </div>
-                    <a href="{{ route('instructors') }}" class="founder-link">{{ __('View Full Profile & Book a Session') }} →</a>
+                    <a href="{{ route('ourTeam') }}" class="founder-link">{{ __('View Full Profile') }} →</a>
+                    <a href="{{ route('contact') }}" class="founder-link" style="margin-left:16px;">{{ __('Book a Session') }} →</a>
                 </div>
             </div>
         </section>

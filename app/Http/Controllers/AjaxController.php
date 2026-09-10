@@ -80,6 +80,14 @@ class AjaxController extends Controller
                 return response()->json(['error' => 'Maximum Packages limit have been reached.']);
             }
         }
+        if ($request->table == 'users' && (int) $request->status === 1) {
+            $user = User::find($request->id);
+            if ($user && $user->password === null) {
+                return response()->json([
+                    'error' => 'Please set the password first from the Action button, then activate the user.',
+                ]);
+            }
+        }
         if($request->table == 'courses' && $request->status == 1){
             $course = Course::find($request->id);
             if($course){
