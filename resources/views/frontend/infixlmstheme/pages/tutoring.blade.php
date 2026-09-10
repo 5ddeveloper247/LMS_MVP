@@ -877,51 +877,46 @@
                 <p class="section-subtitle">Transparent pricing. No subscription required. Buy single sessions or save with a package.</p>
             </div>
             <div class="pricing-grid">
-                <div class="pricing-card">
-                    <p class="pricing-tier">{{ __('Single Session') }}</p>
-                    <h3 class="pricing-name">{{ __('Drop-In Tutoring') }}</h3>
-                    <p class="pricing-desc">One focused session on any subject. Perfect for a specific question, exam review, or concept you're stuck on.</p>
-                    <p class="pricing-amount">$75 <span>/ session</span></p>
-                    <p class="pricing-note">60 minutes · Live video</p>
-                    <ul class="pricing-features">
-                        <li>1-on-1 with a credentialed instructor</li>
-                        <li>Any subject from our catalog</li>
-                        <li>Session recording available</li>
-                        <li>Follow-up study notes emailed</li>
-                    </ul>
-                    <a href="{{ route('contact') }}" class="pricing-cta secondary">{{ __('Book a Session') }} →</a>
-                </div>
-                <div class="pricing-card featured">
-                    <span class="pricing-badge">{{ __('Most Popular') }}</span>
-                    <p class="pricing-tier">{{ __('4-Session Pack') }}</p>
-                    <h3 class="pricing-name">{{ __('Focused Review') }}</h3>
-                    <p class="pricing-desc">Four sessions to work through a full subject area or build a consistent study rhythm before your exam.</p>
-                    <p class="pricing-amount">$260 <span>/ 4 sessions</span></p>
-                    <p class="pricing-note">$65/session · Save $40</p>
-                    <ul class="pricing-features">
-                        <li>Everything in Drop-In, plus:</li>
-                        <li>Priority scheduling</li>
-                        <li>Same instructor across all 4 sessions</li>
-                        <li>Custom study plan between sessions</li>
-                        <li>Flexible — use over 2–8 weeks</li>
-                    </ul>
-                    <a href="{{ route('contact') }}" class="pricing-cta primary">{{ __('Get the 4-Pack') }} →</a>
-                </div>
-                <div class="pricing-card">
-                    <p class="pricing-tier">{{ __('8-Session Pack') }}</p>
-                    <h3 class="pricing-name">{{ __('Deep Dive') }}</h3>
-                    <p class="pricing-desc">Eight sessions for comprehensive subject review or multi-topic exam prep. The best value for serious students.</p>
-                    <p class="pricing-amount">$440 <span>/ 8 sessions</span></p>
-                    <p class="pricing-note">$55/session · Save $160</p>
-                    <ul class="pricing-features">
-                        <li>Everything in 4-Pack, plus:</li>
-                        <li>Personalized weak-area diagnostic</li>
-                        <li>Practice question bank access</li>
-                        <li>Progress check-ins between sessions</li>
-                        <li>Flexible — use over 4–12 weeks</li>
-                    </ul>
-                    <a href="{{ route('contact') }}" class="pricing-cta secondary">{{ __('Get the 8-Pack') }} →</a>
-                </div>
+                @forelse ($sessionPackages as $package)
+                    <div class="pricing-card {{ $package->popular ? 'featured' : '' }}">
+                        @if ($package->popular)
+                            <span class="pricing-badge">{{ __('Most Popular') }}</span>
+                        @endif
+                        <p class="pricing-tier">{{ $package->heading }}</p>
+                        <h3 class="pricing-name">{{ $package->name }}</h3>
+                        @if ($package->description)
+                            <p class="pricing-desc">{{ $package->description }}</p>
+                        @endif
+                        <p class="pricing-amount">
+                            ${{ number_format((float) $package->price, 0) }}
+                            <span>
+                                @if ((int) $package->sessions_count === 1)
+                                    / {{ __('session') }}
+                                @else
+                                    / {{ $package->sessions_count }} {{ __('sessions') }}
+                                @endif
+                            </span>
+                        </p>
+                        @if ($package->price_note)
+                            <p class="pricing-note">{{ $package->price_note }}</p>
+                        @endif
+                        <ul class="pricing-features">
+                            @foreach (['line_1', 'line_2', 'line_3', 'line_4', 'line_5'] as $line)
+                                @if (!empty($package->{$line}))
+                                    <li>{{ $package->{$line} }}</li>
+                                @endif
+                            @endforeach
+                        </ul>
+                        <a href="{{ route('contact') }}"
+                            class="pricing-cta {{ $package->popular ? 'primary' : 'secondary' }}">
+                            {{ __('Book a Session') }} →
+                        </a>
+                    </div>
+                @empty
+                    <p style="text-align:center;grid-column:1/-1;color:var(--charcoal-soft);">
+                        {{ __('Session pricing packages coming soon.') }}
+                    </p>
+                @endforelse
             </div>
             <p style="text-align:center;margin-top:40px;font-size:14px;color:var(--charcoal-soft);max-width:600px;margin-left:auto;margin-right:auto;line-height:1.7;">
                 <strong>{{ __('Not sure if you need tutoring or a full program?') }}</strong>

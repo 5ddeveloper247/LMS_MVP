@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Modules\SystemSetting\Entities\TutorSessionPackage;
 
 /**
  * Isolated controller for the public Tutoring landing page.
@@ -42,6 +43,17 @@ class TutoringPageController extends Controller
                 ->keyBy('user_id');
         }
 
-        return view(theme('pages.tutoring'), compact('tutors', 'personalByUserId'));
+        $sessionPackages = collect();
+        if (Schema::hasTable('tutor_session_packages')) {
+            $sessionPackages = TutorSessionPackage::query()
+                ->where('status', 1)
+                ->where('is_featured', 1)
+                ->orderBy('sort_order')
+                ->orderBy('id')
+                ->limit(3)
+                ->get();
+        }
+
+        return view(theme('pages.tutoring'), compact('tutors', 'personalByUserId', 'sessionPackages'));
     }
 }
