@@ -1,1409 +1,1006 @@
 @extends(theme('layouts.master'))
 @section('title')
-    {{ Settings('site_title') ? Settings('site_title') : 'Infix LMS' }} | {{ __('frontend.Instructor') }}
+    {{ Settings('site_title') ? Settings('site_title') : 'Infix LMS' }} | {{ __('Our Instructors & Tutors') }}
 @endsection
-{{-- @section('css') --}}
-{{-- @endsection --}}
-@section('js')
-    <link rel="stylesheet" type="text/css" href="{{ asset('public/assets/slick/slick-theme.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('public/assets/slick/slick.css') }}">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-straight/css/uicons-regular-straight.css" />
-    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css" />
-    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css" />
-    <script src="https://kit.fontawesome.com/b98cad50b5.js" crossorigin="anonymous"></script>
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css'>
-    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css" />
 
-    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-regular-straight/css/uicons-regular-straight.css'>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
 
-    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-straight/css/uicons-solid-straight.css'>
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <style>
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999;
+<style>
+    .mxp-instructors {
+        --teal-mid: #1A8A6F;
+        --teal-deep: #0F6E56;
+        --teal-darkest: #0A4D3C;
+        --terracotta: #C65D3A;
+        --terracotta-deep: #A84B2D;
+        --cream: #F5EDE0;
+        --cream-warm: #EFE3D0;
+        --charcoal: #2B2B2B;
+        --charcoal-soft: #4A4A4A;
+        --white: #FFFFFF;
+        --gray-line: #E8DFD0;
+        --serif: 'Playfair Display', Georgia, serif;
+        --sans: 'Montserrat', system-ui, sans-serif;
+        --shadow-sm: 0 2px 8px rgba(10, 77, 60, 0.06);
+        --shadow-md: 0 8px 24px rgba(10, 77, 60, 0.10);
+        font-family: var(--sans);
+        color: var(--charcoal);
+        background: var(--cream);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    .mxp-instructors h1,
+    .mxp-instructors h2,
+    .mxp-instructors h3,
+    .mxp-instructors h4 {
+        font-family: var(--serif);
+        font-weight: 700;
+        line-height: 1.2;
+        color: var(--teal-darkest);
+    }
+
+    .mxp-instructors a {
+        color: var(--teal-mid);
+        text-decoration: none;
+    }
+
+    .mxp-instructors .breadcrumb {
+        background: var(--cream-warm);
+        padding: 12px 32px;
+        font-size: 13px;
+        color: var(--charcoal-soft);
+    }
+
+    .mxp-instructors .breadcrumb-inner {
+        max-width: 1240px;
+        margin: 0 auto;
+    }
+
+    .mxp-instructors .breadcrumb a {
+        color: var(--teal-mid);
+    }
+
+    .mxp-instructors .breadcrumb a:hover {
+        color: var(--terracotta);
+    }
+
+    .mxp-instructors .breadcrumb-sep {
+        margin: 0 8px;
+        opacity: 0.5;
+    }
+
+    .mxp-instructors .hero {
+        background: linear-gradient(135deg, var(--teal-darkest) 0%, var(--teal-deep) 100%);
+        color: var(--white);
+        padding: 90px 32px 100px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .mxp-instructors .hero::before {
+        content: '';
+        position: absolute;
+        top: -100px;
+        right: -100px;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(198, 93, 58, 0.18) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+
+    .mxp-instructors .hero-inner {
+        max-width: 900px;
+        margin: 0 auto;
+        text-align: center;
+        position: relative;
+        z-index: 1;
+    }
+
+    .mxp-instructors .hero-eyebrow {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--terracotta);
+        margin-bottom: 24px;
+        padding: 6px 16px;
+        border: 1px solid var(--terracotta);
+        border-radius: 30px;
+    }
+
+    .mxp-instructors .hero h1 {
+        font-size: clamp(38px, 5vw, 58px);
+        color: var(--white);
+        margin-bottom: 22px;
+        letter-spacing: -1px;
+    }
+
+    .mxp-instructors .hero h1 em {
+        font-style: italic;
+        color: var(--cream);
+        font-weight: 400;
+    }
+
+    .mxp-instructors .hero-sub {
+        font-size: 18px;
+        line-height: 1.7;
+        color: var(--cream-warm);
+        max-width: 660px;
+        margin: 0 auto;
+    }
+
+    .mxp-instructors .hero-ctas {
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+        margin-top: 36px;
+        flex-wrap: wrap;
+    }
+
+    .mxp-instructors .btn-primary {
+        display: inline-block;
+        background: var(--terracotta);
+        color: var(--white) !important;
+        padding: 14px 32px;
+        border-radius: 6px;
+        font-size: 15px;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+
+    .mxp-instructors .btn-primary:hover {
+        background: var(--terracotta-deep);
+        transform: translateY(-1px);
+    }
+
+    .mxp-instructors .btn-outline {
+        display: inline-block;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        color: var(--white) !important;
+        padding: 12px 28px;
+        border-radius: 6px;
+        font-size: 15px;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+
+    .mxp-instructors .btn-outline:hover {
+        border-color: var(--white);
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .mxp-instructors .section-eyebrow {
+        font-size: 12px;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: var(--terracotta);
+        font-weight: 600;
+        margin-bottom: 14px;
+    }
+
+    .mxp-instructors .section-title {
+        font-size: clamp(30px, 4vw, 44px);
+        color: var(--teal-darkest);
+        margin-bottom: 14px;
+        line-height: 1.15;
+    }
+
+    .mxp-instructors .section-title em {
+        font-style: italic;
+        font-weight: 400;
+        color: var(--teal-deep);
+    }
+
+    .mxp-instructors .section-subtitle {
+        font-size: 17px;
+        color: var(--charcoal-soft);
+        max-width: 640px;
+        line-height: 1.7;
+    }
+
+    .mxp-instructors .section-header {
+        text-align: center;
+        margin-bottom: 56px;
+    }
+
+    .mxp-instructors .section-header .section-subtitle {
+        margin: 0 auto;
+    }
+
+    .mxp-instructors .stats-bar {
+        background: var(--white);
+        border-bottom: 1px solid var(--gray-line);
+        padding: 40px 32px;
+    }
+
+    .mxp-instructors .stats-inner {
+        max-width: 960px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 32px;
+        text-align: center;
+    }
+
+    .mxp-instructors .stat-num {
+        font-family: var(--serif);
+        font-weight: 700;
+        font-size: 36px;
+        color: var(--teal-deep);
+        line-height: 1;
+        margin-bottom: 6px;
+    }
+
+    .mxp-instructors .stat-label {
+        font-size: 12px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--charcoal-soft);
+        font-weight: 500;
+    }
+
+    .mxp-instructors .filter-section {
+        background: var(--cream);
+        padding: 48px 32px 24px;
+    }
+
+    .mxp-instructors .filter-inner {
+        max-width: 1080px;
+        margin: 0 auto;
+    }
+
+    .mxp-instructors .filter-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--charcoal-soft);
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-bottom: 16px;
+        text-align: center;
+    }
+
+    .mxp-instructors .filter-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .mxp-instructors .filter-tag {
+        padding: 8px 20px;
+        border-radius: 30px;
+        font-size: 13px;
+        font-weight: 500;
+        border: 1.5px solid var(--gray-line);
+        background: var(--white);
+        color: var(--charcoal-soft);
+        cursor: pointer;
+        transition: all 0.2s;
+        user-select: none;
+    }
+
+    .mxp-instructors .filter-tag:hover {
+        border-color: var(--teal-mid);
+        color: var(--teal-mid);
+        background: rgba(26, 138, 111, 0.05);
+    }
+
+    .mxp-instructors .filter-tag.active {
+        background: var(--teal-mid);
+        color: var(--white);
+        border-color: var(--teal-mid);
+    }
+
+    .mxp-instructors .instructors-section {
+        background: var(--cream);
+        padding: 40px 32px 100px;
+    }
+
+    .mxp-instructors .instructors-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 28px;
+        max-width: 1080px;
+        margin: 0 auto;
+    }
+
+    .mxp-instructors .instructor-card {
+        background: var(--white);
+        border-radius: 14px;
+        overflow: hidden;
+        border: 1px solid var(--gray-line);
+        transition: all 0.25s;
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mxp-instructors .instructor-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .mxp-instructors .instructor-card.hidden {
+        display: none;
+    }
+
+    .mxp-instructors .instructor-photo {
+        aspect-ratio: 4/3;
+        background: linear-gradient(135deg, var(--teal-mid) 0%, var(--teal-deep) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--cream);
+        font-family: var(--serif);
+        font-style: italic;
+        font-size: 15px;
+        text-align: center;
+        padding: 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .mxp-instructors .instructor-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .mxp-instructors .instructor-badge {
+        position: absolute;
+        top: 14px;
+        left: 14px;
+        background: var(--terracotta);
+        color: var(--white);
+        font-family: var(--sans);
+        font-style: normal;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        padding: 4px 12px;
+        border-radius: 4px;
+        z-index: 1;
+    }
+
+    .mxp-instructors .instructor-body {
+        padding: 24px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mxp-instructors .instructor-name {
+        font-family: var(--serif);
+        font-weight: 700;
+        font-size: 20px;
+        color: var(--teal-darkest);
+        margin-bottom: 4px;
+    }
+
+    .mxp-instructors .instructor-title {
+        font-size: 12px;
+        color: var(--terracotta);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 14px;
+    }
+
+    .mxp-instructors .instructor-desc {
+        font-size: 13.5px;
+        color: var(--charcoal-soft);
+        line-height: 1.7;
+        margin-bottom: 16px;
+        flex: 1;
+    }
+
+    .mxp-instructors .instructor-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 18px;
+    }
+
+    .mxp-instructors .instructor-tag {
+        font-size: 11px;
+        padding: 4px 10px;
+        border-radius: 30px;
+        background: var(--cream);
+        color: var(--teal-deep);
+        font-weight: 500;
+    }
+
+    .mxp-instructors .instructor-actions {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        margin-top: auto;
+        padding-top: 16px;
+        border-top: 1px solid var(--gray-line);
+        flex-wrap: wrap;
+    }
+
+    .mxp-instructors .instructor-book {
+        display: inline-block;
+        background: var(--terracotta);
+        color: var(--white) !important;
+        padding: 9px 20px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+
+    .mxp-instructors .instructor-book:hover {
+        background: var(--terracotta-deep);
+        transform: translateY(-1px);
+    }
+
+    .mxp-instructors .instructor-profile-link {
+        color: var(--teal-mid);
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .mxp-instructors .instructor-profile-link:hover {
+        color: var(--terracotta);
+    }
+
+    .mxp-instructors .no-results {
+        display: none;
+        text-align: center;
+        padding: 60px 24px;
+        grid-column: 1 / -1;
+    }
+
+    .mxp-instructors .no-results.visible {
+        display: block;
+    }
+
+    .mxp-instructors .no-results p {
+        font-size: 17px;
+        color: var(--charcoal-soft);
+        margin-bottom: 16px;
+    }
+
+    .mxp-instructors .no-results .reset-link {
+        color: var(--teal-mid);
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    .mxp-instructors .why-section {
+        background: var(--white);
+        padding: 100px 32px;
+    }
+
+    .mxp-instructors .why-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .mxp-instructors .why-card {
+        padding: 36px 36px 36px 42px;
+        background: var(--cream);
+        border-radius: 12px;
+        border: 1px solid var(--gray-line);
+        border-left: 4px solid var(--teal-mid);
+    }
+
+    .mxp-instructors .why-card h3 {
+        font-size: 19px;
+        color: var(--teal-deep);
+        margin-bottom: 10px;
+    }
+
+    .mxp-instructors .why-card p {
+        font-size: 14px;
+        color: var(--charcoal-soft);
+        line-height: 1.7;
+    }
+
+    .mxp-instructors .subjects-section {
+        background: var(--cream);
+        padding: 100px 32px;
+    }
+
+    .mxp-instructors .subjects-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        max-width: 1080px;
+        margin: 0 auto;
+    }
+
+    .mxp-instructors .subject-chip {
+        background: var(--white);
+        border: 1px solid var(--gray-line);
+        border-radius: 10px;
+        padding: 18px 20px;
+        text-align: center;
+        transition: all 0.2s;
+    }
+
+    .mxp-instructors .subject-chip:hover {
+        border-color: var(--teal-mid);
+        box-shadow: var(--shadow-sm);
+        transform: translateY(-2px);
+    }
+
+    .mxp-instructors .subject-chip h4 {
+        font-size: 14px;
+        color: var(--teal-deep);
+        margin-bottom: 4px;
+        font-weight: 600;
+    }
+
+    .mxp-instructors .subject-chip p {
+        font-size: 11.5px;
+        color: var(--charcoal-soft);
+    }
+
+    .mxp-instructors .subject-chip.remedial {
+        background: linear-gradient(135deg, var(--teal-darkest) 0%, var(--teal-deep) 100%);
+        border-color: var(--teal-deep);
+    }
+
+    .mxp-instructors .subject-chip.remedial h4 {
+        color: var(--white);
+    }
+
+    .mxp-instructors .subject-chip.remedial p {
+        color: var(--cream-warm);
+    }
+
+    .mxp-instructors .join-section {
+        background: var(--white);
+        padding: 80px 32px;
+    }
+
+    .mxp-instructors .join-card {
+        max-width: 800px;
+        margin: 0 auto;
+        background: linear-gradient(135deg, var(--cream) 0%, var(--cream-warm) 100%);
+        border-radius: 14px;
+        padding: 48px;
+        text-align: center;
+        border: 1px solid var(--gray-line);
+    }
+
+    .mxp-instructors .join-card h2 {
+        font-size: 30px;
+        color: var(--teal-darkest);
+        margin-bottom: 12px;
+    }
+
+    .mxp-instructors .join-card > p {
+        font-size: 15px;
+        color: var(--charcoal-soft);
+        line-height: 1.7;
+        margin-bottom: 28px;
+        max-width: 560px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .mxp-instructors .final-cta {
+        background: linear-gradient(135deg, var(--teal-darkest) 0%, var(--teal-deep) 100%);
+        padding: 80px 32px;
+        text-align: center;
+        color: var(--white);
+    }
+
+    .mxp-instructors .final-cta h2 {
+        font-size: clamp(28px, 3.5vw, 40px);
+        color: var(--white);
+        margin-bottom: 18px;
+    }
+
+    .mxp-instructors .final-cta h2 em {
+        font-style: italic;
+        color: var(--cream);
+        font-weight: 400;
+    }
+
+    .mxp-instructors .final-cta p {
+        font-size: 17px;
+        color: var(--cream-warm);
+        margin-bottom: 32px;
+        max-width: 560px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.7;
+    }
+
+    .mxp-instructors .btn-on-teal {
+        display: inline-block;
+        background: var(--terracotta);
+        color: var(--white) !important;
+        padding: 14px 32px;
+        border-radius: 6px;
+        font-size: 15px;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+
+    .mxp-instructors .btn-on-teal:hover {
+        background: var(--terracotta-deep);
+        transform: translateY(-1px);
+    }
+
+    @media (max-width: 1024px) {
+        .mxp-instructors .subjects-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    @media (max-width: 900px) {
+        .mxp-instructors .hero {
+            padding: 70px 24px 80px;
         }
 
-        .modal.open {
-            display: block;
+        .mxp-instructors .instructors-grid {
+            grid-template-columns: 1fr 1fr;
         }
 
-
-        .model-close {
-            position: relative;
-            top: -30px;
-            right: 8px;
+        .mxp-instructors .stats-inner {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
         }
 
-        .is-invalid {
-            border-bottom: 2px solid red !important;
+        .mxp-instructors .why-grid {
+            grid-template-columns: 1fr;
         }
 
-        .custom_section_color {
-            background-color: #eee !important;
+        .mxp-instructors .subjects-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
 
+    @media (max-width: 768px) {
+        .mxp-instructors .instructors-grid {
+            grid-template-columns: 1fr;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .mxp-instructors .hero h1 {
+            font-size: 32px;
         }
 
-        .border-purple {
-            border: 2px solid #996699 !important;
-        }
-
-        .text-purple {
-            color: #996699;
-        }
-
-        .btn_responsive {
-            font-size: 12.5px;
-            border-radius: 16px !important;
-            border: 2px solid #fff;
-        }
-
-        .btn_responsive:hover {
-            background-color: var(--system_primery_color) !important;
-            border-color: var(--system_primery_color) !important;
-            transition: 0.3s ease !important;
-            color: #fff;
-        }
-
-        .rounded-card {
-            border-radius: 25px !important;
-        }
-
-        .rounded-card-header {
-            border-radius: 25px !important;
-        }
-
-        .rounded-card-img {
-            border-top-left-radius: 25px !important;
-            border-top-right-radius: 25px !important;
-        }
-
-        .section-margin-y {
-            margin: 60px auto !important;
-        }
-
-
-        label span {
-            color: red !important;
-            display: inline !important;
-        }
-
-        .thumb-height {
-            object-fit: none;
-        }
-
-        .thumb-height:hover {
-            transition: 0.3s;
-        }
-
-        .quiz_wizged {
-            overflow: hidden;
-        }
-
-        .custom-heading {
-            font-size: 60px;
-        }
-
-        .custom-padding {
-            padding-right: 60px;
-        }
-
-
-        .custom-padd {
-            padding-left: 60px;
-        }
-
-        .custom-padd {
-            padding: 30px 0;
-        }
-
-        .modal.fade.show {
-            background: rgba(3, 3, 3, 0.7) !important;
-        }
-
-
-        .instructor-image {
-            height: 310px;
-            object-fit: cover;
-        }
-
-        .card-header {
-            height: 300px;
-            overflow: hidden;
-        }
-
-        .card-header img {
-            height: 100%;
-        }
-
-        @media only screen and (min-width: 501px) and (max-width: 767px) {
-            .btn_responsive {
-                font-size: 13px;
-            }
-        }
-
-        @media only screen and (min-width:1450px) {
-            .btn_responsive {
-                font-size: 15px !important;
-                border-radius: 20px !important;
-            }
-
-            .card-header {
-                height: 400px !important;
-            }
-        }
-
-        @media only screen and (min-width: 1800px) {
-            .quiz_wizged {
-                height: 700px !important;
-            }
-
-            .instructor-image {
-                height: 420px !important;
-                object-fit: cover;
-            }
-
-            .thumb-height {
-                height: 400px !important;
-                object-fit: cover;
-            }
-
-            .btn_responsive {
-                font-size: 18px !important;
-                border-radius: 20px !important;
-            }
-
-            .modal_form {
-                max-width: 1500px !important;
-            }
-        }
-
-        .grid_container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 30px;
-        }
-
-        @media (min-width: 1600px) {
-            .grid_container {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-                gap: 30px;
-            }
-        }
-
-        .fw-bold {
-            font-weight: 600;
-        }
-
-
-        .heading-icon {
-            background-color: #a6f0ec59;
-            color: #1E3A5F;
-            height: 30px;
-            width: 30px;
-            display: flex;
+        .mxp-instructors .hero-ctas {
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            border-radius: 50px;
-            font-size: 16px;
         }
 
-        * {
-            font-family: 'Rubik' !important
+        .mxp-instructors .stat-num {
+            font-size: 28px;
         }
 
-        h1 {
-            color: var(--system_primery_color) !important
+        .mxp-instructors .filter-tag {
+            padding: 6px 14px;
+            font-size: 12px;
         }
+    }
+</style>
 
-        h2 {
-            font-size: clamp(1.3rem, 4vw, 2.5rem) !important;
-            font-family: "Rubik" !important;
-            font-weight: 600 !important;
-        }
-
-        @media (max-width: 1250px) {
-            h2 {
-                font-size: clamp(1.3rem, 2.5vw, 2rem) !important;
-            }
-        }
-
-        .rubik {
-            font-family: "Rubik" !important;
-        }
-
-        section .container {
-            max-width: 1700px !important
-        }
-
-        .left-portion {
-            padding-left: 7vw !important
-        }
-
-        @media (min-width: 1800px) {
-            .left-portion {
-                padding-left: 11vw !important
-            }
-        }
-
-        .instructor-section::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 65%;
-            background: linear-gradient(0deg, #1E3A5F 0%, #285898 100%);
-        }
-
-        .slider-wrapper {
-            overflow: hidden;
-            width: 100%;
-            position: relative;
-        }
-
-        .card-container {
-            display: flex;
-            gap: 60px;
-            animation: slideLeft 15s linear infinite alternate-reverse;
-            will-change: transform;
-        }
-
-        @keyframes slideLeft {
-            0% {
-                transform: translateX(0);
-            }
-
-            100% {
-                transform: translateX(-50%);
-            }
-        }
-
-        @media (max-width: 767px) {
-            .card-container {
-                animation-duration: 6s;
-            }
-        }
-
-        .sub .text-dark {
-            color: #fff !important
-        }
-
-        .sub strong {
-            font-weight: 400 !important
-        }
-
-        .prep-card {
-            background-image: url('{{ asset('public/assets/i-bottom.png') }}');
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-    </style>
-    {{-- @endsection --}}
 @section('mainContent')
-    <div>
-        {{-- <div class="row">
-            <div class="col-md-12 px-0">
-                @php
-                    $banner_title = 'Instructors';
-                    $banner_image = 'public/frontend/infixlmstheme/img/images/Teacher Explaining.jpg';
-                    $btn_title = auth()->check() ? '' : 'Become an Instructor';
-                @endphp
-                <x-breadcrumb :banner="$banner_image" :title="$banner_title" :btntitle="$btn_title" :btnclass="'openModal'" />
+    @php
+        $specialtySlugMap = [
+            'med-surg / adult health' => 'medsurg',
+            'med-surg' => 'medsurg',
+            'medsurg' => 'medsurg',
+            'pediatrics' => 'ob-peds',
+            'ob / maternity' => 'ob-peds',
+            'ob/maternity' => 'ob-peds',
+            'mental health / psych' => 'mental-health',
+            'mental health' => 'mental-health',
+            'pharmacology' => 'pharmacology',
+            'community health' => 'community',
+            'fundamentals of nursing' => 'fundamentals',
+            'fundamentals' => 'fundamentals',
+            'leadership / management' => 'nclex',
+            'nclex prep' => 'nclex',
+            'nclex' => 'nclex',
+            'remediation' => 'remediation',
+            'fl bon remediation' => 'remediation',
+        ];
+
+        $toSpecialtySlugs = function ($raw) use ($specialtySlugMap) {
+            $list = [];
+            if (is_string($raw) && $raw !== '') {
+                $decoded = json_decode($raw, true);
+                $list = is_array($decoded) ? $decoded : preg_split('/[,|]/', $raw);
+            } elseif (is_array($raw)) {
+                $list = $raw;
+            }
+            $slugs = [];
+            foreach ($list as $item) {
+                $key = strtolower(trim((string) $item));
+                if ($key === '') {
+                    continue;
+                }
+                $slugs[] = $specialtySlugMap[$key] ?? \Illuminate\Support\Str::slug($key);
+            }
+            return array_values(array_unique($slugs));
+        };
+    @endphp
+
+    <div class="mxp-instructors">
+        <div class="breadcrumb">
+            <div class="breadcrumb-inner">
+                <a href="{{ url('/') }}">{{ __('Home') }}</a>
+                <span class="breadcrumb-sep">›</span>
+                <a href="{{ route('ourTeam') }}">{{ __('Our Team') }}</a>
+                <span class="breadcrumb-sep">›</span>
+                {{ __('Instructors') }}
             </div>
-        </div> --}}
+        </div>
 
-
-        {{-- MainBanner --}}
-        <section class="sec-1 show-animate position-relative"
-            style="background: linear-gradient(180deg, #2CA6A4 0%, #B7E1E0 100%); height: fit-content;">
-            <img src="https://html.rrdevs.net/edcare/assets/img/shapes/hero-shape-11.png" width="300"
-                style="position: absolute; left: 0; top: 0;" alt="">
-
-            <div class="container h-100">
-                <div
-                    class="row bg_text position-relative justify-content-between align-items-center px-3 px-sm-5 h-100 pt-5 pt-md-0">
-
-                    <div class="col-md-6 mb-4 mb-md-0">
-                        <h1 class="hero-section-main-heading mb-3 navy-text"
-                            style="font-weight: 600; font-size: clamp(1.6rem, 4vw, 5rem) !important; line-height: 100%;">
-                            {{-- {{@$homeContent->slider_title}} --}}
-                            Meet Your Tutors & Remediation Coaches
-                        </h1>
-
-                        <p class="mb-4 hero-section-p">
-                            Failed the NCLEX? You're not alone—and you’re not out. Our Florida Board-Approved Remedial
-                            Program is built to help you rise again.
-                        </p>
-
-                        {{-- <p class="hero-section mb-1">
-                            {{@$homeContent->slider_text}}
-                        </p> --}}
-
-
-                        <div class="d-flex align-items-center gap-2 anim-btn border-0">
-                            <button style="background-color: var(--system_primery_color); border-radius: 50px;"
-                                class="py-2 px-4 text-white">
-                                Apply Now
-                            </button>
-
-                            <button style="background-color: var(--system_primery_color); border-radius: 50px;"
-                                class="py-2 px-4 text-white">
-                                Speak to an advisor
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6 home_bg overflow-hidden">
-                        <div class="d-flex align-items-center justify-content-center position-relative h-100"
-                            style="z-index: 99;">
-                            {{-- <img class="hero_img" src="{{ asset($homeContent->slider_banner) }}" width="80%" alt=""> --}}
-                            <img src="{{ asset('public/assets/tutor_shape.svg') }}" width="80%" alt="">
-                            <img src="{{ asset('public/assets/i.png') }}" width="100%"
-                                style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -40%); max-width: 540px"
-                                alt="">
-                        </div>
-                    </div>
+        <header class="hero">
+            <div class="hero-inner">
+                <span class="hero-eyebrow">{{ __('Our Instructors') }}</span>
+                <h1>Real nurses. Real educators. <em>Real results.</em></h1>
+                <p class="hero-sub">Every instructor at Merkaii Xcellence Prep is a credentialed nurse or nurse educator with clinical experience. No anonymous freelancers. No textbook-only academics. Just nurses who teach because they've been where you are.</p>
+                <div class="hero-ctas">
+                    <a href="#instructor-grid" class="btn-primary">{{ __('Browse Instructors') }}</a>
+                    <a href="{{ route('tutoring') }}#pricing" class="btn-outline">{{ __('See Tutoring Pricing') }}</a>
                 </div>
-
-                <img style="position: absolute; right: 0; bottom: 0;" class="d-none d-lg-block"
-                    src="{{ asset('public/assets/r-lines.png') }}" width="350px" alt="Live Classes"
-                    class="benefit-icon-img">
             </div>
+        </header>
 
-            <div class="py-5 px-4 position-relative"
-                style="
-                    background-image: url('{{ asset('public/assets/i-bottom.png') }}');
-                    background-size: cover;
-                    background-repeat: no-repeat;
-                    background-position: center;
-                ">
-                <div style="gap: 40px; max-width: 800px; margin: 0 auto"
-                    class="d-flex align-items-center justify-content-between w-100">
-                    <div
-                        style="background-color: var(--footer_text_hover_color); border-radius: 100px; height: 130px; width: 130px; position: absolute; top: -20px; right: -20px; ">
-                    </div>
-                    <div>
-                        <h2 style="font-weight: 800; font-size: clamp(35px, 5vw, 50px) !important" class="text-white">
-                            150+
-                        </h2>
-                        <small class="text-white">Total Courses</small>
-                    </div>
-                    <hr
-                        style="rotate: 90deg; rotate: 90deg;
-                            background-color: #ffffff70;
-                            height: 1px;
-                            width: 90px;">
-                    <div>
-                        <h2 style="font-weight: 800; font-size: clamp(35px, 5vw, 50px) !important" class="text-white">
-                            250
-                        </h2>
-                        <small class="text-white">Total Instructor</small>
-                    </div>
-                    <hr
-                        style="rotate: 90deg; rotate: 90deg;
-                            background-color: #ffffff70;
-                            height: 1px;
-                            width: 90px;">
-                    <div>
-                        <h2 style="font-weight: 800; font-size: clamp(35px, 5vw, 50px) !important" class="text-white">
-                            35K+
-                        </h2>
-                        <small class="text-white">Total Students</small>
-                    </div>
+        <section class="stats-bar">
+            <div class="stats-inner">
+                <div class="stat-item">
+                    <p class="stat-num">{{ number_format((int) ($stats['active_instructors'] ?? 0)) }}+</p>
+                    <p class="stat-label">{{ __('Active Instructors') }}</p>
+                </div>
+                <div class="stat-item">
+                    <p class="stat-num">{{ number_format((int) ($stats['subjects_covered'] ?? 0)) }}+</p>
+                    <p class="stat-label">{{ __('Subjects Covered') }}</p>
+                </div>
+                <div class="stat-item">
+                    <p class="stat-num">{{ number_format((int) ($stats['students_served'] ?? 0)) }}+</p>
+                    <p class="stat-label">{{ __('Students Served') }}</p>
+                </div>
+                <div class="stat-item">
+                    <p class="stat-num">{{ $stats['pass_rate'] ?? '95%' }}</p>
+                    <p class="stat-label">{{ __('Pass Rate') }}</p>
                 </div>
             </div>
         </section>
 
-        <section>
-            <div class="row align-items-center">
-                <div class="col-lg-6 left-portion py-5" data-aos="fade-right">
-                    <span style="color: var(--footer_text_hover_color)">Get Started</span>
-                    <h2>Why Join Merkaii Xcelellence Prep</h2>
-                    <p>You will have the opportunity to: Our teachers, like our students, come from diverse communities
-                        fostering a strong community support.</p>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-4">
-                            <div class="h-100 p-3" style="box-shadow: 0px 4px 4px 0px #0000001A; border-radius: 6px">
-                                <h6>Florida BON Approved</h6>
-                                <small>Our program meets Florida BON standards, ensuring your coursework, clinical
-                                    hours,
-                                    and coaching are fully recognized, trusted, and professionally guided.</small>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 mb-4">
-                            <div class="h-100 p-3" style="box-shadow: 0px 4px 4px 0px #0000001A; border-radius: 6px">
-                                <h6>Personalized Coaching Support</h6>
-                                <small>Receive tailored one-on-one mentorship with weekly check-ins, personalized study
-                                    plans, and constant guidance to help you master NCLEX confidently.</small>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 mb-4">
-                            <div class="h-100 p-3" style="box-shadow: 0px 4px 4px 0px #0000001A; border-radius: 6px">
-                                <h6>Proven Student Success</h6>
-                                <small>Thousands of students have passed after multiple failed attempts by using our
-                                    structured remediation approach and supportive, experienced nursing mentors.</small>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 mb-4">
-                            <div class="h-100 p-3" style="box-shadow: 0px 4px 4px 0px #0000001A; border-radius: 6px">
-                                <h6>Flexible Learning Options</h6>
-                                <small>Choose between online or hybrid formats that adapt to your schedule, making it
-                                    easier to balance study, practice, and real-life responsibilities.</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-6" data-aos="fade-left">
-                    <img src="{{ asset('public/assets/join-m.png') }}" style="max-height: 700px; object-fit: cover"
-                        width="100%" alt="">
+        <section class="filter-section">
+            <div class="filter-inner">
+                <p class="filter-label">{{ __('Filter by Specialty') }}</p>
+                <div class="filter-tags" id="filterTags">
+                    <span class="filter-tag active" data-filter="all">{{ __('All Instructors') }}</span>
+                    <span class="filter-tag" data-filter="nclex">{{ __('NCLEX Prep') }}</span>
+                    <span class="filter-tag" data-filter="remediation">{{ __('Remediation') }}</span>
+                    <span class="filter-tag" data-filter="pharmacology">{{ __('Pharmacology') }}</span>
+                    <span class="filter-tag" data-filter="medsurg">{{ __('Med-Surg') }}</span>
+                    <span class="filter-tag" data-filter="mental-health">{{ __('Mental Health') }}</span>
+                    <span class="filter-tag" data-filter="ob-peds">{{ __('OB / Pediatrics') }}</span>
+                    <span class="filter-tag" data-filter="fundamentals">{{ __('Fundamentals') }}</span>
+                    <span class="filter-tag" data-filter="community">{{ __('Community Health') }}</span>
                 </div>
             </div>
         </section>
 
-        <section class="instructor-section position-relative">
-            <div class="py-5 position-relative" style="z-index: 10">
-                <div class="slider-wrapper py-5">
-                    <h2 class="mb-5 text-center text-white px-3" data-aos="fade-up">Meet Our Expert Instructors</h2>
-                    <div class="card-container align-items-center" data-aos="fade-up">
-                        {{-- Original set --}}
-                        @for ($i = 0; $i < 10; $i++)
-                            <div class="card border-0" style="min-width: 325px; border-radius: 10px">
-                                <div class="position-relative">
-                                    <img src="https://images.unsplash.com/photo-1544168190-79c17527004f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW5zdHJ1Y3RvcnxlbnwwfHwwfHx8MA%3D%3D"
-                                        width="100%" height="320" style="object-fit: cover" alt="">
-                                    <span class="p-1 text-white"
-                                        style="background-color: var(--footer_text_hover_color); position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); border-radius: 3px">
-                                        $40/hr
-                                    </span>
-                                </div>
-
-                                <div class="p-4" style="background-color: var(--system_primery_color)">
-                                    <h4 class="text-center text-white" style="text-transform: uppercase">Nathan Allen</h4>
-
-                                    <div class="d-flex align-items-center justify-content-between mb-3">
-                                        <span class="text-white">Total Hours</span>
-                                        <span class="text-white">3 hours</span>
-                                    </div>
-
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <span class="text-white">Tutor</span>
-                                        <span class="text-white">Gen-ED</span>
-                                    </div>
-                                </div>
-                            </div>
-                        @endfor
-
-                        {{-- Duplicate set for seamless scroll --}}
-                        @for ($i = 0; $i < 10; $i++)
-                            <div class="card border-0" style="min-width: 325px; border-radius: 10px">
-                                <div class="position-relative">
-                                    <img src="https://images.unsplash.com/photo-1544168190-79c17527004f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW5zdHJ1Y3RvcnxlbnwwfHwwfHx8MA%3D%3D"
-                                        width="100%" height="320" style="object-fit: cover" alt="">
-                                    <span class="p-1 text-white"
-                                        style="background-color: var(--footer_text_hover_color); position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); border-radius: 3px">
-                                        $40/hr
-                                    </span>
-                                </div>
-
-                                <div class="p-4" style="background-color: var(--system_primery_color)">
-                                    <h4 class="text-center text-white" style="text-transform: uppercase">Nathan Allen</h4>
-
-                                    <div class="d-flex align-items-center justify-content-between mb-3">
-                                        <span class="text-white">Total Hours</span>
-                                        <span class="text-white">3 hours</span>
-                                    </div>
-
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <span class="text-white">Tutor</span>
-                                        <span class="text-white">Gen-ED</span>
-                                    </div>
-                                </div>
-                            </div>
-                        @endfor
+        <section class="instructors-section" id="instructor-grid">
+            <div class="instructors-grid" id="instructorGrid">
+                {{-- Lead instructor (design) --}}
+                <div class="instructor-card" data-specialties="nclex remediation">
+                    <div class="instructor-photo">
+                        <span class="instructor-badge">{{ __('Lead Instructor') }}</span>
+                        @php
+                            $paulaImage = null;
+                            try {
+                                if (\Illuminate\Support\Facades\Schema::hasTable('home_contents')) {
+                                    $paulaImage = \Modules\FrontendManage\Entities\HomeContent::where('key', 'home_tile1_image')->value('value');
+                                }
+                            } catch (\Throwable $e) {
+                                $paulaImage = null;
+                            }
+                        @endphp
+                        @if (!empty($paulaImage))
+                            <img src="{{ asset('/' . ltrim($paulaImage, '/')) }}" alt="Paula Martin">
+                        @else
+                            Instructor photo<br>coming soon
+                        @endif
                     </div>
-                </div>
-
-            </div>
-        </section>
-
-        <section class="py-5" style="background-color: #F7F7F7;">
-            <div class="container py-4">
-                <h2 class="fw-bold text-center" data-aos="fade-up">
-                    Interactive Online Tutoring
-                </h2>
-
-                <div class="grid_container px-3 px-sm-4" style="margin-top: 4rem">
-                    <div data-aos="fade-up" class="d-flex flex-column align-items-center bg-white text-center px-4 pb-5"
-                        style="border-radius: 30px">
-                        <div class="d-flex align-items-center justify-content-center"
-                            style="height: 80px;
-                                    width: 80px;
-                                    border-radius: 50px;
-                                    background-color: #fff;
-                                    margin-top: -3rem;
-                                    border: 10px solid #F7F7F7;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 64 64">
-                                <path fill="#FF6B6B"
-                                    d="M40.067 20.573c0 4.557-3.699 8.25-8.26 8.25c-4.556 0-8.249-3.694-8.249-8.25s3.693-8.25 8.249-8.25c4.561 0 8.26 3.694 8.26 8.25" />
-                                <path fill="#FF6B6B"
-                                    d="M31.82.524c-3.818 0-9.151 1.522-13.014 5.385l4.588 8.359a10.7 10.7 0 0 1 8.426-4.09c3.459 0 6.537 1.634 8.498 4.175l4.5-8.636C41.475 2.064 35.48.525 31.82.525zm3.4 6.138h-2.136v2.134h-2.566V6.662h-2.136V4.097h2.136V1.954h2.566v2.143h2.136zM20.966 43.651h2.113l-3.018 10.344h23.581l-3.004-10.344h2.115l3.023 10.344h6.939l-4.736-15.672c-.74-2.587-3.984-7.142-9.582-7.28l-12.87-.011c-5.725.028-9.037 4.672-9.786 7.29l-4.828 15.672h7.037zM.947 57.293h61.73v5.873H.947z" />
-                            </svg>
+                    <div class="instructor-body">
+                        <p class="instructor-name">Paula Martin</p>
+                        <p class="instructor-title">{{ __('Lead Instructor & Founder') }}</p>
+                        <p class="instructor-desc">Creator of the NCLEX PASS Method™. Specializes in NCLEX prep, clinical judgment, test-taking strategy, and FL BON remediation curriculum. 13+ years in nursing education.</p>
+                        <div class="instructor-tags">
+                            <span class="instructor-tag">NCLEX Prep</span>
+                            <span class="instructor-tag">Remediation</span>
+                            <span class="instructor-tag">Clinical Judgment</span>
+                            <span class="instructor-tag">Test Strategy</span>
                         </div>
-                        <h5 class="fw-bold my-4 text-dark">
-                            Diverse Staff to Shape Future
-                        </h5>
-                        <p class="mb-0">
-                            Our teachers, like our students, come from diverse communities fostering a strong community
-                            support
-                        </p>
-                    </div>
-
-                    <div data-aos="fade-up" class="d-flex flex-column align-items-center bg-white text-center px-4 pb-5"
-                        style="border-radius: 30px">
-                        <div class="d-flex align-items-center justify-content-center"
-                            style="height: 80px;
-                                    width: 80px;
-                                    border-radius: 50px;
-                                    background-color: #fff;
-                                    margin-top: -3rem;
-                                    border: 10px solid #F7F7F7;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-                                <path fill="#FF6B6B"
-                                    d="M6 21v-1H4v1a7 7 0 0 0 7 7h3v-2h-3a5 5 0 0 1-5-5m18-10v1h2v-1a7 7 0 0 0-7-7h-3v2h3a5 5 0 0 1 5 5m-13 0h6a3 3 0 0 0-3 3v2h2v-2a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2h2v-2a3 3 0 0 0-3-3m-3-1a4 4 0 1 0-4-4a4 4 0 0 0 4 4m0-6a2 2 0 1 1-2 2a2 2 0 0 1 2-2m19 21h-6a3 3 0 0 0-3 3v2h2v-2a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2h2v-2a3 3 0 0 0-3-3m-7-5a4 4 0 1 0 4-4a4 4 0 0 0-4 4m6 0a2 2 0 1 1-2-2a2 2 0 0 1 2 2" />
-                            </svg>
-                        </div>
-                        <h5 class="fw-bold my-4 text-dark">
-                            Collaborative and Passionate Team
-                        </h5>
-                        <p class="mb-0">
-                            Experienced and dedicated educators who are passionate about the subjects they teach and enjoy
-                            sharing their knowledge
-                        </p>
-                    </div>
-
-                    <div data-aos="fade-up" class="d-flex flex-column align-items-center bg-white text-center px-4 pb-5"
-                        style="border-radius: 30px">
-                        <div class="d-flex align-items-center justify-content-center"
-                            style="height: 80px;
-                                    width: 80px;
-                                    border-radius: 50px;
-                                    background-color: #fff;
-                                    margin-top: -3rem;
-                                    border: 10px solid #F7F7F7;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24">
-                                <path fill="none" stroke="#FF6B6B" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="1.5"
-                                    d="M11 2C6.582 2 3 5.545 3 9.919c0 1.493.417 2.89 1.143 4.081M17 5h-2c-.943 0-1.414 0-1.707.293S13 6.057 13 7v2c0 .943 0 1.414.293 1.707S14.057 11 15 11h2c.943 0 1.414 0 1.707-.293S19 9.943 19 9V7c0-.943 0-1.414-.293-1.707S17.943 5 17 5m-2.5 6v2m3-2v2m-3-10v2m3-2v2M13 6.5h-2m2 3h-2m10-3h-2m2 3h-2M6.383 17.098c-.092-.276-.138-.415-.133-.527a.6.6 0 0 1 .382-.53c.104-.041.25-.041.54-.041h7.656c.291 0 .436 0 .54.04a.6.6 0 0 1 .382.531c.005.112-.041.25-.133.527c-.17.511-.255.767-.386.974a2 2 0 0 1-1.2.869c-.238.059-.506.059-1.043.059H9.012c-.537 0-.806 0-1.043-.06a2 2 0 0 1-1.2-.868c-.131-.207-.216-.463-.386-.974M14 19l-.13.647c-.14.707-.211 1.06-.37 1.34a2 2 0 0 1-1.113.912C12.082 22 11.72 22 11 22s-1.082 0-1.387-.1a2 2 0 0 1-1.113-.913c-.159-.28-.23-.633-.37-1.34L8 19"
-                                    color="#FF6B6B" />
-                            </svg>
-                        </div>
-
-                        <h5 class="fw-bold my-4 text-dark">
-                            Forefront of Innovation
-                        </h5>
-                        <p class="mb-0">
-                            We are constantly revising our teaching methods to ensure our students receive the best possible
-                            education for success.
-                        </p>
-                    </div>
-
-                    <div data-aos="fade-up" class="d-flex flex-column align-items-center bg-white text-center px-4 pb-5"
-                        style="border-radius: 30px">
-                        <div class="d-flex align-items-center justify-content-center"
-                            style="height: 80px;
-                                    width: 80px;
-                                    border-radius: 50px;
-                                    background-color: #fff;
-                                    margin-top: -3rem;
-                                    border: 10px solid #F7F7F7;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 16 16">
-                                <path fill="#FF6B6B"
-                                    d="M8 12a1.5 1.5 0 0 1-1.474-1.22a5 5 0 0 1-2.474-1.712a5 5 0 1 1 8.924-3.567c.027.275-.2.499-.476.499s-.497-.225-.53-.499a4 4 0 1 0-5.285 4.278A1.5 1.5 0 1 1 8 12m-4-1.5v-.027a6 6 0 0 1-.748-.805A1.5 1.5 0 0 0 3 10.5v.5c0 1.971 1.86 4 5 4s5-2.029 5-4v-.5A1.5 1.5 0 0 0 11.5 9H10c.219.29.375.63.45 1h1.05a.5.5 0 0 1 .5.5v.5c0 1.438-1.432 3-4 3s-4-1.562-4-3zM8 8a2.5 2.5 0 0 0-1.572.556A2.99 2.99 0 0 1 5 6a3 3 0 1 1 4.572 2.556A2.5 2.5 0 0 0 8 8M6 6a2 2 0 1 0 4 0a2 2 0 0 0-4 0" />
-                            </svg>
-                        </div>
-
-                        <h5 class="fw-bold my-4 text-dark">
-                            Continuous Support in a Rewarding Environment
-                        </h5>
-                        <p class="mb-0">
-                            We believe that happy teachers are the foundation for successful students – we provide them with
-                            support and resources.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section>
-            <div class="container py-5">
-                <div class="row px-3 px-sm-4 py-5">
-                    @if (getRawHomeContents($home_content, 'instructor_tile1_title', 'en') != '')
-                        <div class="col-lg-6" data-aos="fade-right" style="min-height: 18rem">
-                            <div class="card h-100 d-flex flex-column flex-md-row align-items-center justify-content-between prep-card position-relative"
-                                style="border-radius: 18px;">
-                                <div class="d-flex flex-column p-5" style="gap: 15px; min-width: 60%">
-                                    <p class="text-white sub">{!! getRawHomeContents($home_content, 'instructor_tile1_title', 'en') !!}</p>
-
-                                    <p style="font-weight: 600" class="text-white">{!! getRawHomeContents($home_content, 'instructor_tile1_text', 'en') !!}</p>
-
-                                    <a href="{{ getRawHomeContents($home_content, 'instructor_tile1_btnlink', 'en') }}"
-                                        class="text-white d-flex align-items-center justify-space-between"
-                                        style="background-color: #2FC7A1; border-radius: 50px; padding-left: 18px; padding-right: 0; width: fit-content; gap: 10px">
-                                        {{ getRawHomeContents($home_content, 'instructor_tile1_btntext', 'en') }}
-                                        <svg width="42" height="42" viewBox="0 0 42 42" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <rect width="42" height="42" rx="21" fill="#35D7AE" />
-                                            <path d="M23.5 14.2402L28.5 20.2402L23.5 26.2402" stroke="white"
-                                                stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                            <path d="M13.5 20.2402H28.5" stroke="white" stroke-width="1.5"
-                                                stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                    </a>
-                                </div>
-
-                                <div>
-                                    <img src="{{ asset(getRawHomeContents($home_content, 'instructor_tile1_image', 'en')) }}"
-                                        width="100%" height="100%" style="object-fit: cover" alt="">
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-
-                    @if (getRawHomeContents($home_content, 'instructor_tile2_title', 'en') != '')
-                        <div class="col-lg-6" data-aos="fade-left" style="min-height: 18rem">
-                            <div class="card h-100 d-flex flex-column flex-md-row align-items-center justify-content-between position-relative"
-                                style="border-radius: 18px; background-color: #2FC7A1">
-                                <div class="d-flex flex-column p-5" style="gap: 15px; min-width: 60%">
-                                    <p class="text-white sub">{!! getRawHomeContents($home_content, 'instructor_tile2_title', 'en') !!}</p>
-
-                                    <p style="font-weight: 600" class="text-white">{!! getRawHomeContents($home_content, 'instructor_tile2_text', 'en') !!}</p>
-
-                                    <a href="{{ getRawHomeContents($home_content, 'instructor_tile2_btnlink', 'en') }}"
-                                        class="text-white d-flex align-items-center justify-space-between"
-                                        style="background-color: #17254E; border-radius: 50px; padding-left: 18px; padding-right: 0; width: fit-content; gap: 10px">
-                                        {{ getRawHomeContents($home_content, 'instructor_tile2_btntext', 'en') }}
-                                        <svg width="42" height="42" viewBox="0 0 42 42" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <rect width="42" height="42" rx="21" fill="#35D7AE" />
-                                            <path d="M23.5 14.2402L28.5 20.2402L23.5 26.2402" stroke="white"
-                                                stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                            <path d="M13.5 20.2402H28.5" stroke="white" stroke-width="1.5"
-                                                stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                    </a>
-                                </div>
-
-                                <div>
-                                    <img src="{{ asset(getRawHomeContents($home_content, 'instructor_tile2_image', 'en')) }}"
-                                        width="100%" height="100%" alt="">
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-                </div>
-            </div>
-        </section>
-
-        <section style="background-color: #FAF8FB">
-            <div class="container py-5">
-                <div class="row py-5 px-sm-5 align-items-center justify-content-between">
-                    <div class="col-lg-7" data-aos="fade-right">
-                        <span style="color: var(--footer_text_hover_color)">Get Started</span>
-                        <h2>Who we are Looking for ?</h2>
-                        <p class="mb-4">If you are a highly motivated and experienced educator who is passionate about
-                            making a
-                            difference in the future of healthcare education, we encourage you to apply.Merkaii Xcel Prep
-                            offers a competitive salary and benefits package, as well as the opportunity to work in a
-                            rewarding student and staff-centered environment.</p>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-4">
-                                <div class="h-100 p-3" style="box-shadow: 0px 4px 4px 0px #0000001A; border-radius: 6px">
-                                    <h6>Passionate Educators</h6>
-                                    <small>We are seeking educators who are passionate about their field and dedicated to
-                                        helping students succeed.</small>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 mb-4">
-                                <div class="h-100 p-3" style="box-shadow: 0px 4px 4px 0px #0000001A; border-radius: 6px">
-                                    <h6>Strong Communication Skills</h6>
-                                    <small>The ability to communicate complex medical concepts clearly and concisely is
-                                        essential.</small>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 mb-4">
-                                <div class="h-100 p-3" style="box-shadow: 0px 4px 4px 0px #0000001A; border-radius: 6px">
-                                    <h6>Clinical Expertise</h6>
-                                    <small>We value educators with a strong foundation in clinical healthcare skills</small>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 mb-4">
-                                <div class="h-100 p-3" style="box-shadow: 0px 4px 4px 0px #0000001A; border-radius: 6px">
-                                    <h6>Commitment to Collaboration</h6>
-                                    <small>We are looking for team players who are excited to collaborate with colleagues to
-                                        create a dynamic learning environment</small>
-                                </div>
-                            </div>
-                        </div>
-
-                        <button class="theme_btn py-2 px-4">
-                            Become an Instructor
-                        </button>
-                    </div>
-
-                    <div class="col-lg-5 d-flex justify-content-center" data-aos="fade-left">
-                        <img src="{{ asset('public/assets/looking-right.png') }}"
-                            style="max-height: 700px; max-width: 90%; object-fit: cover" width="100%" alt="">
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- profile slidder -->
-
-
-        <div class="container pt-md-5 pb-md-5 py-3" id="our-tutors-list">
-            <div class="row mx-xl-5">
-                <div class="col-md-12">
-                    <h2 class="custom_small_heading font-weight-bold pb-3 text-center text-capitalize"
-                        id="instructors-custom-heading">
-                        Merkaii Xcellence Tutors use Elsevier Products for Tutoring</h2>
-                    <div class="row justify-content-center">
-                        <div class="col-md-8">
-                            <p class="text-center pb-md-5 pb-3"> Elevate your studies and master Nursing Concepts with MPX
-                                Tutors offering expert guidance using industry-leading resources like Saunders| Shadow
-                                Health| HESI for comprehensive exam preparation and unparallel success.</p>
+                        <div class="instructor-actions">
+                            <a href="{{ route('contact') }}" class="instructor-book">{{ __('Book a Session') }}</a>
+                            <a href="{{ route('ourTeam') }}" class="instructor-profile-link">{{ __('Full Profile') }} →</a>
                         </div>
                     </div>
                 </div>
-                @forelse ($instructors as $instructor)
-                    <div class="col-12 col-sm-6 col-lg-4 col-xl-3 mb-4 d-flex justify-content-center">
-                        <div class="quiz_wizged card rounded-card shadow">
-                            <div class="card-header rounded-card-header p-0" style="">
-                                <a
-                                    href="{{ route('tutorDetails', [$instructor->id, Str::slug($instructor->name, '-')]) }}">
-                                    <img src="{{ getInstructorImage($instructor->image) }}" alt="Avatar"
-                                        class="img-fluid w-100 rounded-card-img instructor_image"
-                                        style="object-fit:cover">
-                                </a>
-                            </div>
-                            <div class="card-body row">
-                                <div class="col-8 col-md-10 px-2 pt-3">
-                                    <a
-                                        href="{{ route('tutorDetails', [$instructor->id, Str::slug($instructor->name, '-')]) }}">
-                                        <h5 class="font-weight-bold">{{ $instructor->name }}</h5>
-                                    </a>
+
+                @forelse (($instructors ?? collect()) as $instructor)
+                    @php
+                        $info = ($personalByUserId ?? collect())->get($instructor->id);
+                        $rawSpecs = optional($info)->specialties;
+                        $specLabels = [];
+                        if (is_string($rawSpecs) && $rawSpecs !== '') {
+                            $decoded = json_decode($rawSpecs, true);
+                            $specLabels = is_array($decoded) ? $decoded : array_filter(array_map('trim', explode(',', $rawSpecs)));
+                        }
+                        $specSlugs = $toSpecialtySlugs($rawSpecs);
+                        $profileUrl = route('tutorDetails', [$instructor->id, \Illuminate\Support\Str::slug($instructor->name ?: 'tutor', '-')]);
+                        $desc = trim(strip_tags((string) ($instructor->about ?? '')));
+                        if ($desc === '') {
+                            $desc = trim((string) ($instructor->headline ?? ''));
+                        }
+                        if ($desc === '') {
+                            $desc = __('Credentialed nurse educator with real clinical experience.');
+                        }
+                        if (\Illuminate\Support\Str::length($desc) > 180) {
+                            $desc = \Illuminate\Support\Str::limit($desc, 180);
+                        }
+                        $title = trim((string) ($instructor->job_title ?? ''));
+                        if ($title === '') {
+                            $title = trim((string) ($instructor->headline ?? ''));
+                        }
+                        if ($title === '') {
+                            $title = __('Nurse Educator');
+                        }
+                    @endphp
+                    <div class="instructor-card" data-specialties="{{ implode(' ', $specSlugs) }}">
+                        <div class="instructor-photo">
+                            <img src="{{ getInstructorImage($instructor->image) }}" alt="{{ $instructor->name }}">
+                        </div>
+                        <div class="instructor-body">
+                            <p class="instructor-name">{{ $instructor->name }}</p>
+                            <p class="instructor-title">{{ $title }}</p>
+                            <p class="instructor-desc">{{ $desc }}</p>
+                            @if (!empty($specLabels))
+                                <div class="instructor-tags">
+                                    @foreach (array_slice($specLabels, 0, 4) as $label)
+                                        <span class="instructor-tag">{{ $label }}</span>
+                                    @endforeach
                                 </div>
-                                <div class="col-4 col-md-2 px-2">
-                                    <h5 class="font-weight-bold float-right pt-3">{{ $instructor->total_tutor_rating }}
-                                    </h5>
-                                </div>
-                                <div class="col-xl-6 col-lg-6 col-md-5 col-sm-5 col-6 px-2">
-                                    <span>{{ __('frontend.Course Rating') }}</span>
-                                </div>
-                                <div class="col-xl-6 col-lg-6 col-md-7 col-sm-7 col-6 px-2">
-                                    <span class="float-right">
-                                        @php
-                                            $main_stars = $instructor->total_tutor_rating;
-                                            $stars = intval($instructor->total_tutor_rating);
-                                        @endphp
-                                        @for ($i = 0; $i < $stars; $i++)
-                                            <i class="fas fa-star text-warning fa-sm"></i>
-                                        @endfor
-                                        @if ($main_stars > $stars)
-                                            <i class="fas fa-star-half fa-sm"></i>
-                                        @endif
-                                        @if ($main_stars == 0)
-                                            @for ($i = 0; $i < 5; $i++)
-                                                <i class="far fa-star fa-sm"></i>
-                                            @endfor
-                                        @endif
-                                    </span>
-                                </div>
-                                <div class="col-7 px-2">
-                                    <span>Total Hours:</span>
-                                </div>
-                                <div class="col-5 px-2">
-                                    <span class="float-right">{{ $instructor->total_hours }} Hrs.</span>
-                                </div>
-                                <div class="col-7 px-2">
-                                    <span>Tutor:</span>
-                                </div>
-                                <div class="col-5 px-2">
-                                    <span class="float-right">
-                                        {{ $instructor->tutor_type == 1 ? 'Nursing' : 'Gen-Ed' }}
-                                    </span>
-                                </div>
-                                <div class="col-7 px-2 ">
-                                    <span>Price:</span>
-                                </div>
-                                <div class="col-5 px-2">
-                                    <span class="float-right">${{ $instructor->tutor_price }}/hr.</span>
-                                </div>
+                            @endif
+                            <div class="instructor-actions">
+                                <a href="{{ route('contact') }}" class="instructor-book">{{ __('Book a Session') }}</a>
+                                <a href="{{ $profileUrl }}" class="instructor-profile-link">{{ __('Full Profile') }} →</a>
                             </div>
                         </div>
                     </div>
                 @empty
-                    <p class="text-center mx-auto">No Tutor Found</p>
                 @endforelse
-                <div class="col-md-12 {{ count($instructors) ? 'd-block' : 'd-none' }}">
-                    {{ $instructors->links() }}
+
+                <div class="no-results" id="noResults">
+                    <p>{{ __('No instructors match that specialty right now.') }}</p>
+                    <span class="reset-link" id="resetFilter">{{ __('Show all instructors') }} →</span>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="modal fade instructor-2" id="becomeAnInstructor" tabindex="-1" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-lg modal_form">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel"></h5>
-                        <button type="button" class="close-modal theme_btn small_btn4 px-3 py-2 closeModal"
-                            aria-label="Close">
-                            <i class="fa fa-times"></i>
-                        </button>
-                    </div>
-                    <div class="modal-body p-0">
-                        <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data"
-                            id="Instructor_reqister">
-                            @csrf
-                            <input name="type" value="Instructor" type="hidden">
-                            <input name="role_id" value="2" type="hidden">
-
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <h2 class="custom_small_heading my-3 text-center">
-                                            Become an Instructor
-                                        </h2>
-                                    </div>
-                                    <div class="col-lg-4 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2 form_label">What position are you
-                                            applying?<span>*</span></label>
-                                        <select name="instructor_position_id"
-                                            class="form-select text_small form-control @if ($errors->first('instructor_position_id')) is-invalid @endif"
-                                            aria-label="Default select example" required>
-                                            <option value="" selected>--SELECT--</option>
-                                            @foreach ($postions as $postion)
-                                                <option value="{{ $postion->id }}"
-                                                    {{ (string) $postion->id == old('instructor_position_id') ? 'selected' : '' }}>
-                                                    {{ $postion->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-4 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2 form_label">How did you hear about us
-                                            ?<span>*</span></label>
-                                        <select name="instructor_hear_id"
-                                            class="form-select text_small form-control @if ($errors->first('instructor_hear_id')) is-invalid @endif"
-                                            aria-label="Default select example" required>
-                                            <option value="" selected>--SELECT--</option>
-                                            @foreach ($hears as $hear)
-                                                <option value="{{ $hear->id }}"
-                                                    {{ (string) $hear->id == old('instructor_hear_id') ? 'selected' : '' }}>
-                                                    {{ $hear->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-4 form_content">
-                                        <label class="mb-0 mt-2 form_label">Start Date</label>
-                                        <input name="start_date" id="start_date"
-                                            class="input--style-1 js-datepicker text_small form-control @if ($errors->first('start_date')) is-invalid @endif"
-                                            type="date" placeholder="" name="birthday"
-                                            value="{{ old('start_date') }}">
-                                    </div>
-
-                                    <!-- personal information section  -->
-                                    <div class="col-md-12">
-                                        <h2 class="custom_small_heading my-3 text-center">
-                                            Personal Information
-                                        </h2>
-                                    </div>
-                                    <div class="col-lg-3 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2 form_label">First Name<span>*</span></label>
-                                        <input
-                                            class="text_small form-control @if ($errors->first('first_name')) is-invalid @endif"
-                                            type="text" placeholder="" name="first_name"
-                                            value="{{ old('first_name') }}" required>
-                                    </div>
-                                    <div class="col-lg-3 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2 form_label">Middle Name</label>
-                                        <input
-                                            class="text_small form-control @if ($errors->first('middle_name')) is-invalid @endif"
-                                            type="text" placeholder="" name="middle_name"
-                                            value="{{ old('middle_name') }}">
-                                    </div>
-                                    <div class="col-lg-3 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2 form_label">Last Name<span>*</span></label>
-                                        <input
-                                            class="text_small form-control @if ($errors->first('last_name')) is-invalid @endif"
-                                            type="text" placeholder="" name="last_name"
-                                            value="{{ old('last_name') }}" required>
-                                    </div>
-
-                                    <div class="col-lg-3 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2 form_label">Gender<span>*</span></label>
-                                        <select name="gender"
-                                            class="form-select text_small form-control @if ($errors->first('gender')) is-invalid @endif"
-                                            aria-label="Default select example" required>
-                                            <option value="" selected>--SELECT--</option>
-                                            <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>
-                                                Male
-                                            </option>
-                                            <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>
-                                                Female
-                                            </option>
-                                            <option value="other" {{ old('gender') == 'other' ? 'selected' : '' }}>
-                                                Other
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-3 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2 form_label">Date of Birth<span>*</span></label>
-                                        <input id="datepicker"
-                                            class="text_small form-control @if ($errors->first('dob')) is-invalid @endif"
-                                            type="date" placeholder="" name="dob" value="{{ old('dob') }}"
-                                            required>
-                                    </div>
-                                    <div class="col-lg-3 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2 form_label">Email<span>*</span></label>
-                                        <input
-                                            class="text_small form-control @if ($errors->first('email')) is-invalid @endif"
-                                            type="email" placeholder="" name="email" value="{{ old('email') }}"
-                                            required>
-                                    </div>
-                                    <div class="col-lg-3 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2 form_label">Phone (Home)</label>
-                                        <input
-                                            class="text_small form-control @if ($errors->first('phone')) is-invalid @endif"
-                                            maxlength="14" type="text" placeholder="" name="phone"
-                                            value="{{ old('phone') }}"
-                                            onKeyPress="if(this.value.length==14) return false;">
-                                    </div>
-                                    <div class="col-lg-3 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2 form_label">Cell<span>*</span></label>
-                                        <input
-                                            class="text_small form-control @if ($errors->first('cell')) is-invalid @endif"
-                                            maxlength="14" type="text" placeholder="" name="cell"
-                                            value="{{ old('cell') }}"
-                                            onKeyPress="if(this.value.length==14) return false;" required>
-                                    </div>
-                                    <div class="col-lg-3 col-sm-4 form_content">
-                                        <label class="mb-0 mt-2 form_label">Work</label>
-                                        <textarea name="work" class="text_small form-control @if ($errors->first('work')) is-invalid @endif">{{ old('work') }}</textarea>
-                                    </div>
-                                    <div class="col-lg-9 col-sm-8 form_content">
-                                        <label class="mb-0 mt-2 form_label">Address<span>*</span></label>
-                                        <textarea name="address" class="text_small form-control @if ($errors->first('address')) is-invalid @endif"
-                                            required>{{ old('address') }}</textarea>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <h2 class="custom_small_heading my-3 text-center">
-                                            School Information
-                                        </h2>
-                                    </div>
-                                    <div class="col-lg-3 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2 form_label">High School/GED</label>
-                                        <input
-                                            class="text_small form-control @if ($errors->first('high_school')) is-invalid @endif"
-                                            type="text" placeholder="" name="high_school"
-                                            value="{{ old('high_school') }}">
-                                    </div>
-                                    <div class="col-lg-3 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2 form_label">Year Attended</label>
-                                        <input
-                                            class="text_small form-control @if ($errors->first('school_years_attended')) is-invalid @endif"
-                                            type="date" placeholder="" name="school_years_attended"
-                                            value="{{ old('school_years_attended') }}">
-                                    </div>
-                                    <div class="col-lg-3 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2 form_label">Graduates</label>
-                                        <select name="school_year_graduate"
-                                            class="form-select text_small form-control @if ($errors->first('school_year_graduate')) is-invalid @endif"
-                                            aria-label="Default select example">
-                                            <option value="" selected>--SELECT--</option>
-                                            <option value="yes"
-                                                {{ 'yes' == old('school_year_graduate') ? 'selected' : '' }}>
-                                                Yes
-                                            </option>
-                                            <option value="no"
-                                                {{ 'no' == old('school_year_graduate') ? 'selected' : '' }}>
-                                                No
-                                            </option>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-lg-3 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2 form_label">Degree/Major</label>
-                                        <input
-                                            class="text_small form-control @if ($errors->first('school_degree')) is-invalid @endif"
-                                            type="text" placeholder="" name="school_degree"
-                                            value="{{ old('school_degree') }}">
-                                    </div>
-                                    <div class="col-lg-4 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2 form_label">College</label>
-                                        <input
-                                            class="text_small form-control @if ($errors->first('college')) is-invalid @endif"
-                                            type="text" placeholder="" name="college" value="{{ old('college') }}">
-                                    </div>
-                                    <div class="col-lg-4 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2 form_label">Year Attended</label>
-                                        <input
-                                            class="text_small form-control @if ($errors->first('college_email')) is-invalid @endif"
-                                            type="date" placeholder="" name="college_email"
-                                            value="{{ old('college_email') }}">
-                                    </div>
-                                    <div class="col-lg-4 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2 form_label">Graduates</label>
-                                        <select name="college_graduate"
-                                            class="form-select text_small form-control @if ($errors->first('college_graduate')) is-invalid @endif"
-                                            aria-label="Default select example" value="{{ old('f_name') }}">
-                                            <option value="" selected>--SELECT--</option>
-                                            <option value="yes"
-                                                {{ 'yes' == old('college_graduate') ? 'selected' : '' }}>
-                                                Yes
-                                            </option>
-                                            <option value="no"
-                                                {{ 'no' == old('college_graduate') ? 'selected' : '' }}>No
-                                            </option>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-lg-3 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2 form_label">Trade or Correspondence School</label>
-                                        <input
-                                            class="text_small form-control @if ($errors->first('trade_school')) is-invalid @endif"
-                                            type="text" placeholder="" name="trade_school"
-                                            value="{{ old('trade_school') }}">
-                                    </div>
-                                    <div class="col-lg-3 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2 form_label">Degree/Major</label>
-                                        <input
-                                            class="text_small form-control @if ($errors->first('trade_degree')) is-invalid @endif"
-                                            type="text" placeholder="" name="trade_degree"
-                                            value="{{ old('trade_degree') }}">
-                                    </div>
-                                    <div class="col-lg-3 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2 form_label">Year Attended</label>
-                                        <input
-                                            class="text_small form-control @if ($errors->first('trade_years_attended')) is-invalid @endif"
-                                            type="date" placeholder="" name="trade_years_attended"
-                                            value="{{ old('trade_years_attended') }}">
-                                    </div>
-
-                                    <div class="col-lg-3 form_content">
-                                        <label class="mb-0 mt-2 form_label">Graduates</label>
-                                        <select name="trade_year_graduate"
-                                            class="form-select text_small form-control @if ($errors->first('trade_year_graduate')) is-invalid @endif"
-                                            aria-label="Default select example">
-                                            <option value="" selected>--SELECT--</option>
-                                            <option value="yes"
-                                                {{ 'yes' == old('trade_year_graduate') ? 'selected' : '' }}>
-                                                Yes
-                                            </option>
-                                            <option value="no"
-                                                {{ 'no' == old('trade_year_graduate') ? 'selected' : '' }}>
-                                                No
-                                            </option>
-                                        </select>
-                                    </div>
-
-                                    <!-- Teaching Experience section  -->
-                                    <div class="col-md-12">
-                                        <h2 class="custom_small_heading my-3 text-center">
-                                            Teaching Experience
-                                        </h2>
-                                    </div>
-                                    <div class="col-lg-4 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2 form_label">Current Position<span>*</span></label>
-                                        <input
-                                            class="text_small form-control @if ($errors->first('current_position')) is-invalid @endif"
-                                            type="text" placeholder="" name="current_position"
-                                            value="{{ old('current_position') }}" required>
-                                    </div>
-                                    <div class="col-lg-4 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2">Employer's Phone Number <span>*</span></label>
-                                        <input
-                                            class="text_small form-control @if ($errors->first('Teach_phone')) is-invalid @endif"
-                                            type="text" placeholder="" name="Teach_phone" maxlength="14"
-                                            value="{{ old('Teach_phone') }}"
-                                            onKeyPress="if(this.value.length==14) return false;" required>
-                                    </div>
-                                    <div class="col-lg-4 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2 form_label">Employer Name <span>*</span></label>
-                                        <input
-                                            class="text_small form-control @if ($errors->first('employee_name')) is-invalid @endif"
-                                            type="text" placeholder="" name="employee_name"
-                                            value="{{ old('employee_name') }}" required>
-                                    </div>
-                                    <div class="col-lg-5 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2 form_label">Position Start Date<span>*</span></label>
-                                        <input
-                                            class="text_small form-control @if ($errors->first('date_employer_start')) is-invalid @endif"
-                                            type="date" placeholder="" name="date_employer_start"
-                                            value="{{ old('date_employer_start') }}" required>
-                                    </div>
-                                    <div class="col-lg-5 col-sm-7 form_content">
-                                        <div id="end_date_div"
-                                            style="{{ old('currently_employed') ? 'display:none;' : '' }}">
-                                            <label class="mb-0 mt-2 form_label">Position End Date<span>*</span></label>
-                                            <input
-                                                class="text_small form-control @if ($errors->first('date_employer_end')) is-invalid @endif"
-                                                type="date" placeholder="" name="date_employer_end"
-                                                value="{{ old('date_employer_end') }}" required>
-                                        </div>
-                                    </div>
-                                    <div
-                                        class="col-lg-2 col-sm-5 d-flex justify-content-center align-items-center mt-3 gap-2">
-                                        <input class="@if ($errors->first('currently_employed')) is-invalid @endif"
-                                            type="checkbox" id="postion" name="currently_employed"
-                                            {{ old('currently_employed') ? 'checked' : '' }}>
-                                        <label class="mb-0" for="postion">Currently Employed?</label><br>
-                                    </div>
-                                    <div class="col-lg-4 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2 form_label">Supervisor Name<span>*</span></label>
-                                        <input
-                                            class="text_small form-control @if ($errors->first('supervisor_name')) is-invalid @endif"
-                                            type="text" placeholder="" name="supervisor_name"
-                                            value="{{ old('supervisor_name') }}" required>
-                                    </div>
-                                    <div class="col-lg-4 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2 form_label">Upload Resume<span>*</span></label>
-                                        <input
-                                            class="text_small form-control @if ($errors->first('upload_resume')) is-invalid @endif"
-                                            type="file" placeholder="" name="upload_resume" accept=".doc,.docx,.pdf"
-                                            required>
-                                    </div>
-                                    <div class="col-lg-4 col-sm-6 form_content">
-                                        <label class="mb-0 mt-2 form_label">Upload Coverletter<span>*</span></label>
-                                        <input
-                                            class="text_small form-control @if ($errors->first('cover_letter')) is-invalid @endif"
-                                            type="file" placeholder="" name="cover_letter" accept=".doc,.docx,.pdf"
-                                            required>
-                                    </div>
-                                    <div class="col-md-12 form_content">
-                                        <label class="mb-0 mt-2 form_label">Address<span>*</span></label>
-                                        <textarea name="employer_address"
-                                            class="text_small form-control @if ($errors->first('employer_address')) is-invalid @endif" required>{{ old('employer_address') }}</textarea>
-                                    </div>
-                                    <div class="col-md-auto ml-auto mt-3">
-                                        <button type="button"
-                                            class="btn btn-secondary close-modal closeModal">Close</button>
-                                        <button type="submit" class="btn small_btn4 theme_btn">Submit</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+        <section class="why-section">
+            <div class="section-header">
+                <p class="section-eyebrow">{{ __('What Sets Us Apart') }}</p>
+                <h2 class="section-title">Why our instructors are <em>different.</em></h2>
+                <p class="section-subtitle">At Merkaii Xcellence Prep, instructors and tutors are the same people. The educator who designs your curriculum is the same person who sits with you in your 1-on-1 session.</p>
+            </div>
+            <div class="why-grid">
+                <div class="why-card">
+                    <h3>{{ __('Credentialed Nurses First') }}</h3>
+                    <p>Every instructor holds an active nursing license and brings real clinical experience to the classroom — not just textbook theory.</p>
+                </div>
+                <div class="why-card">
+                    <h3>{{ __('NCLEX PASS Method™ Trained') }}</h3>
+                    <p>All instructors are trained in our proprietary methodology: Content + Process + Confidence. They teach the system, not just the material.</p>
+                </div>
+                <div class="why-card">
+                    <h3>{{ __('Small Caseloads by Design') }}</h3>
+                    <p>We limit each instructor's active students so they have time to review your work, prepare for your sessions, and actually know your weak areas.</p>
+                </div>
+                <div class="why-card">
+                    <h3>{{ __('Students Who Failed, Nurses Who Passed') }}</h3>
+                    <p>Many of our instructors understand the repeat-tester experience personally. They don't just teach the content — they understand the mindset.</p>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <section class="subjects-section">
+            <div class="section-header">
+                <p class="section-eyebrow">{{ __('Subject Areas') }}</p>
+                <h2 class="section-title">Tutoring across all nursing subjects.</h2>
+                <p class="section-subtitle">Our instructors cover every subject on the NCLEX test plan and FL BON remediation curriculum. Request a session in any area below.</p>
+            </div>
+            <div class="subjects-grid">
+                <div class="subject-chip remedial"><h4>FL BON Remedial Subjects</h4><p>Board-mandated coursework</p></div>
+                <div class="subject-chip"><h4>Fundamentals of Nursing</h4><p>Core concepts &amp; skills</p></div>
+                <div class="subject-chip"><h4>Med-Surg Nursing</h4><p>Adult health conditions</p></div>
+                <div class="subject-chip"><h4>Pharmacology</h4><p>Drug classes &amp; safety</p></div>
+                <div class="subject-chip"><h4>Mental Health Nursing</h4><p>Psych &amp; behavioral health</p></div>
+                <div class="subject-chip"><h4>Maternal-Newborn (OB)</h4><p>Pregnancy, labor, postpartum</p></div>
+                <div class="subject-chip"><h4>Pediatric Nursing</h4><p>Infant through adolescent</p></div>
+                <div class="subject-chip"><h4>Community Health</h4><p>Population-based care</p></div>
+                <div class="subject-chip"><h4>Physical Assessment</h4><p>Head-to-toe &amp; systems</p></div>
+                <div class="subject-chip"><h4>Gerontological Nursing</h4><p>Aging &amp; geriatric care</p></div>
+                <div class="subject-chip"><h4>Nursing Management</h4><p>Leadership &amp; delegation</p></div>
+                <div class="subject-chip"><h4>NCLEX Test Strategy</h4><p>Clinical judgment &amp; NGN</p></div>
+            </div>
+        </section>
+
+        <section class="join-section">
+            <div class="join-card">
+                <p class="section-eyebrow">{{ __('Join Our Team') }}</p>
+                <h2>Interested in teaching with Merkaii?</h2>
+                <p>We're always looking for experienced nurse educators who share our mission. If you're a credentialed nurse with a passion for teaching and a belief that struggling students deserve better support, we'd love to hear from you.</p>
+                <a href="{{ route('becomeATutor') }}#apply" class="btn-primary">{{ __('Apply to Become an Instructor') }} →</a>
+            </div>
+        </section>
+
+        <section class="final-cta">
+            <h2>Ready to work with <em>a real instructor?</em></h2>
+            <p>Book your first session and walk away with the clarity your textbook never gave you.</p>
+            <a href="{{ route('contact') }}" class="btn-on-teal">{{ __('Book a Session') }} →</a>
+        </section>
     </div>
 
-
     @include(theme('partials._custom_footer'))
-    {{-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> --}}
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init({
-            duration: 1000,
-            anchorPlacement: 'top-bottom', // defines which position of the element regarding to window should trigger the animation
+        (function() {
+            var filterTags = document.querySelectorAll('.mxp-instructors .filter-tag');
+            var cards = document.querySelectorAll('.mxp-instructors .instructor-card');
+            var noResults = document.getElementById('noResults');
+            var resetFilter = document.getElementById('resetFilter');
 
-        });
-    </script>
-
-    {{-- <script src="https://code.jquery.com/jquery-2.2.0.min.js" type="text/javascript"></script> --}}
-    <script src="{{ asset('public/assets/slick/slick.js') }}" type="text/javascript" charset="utf-8"></script>
-    <script>
-        $('.custom_slick_slider_03').slick({
-            "slidesToShow": 4,
-            "pauseOnHover": true,
-            "autoplay": true,
-            "infinite": true,
-            "dots": false,
-            "arrows": false,
-            "responsive": [{
-                    "breakpoint": 1400,
-                    "settings": {
-                        "slidesToShow": 4
-                    }
-                },
-                {
-                    "breakpoint": 1200,
-                    "settings": {
-                        "slidesToShow": 3
-                    }
-                },
-                {
-                    "breakpoint": 992,
-                    "settings": {
-                        "slidesToShow": 2
-                    }
-                },
-                {
-                    "breakpoint": 768,
-                    "settings": {
-                        "slidesToShow": 2
-                    }
-                },
-                {
-                    "breakpoint": 576,
-                    "settings": {
-                        "slidesToShow": 1
-                    }
+            function applyFilter(filter) {
+                var visible = 0;
+                cards.forEach(function(card) {
+                    var specialties = (card.getAttribute('data-specialties') || '').split(/\s+/);
+                    var show = filter === 'all' || specialties.indexOf(filter) !== -1;
+                    card.classList.toggle('hidden', !show);
+                    if (show) visible++;
+                });
+                if (noResults) {
+                    noResults.classList.toggle('visible', visible === 0);
                 }
-            ]
-        });
-    </script>
-
-    <script>
-        $(document).ready(function() {
-            var today = new Date().toISOString().split('T')[0];
-            document.getElementById("datepicker").setAttribute('max', today);
-            document.getElementById("start_date").setAttribute('min', today);
-
-            $('#postion').change(function() {
-                if ($(this).is(':checked')) {
-                    $('#end_date_div').hide();
-                    $('#end_date_div input').removeAttr('required');
-                } else {
-                    $('#end_date_div').show();
-                    $('#end_date_div input').attr('required', 'required');
-                }
-            });
-
-            // $("#datepicker").datepicker({
-            //     dateFormat: 'dd/mm/yy',
-            //     maxDate:'0'
-            // });
-            // $("#start_date").datepicker({
-            //     dateFormat: 'dd/mm/yy',
-            //     minDate:'0'
-            // });
-        });
-        $(".hit").click(function() {
-            $('#becomeAnInstructor').modal('show');
-            // $('.popup').removeClass('d-none');
-
-        });
-        $('.close-modal').click(modalFormControl);
-
-        if (window.location.hash) {
-            let hash = window.location.hash;
-            if ($(hash).hasClass('modal')) {
-                $(hash).modal('show');
-
             }
-        }
 
-
-        function modalFormControl() {
-            var form = $('#Instructor_reqister');
-            form.find('.is-invalid').removeClass('is-invalid');
-            form.find('.is-invalid, .is-focused, .is-filled').removeClass(["is-invalid", "is-focused",
-                "is-filled"
-            ]);
-            form.find('#category_id').val(null).trigger('change');
-            form.find('.invalid-feedback').children().text('');
-            form.trigger("reset");
-
-
-            $('.modal-backdrop').removeClass('show');
-            $('.modal-backdrop').removeClass('fade');
-            $('.modal-backdrop').removeClass('modal-backdrop');
-            form.parents('.modal').removeClass('show');
-            form.parents('.modal').removeClass('fade');
-            form.parents('.modal').attr('style', '');
-            form.parents('.modal').modal('hide');
-
-        }
-    </script>
-    @if (count($errors))
-        <script>
-            $('#becomeAnInstructor').modal('show');
-        </script>
-    @endif
-
-    <!-- Optional JavaScript; select of the two! -->
-
-    <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
-    </script>
-
-    <script>
-        // Add event listener to elements with class 'openModal'
-        var openModalButtons = document.getElementsByClassName('openModal');
-        for (var i = 0; i < openModalButtons.length; i++) {
-            openModalButtons[i].addEventListener('click', function() {
-                var instructors = document.getElementsByClassName('instructor-2');
-                for (var j = 0; j < instructors.length; j++) {
-                    instructors[j].style.display = 'block';
-                }
-                document.body.classList.add('modal-open');
-                document.documentElement.style.overflow = 'hidden';
-                document.body.style.overflow = 'hidden';
-                document.getElementById('modalContent').addEventListener('scroll', function(event) {
-                    event.stopPropagation();
+            filterTags.forEach(function(tag) {
+                tag.addEventListener('click', function() {
+                    filterTags.forEach(function(t) { t.classList.remove('active'); });
+                    tag.classList.add('active');
+                    applyFilter(tag.getAttribute('data-filter'));
                 });
             });
-        }
 
-        // Add event listener to elements with class 'closeModal'
-        var closeModalButtons = document.getElementsByClassName('closeModal');
-        for (var k = 0; k < closeModalButtons.length; k++) {
-            closeModalButtons[k].addEventListener('click', function() {
-                var instructors = document.getElementsByClassName('instructor-2');
-                for (var l = 0; l < instructors.length; l++) {
-                    instructors[l].style.display = 'none';
-                }
-                document.body.classList.remove('modal-open');
-                document.documentElement.style.overflow = '';
-                document.body.style.overflow = '';
-            });
-        }
+            if (resetFilter) {
+                resetFilter.addEventListener('click', function() {
+                    filterTags.forEach(function(t) { t.classList.remove('active'); });
+                    var all = document.querySelector('.mxp-instructors .filter-tag[data-filter="all"]');
+                    if (all) all.classList.add('active');
+                    applyFilter('all');
+                });
+            }
+        })();
     </script>
-
-    {{-- <script>
-        $(".hit").click(function() {
-            $('.popup').removeClass('d-none');
-
-        });
-        $(".model-close").click(function() {
-
-            $('.popup').addClass('d-none');
-
-        })
-    </script> --}}
-    <!-- Optional JavaScript; select of the two! -->
-
-    <!-- Option 1: Bootstrap Bundle with Popper -->
-    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
-    </script> --}}
 @endsection

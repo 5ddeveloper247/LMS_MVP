@@ -773,7 +773,7 @@
                                         <div class="header__right">
                                             <div class="contact_wrap d-flex align-items-center">
                                                 <div class="login_btn d-flex p-0">
-                                                    <a href="{{ url('pre-registration') }}"
+                                                    <a href="{{ route('login') }}"
                                                         class="d-flex justify-content-center align-items-center register-btn-svg px-2 py-1"
                                                         style="gap: 5px;">
                                                             {{ __('Schedule a Call') }}
@@ -1644,7 +1644,7 @@
         </div>
       @else
         <div class="nav-cta-wrap">
-          <a href="{{ url('pre-registration') }}" class="btn-nav-cta">{{ __('Schedule a Call') }}</a>
+          <a href="{{ route('login') }}" class="btn-nav-cta">{{ __('Schedule a Call') }}</a>
         </div>
       @endif
     @endguest
@@ -1736,7 +1736,7 @@
     </div>
   @endauth
   @guest
-    <a href="{{ url('pre-registration') }}" class="mxp-mobile-cta">{{ __('Schedule a Call') }}</a>
+    <a href="{{ route('login') }}" class="mxp-mobile-cta">{{ __('Schedule a Call') }}</a>
   @endguest
 
   <div class="mxp-mobile-utility-links">

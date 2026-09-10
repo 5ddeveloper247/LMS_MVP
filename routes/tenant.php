@@ -69,6 +69,9 @@ Route::group(['namespace' => 'Frontend'], function () {
     //    Route::get('/footer/page/{slug}', 'WebsiteController@page')->name('dynamic.page');
     Route::get('/about-us', 'WebsiteController@aboutData')->name('about');
     Route::get('/our-team', 'TeamPageController@index')->name('ourTeam');
+    Route::get('/tutoring', 'TutoringPageController@index')->name('tutoring');
+    Route::get('/become-a-tutor', 'BecomeTutorPageController@index')->name('becomeATutor');
+    Route::post('/become-a-tutor', 'BecomeTutorPageController@store')->name('becomeATutor.store');
     Route::get('/contact-us', 'WebsiteController@contact')->name('contact')->middleware('HeaderMenuPermissions');
     Route::post('/contact-login', 'WebsiteController@contactLogin')->name('contactLogin')->middleware('HeaderMenuPermissions');
     Route::get('/contact', 'WebsiteController@contactUs')->name('contact-us')->middleware('HeaderMenuPermissions');

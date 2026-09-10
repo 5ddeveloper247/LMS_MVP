@@ -79,6 +79,8 @@
                                                     <th scope="col">{{ __('common.Image') }}</th>
                                                     <th scope="col">{{ __('common.Name') }}</th>
                                                     <th scope="col">{{ __('common.Email') }}</th>
+                                                    <th scope="col">{{ __('Tutor') }}</th>
+                                                    <th scope="col">{{ __('Featured') }}</th>
                                                     @if (isModuleActive('OrgInstructorPolicy'))
                                                         <th scope="col">{{ __('policy.Group') }}
                                                             {{ __('policy.Policy') }}</th>
@@ -415,54 +417,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-xl-4">
-                                    <div class="primary_input mb-15">
-                                        <label class="primary_input_label"
-                                            for="">{{ __('instructor.Date of Birth') }}
-                                        </label>
-                                        <div class="primary_datepicker_input">
-                                            <div class="no-gutters input-right-icon">
-                                                <div class="col">
-                                                    <div class="">
-                                                        <input placeholder="Date"
-                                                            class="primary_input_field primary-input date form-control"
-                                                            id="instructorDob"
-                                                            {{ $errors->first('dob') ? 'autofocus' : '' }} type="text"
-                                                            name="dob" value="{{ old('dob') }}"
-                                                            autocomplete="off">
-                                                    </div>
-                                                </div>
-                                                <button class="" type="button">
-                                                    <i class="ti-calendar" id="start-date-icon"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xl-4">
-                                    <div class="primary_input mb-35">
-                                        <label class="primary_input_label" for="">{{ __('common.gender') }}
-                                            <strong class="text-danger">*</strong>
-                                        </label>
-                                        <select class="primary_select" data-course_id="{{ @$course->id }}"
-                                            name="gender" id="instructorGender" required>
-                                            <option data-display="{{ __('common.Select') }} {{ __('common.gender') }}"
-                                                value="" selected>{{ __('common.Select') }}
-                                                {{ __('common.gender') }} </option>
-
-                                            <option value="male" {{ 'male' == old('gender') ? 'selected' : '' }}>Male
-                                            </option>
-                                            <option value="female" {{ 'female' == old('gender') ? 'selected' : '' }}>
-                                                Female
-                                            </option>
-                                            <option value="other" {{ 'other' == old('gender') ? 'selected' : '' }}>
-                                                Other
-                                            </option>
-
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-xl-4">
+                                <div class="col-xl-6">
                                     <div class="primary_input mb-25">
                                         <label class="primary_input_label" for="">{{ __('common.Phone') }}
                                         </label>
@@ -471,10 +426,7 @@
                                             {{ $errors->first('phone') ? 'autofocus' : '' }}>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-
-                                <div class="col-xl-5">
+                                <div class="col-xl-6">
                                     <div class="primary_input mb-25">
                                         <label class="primary_input_label" for="">{{ __('common.Email') }}
                                             <strong class="text-danger">*</strong></label>
@@ -483,7 +435,9 @@
                                             {{ $errors->first('email') ? 'autofocus' : '' }} required>
                                     </div>
                                 </div>
-                                <div class="col-xl-5">
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-10">
                                     <div class="primary_input mb-35">
                                         <label class="primary_input_label" for="">{{ __('common.Image') }}
                                             <small>{{ __('student.Recommended size') }}
@@ -493,18 +447,10 @@
                                                 type="text" id="instructorImage"
                                                 placeholder="{{ __('student.Browse Image file') }}" readonly=""
                                                 value="{{ old('img_name') }}">
-                                            {{-- <button onclick="destroyCropper1()" class="" type="button">
-                                                <label class="primary-btn small fix-gr-bg" id="Browseeeditinstructor"
-                                                    for="document_file_thumb-1">{{ __('common.Browse') }}</label>
-                                                <input type="file" class="d-none fileUpload upload-editor-1"
-                                                    name="image" id="document_file_thumb-1">
-                                                <input type="hidden" name="hidden_file" id="cropper_img"
-                                                    class="upload-editor-hidden-file-1">
-                                            </button> --}}
-                                        <button class="" type="button">
-                                                            <label class="primary-btn small fix-gr-bg" for="document_file1">Browse</label>
-                                                            <input type="file" class="d-none fileUpload" name="image" id="document_file1">
-                                                        </button>
+                                            <button class="" type="button">
+                                                <label class="primary-btn small fix-gr-bg" for="document_file1">Browse</label>
+                                                <input type="file" class="d-none fileUpload" name="image" id="document_file1">
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -549,42 +495,6 @@
                                                 placeholder="{{ __('common.Minimum 8 characters') }}"
                                                 {{ $errors->first('password_confirmation') ? 'autofocus' : '' }}>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xl-6">
-                                    <div class="primary_input mb-25">
-                                        <label class="primary_input_label" for="">
-                                            {{ __('common.Facebook URL') }}</label>
-                                        <input class="primary_input_field" value="{{ old('facebook') }}"
-                                            name="facebook" placeholder="-" id="instructorFacebook" type="text">
-                                    </div>
-                                </div>
-                                <div class="col-xl-6">
-                                    <div class="primary_input mb-25">
-                                        <label class="primary_input_label" for="">
-                                            {{ __('common.Twitter URL') }}</label>
-                                        <input class="primary_input_field" value="{{ old('twitter') }}" name="twitter"
-                                            placeholder="-" id="instructorTwitter" type="text">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xl-6">
-                                    <div class="primary_input mb-25">
-                                        <label class="primary_input_label" for="">
-                                            {{ __('common.LinkedIn URL') }}</label>
-                                        <input class="primary_input_field" value="{{ old('linkedin') }}"
-                                            name="linkedin" placeholder="-" id="instructorLinkedin" type="text">
-                                    </div>
-                                </div>
-                                <div class="col-xl-6">
-                                    <div class="primary_input mb-25">
-                                        <label class="primary_input_label" for="">
-                                            {{ __('common.Instagram URL') }}</label>
-                                        <input class="primary_input_field" value="{{ old('instagram') }}"
-                                            name="instagram" placeholder="-" id="instructorInstragram" type="text">
                                     </div>
                                 </div>
                             </div>
@@ -904,6 +814,16 @@
                     data: 'email',
                     name: 'email'
                 },
+                {
+                    data: 'tutor',
+                    name: 'total_hours',
+                    orderable: true
+                },
+                {
+                    data: 'is_featured',
+                    name: 'is_featured',
+                    orderable: true
+                },
                 @if (isModuleActive('OrgInstructorPolicy'))
                     {
                         data: 'group_policy',
@@ -1014,6 +934,52 @@
                 },
             ],
             responsive: true,
+        });
+
+        // Featured toggle: lock per-id to avoid double-fire from DataTables responsive clones
+        var featuredToggleLock = {};
+        $(document).on('change', '#lms_table .instructor_featured_toggle', function(e) {
+            e.stopImmediatePropagation();
+            var $el = $(this);
+            var id = $el.data('id') || $el.val();
+            if (!id || featuredToggleLock[id]) {
+                return;
+            }
+            featuredToggleLock[id] = true;
+
+            var status = $el.is(':checked') ? 1 : 0;
+            $('#lms_table .instructor_featured_toggle[data-id="' + id + '"]').prop('checked', status === 1);
+
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('instructor.toggle.featured') }}',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    id: id,
+                    status: status
+                },
+                dataType: 'json',
+                success: function(res) {
+                    if (res.success) {
+                        var on = parseInt(res.is_featured, 10) === 1;
+                        $('#lms_table .instructor_featured_toggle[data-id="' + id + '"]').prop('checked', on);
+                        toastr.success(res.message || 'Updated successfully', 'Success');
+                    } else {
+                        $('#lms_table .instructor_featured_toggle[data-id="' + id + '"]').prop('checked', status !== 1);
+                        toastr.error(res.message || 'Failed', 'Error');
+                    }
+                },
+                error: function(xhr) {
+                    $('#lms_table .instructor_featured_toggle[data-id="' + id + '"]').prop('checked', status !== 1);
+                    var msg = (xhr.responseJSON && xhr.responseJSON.message)
+                        ? xhr.responseJSON.message
+                        : 'Failed';
+                    toastr.error(msg, 'Error');
+                },
+                complete: function() {
+                    featuredToggleLock[id] = false;
+                }
+            });
         });
 
         // Individual Tutor Table

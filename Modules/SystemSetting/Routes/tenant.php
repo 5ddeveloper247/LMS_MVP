@@ -84,8 +84,10 @@ Route::group(['prefix' => 'admin/systemsetting', 'middleware' => ['auth', 'admin
     Route::post('/update', 'InstructorSettingController@update')->name('instructor.update')->middleware('RoutePermissionCheck:instructor.edit');
     Route::post('/destroy', 'InstructorSettingController@destroy')->name('instructor.delete')->middleware('RoutePermissionCheck:instructor.delete');
     Route::post('/set/hours', 'InstructorSettingController@setHours')->name('instructor.set.hours');
+    Route::post('/toggle-featured', 'InstructorSettingController@toggleFeatured')->name('instructor.toggle.featured')->middleware('RoutePermissionCheck:allInstructor');
     Route::get('/status/{id}', 'InstructorSettingController@status')->name('instructor.change_status')->middleware('RoutePermissionCheck:instructor.change_status');
     Route::get('/view/{id}', 'InstructorSettingController@view')->name('instructor.view');
+    Route::get('/resume/{id}', 'InstructorSettingController@downloadResume')->name('instructor.resume.download');
     Route::post('update/view/', 'InstructorSettingController@updateView')->name('instructor.update.view');
 
     //    turing

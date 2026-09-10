@@ -2020,12 +2020,16 @@ class WebsiteController extends Controller
         try {
             if (hasDynamicPage()) {
                 $row = FrontPage::where('slug', '/contact-us')->first();
-                $details = dynamicContentAppend($row->details);
-                return view('aorapagebuilder::pages.show', compact('row', 'details'));
-            } else {
-                $page_content = app('getHomeContent');
-                return view(theme('pages.contact'), compact('page_content'));
+                if ($row) {
+                    $details = dynamicContentAppend($row->details);
+                    return view('aorapagebuilder::pages.show', compact('row', 'details'));
+                }
             }
+
+            $page_content = app('getHomeContent');
+            $allPrograms = Program::where('status', 1)->latest()->get();
+            $allCourses = Course::whereNull('parent_id')->where('type', '<>', 3)->latest()->get();
+            return view(theme('pages.contact'), compact('page_content', 'allPrograms', 'allCourses'));
         } catch (\Exception $e) {
             GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
         }
