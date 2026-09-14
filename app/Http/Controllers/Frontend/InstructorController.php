@@ -132,6 +132,82 @@ class InstructorController extends Controller
             $tutor = User::with('tutorReviews', 'userTutorReviews')->findOrFail($id);
             $courses = Course::where('user_id', $id)->where('status', 1)->where('type', 1)->get();
 
+            $personalInfo = null;
+            if (\Illuminate\Support\Facades\Schema::hasTable('instructors_personal_info')) {
+                $personalInfo = DB::table('instructors_personal_info')->where('user_id', $id)->first();
+            }
+
+            $weekAvailability = [];
+            $from = Carbon::today()->format('Y-m-d');
+            $to = Carbon::today()->addDays(6)->format('Y-m-d');
+            $weekSlots = TutorSlote::where('instructor_id', $id)
+                ->whereBetween('slot_date', [$from, $to])
+                ->whereNotNull('start_time')
+                ->with('slotHiring')
+                ->get()
+                ->groupBy(function ($slot) {
+                    return Carbon::parse($slot->slot_date)->format('Y-m-d');
+                });
+
+            foreach ($weekSlots as $dateStr => $daySlots) {
+                $freeSlots = $daySlots->filter(function ($slot) use ($dateStr) {
+                    return !$slot->slotHiring->contains(function ($hiring) use ($dateStr) {
+                        return Carbon::parse($hiring->assign_date)->format('Y-m-d') === $dateStr;
+                    });
+                });
+
+                $freeCount = $freeSlots->count();
+                if ($freeCount < 1) {
+                    continue;
+                }
+
+                $period = 'Session';
+                try {
+                    $hour = Carbon::parse($freeSlots->first()->start_time)->hour;
+                    if ($hour < 12) {
+                        $period = 'Morning';
+                    } elseif ($hour < 17) {
+                        $period = 'Afternoon';
+                    } else {
+                        $period = 'Evening';
+                    }
+                } catch (\Exception $e) {
+                    $period = 'Session';
+                }
+
+                if ($freeCount === 1) {
+                    $status = '1 Slot Left';
+                    $statusClass = 'limited';
+                } elseif ($freeCount === 2) {
+                    $status = '2 Slots Left';
+                    $statusClass = 'limited';
+                } else {
+                    $status = 'Available';
+                    $statusClass = 'open';
+                }
+
+                $weekAvailability[] = [
+                    'label' => Carbon::parse($dateStr)->format('l') . ' ' . $period,
+                    'status' => $status,
+                    'statusClass' => $statusClass,
+                ];
+            }
+
+            $relatedInstructors = collect();
+            $relatedQuery = User::query()
+                ->where('role_id', 2)
+                ->where('status', '1')
+                ->where('id', '!=', $id);
+
+            if (\Illuminate\Support\Facades\Schema::hasColumn('users', 'is_featured')) {
+                $relatedQuery->where('is_featured', 1);
+            }
+
+            $relatedInstructors = $relatedQuery
+                ->orderBy('total_rating', 'desc')
+                ->limit(3)
+                ->get();
+
             //            reviews
             if ($request->ajax()) {
                 if ($request->type == "review") {
@@ -160,7 +236,13 @@ class InstructorController extends Controller
 
 
 
-            return view(theme('pages.tutorDetails'), compact('tutor', 'courses'));
+            return view(theme('pages.tutorDetails'), compact(
+                'tutor',
+                'courses',
+                'personalInfo',
+                'weekAvailability',
+                'relatedInstructors'
+            ));
         } catch (\Exception $e) {
             GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
         }

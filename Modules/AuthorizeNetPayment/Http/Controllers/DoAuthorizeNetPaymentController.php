@@ -22,6 +22,73 @@ use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Distributions\F;
 class DoAuthorizeNetPaymentController extends Controller
 {
     /**
+     * Parse Authorize.Net JSON (often has UTF-8 BOM) into a flat key=>value map
+     * compatible with the existing resultCode / text / refId checks.
+     */
+    private function parseAuthorizeNetResponse($getresponse): array
+    {
+        $dataArray = [];
+        if (!is_string($getresponse) || $getresponse === '') {
+            return $dataArray;
+        }
+
+        // Strip UTF-8 BOM Authorize.Net sometimes prepends
+        $cleaned = preg_replace('/^\xEF\xBB\xBF/', '', $getresponse);
+        $decoded = json_decode($cleaned, true);
+
+        if (is_array($decoded)) {
+            if (isset($decoded['messages']['resultCode'])) {
+                $dataArray['resultCode'] = $decoded['messages']['resultCode'];
+            }
+            if (!empty($decoded['messages']['message'][0]['text'])) {
+                $dataArray['text'] = $decoded['messages']['message'][0]['text'];
+            } elseif (!empty($decoded['messages']['message'][0]['description'])) {
+                $dataArray['text'] = $decoded['messages']['message'][0]['description'];
+            }
+            if (isset($decoded['refId'])) {
+                $dataArray['refId'] = $decoded['refId'];
+            }
+            $tx = $decoded['transactionResponse'] ?? [];
+            if (isset($tx['transId'])) {
+                $dataArray['transId'] = $tx['transId'];
+            }
+            if (isset($tx['authCode'])) {
+                $dataArray['authCode'] = $tx['authCode'];
+            }
+            if (isset($tx['accountType'])) {
+                $dataArray['accountType'] = $tx['accountType'];
+            }
+            if (isset($tx['messages'][0]['description']) && empty($dataArray['text'])) {
+                $dataArray['text'] = $tx['messages'][0]['description'];
+            }
+            if (isset($tx['errors'][0]['errorText'])) {
+                $dataArray['text'] = $tx['errors'][0]['errorText'];
+            }
+        }
+
+        // Fallback to legacy regex if JSON decode failed
+        if (empty($dataArray['resultCode'])) {
+            preg_match_all('/"([^"]+)":"([^"]+)"/', $cleaned, $matches, PREG_SET_ORDER);
+            foreach ($matches as $match) {
+                $dataArray[$match[1]] = $match[2];
+            }
+        }
+
+        return $dataArray;
+    }
+
+    private function isAuthorizeNetSuccess(array $dataArray): bool
+    {
+        $code = $dataArray['resultCode'] ?? null;
+        $text = $dataArray['text'] ?? '';
+        return $code === 'Ok' && (
+            $text === 'Successful.' ||
+            stripos($text, 'successful') !== false ||
+            stripos($text, 'This transaction has been approved') !== false
+        );
+    }
+
+    /**
      * Display a listing of the resource.
      * @return Renderable
      */
@@ -148,15 +215,9 @@ class DoAuthorizeNetPaymentController extends Controller
             // dd($getresponse);
             curl_close($curl);
 
-            $dataArray = [];
-            preg_match_all('/"([^"]+)":"([^"]+)"/', $getresponse, $matches, PREG_SET_ORDER);
-            foreach ($matches as $match) {
-                $key = $match[1];
-                $value = $match[2];
-                $dataArray[$key] = $value;
-            }
+            $dataArray = $this->parseAuthorizeNetResponse($getresponse);
             $formatedData = [];
-            if ($dataArray['resultCode'] == "Ok" && $dataArray["text"] == "Successful.") {
+            if ($this->isAuthorizeNetSuccess($dataArray)) {
                 $dataArray['paid'] = true;
                 $dataArray['status'] = "succeeded";
                 $dataArray['user_id'] = $data['user_id'];
@@ -176,14 +237,14 @@ class DoAuthorizeNetPaymentController extends Controller
                 $dataArray["captured"] = true;
         
                 //formated Data
-                $formatedData['id'] = $dataArray['refId'];
+                $formatedData['id'] = $dataArray['refId'] ?? ('ref' . time());
                 $formatedData['amount'] = $dataArray['amount'];
-                $formatedData['payment_method_details'] = $dataArray['accountType'];
+                $formatedData['payment_method_details'] = $dataArray['accountType'] ?? 'card';
                 $formatedData['amount_refunded'] = $dataArray['amount_refunded'];
                 $formatedData['currency'] = $dataArray['currency'];
                 $formatedData['created'] = $dataArray['created'];
                 $formatedData['captured'] = $dataArray['captured'];
-                $formatedData['ref_num'] = $dataArray['refId'];
+                $formatedData['ref_num'] = $dataArray['refId'] ?? $formatedData['id'];
                 $formatedData['auth_code'] = $dataArray['authCode'] ?? '';
                 $formatedData['outcome'] = [
                     "network_status" => "approved_by_network",
@@ -192,11 +253,11 @@ class DoAuthorizeNetPaymentController extends Controller
                 $formatedData['paid'] = $dataArray['paid'];
                 $formatedData['status'] = $dataArray['status'];
                 $formatedData['source'] = [
-                    "id" => $dataArray['transId'],
+                    "id" => $dataArray['transId'] ?? $formatedData['id'],
                     "address_line1_check" => $dataArray["address_line1_check"],
                     "address_zip" => $dataArray["address_zip"],
                     "address_zip_check" => $dataArray["address_zip_check"],
-                    "brand" => $dataArray["accountType"],
+                    "brand" => $dataArray["accountType"] ?? 'card',
                     "exp_month" => $dataArray["exp_month"],
                     "exp_year" => $dataArray["exp_year"],
                     "first6" => $dataArray["first6"],
@@ -204,6 +265,11 @@ class DoAuthorizeNetPaymentController extends Controller
                 ];
             } else {
                 $dataArray['paid'] = false;
+                \Log::warning('Authorize.Net payment failed/unexpected', [
+                    'resultCode' => $dataArray['resultCode'] ?? null,
+                    'text' => $dataArray['text'] ?? null,
+                    'raw_preview' => is_string($getresponse) ? substr($getresponse, 0, 500) : null,
+                ]);
             }
         } else {
             $paymentDetails = $request->session()->get('payment_details');
@@ -322,15 +388,9 @@ class DoAuthorizeNetPaymentController extends Controller
             $getresponse = curl_exec($curl);
             curl_close($curl);
 
-            $dataArray = [];
-            preg_match_all('/"([^"]+)":"([^"]+)"/', $getresponse, $matches, PREG_SET_ORDER);
-            foreach ($matches as $match) {
-                $key = $match[1];
-                $value = $match[2];
-                $dataArray[$key] = $value;
-            }
+            $dataArray = $this->parseAuthorizeNetResponse($getresponse);
             $formatedData = [];
-            if ($dataArray['resultCode'] == "Ok" && $dataArray["text"] == "Successful.") {
+            if ($this->isAuthorizeNetSuccess($dataArray)) {
                 $dataArray['paid'] = true;
                 $dataArray['status'] = "succeeded";
                 $dataArray['user_id'] =$data['user_id'];
@@ -350,15 +410,15 @@ class DoAuthorizeNetPaymentController extends Controller
                 $dataArray["captured"] = true;
                
                 //formated Data
-                $formatedData['id'] = $dataArray['refId'];
+                $formatedData['id'] = $dataArray['refId'] ?? ('ref' . time());
                 $formatedData['amount'] = $dataArray['amount'];
-                $formatedData['payment_method_details'] = $dataArray['accountType'];
+                $formatedData['payment_method_details'] = $dataArray['accountType'] ?? 'card';
                 $formatedData['amount_refunded'] = $dataArray['amount_refunded'];
                 $formatedData['currency'] = $dataArray['currency'];
                 $formatedData['created'] = $dataArray['created'];
                 $formatedData['captured'] = $dataArray['captured'];
-                $formatedData['ref_num'] = $dataArray['refId'];
-                $formatedData['auth_code'] = $dataArray['authCode'];
+                $formatedData['ref_num'] = $dataArray['refId'] ?? $formatedData['id'];
+                $formatedData['auth_code'] = $dataArray['authCode'] ?? '';
                 $formatedData['outcome'] = [
                     "network_status" => "approved_by_network",
                     "type" => "authorized"
@@ -366,11 +426,11 @@ class DoAuthorizeNetPaymentController extends Controller
                 $formatedData['paid'] = $dataArray['paid'];
                 $formatedData['status'] = $dataArray['status'];
                 $formatedData['source'] = [
-                    "id" => $dataArray['transId'],
+                    "id" => $dataArray['transId'] ?? $formatedData['id'],
                     "address_line1_check" => $dataArray["address_line1_check"],
                     "address_zip" => $dataArray["address_zip"],
                     "address_zip_check" => $dataArray["address_zip_check"],
-                    "brand" => $dataArray["accountType"],
+                    "brand" => $dataArray["accountType"] ?? 'card',
                     "exp_month" => $dataArray["exp_month"],
                     "exp_year" => $dataArray["exp_year"],
                     "first6" => $dataArray["first6"],
@@ -378,6 +438,11 @@ class DoAuthorizeNetPaymentController extends Controller
                 ];
             } else {
                 $dataArray['paid'] = false;
+                \Log::warning('Authorize.Net payment failed/unexpected (session payment_details path)', [
+                    'resultCode' => $dataArray['resultCode'] ?? null,
+                    'text' => $dataArray['text'] ?? null,
+                    'raw_preview' => is_string($getresponse) ? substr($getresponse, 0, 500) : null,
+                ]);
             }
         }
 
@@ -387,7 +452,7 @@ class DoAuthorizeNetPaymentController extends Controller
         $getresponse1 = json_encode($dataArray, true);
         $getresponse = json_decode($getresponse1, true);
 
-        if ($getresponse["paid"]) {
+        if (!empty($getresponse["paid"])) {
             $saveCheck = $this->saveCloverResponce((int) $user_id, $response1, $type);
             if ($saveCheck) {
                 if ($is_checkout) {

@@ -816,6 +816,7 @@
                         if ($title === '') {
                             $title = __('Nurse Educator');
                         }
+                        $profileUrl = route('tutorDetails', [$tutor->id, \Illuminate\Support\Str::slug($tutor->name ?: 'tutor', '-')]);
                     @endphp
                     <div class="instructor-card">
                         <div class="instructor-photo">
@@ -832,7 +833,7 @@
                                     @endforeach
                                 </div>
                             @endif
-                            <a href="{{ route('contact') }}" class="instructor-book">{{ __('Book a Session') }} →</a>
+                            <a href="{{ $profileUrl }}" class="instructor-book">{{ __('Book a Session') }} →</a>
                         </div>
                     </div>
                 @empty

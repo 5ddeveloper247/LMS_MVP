@@ -11,54 +11,91 @@
 {{-- @stop --}}
 @section('mainContent')
     {!! generateBreadcrumb() !!}
-    <section class="admin-visitor-area up_st_admin_visitor">
+    <section class="admin-visitor-area up_st_admin_visitor student-details">
         <div class="container-fluid p-0">
+            <div class="row pt-0">
+                <ul class="nav nav-tabs no-bottom-border mt-sm-md-20 mb-10 ml-3" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#single_tutor_hired" role="tab" data-toggle="tab">
+                            Single Tutor Hired
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#packages_hired" role="tab" data-toggle="tab">
+                            Packages Hired
+                        </a>
+                    </li>
+                </ul>
+            </div>
 
-            <div class="row justify-content-center">
-                <div class="col-12">
-                    <div class="box_header common_table_header">
-                        <div class="main-title d-md-flex">
-                            <h3 class="mr-30 mb_xs_15px mb_sm_20px mb-0">{{ __('Hired Tutors') }} {{ __('common.List') }}
-                            </h3>
-
-
+            <div class="tab-content mt-4">
+                {{-- Single Tutor Hired (existing list) --}}
+                <div role="tabpanel" class="tab-pane fade show active" id="single_tutor_hired">
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <div class="box_header common_table_header">
+                                <div class="main-title d-md-flex">
+                                    <h3 class="mr-30 mb_xs_15px mb_sm_20px mb-0">
+                                        Single Tutor Hired {{ __('common.List') }}
+                                    </h3>
+                                </div>
+                                @if (!isAdmin())
+                                    <a href="{{ route('tutor.slots') }}" class="primary-btn fix-gr-bg">Set Hours</a>
+                                @endif
+                            </div>
                         </div>
-                        @if(!isAdmin())
-                            <a href="{{ route('tutor.slots') }}" class="primary-btn fix-gr-bg">Set Hours</a>
-                        @endif
-                    </div>
-                </div>
-                <div class="col-lg-12">
-                    <div class="QA_section QA_section_heading_custom check_box_table">
-                        <div class="QA_table">
-                            <!-- table-responsive -->
-                            <div class="">
-                                <table id="lms_table" class="Crm_table_active3 table table-responsive">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">{{ __('common.SL') }}</th>
-                                            @if (\Illuminate\Support\Facades\Auth::user()->role_id == 1)
-                                                <th scope="col">{{ __('Instructor') }}</th>
-                                            @endif
-                                            <th scope="col">{{ __('Student') }}</th>
-                                            <th scope="col">{{ __('Course') }}</th>
-                                            <th scope="col">{{ __('Date') }}</th>
-                                            <th scope="col">{{ __('Start Time') }}</th>
-                                            <th scope="col">{{ __('End Time') }}</th>
-                                            <th scope="col">{{ __('Price') }}</th>
-                                            <th scope="col">{{ __('Start Join') }}</th>
-                                            <th scope="col">{{ __('Cancel Request') }}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    </tbody>
-                                </table>
+                        <div class="col-lg-12">
+                            <div class="QA_section QA_section_heading_custom check_box_table">
+                                <div class="QA_table">
+                                    <div class="">
+                                        <table id="lms_table" class="Crm_table_active3 table table-responsive">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">{{ __('common.SL') }}</th>
+                                                    @if (\Illuminate\Support\Facades\Auth::user()->role_id == 1)
+                                                        <th scope="col">{{ __('instructor.Instructor') }}</th>
+                                                    @endif
+                                                    <th scope="col">{{ __('student.Student') }}</th>
+                                                    <th scope="col">{{ __('courses.Course') }}</th>
+                                                    <th scope="col">{{ __('common.Date') }}</th>
+                                                    <th scope="col">{{ __('common.Start') }} {{ __('common.Time') }}</th>
+                                                    <th scope="col">{{ __('common.End') }} {{ __('common.Time') }}</th>
+                                                    <th scope="col">{{ __('common.Price') }}</th>
+                                                    <th scope="col">{{ __('Start Join') }}</th>
+                                                    <th scope="col">{{ __('Cancel Request') }}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                {{-- Packages Hired (placeholder for next step) --}}
+                <div role="tabpanel" class="tab-pane fade" id="packages_hired">
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <div class="box_header common_table_header">
+                                <div class="main-title d-md-flex">
+                                    <h3 class="mr-30 mb_xs_15px mb_sm_20px mb-0">
+                                        Packages Hired {{ __('common.List') }}
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="white_box_30px">
+                                <p class="mb-0 text-muted">
+                                    Packages hired listing will be added in the next step.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
