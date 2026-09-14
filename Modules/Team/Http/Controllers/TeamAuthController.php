@@ -90,48 +90,56 @@ class TeamAuthController extends Controller
 
     public function refreshAccessToken()
     {
-        $TeamsettingObj = new Teamsetting();
         $teamSettings = TeamSetting::find(1);
+        if (!$teamSettings) {
+            return ['error' => 'team_settings_missing', 'error_description' => 'Team settings not found.'];
+        }
 
-
-        
-        // dd();
-        // dd($teamSettings->redirect_url);
         $client_id = $teamSettings->client_id;
         $client_secret = $teamSettings->client_secret;
-        $redirect_uri = $teamSettings->redirect_url;
+        // Use DB redirect_url (matches how the token was issued). Hardcoded live URL broke beta/local refresh.
+        $redirect_uri = $teamSettings->redirect_url ?: 'https://merkaiixcelprep.com/auth/team';
+        $refresh_token = $teamSettings->refresh_token;
+        $token_url = $teamSettings->token_url ?: 'https://login.microsoftonline.com/common/oauth2/v2.0/token';
 
-        //Access the refresh token
-        $refresh_token = $teamSettings->refresh_token; //refresh token url
-        //$refresh_token = 'eyJ0eXAiOiJKV1QiLCJub25jZSI6IjZndHJvRWJNY0lxaGZlNnVQbjdvTHlhX2tDMzhDQnVFS2tNMk8zbzlFWG8iLCJhbGciOiJSUzI1NiIsIng1dCI6IkwxS2ZLRklfam5YYndXYzIyeFp4dzFzVUhIMCIsImtpZCI6IkwxS2ZLRklfam5YYndXYzIyeFp4dzFzVUhIMCJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9lZDEwNDc2My02ZGEzLTQ5NTgtYTMzMi0yYjNjMzc3YThlOTAvIiwiaWF0IjoxNzE4MDQ3OTgwLCJuYmYiOjE3MTgwNDc5ODAsImV4cCI6MTcxODEzNDY4MCwiYWNjdCI6MCwiYWNyIjoiMSIsImFpbyI6IkFWUUFxLzhYQUFBQTFvSXQwSmRTTmVybkRDdytybVlLRnlEU3VPSUQ1TTRNYUFhL2N2WkVZRStSVGR3WThVTEZ6MUZHckdyU3pHemNmUG1lb3dleXZzNHdoQmlORlhKc1ptUWVqbFNEcmdSWmI2aEROMzJOd2ZFPSIsImFtciI6WyJwd2QiLCJtZmEiXSwiYXBwX2Rpc3BsYXluYW1lIjoiR3JhcGggRXhwbG9yZXIiLCJhcHBpZCI6ImRlOGJjOGI1LWQ5ZjktNDhiMS1hOGFkLWI3NDhkYTcyNTA2NCIsImFwcGlkYWNyIjoiMCIsImlkdHlwIjoidXNlciIsImlwYWRkciI6IjI0MDc6YWE4MDozMTQ6YjgyNjozNDozMWQzOjVlNzc6MmUyNiIsIm5hbWUiOiJNZXJha2lpIFZpcnR1YWwgQ2xhc3MiLCJvaWQiOiJmYTI4MzlmOC1mM2I4LTQ2M2EtYTI1OS04MWMwYTNhNDU4MjMiLCJwbGF0ZiI6IjMiLCJwdWlkIjoiMTAwMzIwMDFFN0ExNkExMiIsInJoIjoiMC5BWFlBWTBjUTdhTnRXRW1qTWlzOE4zcU9rQU1BQUFBQUFBQUF3QUFBQUFBQUFBQzBBUDAuIiwic2NwIjoiQ2FsZW5kYXJzLlJlYWRXcml0ZSBDaGF0LkNyZWF0ZSBDaGF0LlJlYWRXcml0ZSBEZXZpY2VNYW5hZ2VtZW50QXBwcy5SZWFkV3JpdGUuQWxsIERldmljZU1hbmFnZW1lbnRDb25maWd1cmF0aW9uLlJlYWRXcml0ZS5BbGwgRGV2aWNlTWFuYWdlbWVudE1hbmFnZWREZXZpY2VzLlJlYWRXcml0ZS5BbGwgRGV2aWNlTWFuYWdlbWVudFNlcnZpY2VDb25maWcuUmVhZFdyaXRlLkFsbCBEaXJlY3RvcnkuUmVhZFdyaXRlLkFsbCBHcm91cC5SZWFkV3JpdGUuQWxsIE9ubGluZU1lZXRpbmdzLlJlYWRXcml0ZSBvcGVuaWQgcHJvZmlsZSBUZWFtLkNyZWF0ZSBUZWFtU2V0dGluZ3MuUmVhZFdyaXRlLkFsbCBVc2VyLlJlYWQgVXNlci5SZWFkLkFsbCBVc2VyLlJlYWRXcml0ZS5BbGwgZW1haWwiLCJzdWIiOiJZZHdQeEtqbGJ1c240c0JodGNVNmRMT3NmNmF6aUdZUWY0ZEZfU3k2QmxnIiwidGVuYW50X3JlZ2lvbl9zY29wZSI6Ik5BIiwidGlkIjoiZWQxMDQ3NjMtNmRhMy00OTU4LWEzMzItMmIzYzM3N2E4ZTkwIiwidW5pcXVlX25hbWUiOiJtY29odmlydHVhbEBtZXJha2ludXJzaW5nLmNvbSIsInVwbiI6Im1jb2h2aXJ0dWFsQG1lcmFraW51cnNpbmcuY29tIiwidXRpIjoiVWozekFrMWRfRVN0YllENzJFVjFBQSIsInZlciI6IjEuMCIsIndpZHMiOlsiNjJlOTAzOTQtNjlmNS00MjM3LTkxOTAtMDEyMTc3MTQ1ZTEwIiwiYjc5ZmJmNGQtM2VmOS00Njg5LTgxNDMtNzZiMTk0ZTg1NTA5Il0sInhtc19jYyI6WyJDUDEiXSwieG1zX3NzbSI6IjEiLCJ4bXNfc3QiOnsic3ViIjoiVUtzMHAxQlhrWXdKR29hNmdsVnl6S3JrdEM2VUJRVUNxT25GbVZWRVJ4USJ9LCJ4bXNfdGNkdCI6MTY0NzM4MjQ1MX0.ALTy5g1Hj5BZG6izGk0omiexMxmlv4n2dxjhNa5NVHKReoeWtpzfI8UPI0S84S5-a6Tle6NvfEWnRBZq_qH2HDzOwF-O5ujcq7DTWVnYVASnOreR_Qs_8ljzeyajqV_RAjcw32mhJlgsWmlefCYLmsW4F-pNK3izU7KQyUX3T1H4BhqHFhCkprc5h3LV_eE4NSitG5sVEvAsYfs5fP40UgI6OcEFHEdgI-cP6QEdXrrQ0XE2ZmsOEnMqPO5dsKo5et_Ruszse5elzrOZhCITmTIT6wYyGXnf-URMKTIu_zylImypjP07ucCIXRNefqq6ftjW5NHKTPEBJkg1K2xi_A';
-		$token_url = $teamSettings->token_url;       // token auth url
+        if (empty($refresh_token) || empty($client_id) || empty($client_secret)) {
+            return ['error' => 'team_credentials_missing', 'error_description' => 'Generate Tokens from Team Settings first.'];
+        }
+
         $token_params = array(
             'grant_type' => 'refresh_token',
-            // 'refresh_token' => $this->refresh_token,
             'refresh_token' => $refresh_token,
             'client_id' => $client_id,
             'client_secret' => $client_secret,
-            'redirect_uri' => 'https://merkaiixcelprep.com/auth/team',
+            'redirect_uri' => $redirect_uri,
         );
 
-        // Use PHP's cURL functions
         $ch = curl_init($token_url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $token_params);
         $token_response = curl_exec($ch);
-        // Check for cURL errors
         if (curl_errno($ch)) {
-            echo 'cURL error: ' . curl_error($ch);
-            // Handle the error appropriately
-            return;
+            $err = curl_error($ch);
+            curl_close($ch);
+            return ['error' => 'curl_error', 'error_description' => $err];
+        }
+        curl_close($ch);
+
+        $token_data = json_decode($token_response, true);
+        if (!is_array($token_data)) {
+            return ['error' => 'invalid_token_response', 'error_description' => 'Empty or invalid token response.'];
         }
 
-        curl_close($ch);
-        // Decode the token response
-        $token_data = json_decode($token_response, true);
-       
-        // $this->storeTokens($token_data['refresh_token']);
+        // Persist rotated tokens when Microsoft returns new ones
+        if (!empty($token_data['access_token'])) {
+            $teamSettings->access_token = $token_data['access_token'];
+            if (!empty($token_data['refresh_token'])) {
+                $teamSettings->refresh_token = $token_data['refresh_token'];
+            }
+            $teamSettings->save();
+        }
+
         return $token_data;
     }
 }
