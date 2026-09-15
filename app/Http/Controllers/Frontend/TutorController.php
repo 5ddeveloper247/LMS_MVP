@@ -8,9 +8,10 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 use Modules\StudentSetting\Entities\TutorReveiws;
 use Modules\SystemSetting\Entities\TutorHiring;
-
+use Modules\SystemSetting\Entities\TutorSessionPackagePurchase;
 
 class TutorController extends Controller
 {
@@ -22,19 +23,58 @@ class TutorController extends Controller
     public function myTutors(Request $request)
     {
         try {
-            $tutors = TutorHiring::where('user_id', Auth::id())->orderBy('assign_date', 'DESC')->with('instructor', 'course', 'tutorReviewRating')->paginate(9);
-            // dd($tutors[0]->id/);
-            return view(theme('pages.myTutors'), compact('tutors'));
+            $tutors = TutorHiring::where('user_id', Auth::id())
+                ->orderBy('assign_date', 'DESC')
+                ->with('instructor', 'course', 'tutorReviewRating')
+                ->paginate(9, ['*'], 'tutors_page');
+
+            $packages = collect();
+            if (Schema::hasTable('tutor_session_package_purchases')) {
+                $packages = TutorSessionPackagePurchase::where('user_id', Auth::id())
+                    ->where('status', 1)
+                    ->orderByDesc('id')
+                    ->paginate(9, ['*'], 'packages_page');
+            }
+
+            $activeTab = $request->get('tab') === 'packages' ? 'packages' : 'tutors';
+
+            return view(theme('pages.myTutors'), compact('tutors', 'packages', 'activeTab'));
         } catch (\Exception $e) {
             GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
         }
     }
-    public function cancelRequest(Request $request, $id){
-        
 
-        $record=TutorHiring::find($id);
-        
-        $record->cancel_request='1';
+    public function myPackageDetails($id)
+    {
+        try {
+            if (!Schema::hasTable('tutor_session_package_purchases')) {
+                abort(404);
+            }
+
+            $purchase = TutorSessionPackagePurchase::where('user_id', Auth::id())
+                ->where('status', 1)
+                ->findOrFail($id);
+
+            $hirings = collect();
+            if (Schema::hasColumn('tutor_hirings', 'package_purchase_id')) {
+                $hirings = TutorHiring::where('user_id', Auth::id())
+                    ->where('package_purchase_id', $purchase->id)
+                    ->with('instructor', 'course', 'tutorReviewRating')
+                    ->orderByDesc('assign_date')
+                    ->get();
+            }
+
+            return view(theme('pages.myPackageDetails'), compact('purchase', 'hirings'));
+        } catch (\Exception $e) {
+            GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
+        }
+    }
+
+    public function cancelRequest(Request $request, $id)
+    {
+        $record = TutorHiring::find($id);
+
+        $record->cancel_request = '1';
         $record->save();
         return redirect()->back();
     }
@@ -63,20 +103,6 @@ class TutorController extends Controller
                 'review' => $tutor_review->comment,
                 'star' => $tutor_review->star,
             ]);
-
-//                send_browser_notification(
-//                    $course->user,
-//                    'Course_Review',
-//                    [
-//                        'time' => Carbon::now()->format('d-M-Y, g:i A'),
-//                        'course' => $course->title,
-//                        'review' => $newReview->comment,
-//                        'star' => $newReview->star,
-//                    ],
-//                    trans('common.View'),
-//                    courseDetailsUrl(@$course->id, @$course->type, @$course->slug),
-//                );
-
 
             return response()->json([
                 'status' => 200,

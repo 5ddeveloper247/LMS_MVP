@@ -70,6 +70,30 @@ Route::group(['namespace' => 'Frontend'], function () {
     Route::get('/about-us', 'WebsiteController@aboutData')->name('about');
     Route::get('/our-team', 'TeamPageController@index')->name('ourTeam');
     Route::get('/tutoring', 'TutoringPageController@index')->name('tutoring');
+    Route::middleware('auth')->group(function () {
+        Route::get('/session-package/{id}', 'TutoringPageController@showPackage')
+            ->name('sessionPackage.show');
+        Route::get('/session-package/{id}/book-tutors', 'TutoringPageController@bookTutors')
+            ->name('sessionPackage.bookTutors');
+        Route::get('/session-package/{id}/book-tutors/{tutorId}', 'TutoringPageController@bookTutorSlot')
+            ->name('sessionPackage.bookTutorSlot');
+        Route::post('/session-package/{id}/sessions', 'TutoringPageController@addSession')
+            ->name('sessionPackage.addSession');
+        Route::post('/session-package/{id}/sessions/{index}/remove', 'TutoringPageController@removeSession')
+            ->name('sessionPackage.removeSession');
+        Route::get('/session-package/{id}/checkout', 'TutoringPageController@checkout')
+            ->name('sessionPackage.checkout');
+        Route::post('/session-package/{id}/pay', 'TutoringPageController@paySubmit')
+            ->name('sessionPackage.paySubmit');
+
+        // Hire remaining sessions from an already-purchased package (no payment)
+        Route::get('/my-packages/{purchaseId}/hire', 'TutoringPageController@hireFromPurchase')
+            ->name('sessionPackage.hireFromPurchase');
+        Route::get('/my-packages/{purchaseId}/hire/{tutorId}', 'TutoringPageController@hireTutorSlot')
+            ->name('sessionPackage.hireTutorSlot');
+        Route::post('/my-packages/{purchaseId}/hire', 'TutoringPageController@hireAddSession')
+            ->name('sessionPackage.hireAddSession');
+    });
     Route::get('/become-a-tutor', 'BecomeTutorPageController@index')->name('becomeATutor');
     Route::post('/become-a-tutor', 'BecomeTutorPageController@store')->name('becomeATutor.store');
     Route::get('/contact-us', 'WebsiteController@contact')->name('contact')->middleware('HeaderMenuPermissions');
@@ -215,6 +239,7 @@ Route::group(['namespace' => 'Frontend', 'middleware' => ['student']], function 
     Route::get('my-offline-course', 'StudentController@myCourses')->name('myOfflineCourse');
     Route::get('my-prep-Course', 'StudentController@myCourses')->name('myQuizzes');
     Route::get('my-tutors', 'TutorController@myTutors')->name('myTutors');
+    Route::get('my-packages/{id}', 'TutorController@myPackageDetails')->name('myPackage.details');
     Route::get('cancel-request/{id}', 'TutorController@cancelRequest')->name('cancel-request');
 
     Route::post('tutorReview', 'TutorController@tutorReview')->name('tutorReview');

@@ -908,7 +908,7 @@
                                 @endif
                             @endforeach
                         </ul>
-                        <a href="{{ route('contact') }}"
+                        <a href="{{ route('sessionPackage.show', $package->id) }}"
                             class="pricing-cta {{ $package->popular ? 'primary' : 'secondary' }}">
                             {{ __('Book a Session') }} →
                         </a>
