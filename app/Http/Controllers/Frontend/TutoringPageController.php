@@ -211,8 +211,6 @@ class TutoringPageController extends Controller
      */
     public function checkout($id)
     {
-        $this->guardStudentBuyer();
-
         $package = $this->findActivePackage($id);
         $cart = $this->getCart($package->id);
 
@@ -224,8 +222,6 @@ class TutoringPageController extends Controller
      */
     public function paySubmit(Request $request, $id)
     {
-        $this->guardStudentBuyer();
-
         $package = $this->findActivePackage($id);
         $cart = $this->getCart($package->id);
 
