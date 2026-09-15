@@ -75,7 +75,7 @@
                     </div>
                 </div>
 
-                {{-- Packages Hired (placeholder for next step) --}}
+                {{-- Packages Hired --}}
                 <div role="tabpanel" class="tab-pane fade" id="packages_hired">
                     <div class="row justify-content-center">
                         <div class="col-12">
@@ -88,10 +88,27 @@
                             </div>
                         </div>
                         <div class="col-lg-12">
-                            <div class="white_box_30px">
-                                <p class="mb-0 text-muted">
-                                    Packages hired listing will be added in the next step.
-                                </p>
+                            <div class="QA_section QA_section_heading_custom check_box_table">
+                                <div class="QA_table">
+                                    <div class="">
+                                        <table id="packages_hired_table" class="Crm_table_active3 table table-responsive">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">{{ __('common.SL') }}</th>
+                                                    <th scope="col">{{ __('student.Student') }}</th>
+                                                    <th scope="col">{{ __('Package') }}</th>
+                                                    <th scope="col">{{ __('Sessions') }}</th>
+                                                    <th scope="col">{{ __('Remaining') }}</th>
+                                                    <th scope="col">{{ __('common.Price') }}</th>
+                                                    <th scope="col">{{ __('Purchased') }}</th>
+                                                    <th scope="col">{{ __('common.Action') }}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -104,6 +121,7 @@
 @push('scripts')
     @php
         $url = route('get.all.slots');
+        $packagesUrl = route('get.all.package.purchases');
     @endphp
 
     <script>
@@ -122,7 +140,7 @@
             ],
             "ajax": $.fn.dataTable.pipeline({
                 url: '{!! $url !!}',
-                pages: 5 // number of pages to cache
+                pages: 5
             }),
             columns: [{
                     data: 'DT_RowIndex',
@@ -168,8 +186,6 @@
                         return data == 0 ? 'No Request' : '<span class="text-info"> Cancel request received</span>';
                     }
                 }
-
-
             ],
             language: {
                 emptyTable: "{{ __('common.No data available in the table') }}",
@@ -201,7 +217,6 @@
                         columns: ':visible',
                         columns: ':not(:last-child)',
                     },
-
                 },
                 {
                     extend: 'csvHtml5',
@@ -230,7 +245,6 @@
                         doc.content[1].table.widths =
                             Array(doc.content[1].table.body[0].length + 1).join('*').split('');
                     }
-
                 },
                 {
                     extend: 'print',
@@ -265,6 +279,113 @@
             ],
             responsive: true,
         });
+
+        let packagesTable = $('#packages_hired_table').DataTable({
+            bLengthChange: true,
+            lengthChange: true,
+            lengthMenu: [
+                [10, 25, 50, 100],
+                [10, 25, 50, 100]
+            ],
+            bDestroy: true,
+            processing: true,
+            serverSide: true,
+            order: [
+                [0, "desc"]
+            ],
+            ajax: $.fn.dataTable.pipeline({
+                url: '{!! $packagesUrl !!}',
+                pages: 5
+            }),
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'id'
+                },
+                {
+                    data: 'student',
+                    name: 'student'
+                },
+                {
+                    data: 'package',
+                    name: 'package'
+                },
+                {
+                    data: 'sessions',
+                    name: 'sessions'
+                },
+                {
+                    data: 'remaining',
+                    name: 'remaining'
+                },
+                {
+                    data: 'price',
+                    name: 'price'
+                },
+                {
+                    data: 'purchased_at',
+                    name: 'purchased_at'
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                }
+            ],
+            language: {
+                emptyTable: "{{ __('common.No data available in the table') }}",
+                search: "<i class='ti-search'></i>",
+                searchPlaceholder: '{{ __('common.Quick Search') }}',
+                paginate: {
+                    next: "<i class='ti-arrow-right'></i>",
+                    previous: "<i class='ti-arrow-left'></i>"
+                }
+            },
+            dom: 'Blfrtip',
+            buttons: [{
+                    extend: 'copyHtml5',
+                    text: '<i class="far fa-copy"></i>',
+                    titleAttr: '{{ __('common.Copy') }}',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="far fa-file-excel"></i>',
+                    titleAttr: '{{ __('common.Excel') }}',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                },
+                {
+                    extend: 'csvHtml5',
+                    text: '<i class="far fa-file-alt"></i>',
+                    titleAttr: '{{ __('common.CSV') }}',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="fa fa-print"></i>',
+                    titleAttr: '{{ __('common.Print') }}',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                },
+                {
+                    extend: 'colvis',
+                    text: '<i class="fa fa-columns"></i>',
+                    postfixButtons: ['colvisRestore']
+                }
+            ],
+            responsive: true,
+        });
+
+        // Open Packages Hired tab when hash is present
+        if (window.location.hash === '#packages_hired') {
+            $('a[href="#packages_hired"]').tab('show');
+        }
     </script>
-    {{--    <script src="{{asset('public/backend/js/instructor_list.js')}}"></script> --}}
 @endpush

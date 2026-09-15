@@ -115,6 +115,12 @@ Route::group(['prefix' => 'admin/systemsetting', 'middleware' => ['auth', 'admin
 
     //    turing
     Route::get('/hired/tutors', 'TutorsSettingController@hiredTutors')->name('hired.tutors')->middleware('RoutePermissionCheck:hired.tutors');
+    Route::get('/hired/packages/data', 'TutorsSettingController@getAllPackagePurchases')
+        ->name('get.all.package.purchases')
+        ->middleware('RoutePermissionCheck:hired.tutors');
+    Route::get('/hired/packages/{id}', 'TutorsSettingController@packagePurchaseDetails')
+        ->name('hired.package.details')
+        ->middleware('RoutePermissionCheck:hired.tutors');
     Route::get('/tutor/slots', 'TutorsSettingController@tutorSlots')->name('tutor.slots');
     Route::post('/set/slot/time', 'TutorsSettingController@setSlotTime')->name('set.slot.time');
     Route::get('/get/all/slots', 'TutorsSettingController@getAllSlots')->name('get.all.slots');

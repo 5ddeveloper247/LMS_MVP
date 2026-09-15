@@ -10,7 +10,9 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Modules\SystemSetting\Entities\TutorHiring;
+use Modules\SystemSetting\Entities\TutorSessionPackagePurchase;
 use Modules\SystemSetting\Entities\TutorSlote;
+use Illuminate\Support\Facades\Schema;
 use Modules\VirtualClass\Entities\VirtualClass;
 use Modules\Team\Entities\TeamMeeting;
 use Yajra\DataTables\Facades\DataTables;
@@ -217,6 +219,76 @@ class TutorsSettingController extends Controller
            })->rawColumns(['action','cancel'])->make(true);
 
         // dd($testing);
+    }
+
+    public function getAllPackagePurchases()
+    {
+        if (!Schema::hasTable('tutor_session_package_purchases')) {
+            return Datatables::of(collect())->addIndexColumn()->make(true);
+        }
+
+        $query = TutorSessionPackagePurchase::query()
+            ->with('user')
+            ->where('status', 1)
+            ->orderByDesc('id');
+
+        return Datatables::of($query)
+            ->addIndexColumn()
+            ->addColumn('student', function ($row) {
+                return optional($row->user)->name ?? '--Student Removed--';
+            })
+            ->addColumn('package', function ($row) {
+                return $row->package_name ?: '—';
+            })
+            ->addColumn('sessions', function ($row) {
+                return (int) $row->sessions_used . ' / ' . (int) $row->sessions_allowed;
+            })
+            ->addColumn('remaining', function ($row) {
+                return $row->remainingSessions();
+            })
+            ->addColumn('price', function ($row) {
+                return getPriceFormat($row->price);
+            })
+            ->addColumn('purchased_at', function ($row) {
+                return $row->created_at
+                    ? Carbon::parse($row->created_at)->format('d M Y')
+                    : '—';
+            })
+            ->addColumn('action', function ($row) {
+                $url = route('hired.package.details', $row->id);
+
+                return '<a class="primary-btn small fix-gr-bg small border-0 text-white" href="' . $url . '">'
+                    . e(__('Details'))
+                    . '</a>';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+
+    public function packagePurchaseDetails($id)
+    {
+        try {
+            if (!Schema::hasTable('tutor_session_package_purchases')) {
+                abort(404);
+            }
+
+            $purchase = TutorSessionPackagePurchase::with('user')->findOrFail($id);
+
+            $hirings = collect();
+            if (Schema::hasColumn('tutor_hirings', 'package_purchase_id')) {
+                $hirings = TutorHiring::where('package_purchase_id', $purchase->id)
+                    ->with(['instructor', 'student', 'course'])
+                    ->orderByDesc('assign_date')
+                    ->orderByDesc('id')
+                    ->get();
+            }
+
+            return view('systemsetting::hired_package_details', compact('purchase', 'hirings'));
+        } catch (\Exception $e) {
+            Toastr::error(trans('common.Operation failed'), trans('common.Failed'));
+
+            return redirect()->back();
+        }
     }
 
     // to delete booked slot on student request
