@@ -1024,7 +1024,7 @@
                         <!-- ppppp -->
                         <div class="col-xl-5">
                             <label class="primary_input_label">
-                                Thumbnail (Max Image Size 1MB, Recommended Dimensions: 1170X600)
+                                Thumbnail (Max Image Size 2MB, Recommended Dimensions: 1170X600 — crop after upload)
                             </label>
                         </div>
                         <div class="col-xl-5">
@@ -1434,38 +1434,39 @@
             //     tooltip: true
             // });
 
-            // 1st Cropper
+            // 1st Cropper — any image up to 2MB; crop to recommended 1170x600
             var _URL1 = window.URL || window.webkitURL;
+            var maxCourseThumbBytes = 2 * 1024 * 1024;
             $("#document_file_thumb-1").change(function(e) {
                 var file, img;
                 if ((file = this.files[0])) {
-                    if (file.type.startsWith('image/')) {
-                        img = new Image();
-                        img.onload = function() {
-                            var image_width = this.width;
-                            var image_height = this.height;
-                            if (image_width == 1170 && image_height == 600) {
-                                jQuery('#image-editor-modal-1').modal('show', {
-                                    backdrop: 'static'
-                                });
-                            } else {
-                                $('#input-1, #document_file_thumb-1').val('');
-                                $("#image_preview-1").attr("src",
-                                    "{{ asset('public/assets/course/image-375x500.png') }}");
-                                toastr.error(
-                                    'Wrong Image Dimensions, Please Select Image of 1170 X 600 !',
-                                    'Error')
-                            }
-                        };
-                        img.src = _URL1.createObjectURL(file);
-                    } else {
+                    if (!file.type.startsWith('image/')) {
                         setTimeout(function() {
                             $('#input-1, #document_file_thumb-1').val('');
                             $("#image_preview-1").attr("src",
                                 "{{ asset('public/assets/course/image-375x500.png') }}");
                         }, 500);
-                        toastr.error('Please select a valid image file!', 'Error')
+                        toastr.error('Please select a valid image file!', 'Error');
+                        return;
                     }
+                    if (file.size > maxCourseThumbBytes) {
+                        $('#input-1, #document_file_thumb-1').val('');
+                        $("#image_preview-1").attr("src",
+                            "{{ asset('public/assets/course/image-375x500.png') }}");
+                        toastr.error('Image size must be 2MB or less.', 'Error');
+                        return;
+                    }
+                    img = new Image();
+                    img.onload = function() {
+                        jQuery('#image-editor-modal-1').modal('show', {
+                            backdrop: 'static'
+                        });
+                    };
+                    img.onerror = function() {
+                        $('#input-1, #document_file_thumb-1').val('');
+                        toastr.error('Please select a valid image file!', 'Error');
+                    };
+                    img.src = _URL1.createObjectURL(file);
                 }
             });
             $('.image-editor-cancel-button-1').on('click', function() {
@@ -1479,38 +1480,37 @@
 
 
             // 2nd Cropper
-
             var _URL2 = window.URL || window.webkitURL;
             $("#document_file_thumb-2").change(function(e) {
                 var file, img;
                 if ((file = this.files[0])) {
-                    if (file.type.startsWith('image/')) {
-                        img = new Image();
-                        img.onload = function() {
-                            var image_width = this.width;
-                            var image_height = this.height;
-                            if (image_width == 1170 && image_height == 600) {
-                                jQuery('#image-editor-modal-2').modal('show', {
-                                    backdrop: 'static'
-                                });
-                            } else {
-                                $('#input-2, #document_file_thumb-2').val('');
-                                $("#image_preview-2").attr("src",
-                                    "{{ asset('public/assets/course/image-375x500.png') }}");
-                                toastr.error(
-                                    'Wrong Image Dimensions, Please Select Image of 1170 X 600 !',
-                                    'Error')
-                            }
-                        };
-                        img.src = _URL2.createObjectURL(file);
-                    } else {
+                    if (!file.type.startsWith('image/')) {
                         setTimeout(function() {
                             $('#input-2, #document_file_thumb-2').val('');
                             $("#image_preview-2").attr("src",
                                 "{{ asset('public/assets/course/image-375x500.png') }}");
                         }, 500);
-                        toastr.error('Please select a valid image file!', 'Error')
+                        toastr.error('Please select a valid image file!', 'Error');
+                        return;
                     }
+                    if (file.size > maxCourseThumbBytes) {
+                        $('#input-2, #document_file_thumb-2').val('');
+                        $("#image_preview-2").attr("src",
+                            "{{ asset('public/assets/course/image-375x500.png') }}");
+                        toastr.error('Image size must be 2MB or less.', 'Error');
+                        return;
+                    }
+                    img = new Image();
+                    img.onload = function() {
+                        jQuery('#image-editor-modal-2').modal('show', {
+                            backdrop: 'static'
+                        });
+                    };
+                    img.onerror = function() {
+                        $('#input-2, #document_file_thumb-2').val('');
+                        toastr.error('Please select a valid image file!', 'Error');
+                    };
+                    img.src = _URL2.createObjectURL(file);
                 }
             });
             $('.image-editor-cancel-button-2').on('click', function() {
@@ -1527,33 +1527,33 @@
             $("#document_file_thumb-3").change(function(e) {
                 var file, img;
                 if ((file = this.files[0])) {
-                    if (file.type.startsWith('image/')) {
-                        img = new Image();
-                        img.onload = function() {
-                            var image_width = this.width;
-                            var image_height = this.height;
-                            if (image_width == 1170 && image_height == 600) {
-                                jQuery('#image-editor-modal-3').modal('show', {
-                                    backdrop: 'static'
-                                });
-                            } else {
-                                $('#input-3, #document_file_thumb-3').val('');
-                                $("#image_preview-3").attr("src",
-                                    "{{ asset('public/assets/course/image-375x500.png') }}");
-                                toastr.error(
-                                    'Wrong Image Dimensions, Please Select Image of 1170 X 600 !',
-                                    'Error')
-                            }
-                        };
-                        img.src = _URL3.createObjectURL(file);
-                    } else {
+                    if (!file.type.startsWith('image/')) {
                         setTimeout(function() {
                             $('#input-3, #document_file_thumb-3').val('');
                             $("#image_preview-3").attr("src",
                                 "{{ asset('public/assets/course/image-375x500.png') }}");
                         }, 500);
-                        toastr.error('Please select a valid image file!', 'Error')
+                        toastr.error('Please select a valid image file!', 'Error');
+                        return;
                     }
+                    if (file.size > maxCourseThumbBytes) {
+                        $('#input-3, #document_file_thumb-3').val('');
+                        $("#image_preview-3").attr("src",
+                            "{{ asset('public/assets/course/image-375x500.png') }}");
+                        toastr.error('Image size must be 2MB or less.', 'Error');
+                        return;
+                    }
+                    img = new Image();
+                    img.onload = function() {
+                        jQuery('#image-editor-modal-3').modal('show', {
+                            backdrop: 'static'
+                        });
+                    };
+                    img.onerror = function() {
+                        $('#input-3, #document_file_thumb-3').val('');
+                        toastr.error('Please select a valid image file!', 'Error');
+                    };
+                    img.src = _URL3.createObjectURL(file);
                 }
             });
             $('.image-editor-cancel-button-3').on('click', function() {
@@ -1570,33 +1570,33 @@
             $("#document_file_thumb-4").change(function(e) {
                 var file, img;
                 if ((file = this.files[0])) {
-                    if (file.type.startsWith('image/')) {
-                        img = new Image();
-                        img.onload = function() {
-                            var image_width = this.width;
-                            var image_height = this.height;
-                            if (image_width == 1170 && image_height == 600) {
-                                jQuery('#image-editor-modal-4').modal('show', {
-                                    backdrop: 'static'
-                                });
-                            } else {
-                                $('#input-4, #document_file_thumb-4').val('');
-                                $("#image_preview-4").attr("src",
-                                    "{{ asset('public/assets/course/image-375x500.png') }}");
-                                toastr.error(
-                                    'Wrong Image Dimensions, Please Select Image of 1170 X 600 !',
-                                    'Error')
-                            }
-                        };
-                        img.src = _URL4.createObjectURL(file);
-                    } else {
+                    if (!file.type.startsWith('image/')) {
                         setTimeout(function() {
                             $('#input-4, #document_file_thumb-4').val('');
                             $("#image_preview-4").attr("src",
                                 "{{ asset('public/assets/course/image-375x500.png') }}");
                         }, 500);
-                        toastr.error('Please select a valid image file!', 'Error')
+                        toastr.error('Please select a valid image file!', 'Error');
+                        return;
                     }
+                    if (file.size > maxCourseThumbBytes) {
+                        $('#input-4, #document_file_thumb-4').val('');
+                        $("#image_preview-4").attr("src",
+                            "{{ asset('public/assets/course/image-375x500.png') }}");
+                        toastr.error('Image size must be 2MB or less.', 'Error');
+                        return;
+                    }
+                    img = new Image();
+                    img.onload = function() {
+                        jQuery('#image-editor-modal-4').modal('show', {
+                            backdrop: 'static'
+                        });
+                    };
+                    img.onerror = function() {
+                        $('#input-4, #document_file_thumb-4').val('');
+                        toastr.error('Please select a valid image file!', 'Error');
+                    };
+                    img.src = _URL4.createObjectURL(file);
                 }
             });
             $('.image-editor-cancel-button-4').on('click', function() {

@@ -9,7 +9,7 @@ let current_uploader_1 = null,
 function setCropper1() {
     cropper_1 = new Cropper(image_1, {
         dragMode: true,
-        aspectRatio: 0.75,
+        aspectRatio: 1170 / 600,
         autoCropArea: 0.85,
         restore: false,
         guides: false,
@@ -92,10 +92,10 @@ $("body").on("change", ".upload-editor-1", function (e) {
     $("#image-editor-crop-1").click(function () {
         $("#image-editor-save-button-1").show(),
             (canvas_1 = cropper_1.getCroppedCanvas({
-                width: 500,
-                height: 500,
-                minContainerWidth: 500,
-                minContainerHeight: 500,
+                width: 1170,
+                height: 600,
+                minContainerWidth: 400,
+                minContainerHeight: 200,
             })),
             canvas_1.toBlob(function (e) {
                 url = URL.createObjectURL(e);
@@ -119,7 +119,7 @@ let current_uploader_2 = null,
 function setCropper2() {
     cropper_2 = new Cropper(image_2, {
         dragMode: true,
-        aspectRatio: 0.75,
+        aspectRatio: 1170 / 600,
         autoCropArea: 0.85,
         restore: false,
         guides: false,
@@ -204,10 +204,10 @@ $("body").on("change", ".upload-editor-2", function (e) {
     $("#image-editor-crop-2").click(function () {
         $("#image-editor-save-button-2").show(),
             (canvas_2 = cropper_2.getCroppedCanvas({
-                width: 500,
-                height: 500,
-                minContainerWidth: 500,
-                minContainerHeight: 500,
+                width: 1170,
+                height: 600,
+                minContainerWidth: 400,
+                minContainerHeight: 200,
             })),
             canvas_2.toBlob(function (e) {
                 url = URL.createObjectURL(e);
@@ -232,7 +232,7 @@ let current_uploader_3 = null,
 function setCropper3() {
     cropper_3 = new Cropper(image_3, {
         dragMode: true,
-        aspectRatio: 0.75,
+        aspectRatio: 1170 / 600,
         autoCropArea: 0.85,
         restore: false,
         guides: false,
@@ -315,10 +315,10 @@ $("body").on("change", ".upload-editor-3", function (e) {
     $("#image-editor-crop-3").click(function () {
         $("#image-editor-save-button-3").show(),
             (canvas_3 = cropper_3.getCroppedCanvas({
-                width: 500,
-                height: 500,
-                minContainerWidth: 500,
-                minContainerHeight: 500,
+                width: 1170,
+                height: 600,
+                minContainerWidth: 400,
+                minContainerHeight: 200,
             })),
             canvas_3.toBlob(function (e) {
                 url = URL.createObjectURL(e);
@@ -342,7 +342,7 @@ let current_uploader_4 = null,
 function setCropper4() {
     cropper_4 = new Cropper(image_4, {
         dragMode: true,
-        aspectRatio: 0.75,
+        aspectRatio: 1170 / 600,
         autoCropArea: 0.85,
         restore: false,
         guides: false,
@@ -425,10 +425,10 @@ $("body").on("change", ".upload-editor-4", function (e) {
     $("#image-editor-crop-4").click(function () {
         $("#image-editor-save-button-4").show(),
             (canvas_4 = cropper_4.getCroppedCanvas({
-                width: 500,
-                height: 500,
-                minContainerWidth: 500,
-                minContainerHeight: 500,
+                width: 1170,
+                height: 600,
+                minContainerWidth: 400,
+                minContainerHeight: 200,
             })),
             canvas_4.toBlob(function (e) {
                 url = URL.createObjectURL(e);
