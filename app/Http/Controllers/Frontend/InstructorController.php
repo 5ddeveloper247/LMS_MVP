@@ -23,6 +23,7 @@ use Modules\SystemSetting\Entities\TutorSlote;
 use Modules\SystemSetting\Entities\TutorHiring;
 use Modules\FrontendManage\Entities\BecomeInstructor;
 use Modules\Payment\Entities\Checkout;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Validator;
 use Modules\Team\Http\Controllers\TeamAuthController;
 use Modules\Team\Entities\TeamSetting;
@@ -250,9 +251,7 @@ class InstructorController extends Controller
 
     public function tutorBooking($id)
     {
-        if (isTutor() || isInstructor()) {
-            abort(401);
-        }
+        $this->guardStudentBuyer();
         try {
 
             $tutor = User::findOrFail($id);
@@ -286,9 +285,7 @@ class InstructorController extends Controller
 
     public function tutorPayment(Request $request)
     {
-        if (isTutor() || isInstructor() || isAdmin()) {
-            abort(401);
-        }
+        $this->guardStudentBuyer();
         try {
             $clover = new CloverController();
             $pakms = $clover->getPakmsKey();
@@ -347,6 +344,7 @@ class InstructorController extends Controller
     public function tutorPaymentSubmit(Request $request)
 
     {
+        $this->guardStudentBuyer();
 
         $cardnumber = $request->cardNumber;
         $formatedCardNumber =  str_replace(' ', '', $cardnumber);
@@ -850,5 +848,20 @@ class InstructorController extends Controller
     //         // $this->storeTokens($token_data['refresh_token']);
     //         return $token_data;
     //     }
+
+    /**
+     * Only students (role_id = 3) may hire tutors.
+     */
+    private function guardStudentBuyer(): void
+    {
+        if (!Auth::check()) {
+            throw new HttpResponseException(redirect()->route('login'));
+        }
+
+        if (!function_exists('isStudent') || !isStudent()) {
+            Toastr::error('Only students can buy packages or hire tutors.', 'Error');
+            throw new HttpResponseException(redirect()->route('tutoring'));
+        }
+    }
 
 }

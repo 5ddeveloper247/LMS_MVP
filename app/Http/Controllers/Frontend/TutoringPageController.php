@@ -7,6 +7,7 @@ use App\Http\Controllers\Frontend\InstructorController;
 use App\User;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -74,6 +75,8 @@ class TutoringPageController extends Controller
      */
     public function showPackage($id)
     {
+        $this->guardStudentBuyer();
+
         $package = $this->findActivePackage($id);
         $cart = $this->getCart($package->id);
 
@@ -211,6 +214,8 @@ class TutoringPageController extends Controller
      */
     public function checkout($id)
     {
+        $this->guardStudentBuyer();
+
         $package = $this->findActivePackage($id);
         $cart = $this->getCart($package->id);
 
@@ -222,6 +227,8 @@ class TutoringPageController extends Controller
      */
     public function paySubmit(Request $request, $id)
     {
+        $this->guardStudentBuyer();
+
         $package = $this->findActivePackage($id);
         $cart = $this->getCart($package->id);
 
@@ -542,16 +549,19 @@ class TutoringPageController extends Controller
         return $query->get();
     }
 
+    /**
+     * Only students (role_id = 3) may buy packages or hire tutors.
+     * Instructors (2), tutors (9), admins (1), and other roles are blocked.
+     */
     private function guardStudentBuyer(): void
     {
-        if (function_exists('isTutor') && isTutor()) {
-            abort(401);
+        if (!Auth::check()) {
+            throw new HttpResponseException(redirect()->route('login'));
         }
-        if (function_exists('isInstructor') && isInstructor()) {
-            abort(401);
-        }
-        if (function_exists('isAdmin') && isAdmin()) {
-            abort(401);
+
+        if (!function_exists('isStudent') || !isStudent()) {
+            Toastr::error('Only students can buy packages or hire tutors.', 'Error');
+            throw new HttpResponseException(redirect()->route('tutoring'));
         }
     }
 }
