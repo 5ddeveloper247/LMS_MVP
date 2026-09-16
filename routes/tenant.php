@@ -69,6 +69,8 @@ Route::group(['namespace' => 'Frontend'], function () {
     //    Route::get('/footer/page/{slug}', 'WebsiteController@page')->name('dynamic.page');
     Route::get('/about-us', 'WebsiteController@aboutData')->name('about');
     Route::get('/our-team', 'TeamPageController@index')->name('ourTeam');
+    Route::get('/success-stories', 'SuccessStoriesPageController@index')->name('successStories');
+    Route::post('/success-stories', 'SuccessStoriesPageController@store')->name('successStories.store');
     Route::get('/tutoring', 'TutoringPageController@index')->name('tutoring');
     Route::middleware('auth')->group(function () {
         Route::get('/session-package/{id}', 'TutoringPageController@showPackage')

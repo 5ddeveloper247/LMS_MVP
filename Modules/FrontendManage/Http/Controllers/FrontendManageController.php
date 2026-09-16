@@ -480,8 +480,19 @@ class FrontendManageController extends Controller
             'author.' . $code => 'required',
             'profession.' . $code => 'required',
             'image' => 'required',
+            'program_type' => 'nullable|in:' . implode(',', array_keys(Testimonial::PROGRAM_TYPES)),
+            'email' => 'nullable|email|max:255',
+            'passing_year' => 'nullable|string|max:10',
+            'featured' => 'nullable|in:0,1',
         ];
         $this->validate($request, $rules, validationMessage($rules));
+
+        $featured = (int) $request->input('featured', 0) === 1;
+        if ($featured && Testimonial::anotherFeaturedExists()) {
+            Toastr::error('Only one testimonial can be featured.', trans('common.Failed'));
+            return redirect()->back()->withInput();
+        }
+
         try {
             $testimonial = new Testimonial();
 
@@ -497,6 +508,11 @@ class FrontendManageController extends Controller
                 $testimonial->setTranslation('profession', $key, $profession);
             }
             $testimonial->star = $request->star;
+            $testimonial->email = $request->email;
+            $testimonial->passing_year = $request->passing_year;
+            $testimonial->program_type = $request->program_type;
+            $testimonial->featured = $featured;
+            $testimonial->source = Testimonial::SOURCE_ADMIN;
 
 
             if ($request->file('image') != "") {
@@ -521,10 +537,19 @@ class FrontendManageController extends Controller
             'body' => 'required',
             'author' => 'required',
             'profession' => 'required',
+            'program_type' => 'nullable|in:' . implode(',', array_keys(Testimonial::PROGRAM_TYPES)),
+            'email' => 'nullable|email|max:255',
+            'passing_year' => 'nullable|string|max:10',
+            'featured' => 'nullable|in:0,1',
         ];
 
         $this->validate($request, $rules, validationMessage($rules));
 
+        $featured = (int) $request->input('featured', 0) === 1;
+        if ($featured && Testimonial::anotherFeaturedExists((int) $request->id)) {
+            Toastr::error('Only one testimonial can be featured.', trans('common.Failed'));
+            return redirect()->back()->withInput();
+        }
 
         try {
             $testimonial = Testimonial::find($request->id);
@@ -538,6 +563,13 @@ class FrontendManageController extends Controller
                 $testimonial->setTranslation('profession', $key, $profession);
             }
             $testimonial->star = $request->star;
+            $testimonial->email = $request->email;
+            $testimonial->passing_year = $request->passing_year;
+            $testimonial->program_type = $request->program_type;
+            $testimonial->featured = $featured;
+            if (empty($testimonial->source)) {
+                $testimonial->source = Testimonial::SOURCE_ADMIN;
+            }
 
 
             if ($request->file('image') != "") {

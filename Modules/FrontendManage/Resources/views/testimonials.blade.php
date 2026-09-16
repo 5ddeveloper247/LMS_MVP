@@ -140,6 +140,87 @@
 
                                             <div class="col-xl-12">
                                                 <div class="primary_input mb-25">
+                                                    <label class="primary_input_label" for="">Program Type</label>
+                                                    <select class="primary_select mb-25 {{ @$errors->has('program_type') ? ' is-invalid' : '' }}"
+                                                            name="program_type" id="program_type">
+                                                        <option value="">{{ __('common.Select') }}</option>
+                                                        @foreach(\Modules\SystemSetting\Entities\Testimonial::PROGRAM_TYPES as $typeKey => $typeLabel)
+                                                            <option value="{{ $typeKey }}"
+                                                                {{ old('program_type', isset($edit) ? $edit->program_type : '') == $typeKey ? 'selected' : '' }}>
+                                                                {{ $typeLabel }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                    @if ($errors->has('program_type'))
+                                                        <span class="invalid-feedback d-block mb-10" role="alert">
+                                                            <strong>{{ @$errors->first('program_type') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xl-12">
+                                                <div class="primary_input mb-25">
+                                                    <label class="primary_input_label" for="">Email</label>
+                                                    <input name="email" id="email"
+                                                           class="primary_input_field name {{ @$errors->has('email') ? ' is-invalid' : '' }}"
+                                                           placeholder="Email"
+                                                           type="email"
+                                                           value="{{ old('email', isset($edit) ? $edit->email : '') }}">
+                                                    @if ($errors->has('email'))
+                                                        <span class="invalid-feedback d-block mb-10" role="alert">
+                                                            <strong>{{ @$errors->first('email') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xl-12">
+                                                <div class="primary_input mb-25">
+                                                    <label class="primary_input_label" for="">Passing Year</label>
+                                                    <input name="passing_year" id="passing_year"
+                                                           class="primary_input_field name {{ @$errors->has('passing_year') ? ' is-invalid' : '' }}"
+                                                           placeholder="e.g. 2024"
+                                                           type="text"
+                                                           value="{{ old('passing_year', isset($edit) ? $edit->passing_year : '') }}">
+                                                    @if ($errors->has('passing_year'))
+                                                        <span class="invalid-feedback d-block mb-10" role="alert">
+                                                            <strong>{{ @$errors->first('passing_year') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xl-12">
+                                                <div class="primary_input mb-25">
+                                                    <label class="primary_input_label" for="">Featured</label>
+                                                    <select class="primary_select mb-25 {{ @$errors->has('featured') ? ' is-invalid' : '' }}"
+                                                            name="featured" id="featured">
+                                                        <option value="0" {{ (string) old('featured', isset($edit) ? (int) $edit->featured : 0) === '0' ? 'selected' : '' }}>
+                                                            {{ __('common.No') }}
+                                                        </option>
+                                                        <option value="1" {{ (string) old('featured', isset($edit) ? (int) $edit->featured : 0) === '1' ? 'selected' : '' }}>
+                                                            {{ __('common.Yes') }}
+                                                        </option>
+                                                    </select>
+                                                    <small class="text-muted d-block mt-1">Only one testimonial can be featured.</small>
+                                                    @if ($errors->has('featured'))
+                                                        <span class="invalid-feedback d-block mb-10" role="alert">
+                                                            <strong>{{ @$errors->first('featured') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+
+                                            @if(isset($edit) && $edit->isOutside())
+                                                <div class="col-xl-12 mb-25">
+                                                    <span class="badge badge-warning">Outside</span>
+                                                    <small class="text-muted d-block mt-1">Submitted from the public Success Stories form.</small>
+                                                </div>
+                                            @endif
+
+                                            <div class="col-xl-12">
+                                                <div class="primary_input mb-25">
                                                     <label class="primary_input_label" for="">{{ __('common.Star') }}
                                                         *</label>
                                                     <select class="primary_select mb-25" name="star" id="star">
@@ -255,38 +336,49 @@
                     </div>
                     <div class="QA_section QA_section_heading_custom check_box_table">
                         <div class="QA_table">
-                            <!-- table-responsive -->
-                            <div class="">
+                            <div class="table-responsive">
                                 <table id="lms_table" class="table Crm_table_active3">
                                     <thead>
                                     <tr>
                                         <th scope="col">{{ __('common.SL') }}</th>
-                                        <th scope="col">{{ __('frontendmanage.Body') }}</th>
                                         <th scope="col">{{ __('frontendmanage.Author') }}</th>
-                                        <th scope="col">{{ __('frontendmanage.Profession') }}</th>
-                                        <th scope="col">{{ __('common.Image') }}</th>
-                                        <th scope="col">{{ __('frontendmanage.Date') }}</th>
-
+                                        <th scope="col">Program</th>
+                                        <th scope="col">Source</th>
+                                        <th scope="col">Featured</th>
                                         <th scope="col">{{ __('common.Status') }}</th>
-                                        <th scope="col">{{ __('common.Star') }}</th>
                                         <th scope="col">{{ __('common.Action') }}</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-
-
                                     @foreach($testimonials as $key => $item)
                                         <tr>
-                                            <th>{{ $key+1 }}</th>
-                                            <td>{{ @$item->body }}</td>
-                                            <td>{{ @$item->author }}</td>
-                                            <td>{{ @$item->profession }}</td>
+                                            <td>{{ $key + 1 }}</td>
                                             <td>
-                                                <img src="{{asset('/'.@$item->image)}}" alt=""
-                                                     class="img img-responsive"
-                                                     style="width: auto; height:100px !important">
+                                                {{ @$item->author }}
+                                                @if($item->email)
+                                                    <br><small class="text-muted">{{ $item->email }}</small>
+                                                @endif
                                             </td>
-                                            <td>{{ showDate(@$item->created_at)}}</td>
+                                            <td>
+                                                {{ \Modules\SystemSetting\Entities\Testimonial::PROGRAM_TYPES[$item->program_type] ?? '—' }}
+                                                @if($item->passing_year)
+                                                    <br><small class="text-muted">{{ $item->passing_year }}</small>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($item->isOutside())
+                                                    <span class="badge badge-warning">Outside</span>
+                                                @else
+                                                    <span class="badge badge-secondary">Admin</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($item->featured)
+                                                    <span class="badge badge-success">Yes</span>
+                                                @else
+                                                    <span class="text-muted">No</span>
+                                                @endif
+                                            </td>
                                             <td>
                                                 <label class="switch_toggle"
                                                        for="status_enable_disable{{ @$item->id }}">
@@ -298,12 +390,6 @@
                                                 </label>
                                             </td>
                                             <td>
-                                                @for($i=1;$i<=$item->star;$i++)
-                                                    <i class="fas fa-star"></i>
-                                                @endfor
-                                            </td>
-                                            <td>
-                                                <!-- shortby  -->
                                                 <div class="dropdown CRM_dropdown">
                                                     <button class="btn btn-secondary dropdown-toggle" type="button"
                                                             id="dropdownMenu2" data-toggle="dropdown"
