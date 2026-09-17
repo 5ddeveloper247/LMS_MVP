@@ -802,43 +802,6 @@
 
         <section class="instructors-section" id="instructor-grid">
             <div class="instructors-grid" id="instructorGrid">
-                {{-- Lead instructor (design) --}}
-                <div class="instructor-card" data-specialties="nclex remediation">
-                    <div class="instructor-photo">
-                        <span class="instructor-badge">{{ __('Lead Instructor') }}</span>
-                        @php
-                            $paulaImage = null;
-                            try {
-                                if (\Illuminate\Support\Facades\Schema::hasTable('home_contents')) {
-                                    $paulaImage = \Modules\FrontendManage\Entities\HomeContent::where('key', 'home_tile1_image')->value('value');
-                                }
-                            } catch (\Throwable $e) {
-                                $paulaImage = null;
-                            }
-                        @endphp
-                        @if (!empty($paulaImage))
-                            <img src="{{ asset('/' . ltrim($paulaImage, '/')) }}" alt="Paula Martin">
-                        @else
-                            Instructor photo<br>coming soon
-                        @endif
-                    </div>
-                    <div class="instructor-body">
-                        <p class="instructor-name">Paula Martin</p>
-                        <p class="instructor-title">{{ __('Lead Instructor & Founder') }}</p>
-                        <p class="instructor-desc">Creator of the NCLEX PASS Method™. Specializes in NCLEX prep, clinical judgment, test-taking strategy, and FL BON remediation curriculum. 13+ years in nursing education.</p>
-                        <div class="instructor-tags">
-                            <span class="instructor-tag">NCLEX Prep</span>
-                            <span class="instructor-tag">Remediation</span>
-                            <span class="instructor-tag">Clinical Judgment</span>
-                            <span class="instructor-tag">Test Strategy</span>
-                        </div>
-                        <div class="instructor-actions">
-                            <a href="{{ route('contact') }}" class="instructor-book">{{ __('Book a Session') }}</a>
-                            <a href="{{ route('ourTeam') }}" class="instructor-profile-link">{{ __('Full Profile') }} →</a>
-                        </div>
-                    </div>
-                </div>
-
                 @forelse (($instructors ?? collect()) as $instructor)
                     @php
                         $info = ($personalByUserId ?? collect())->get($instructor->id);
@@ -850,6 +813,7 @@
                         }
                         $specSlugs = $toSpecialtySlugs($rawSpecs);
                         $profileUrl = route('tutorDetails', [$instructor->id, \Illuminate\Support\Str::slug($instructor->name ?: 'tutor', '-')]);
+                        $bookingUrl = route('tutorBooking', $instructor->id);
                         $desc = trim(strip_tags((string) ($instructor->about ?? '')));
                         if ($desc === '') {
                             $desc = trim((string) ($instructor->headline ?? ''));
@@ -884,7 +848,7 @@
                                 </div>
                             @endif
                             <div class="instructor-actions">
-                                <a href="{{ route('contact') }}" class="instructor-book">{{ __('Book a Session') }}</a>
+                                <a href="{{ $bookingUrl }}" class="instructor-book">{{ __('Book a Session') }}</a>
                                 <a href="{{ $profileUrl }}" class="instructor-profile-link">{{ __('Full Profile') }} →</a>
                             </div>
                         </div>
@@ -959,7 +923,7 @@
         <section class="final-cta">
             <h2>Ready to work with <em>a real instructor?</em></h2>
             <p>Book your first session and walk away with the clarity your textbook never gave you.</p>
-            <a href="{{ route('contact') }}" class="btn-on-teal">{{ __('Book a Session') }} →</a>
+            <a href="{{ route('tutoring') }}" class="btn-on-teal">{{ __('Book a Session') }} →</a>
         </section>
     </div>
 
