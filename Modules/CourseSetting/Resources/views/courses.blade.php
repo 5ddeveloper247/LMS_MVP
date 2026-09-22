@@ -1332,7 +1332,7 @@
                         html += '<tr><th width="30%">{{ __("Course Code") }}</th><td>' + (data.course_code || 'N/A') + '</td></tr>';
                         html += '<tr><th>{{ __("Title") }}</th><td>' + data.title + '</td></tr>';
                         html += '<tr><th>{{ __("Category") }}</th><td>' + (data.category || 'N/A') + '</td></tr>';
-                        html += '<tr><th>{{ __("Instructor") }}</th><td>' + (data.instructor || 'N/A') + '</td></tr>';
+                        html += '<tr><th>{{ __("courses.Instructor") }}</th><td>' + (data.instructor || 'N/A') + '</td></tr>';
                         html += '<tr><th>{{ __("Status") }}</th><td>' + (data.status == 1 ? '{{ __("Active") }}' : '{{ __("Pending") }}') + '</td></tr>';
                         if (data.duration !== null) {
                             html += '<tr><th>{{ __("Duration") }}</th><td>' + data.duration + ' {{ __("weeks") }}</td></tr>';

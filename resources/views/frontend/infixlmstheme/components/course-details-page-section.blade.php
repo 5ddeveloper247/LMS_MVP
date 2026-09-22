@@ -1,1960 +1,659 @@
-<div>
-    <input type="hidden" value="{{ asset('/') }}" id="baseUrl">
-    <!-- course_details::start  -->
-    <div class="course__details p-md-5 p-4">
-        <div class="container px-0">
+<div class="mxp-course-detail">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+.mxp-course-detail {
+    --teal-mid: #1A8A6F; --teal-deep: #0F6E56; --teal-darkest: #0A4D3C;
+    --terracotta: #C65D3A; --terracotta-deep: #A84B2D;
+    --cream: #F5EDE0; --cream-warm: #EFE3D0;
+    --charcoal: #2B2B2B; --charcoal-soft: #4A4A4A;
+    --white: #FFFFFF; --gray-line: #E8DFD0;
+    --gold-star: #E8A840;
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'Montserrat', system-ui, sans-serif;
+    --shadow-sm: 0 2px 8px rgba(10, 77, 60, 0.06);
+    --shadow-md: 0 8px 24px rgba(10, 77, 60, 0.10);
+    font-family: var(--sans);
+    color: var(--charcoal);
+    background: var(--cream);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .mxp-course-detail * { box-sizing: border-box; }
+.mxp-course-detail h1, .mxp-course-detail h2, .mxp-course-detail h3, .mxp-course-detail h4 { font-family: var(--serif); font-weight: 700; line-height: 1.2; color: var(--teal-darkest); }
+
+  /* ============ NAV ============ */
+.mxp-course-detail .nav { position: sticky; top: 0; z-index: 100; background: rgba(245, 237, 224, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--gray-line); padding: 16px 0; }
+.mxp-course-detail .nav-inner { max-width: 1240px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+.mxp-course-detail .nav-brand { font-family: var(--serif); font-weight: 700; font-size: 20px; color: var(--teal-darkest); text-decoration: none; }
+.mxp-course-detail .nav-brand-accent { color: var(--terracotta); font-style: italic; }
+.mxp-course-detail .nav-links { display: flex; gap: 28px; list-style: none; }
+.mxp-course-detail .nav-links a { font-size: 14px; font-weight: 500; color: var(--charcoal); text-decoration: none; transition: color 0.2s; }
+.mxp-course-detail .nav-links a:hover, .mxp-course-detail .nav-links a.active { color: var(--teal-mid); }
+.mxp-course-detail .nav-cta { background: var(--terracotta); color: var(--white); padding: 10px 22px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600; transition: background 0.2s; }
+.mxp-course-detail .nav-cta:hover { background: var(--terracotta-deep); }
+
+.mxp-course-detail .breadcrumb { background: var(--cream-warm); padding: 14px 32px; border-bottom: 1px solid var(--gray-line); }
+.mxp-course-detail .breadcrumb-inner { max-width: 1240px; margin: 0 auto; font-size: 13px; color: var(--charcoal-soft); }
+.mxp-course-detail .breadcrumb-inner a { color: var(--teal-mid); text-decoration: none; font-weight: 500; }
+.mxp-course-detail .breadcrumb-inner a:hover { color: var(--terracotta); }
+.mxp-course-detail .breadcrumb-inner span { margin: 0 8px; opacity: 0.5; }
+
+.mxp-course-detail .container { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+
+  /* ============ COURSE HEADER ============ */
+.mxp-course-detail .course-header { background: linear-gradient(135deg, var(--teal-darkest) 0%, var(--teal-deep) 100%); color: var(--white); padding: 60px 32px 70px; position: relative; overflow: hidden; }
+.mxp-course-detail .course-header::before { content: ''; position: absolute; top: -80px; right: -80px; width: 350px; height: 350px; background: radial-gradient(circle, rgba(198, 93, 58, 0.15) 0%, transparent 70%); border-radius: 50%; }
+.mxp-course-detail .course-header-inner { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: 1fr 340px; gap: 50px; align-items: start; position: relative; z-index: 1; }
+.mxp-course-detail .course-header-text .course-domain { display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: var(--terracotta); margin-bottom: 16px; padding: 5px 14px; border: 1px solid var(--terracotta); border-radius: 30px; }
+.mxp-course-detail .course-header-text h1 { font-size: clamp(32px, 4vw, 48px); color: var(--white); margin-bottom: 16px; letter-spacing: -0.5px; }
+.mxp-course-detail .course-header-text h1 em { font-style: italic; color: var(--cream); font-weight: 400; }
+.mxp-course-detail .course-header-desc { font-size: 17px; line-height: 1.65; color: var(--cream-warm); margin-bottom: 24px; }
+.mxp-course-detail .course-meta { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 28px; }
+.mxp-course-detail .course-meta-item { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--cream); }
+.mxp-course-detail .course-meta-item svg { width: 18px; height: 18px; color: var(--terracotta); flex-shrink: 0; }
+
+  /* Course Image */
+.mxp-course-detail .course-hero-image { width: 100%; border-radius: 12px; overflow: hidden; margin-top: 4px; }
+.mxp-course-detail .course-hero-image img { width: 100%; height: 260px; object-fit: cover; display: block; border-radius: 12px; border: 2px solid rgba(255,255,255,0.15); }
+.mxp-course-detail .course-hero-image-placeholder {
+    width: 100%; height: 260px; border-radius: 12px;
+    background: linear-gradient(135deg, rgba(26,138,111,0.3) 0%, rgba(15,110,86,0.5) 100%);
+    border: 2px dashed rgba(255,255,255,0.25);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+    color: rgba(255,255,255,0.5); font-size: 13px;
+  }
+.mxp-course-detail .course-hero-image-placeholder svg { width: 40px; height: 40px; opacity: 0.4; }
+
+  /* ============ PURCHASE CARD (Header — On-Demand $79) ============ */
+.mxp-course-detail .purchase-card { background: var(--white); border-radius: 14px; padding: 32px; box-shadow: 0 12px 40px rgba(0,0,0,0.2); }
+.mxp-course-detail .purchase-card-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--teal-mid); margin-bottom: 6px; }
+.mxp-course-detail .purchase-price { font-family: var(--serif); font-size: 42px; font-weight: 700; color: var(--terracotta); margin-bottom: 2px; }
+.mxp-course-detail .purchase-type { font-family: var(--serif); font-size: 15px; font-weight: 600; color: var(--teal-darkest); margin-bottom: 2px; }
+.mxp-course-detail .purchase-sub-note { font-size: 12px; color: var(--teal-mid); font-weight: 500; margin-bottom: 20px; display: flex; align-items: center; gap: 5px; }
+.mxp-course-detail .purchase-sub-note svg { width: 14px; height: 14px; }
+.mxp-course-detail .btn-buy { display: block; width: 100%; text-align: center; background: var(--terracotta); color: var(--white); padding: 14px; border-radius: 6px; text-decoration: none; font-size: 15px; font-weight: 600; border: 2px solid var(--terracotta); transition: all 0.2s; margin-bottom: 10px; cursor: pointer; }
+.mxp-course-detail .btn-buy:hover { background: var(--terracotta-deep); border-color: var(--terracotta-deep); }
+.mxp-course-detail .btn-cart { display: block; width: 100%; text-align: center; background: transparent; color: var(--teal-darkest); padding: 12px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600; border: 1.5px solid var(--teal-darkest); transition: all 0.2s; margin-bottom: 10px; cursor: pointer; }
+.mxp-course-detail .btn-cart:hover { background: var(--teal-darkest); color: var(--white); }
+.mxp-course-detail .btn-bundle-link { display: block; text-align: center; font-size: 13px; color: var(--teal-mid); font-weight: 600; text-decoration: none; padding: 10px; border: 1.5px solid var(--teal-mid); border-radius: 6px; transition: all 0.2s; margin-bottom: 24px; }
+.mxp-course-detail .btn-bundle-link:hover { background: var(--teal-mid); color: var(--white); }
+.mxp-course-detail .purchase-divider { height: 1px; background: var(--gray-line); margin: 0 0 18px; }
+.mxp-course-detail .purchase-includes { list-style: none; }
+.mxp-course-detail .purchase-includes li { padding: 7px 0; font-size: 13px; color: var(--charcoal-soft); display: flex; align-items: flex-start; gap: 10px; border-bottom: 1px solid var(--gray-line); }
+.mxp-course-detail .purchase-includes li:last-child { border-bottom: none; }
+.mxp-course-detail .purchase-includes li svg { width: 16px; height: 16px; color: var(--teal-mid); flex-shrink: 0; margin-top: 2px; }
+.mxp-course-detail .subscription-note { background: rgba(26,138,111,0.06); border: 1px solid rgba(26,138,111,0.15); border-radius: 8px; padding: 12px 14px; margin-top: 16px; font-size: 12px; color: var(--charcoal-soft); line-height: 1.6; }
+.mxp-course-detail .subscription-note strong { color: var(--teal-darkest); font-weight: 600; }
+.mxp-course-detail .btn-buy.is-disabled,
+.mxp-course-detail .btn-enroll-il.is-disabled {
+  display: block; width: 100%; text-align: center; padding: 14px; border-radius: 6px;
+  font-size: 15px; font-weight: 600; margin-bottom: 10px; opacity: 0.65; cursor: not-allowed;
+  background: var(--gray-line); color: var(--charcoal-soft); border: 2px solid var(--gray-line);
+}
+.mxp-course-detail .course-header-type-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+.mxp-course-detail .course-header-type-badge {
+  display: inline-flex; align-items: center; padding: 5px 12px; border-radius: 999px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+  border: 1px solid rgba(255,255,255,0.35); color: var(--white);
+}
+.mxp-course-detail .course-header-type-badge.is-live { background: rgba(198, 93, 58, 0.92); }
+.mxp-course-detail .course-header-type-badge.is-ondemand { background: rgba(26, 138, 111, 0.92); }
+.mxp-course-detail .course-header-type-badge.is-full { background: rgba(255,255,255,0.16); }
+.mxp-course-detail .course-header-inner--single { grid-template-columns: 1fr !important; }
+.mxp-course-detail .sidebar-pricing-stack { display: flex; flex-direction: column; gap: 24px; }
+.mxp-course-detail .course-about-content { font-size: 15px; color: var(--charcoal-soft); line-height: 1.75; }
+.mxp-course-detail .course-about-content p:last-child { margin-bottom: 0; }
+
+  /* ============ TWO-COLUMN CONTENT: Content LEFT, Pricing RIGHT ============ */
+.mxp-course-detail .course-content { background: var(--white); padding: 70px 32px; }
+.mxp-course-detail .content-two-col { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: 1fr 340px; gap: 50px; align-items: start; }
+.mxp-course-detail .content-two-col.content-two-col--single { grid-template-columns: 1fr; }
+
+  /* Instructor-Led Sidebar (RIGHT) */
+.mxp-course-detail .sidebar-pricing { position: sticky; top: 90px; order: 2; }
+.mxp-course-detail .sidebar-card { background: var(--cream); border-radius: 14px; padding: 28px; border: 2px solid var(--teal-mid); box-shadow: var(--shadow-md); }
+.mxp-course-detail .sidebar-card .purchase-card-label { color: var(--terracotta); }
+.mxp-course-detail .sidebar-card .purchase-price { font-size: 38px; color: var(--teal-darkest); }
+.mxp-course-detail .sidebar-card .purchase-type { color: var(--teal-darkest); }
+.mxp-course-detail .sidebar-card .purchase-sub-note { color: var(--terracotta); }
+.mxp-course-detail .sidebar-card .purchase-sub-note svg { color: var(--terracotta); }
+.mxp-course-detail .btn-enroll-il { display: block; width: 100%; text-align: center; background: var(--teal-darkest); color: var(--white); padding: 14px; border-radius: 6px; text-decoration: none; font-size: 15px; font-weight: 600; border: 2px solid var(--teal-darkest); transition: all 0.2s; margin-bottom: 10px; cursor: pointer; }
+.mxp-course-detail .btn-enroll-il:hover { background: var(--teal-deep); border-color: var(--teal-deep); }
+.mxp-course-detail .btn-cart-il { display: block; width: 100%; text-align: center; background: transparent; color: var(--teal-darkest); padding: 12px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600; border: 1.5px solid var(--charcoal-soft); transition: all 0.2s; margin-bottom: 10px; cursor: pointer; }
+.mxp-course-detail .btn-cart-il:hover { background: var(--charcoal); color: var(--white); border-color: var(--charcoal); }
+.mxp-course-detail .btn-bundle-il { display: block; text-align: center; font-size: 13px; color: var(--teal-mid); font-weight: 600; text-decoration: none; padding: 10px; border: 1.5px solid var(--teal-mid); border-radius: 6px; transition: all 0.2s; margin-bottom: 20px; }
+.mxp-course-detail .btn-bundle-il:hover { background: var(--teal-mid); color: var(--white); }
+.mxp-course-detail .sidebar-includes { list-style: none; margin-top: 4px; }
+.mxp-course-detail .sidebar-includes li { padding: 6px 0; font-size: 12.5px; color: var(--charcoal-soft); display: flex; align-items: flex-start; gap: 8px; }
+.mxp-course-detail .sidebar-includes li svg { width: 15px; height: 15px; color: var(--teal-mid); flex-shrink: 0; margin-top: 1px; }
+.mxp-course-detail .sidebar-il-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--teal-darkest); color: var(--white); font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; padding: 5px 12px; border-radius: 4px; margin-bottom: 14px; }
+.mxp-course-detail .sidebar-il-badge svg { width: 14px; height: 14px; }
+
+  /* Left content column */
+.mxp-course-detail .content-inner { min-width: 0; order: 1; }
+.mxp-course-detail .content-inner h2 { font-size: 28px; margin: 50px 0 18px; padding-top: 30px; border-top: 1px solid var(--gray-line); }
+.mxp-course-detail .content-inner h2:first-of-type { margin-top: 0; padding-top: 0; border-top: none; }
+.mxp-course-detail .content-inner p { font-size: 15px; color: var(--charcoal-soft); line-height: 1.8; margin-bottom: 16px; }
+
+  /* Objectives */
+.mxp-course-detail .objectives-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 20px; }
+.mxp-course-detail .objective-item { display: flex; gap: 10px; align-items: flex-start; background: var(--cream); border-radius: 10px; padding: 16px 18px; }
+.mxp-course-detail .objective-item svg { width: 18px; height: 18px; color: var(--teal-mid); flex-shrink: 0; margin-top: 1px; }
+.mxp-course-detail .objective-item p { font-size: 14px; color: var(--charcoal); line-height: 1.5; margin: 0; }
+.mxp-course-detail .course-outcomes-content ul {
+  list-style: none; padding: 0; margin: 0; display: grid;
+  grid-template-columns: repeat(2, 1fr); gap: 14px;
+}
+.mxp-course-detail .course-outcomes-content li {
+  display: flex; gap: 10px; align-items: flex-start; background: var(--cream);
+  border-radius: 10px; padding: 16px 18px; font-size: 14px; color: var(--charcoal); line-height: 1.5;
+}
+.mxp-course-detail .course-outcomes-content li::before {
+  content: ''; width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231A8A6F' stroke-width='2'%3E%3Cpath d='M22 11.08V12a10 10 0 1 1-5.93-9.14'/%3E%3Cpolyline points='22 4 12 14.01 9 11.01'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+.mxp-course-detail .course-outcomes-content > p {
+  background: var(--cream); border-radius: 10px; padding: 16px 18px;
+  font-size: 14px; color: var(--charcoal); line-height: 1.5; margin-bottom: 14px;
+}
+.mxp-course-detail .related-card-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mxp-course-detail .section-empty {
+  background: var(--cream); border: 1px dashed var(--gray-line); border-radius: 10px;
+  padding: 24px; color: var(--charcoal-soft); font-size: 14px;
+}
+.mxp-course-detail .instructor-photo img {
+  width: 100%; height: 100%; object-fit: cover; border-radius: 12px; display: block;
+}
+
+  /* Modules */
+.mxp-course-detail .module-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+.mxp-course-detail .module-item { background: var(--cream); border-radius: 10px; overflow: hidden; border: 1px solid var(--gray-line); }
+.mxp-course-detail .module-item summary { padding: 18px 22px; cursor: pointer; font-family: var(--serif); font-size: 16px; font-weight: 600; color: var(--teal-darkest); list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.mxp-course-detail .module-item summary::-webkit-details-marker { display: none; }
+.mxp-course-detail .module-item summary::after { content: '+'; font-size: 22px; color: var(--terracotta); font-weight: 400; }
+.mxp-course-detail .module-item[open] summary::after { content: '\2212'; }
+.mxp-course-detail .module-item summary .module-meta { font-family: var(--sans); font-size: 12px; color: var(--charcoal-soft); font-weight: 500; margin-left: auto; margin-right: 12px; }
+.mxp-course-detail .module-body { padding: 0 22px 18px; }
+.mxp-course-detail .module-body ul { list-style: none; }
+.mxp-course-detail .module-body li { padding: 6px 0 6px 20px; position: relative; font-size: 14px; color: var(--charcoal-soft); line-height: 1.6; }
+.mxp-course-detail .module-body li::before { content: '\00B7'; position: absolute; left: 6px; color: var(--teal-mid); font-weight: 700; font-size: 18px; }
+
+  /* ============ INSTRUCTOR (with photo) ============ */
+.mxp-course-detail .instructor-card { display: flex; gap: 28px; align-items: flex-start; background: var(--cream); border-radius: 14px; padding: 32px; margin-bottom: 20px; }
+.mxp-course-detail .instructor-photo { width: 110px; height: 110px; border-radius: 14px; overflow: hidden; flex-shrink: 0; border: 3px solid var(--white); box-shadow: var(--shadow-sm); }
+.mxp-course-detail .instructor-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mxp-course-detail .instructor-photo-placeholder {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, var(--teal-mid), var(--teal-deep));
+    display: flex; align-items: center; justify-content: center;
+    color: var(--white); font-family: var(--serif); font-size: 32px; font-weight: 700;
+  }
+.mxp-course-detail .instructor-info h4 { font-family: var(--sans); font-size: 17px; font-weight: 700; color: var(--teal-darkest); margin-bottom: 2px; }
+.mxp-course-detail .instructor-info .credentials { font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--terracotta); margin-bottom: 10px; }
+.mxp-course-detail .instructor-info p { font-size: 14px; color: var(--charcoal-soft); line-height: 1.7; margin: 0; }
+
+  /* Instructor's Other Courses */
+.mxp-course-detail .instructor-courses { margin-top: 10px; }
+.mxp-course-detail .instructor-courses h3 { font-size: 18px; margin-bottom: 16px; color: var(--teal-darkest); }
+.mxp-course-detail .instructor-courses-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.mxp-course-detail .instructor-course-card { background: var(--cream); border-radius: 10px; padding: 18px 20px; border: 1px solid var(--gray-line); text-decoration: none; color: inherit; display: block; transition: all 0.2s; }
+.mxp-course-detail .instructor-course-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); border-color: var(--teal-mid); }
+.mxp-course-detail .instructor-course-card .ic-tag { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--teal-mid); margin-bottom: 4px; }
+.mxp-course-detail .instructor-course-card h4 { font-size: 15px; color: var(--teal-darkest); margin-bottom: 4px; font-weight: 600; }
+.mxp-course-detail .instructor-course-card p { font-size: 12px; color: var(--charcoal-soft); margin: 0; line-height: 1.5; }
+.mxp-course-detail .instructor-course-card .ic-price { font-family: var(--serif); font-size: 15px; font-weight: 700; color: var(--terracotta); margin-top: 8px; }
+
+  /* ============ REVIEWS ============ */
+.mxp-course-detail .reviews-section { background: var(--cream); padding: 80px 32px; }
+.mxp-course-detail .reviews-inner { max-width: 1080px; margin: 0 auto; }
+.mxp-course-detail .reviews-header { text-align: center; margin-bottom: 50px; }
+.mxp-course-detail .reviews-header h2 { font-size: 32px; margin-bottom: 10px; }
+.mxp-course-detail .reviews-header p { font-size: 15px; color: var(--charcoal-soft); }
+.mxp-course-detail .reviews-summary { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 20px; }
+.mxp-course-detail .reviews-avg { font-family: var(--serif); font-size: 48px; font-weight: 700; color: var(--teal-darkest); }
+.mxp-course-detail .reviews-avg-detail { text-align: left; }
+.mxp-course-detail .reviews-stars { display: flex; gap: 3px; margin-bottom: 2px; }
+.mxp-course-detail .reviews-stars svg { width: 18px; height: 18px; color: var(--gold-star); fill: var(--gold-star); }
+.mxp-course-detail .reviews-count { font-size: 13px; color: var(--charcoal-soft); }
+.mxp-course-detail .reviews-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 10px; }
+.mxp-course-detail .review-card { background: var(--white); border-radius: 14px; padding: 28px; border: 1px solid var(--gray-line); }
+.mxp-course-detail .review-top { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.mxp-course-detail .review-avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--teal-mid), var(--teal-deep)); display: flex; align-items: center; justify-content: center; color: var(--white); font-family: var(--serif); font-size: 16px; font-weight: 700; flex-shrink: 0; }
+.mxp-course-detail .review-meta { flex: 1; }
+.mxp-course-detail .review-meta h4 { font-family: var(--sans); font-size: 14px; font-weight: 600; color: var(--teal-darkest); margin-bottom: 1px; }
+.mxp-course-detail .review-meta p { font-size: 12px; color: var(--charcoal-soft); margin: 0; }
+.mxp-course-detail .review-stars { display: flex; gap: 2px; margin-bottom: 12px; }
+.mxp-course-detail .review-stars svg { width: 15px; height: 15px; color: var(--gold-star); fill: var(--gold-star); }
+.mxp-course-detail .review-card p.review-text { font-size: 14px; color: var(--charcoal-soft); line-height: 1.7; margin: 0; }
+.mxp-course-detail .review-verified { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: var(--teal-mid); font-weight: 500; margin-top: 12px; }
+.mxp-course-detail .review-verified svg { width: 13px; height: 13px; }
+
+  /* ============ RELATED COURSES (with images + course type) ============ */
+.mxp-course-detail .related-section { background: var(--white); padding: 70px 32px; }
+.mxp-course-detail .related-header { text-align: center; margin-bottom: 40px; }
+.mxp-course-detail .related-header h2 { font-size: 32px; margin-bottom: 10px; }
+.mxp-course-detail .related-header p { font-size: 15px; color: var(--charcoal-soft); }
+.mxp-course-detail .related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1080px; margin: 0 auto; }
+.mxp-course-detail .related-card { background: var(--cream); border-radius: 12px; overflow: hidden; border: 1px solid var(--gray-line); transition: transform 0.2s, box-shadow 0.2s; text-decoration: none; color: inherit; display: block; }
+.mxp-course-detail .related-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.mxp-course-detail .related-card-image { width: 100%; height: 160px; overflow: hidden; }
+.mxp-course-detail .related-card-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mxp-course-detail .related-card-image-placeholder {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, rgba(26,138,111,0.15) 0%, rgba(15,110,86,0.25) 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+    color: var(--teal-mid); font-size: 12px;
+  }
+.mxp-course-detail .related-card-image-placeholder svg { width: 28px; height: 28px; opacity: 0.35; }
+.mxp-course-detail .related-card-body { padding: 22px 24px 24px; }
+.mxp-course-detail .related-tag { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--teal-mid); margin-bottom: 6px; }
+.mxp-course-detail .related-card h3 { font-size: 18px; margin-bottom: 6px; color: var(--teal-darkest); }
+.mxp-course-detail .related-card p.related-desc { font-size: 13px; color: var(--charcoal-soft); line-height: 1.6; margin-bottom: 14px; }
+.mxp-course-detail .related-card-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.mxp-course-detail .related-price { font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--terracotta); }
+.mxp-course-detail .related-course-type { font-size: 10px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; white-space: nowrap; }
+.mxp-course-detail .related-course-type.self-study { background: rgba(26,138,111,0.1); color: var(--teal-deep); }
+.mxp-course-detail .related-course-type.instructor-led { background: rgba(198,93,58,0.12); color: var(--terracotta-deep); }
+
+  /* ============ FINAL CTA ============ */
+.mxp-course-detail .final-cta { background: linear-gradient(135deg, var(--teal-darkest) 0%, var(--teal-deep) 100%); color: var(--white); padding: 80px 32px; text-align: center; }
+.mxp-course-detail .final-cta-inner { max-width: 700px; margin: 0 auto; }
+.mxp-course-detail .final-cta h2 { color: var(--white); font-size: clamp(28px, 4vw, 40px); margin-bottom: 16px; }
+.mxp-course-detail .final-cta h2 em { font-style: italic; color: var(--cream); }
+.mxp-course-detail .final-cta p { font-size: 17px; color: var(--cream-warm); margin-bottom: 30px; line-height: 1.6; }
+.mxp-course-detail .cta-price-row { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 24px; }
+.mxp-course-detail .cta-option { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; padding: 20px 28px; text-align: center; min-width: 200px; }
+.mxp-course-detail .cta-option-price { font-family: var(--serif); font-size: 32px; font-weight: 700; color: var(--white); }
+.mxp-course-detail .cta-option-label { font-size: 13px; color: var(--cream-warm); margin-top: 4px; }
+.mxp-course-detail .btn-primary { background: var(--terracotta); color: var(--white); padding: 16px 36px; border-radius: 6px; text-decoration: none; font-size: 15px; font-weight: 600; transition: all 0.2s; display: inline-block; border: 2px solid var(--terracotta); }
+.mxp-course-detail .btn-primary:hover { background: var(--terracotta-deep); border-color: var(--terracotta-deep); transform: translateY(-1px); }
+
+  /* ============ FOOTER ============ */
+.mxp-course-detail .footer { background: var(--teal-darkest); color: var(--cream-warm); padding: 70px 32px 30px; }
+.mxp-course-detail .footer-inner { max-width: 1240px; margin: 0 auto; }
+.mxp-course-detail .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+.mxp-course-detail .footer-col h5 { font-family: var(--serif); font-weight: 700; font-size: 16px; color: var(--cream); margin-bottom: 16px; }
+.mxp-course-detail .footer-col ul { list-style: none; }
+.mxp-course-detail .footer-col ul li { margin-bottom: 10px; }
+.mxp-course-detail .footer-col ul a { color: rgba(245, 237, 224, 0.75); text-decoration: none; font-size: 13.5px; transition: color 0.2s; }
+.mxp-course-detail .footer-col ul a:hover { color: var(--terracotta); }
+.mxp-course-detail .footer-brand-block .footer-brand { font-family: var(--serif); font-weight: 700; font-size: 22px; color: var(--white); margin-bottom: 14px; }
+.mxp-course-detail .footer-brand-block .footer-brand em { font-style: italic; color: var(--terracotta); }
+.mxp-course-detail .footer-brand-block p { font-size: 13px; line-height: 1.7; color: rgba(245, 237, 224, 0.7); max-width: 340px; }
+.mxp-course-detail .footer-tagline { font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--terracotta); margin-top: 18px; }
+.mxp-course-detail .footer-motto { font-family: var(--serif); font-style: italic; font-size: 13px; color: rgba(245,237,224,0.6); margin-top: 8px; }
+.mxp-course-detail .footer-contact-band { background: rgba(0,0,0,0.18); padding: 28px 0; margin: 0 -32px; padding-left: 32px; padding-right: 32px; }
+.mxp-course-detail .footer-contact-inner { max-width: 1240px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; }
+.mxp-course-detail .footer-contact-info { font-size: 13px; line-height: 1.8; color: rgba(245, 237, 224, 0.85); }
+.mxp-course-detail .footer-contact-info strong { color: var(--cream); }
+.mxp-course-detail .footer-contact-info a { color: rgba(245, 237, 224, 0.85); text-decoration: none; }
+.mxp-course-detail .footer-contact-info a:hover { color: var(--terracotta); }
+.mxp-course-detail .footer-social { display: flex; gap: 12px; }
+.mxp-course-detail .footer-social a { width: 38px; height: 38px; border-radius: 50%; background: rgba(245, 237, 224, 0.1); border: 1px solid rgba(245, 237, 224, 0.15); display: flex; align-items: center; justify-content: center; color: var(--cream); text-decoration: none; transition: all 0.2s; }
+.mxp-course-detail .footer-social a:hover { background: var(--terracotta); border-color: var(--terracotta); transform: translateY(-2px); }
+.mxp-course-detail .footer-social svg { width: 16px; height: 16px; }
+.mxp-course-detail .footer-legal { background: #052821; padding: 24px 32px; margin: 0 -32px; }
+.mxp-course-detail .footer-legal-inner { max-width: 1240px; margin: 0 auto; }
+.mxp-course-detail .footer-legal-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 11.5px; color: rgba(255,255,255,0.5); }
+.mxp-course-detail .footer-legal-links { display: flex; gap: 18px; }
+.mxp-course-detail .footer-legal-links a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 11.5px; }
+.mxp-course-detail .footer-legal-links a:hover { color: var(--terracotta); }
+.mxp-course-detail .footer-disclaimer { font-size: 11px; color: rgba(255,255,255,0.38); line-height: 1.65; }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 1060px) {
+.mxp-course-detail .content-two-col { grid-template-columns: 1fr 280px; gap: 32px; }
+  }
+  @media (max-width: 960px) {
+.mxp-course-detail .nav-links { display: none; }
+.mxp-course-detail .course-header-inner { grid-template-columns: 1fr; }
+.mxp-course-detail .purchase-card { max-width: 400px; }
+.mxp-course-detail .content-two-col { grid-template-columns: 1fr; }
+.mxp-course-detail .sidebar-pricing { position: static; order: 0; }
+.mxp-course-detail .content-inner { order: 1; }
+.mxp-course-detail .sidebar-card { max-width: 400px; }
+.mxp-course-detail .objectives-grid { grid-template-columns: 1fr; }
+.mxp-course-detail .instructor-courses-grid { grid-template-columns: 1fr; }
+.mxp-course-detail .reviews-grid { grid-template-columns: 1fr; }
+.mxp-course-detail .related-grid { grid-template-columns: 1fr; max-width: 440px; margin: 0 auto; }
+.mxp-course-detail .cta-price-row { flex-direction: column; align-items: center; }
+.mxp-course-detail .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+.mxp-course-detail .footer-brand-block { grid-column: 1 / -1; }
+  }
+  @media (max-width: 640px) {
+.mxp-course-detail .course-hero-image img, .mxp-course-detail .course-hero-image-placeholder { height: 180px; }
+.mxp-course-detail .instructor-card { flex-direction: column; align-items: center; text-align: center; }
+.mxp-course-detail .footer-grid { grid-template-columns: 1fr; }
+.mxp-course-detail .footer-contact-inner { flex-direction: column; align-items: flex-start; }
+.mxp-course-detail .footer-legal-top { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+
+<div class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="{{ url('/') }}">Home</a><span>&rsaquo;</span><a href="{{ route('quizzes') }}">Prep-Courses</a><span>&rsaquo;</span>{{ $course->title ?? 'Medical-Surgical Nursing' }}
+  </div>
+</div>
+
+<!-- ============================================================
+     COURSE HEADER + ON-DEMAND PURCHASE CARD ($79)
+     ============================================================ -->
+<header class="course-header">
+  <div class="course-header-inner {{ empty($headerPurchase) ? 'course-header-inner--single' : '' }}">
+    <div class="course-header-text">
+      @if (!empty($categoryName))
+        <span class="course-domain">{{ $categoryName }}</span>
+      @endif
+      <h1>{{ $course->title }}</h1>
+      @if (!empty($courseExcerpt))
+        <p class="course-header-desc">{{ $courseExcerpt }}</p>
+      @endif
+      @if (!empty($typeBadges))
+        <div class="course-header-type-badges">
+          @foreach ($typeBadges as $badge)
+            <span class="course-header-type-badge {{ $badge['class'] === 'pc-badge-live' ? 'is-live' : ($badge['class'] === 'pc-badge-ondemand' ? 'is-ondemand' : 'is-full') }}">{{ $badge['label'] }}</span>
+          @endforeach
+        </div>
+      @endif
+      <div class="course-meta">
+        @if (($total ?? 0) > 0)
+          <div class="course-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+            {{ $total }} {{ $total === 1 ? 'Lesson' : 'Lessons' }}
+          </div>
+        @endif
+        @if (count($purchaseOptions ?? []) > 1)
+          <div class="course-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            {{ count($purchaseOptions) }} Learning Options
+          </div>
+        @endif
+        @if (($detailReviewStats['total'] ?? 0) > 0)
+          <div class="course-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            {{ $detailReviewStats['rating'] }} ({{ $detailReviewStats['total'] }} {{ $detailReviewStats['total'] === 1 ? 'Review' : 'Reviews' }})
+          </div>
+        @endif
+      </div>
+
+      <div class="course-hero-image">
+        @if (!empty($courseImage))
+          <img src="{{ $courseImage }}" alt="{{ $course->title }}">
+        @else
+          <div class="course-hero-image-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            {{ $course->title }}
+          </div>
+        @endif
+      </div>
+    </div>
+
+    @if (!empty($headerPurchase))
+      @include(theme('components.partials.course-detail-purchase-card'), ['option' => $headerPurchase, 'variant' => 'header'])
+    @endif
+  </div>
+</header>
+
+<!-- ============================================================
+     MAIN CONTENT — Content LEFT, Instructor-Led Pricing RIGHT
+     ============================================================ -->
+<section class="course-content">
+  <div class="content-two-col {{ empty($sidebarPurchases) ? 'content-two-col--single' : '' }}">
+
+    <!-- LEFT COLUMN: Course Details -->
+    <div class="content-inner">
+
+      <h2>About This Course</h2>
+      @if (!empty($course->about))
+        <div class="course-about-content">{!! $course->about !!}</div>
+      @else
+        <p>Explore this prep-course and choose the learning option that fits you best.</p>
+      @endif
+
+      @if (!empty($course->outcomes))
+        <h2>Learning Objectives</h2>
+        <div class="course-outcomes-content">{!! $course->outcomes !!}</div>
+      @endif
+
+      <h2>Course Modules</h2>
+      @if ($course->chapters->count())
+        <div class="module-list">
+          @foreach ($course->chapters as $chapter)
             @php
-                if (!empty($request->courseType) && count($course->children)) {
-                    foreach ($course->children as $child) {
-                        if ($request->courseType == $child->type) {
-                            $course_image = getCourseImage($child->image);
-                            break;
-                        } else {
-                            $course_image = getCourseImage($course->image);
-                        }
-                    }
-                } else {
-                    $course_image = getCourseImage($course->image);
-                }
+              $chapterLessons = $chapter->lessons;
+              $lessonCount = $chapterLessons->count();
+              $quizCount = $chapterLessons->where('is_quiz', 1)->count();
             @endphp
-            <!-- firststart -->
-            <div class="row px-lg-5 small_screen course_padding">
-                <div class="col-lg-9 col-md-8 col-sm-7 d-flex justify-content-between px-2">
-                    <div class="course__details_title w-100 mb-md-0">
-
-                        <div class="col-lg-6 col-md-8 details_content d-flex flex-column justify-content-start">
-                            @if($course->category)
-                            <h5 class="small_heading course-span f_w_700">{{ __('frontend.Category') }}</h5>
-                            <p class="course-span">{{ @$course->category->name }}</p>
-                            @endif
-                            <div class="details_content">
-                                <h5 class="small_heading course-span f_w_700" style="color: #1770B5;">{{ __('frontend.Reviews') }}
-                                </h5>
-                                <div class="rating_star d-flex align-items-md-center flex-column flex-md-row">
-                                    <div class="stars course-span d-flex">
-                                        @php
-                                            $main_stars = @$courseRating['rating'];
-                                            $stars = intval($courseRating['rating']);
-                                        @endphp
-                                        @for ($i = 0; $i < $stars; $i++)
-                                            <i class="fas fa-star"></i>
-                                        @endfor
-                                        @if ($main_stars > $stars)
-                                            <i class="fas fa-star-half"></i>
-                                        @endif
-                                        @if ($main_stars == 0)
-                                            @for ($i = 0; $i < 5; $i++)
-                                                <i class="far fa-star"></i>
-                                            @endfor
-                                        @endif
-                                    </div>
-                                    <p class="course-span px-md-3">{{ @$courseRating['rating'] }}
-                                        ({{ @$courseRating['total'] }} {{ __('frontend.Rating') }})</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-6 col-md-4 d-flex align-items-end justify-content-end">
-
-                            <div class="sidebar__title text-right">
-                                <h2 class="custom_small_heading font-weight-bold custom_heading_1 mb-0" style="color: #ff6700;">
-                                    @php
-                                        $course_plan = \Modules\CourseSetting\Entities\Course::where(
-                                            'type',
-                                            request()->get('courseType'),
-                                        )
-                                            ->where('parent_id', $course->id)
-                                            // ->with('effectiveCoursePlan')
-                                            ->first() ?? $course;
-                                        $course_duration = (!empty($course_plan->effectiveCoursePlan[0])) ? round((strtotime($course_plan->effectiveCoursePlan[0]->edate) - strtotime($course_plan->effectiveCoursePlan[0]->sdate)) / 604800, 1) : 0;
-                                        
-                        // dd($course_plan->effectiveCoursePlan);
-                                    @endphp
-                                    @if (!empty($course_plan->effectiveCoursePlan[0]))
-                                        {{ getPriceFormat($course_plan->effectiveCoursePlan[0]->amount) }}<br>
-                                        <small style="font-size:0.55em">This Cohort will start on {{date('d M Y',strtotime($course_plan->effectiveCoursePlan[0]->sdate))}}</small>
-                                    @else
-                                        @if (request()->has('courseType') && request()->courseType != 9)
-                                            @if (request()->courseType == 2 || request()->courseType == 7)
-                                                {{ getPriceFormat(\Modules\CourseSetting\Entities\Course::where('type', request()->get('courseType'))->where('id', $course->id)->first(['price'])->price) }}
-                                            @else
-                                            {{-- @dd($course) --}}
-                                            {{-- {{ getPriceFormat(\Modules\CourseSetting\Entities\Course::where('type', request()->get('courseType'))->where('parent_id', $course->id)->first(['price'])->price) }} --}}
-                                            {{ getPriceFormat($course_plan->price) }}
-                                            @endif
-                                        @else
-                                            @if (@$course->discount_price != null)
-                                                {{ getPriceFormat($course->discount_price) }}
-                                            @elseif ($course->price != null && $course->price != '0.00')
-                                                {{ getPriceFormat($course->price + $course->tax) }}
-                                            @endif
-                                        @endif
-                                    @endif
-                                </h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-5 py-3 py-sm-0">
-                    {{-- new card_1 starts --}}
-                    {{-- this one needs t be fixed --}}
-                    <div class="custom_section_color img_round course_tab px-2 pt-2"style="background-color: #eee;">
-                        <div class="custom_section_color rounded_section p-2 img_round" style="height: auto;">
-                            <h5 class="font-weight-bold custom_heading_1 small_heading">This Course includes:
-                            </h5>
-                            @if(request()->has('courseType') && in_array(request()->get('courseType'),[4,6]))
-
-                            <span class="program-span"><i class="fa-clock-o fas"></i>&nbsp;&nbsp; {{ __('frontend.Duration') }} |
-                                @if ($course_duration <= 1)
-                                    1 Week
-                                @else
-                                    {{ round($course_duration,1) . ' Weeks' }}
-                                @endif
-                            </span>
-                            @endif
-                            @if($course->type != '7')
-                            @if(request()->has('courseType') && in_array(request()->get('courseType'),[4,6]))
-                            <br class="mt-2">
-                            <span class="program-span"><i class="fas fa-user"></i>&nbsp;&nbsp; Enrolled |
-                            @if (empty($course->totalseats))
-                                    0
-                                @else
-                                {{ count($course->enrolls->where('course_type',request()->get('courseType'))->where('plan_id',$course->totalseats->id)) }}
-                                {{-- {{ $course->total_enrolled }} --}}
-                                Students
-                                @endif
-                            </span>
-                            <br class="mt-2">
-                            <span class="program-span"><i class="fas fa-user"></i>&nbsp;&nbsp; Remaining Enrolled |
-                                @if (empty($course->totalseats->no_of_students))
-                                    0
-                                @else
-                                    {{-- {{ $course->totalseats - $course->total_enrolled }} --}}
-                                    @if ($course->totalseats->no_of_students - count($course->enrolls->where('course_type',request()->get('courseType'))->where('plan_id',$course->totalseats->id)) <= 0)
-                                        {{ '0' }}
-                                    @else
-                                        {{ $course->totalseats->no_of_students - count($course->enrolls->where('course_type',request()->get('courseType'))->where('plan_id',$course->totalseats->id)) }}
-                                    @endif
-
-                                @endif
-
-                            </span>
-                            <br class= "mt-2">
-                            @else
-                            <br class="mt-2">
-                            <span class="program-span"><i class="fas fa-bars-staggered"></i>&nbsp;&nbsp; Chapters |
-                                {{ count($course->chapters) }}
-                                
-                            </span>
-                            <br class="mt-2">
-                            <span class="program-span"><i class="fas fa-bars-staggered"></i>&nbsp;&nbsp; Lessons |
-                                {{ count($course->lessons) }}
-                                
-                            </span>
-                            <br class="mt-2">
-                            <span class="program-span"><i class="fas fa-bars-staggered"></i>&nbsp;&nbsp; Quiz |
-                                {{ count($course->lessons->where('is_quiz',1)) }}
-                                
-                            </span>
-                            @endif
-
-                            @else
-                            <span class="program-span"><i class="fa-clock-o fas"></i>&nbsp;&nbsp; {{ __('frontend.Duration') }} |
-                                6 Weeks
-                            </span>
-                            @endif
-                        </div>
-                        {{-- new card_1 ends --}}
-                    </div>
-                </div>
-            </div>
+            <details class="module-item">
+              <summary>
+                {{ $chapter->name }}
+                <span class="module-meta">
+                  {{ $lessonCount }} {{ $lessonCount === 1 ? 'lesson' : 'lessons' }}
+                  @if ($quizCount)
+                    &middot; {{ $quizCount }} {{ $quizCount === 1 ? 'quiz' : 'quizzes' }}
+                  @endif
+                </span>
+              </summary>
+              <div class="module-body">
+                @if ($lessonCount)
+                  <ul>
+                    @foreach ($chapterLessons as $lesson)
+                      <li>{{ $lesson->name }}</li>
+                    @endforeach
+                  </ul>
+                @else
+                  <p class="section-empty" style="margin:0;">No lessons added to this module yet.</p>
+                @endif
+              </div>
+            </details>
+          @endforeach
         </div>
-        <!-- firstend -->
-        <!-- 2ndstart -->
-        <div class="container px-0">
-            <div class="row my-sm-4 my-2 px-lg-5 small_screen course_padding">
+      @else
+        <p class="section-empty">Course modules will be published soon.</p>
+      @endif
 
-                <div class="col-lg-9 col-md-8 col-sm-7 mb-2 mb-sm-0 course_main_image">
-                    @if ($course->image == '')
-
-                        <div class="video_screen @if ($course->host != 'ImagePreview' && $course->host != '') theme__overlay @endif mb-4">
-                            @if ($course->host != 'ImagePreview' && $course->host != '')
-                                <div class="video_play text-center">
-                                    @if ($course->host == 'Self' || $course->host == 'AmazonS3')
-                                        <div id="vidBox">
-                                            <div id="videCont">
-                                                <video id="videoPlayer" loop controls controlsList="nodownload">
-                                                    <source src="{{ asset($course->trailer_link) }}" type="video/mp4">
-                                                </video>
-                                            </div>
-                                        </div>
-                                        <a href="{{ youtubeVideo($course->trailer_link) }}" id="SelfVideoPlayer"></a>
-                                    @endif
-                                    <a id="playTrailer"
-                                        @if ($course->host == 'Vimeo') video-url="https://vimeo.com/{{ getVideoId(showPicName(@$course->trailer_link)) }}?autoplay=1"
-
-                                   @else
-                                   video-url="{{ $course->trailer_link }}" @endif
-                                        data-host="{{ $course->host }}" class="play_button">
-                                        <i class="ti-control-play"></i>
-                                    </a>
-                                    <p>{{ __('frontend.Preview this course') }}</p>
-                                </div>
-                            @endif
-                        </div>
-                    @else
-                        <div class="course_detail_image image_responsive px-md-2">
-                            <img src="{{ $course_image }}" class="img-fluid w-100 img_round course_image"
-                                style="">
-                        </div>
-                    @endif
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-5 py-sm-0 py-3 course_main_text">
-                    <div class="custom_section_color img_round course_tab px-2 pt-2 course_main_section" style="background-color: #eee;">
-                        <h5 class="font-weight-bold mt-1 course-span custom_heading_1 small_heading">You May also Like</h5>
-                        <div class="row mx-0">
-                            @if (isset($recent_courses))
-                                @forelse($recent_courses as  $recent_course)
-                                @php
-                                 $recent_price = $recent_course->effectiveCoursePlan[0]->amount ?? $recent_course->price + $recent_course->tax;
-                                @endphp
-                                    <div class="col-xl-5 col-lg-5 col-md-6 col-4 mb-3 pl-0 pr-2 course_tabs_section">
-                                        <a
-                                            href="{{ !empty($recent_course->parent_id) ? courseDetailsUrl(@$recent_course->parent->id, @$recent_course->type, @$recent_course->parent->slug) . '?courseType=' . $recent_course->type : courseDetailsUrl(@$recent_course->id, @$recent_course->type, @$recent_course->slug) }}">
-                                            <img style="" src="{{ getCourseImage($recent_course->thumbnail) }}"
-                                                class="img-fluid h-100">
-                                        </a>
-                                    </div>
-                                    <div class="col-lg-7 col-md-6 col-8 p-clamp0 p-0 course_tabs_section">
-                                        <p class="p-clamp">
-                                            <a class="text-dark course-span"
-                                                href="{{ !empty($recent_course->parent_id) ? courseDetailsUrl(@$recent_course->parent->id, @$recent_course->type, @$recent_course->parent->slug) . '?courseType=' . $recent_course->type : courseDetailsUrl(@$recent_course->id, @$recent_course->type, @$recent_course->slug) }}">
-                                                {{ !empty($recent_course->parent_id) ? $recent_course->parent->title : $recent_course->title }}</a>
-                                        </p>
-                                        <p class="course-span" style="color: #ff6700;">
-                                            {{ getPriceFormat($recent_price) }}</p>
-
-                                        @if ($recent_course->type == 2)
-                                            <p class="color course-span">{{ __('Big Quiz') }}</p>
-                                        @elseif($recent_course->type == 4)
-                                            <p class="color course-span">{{ __('Full Course') }}</p>
-                                        @elseif($recent_course->type == 5)
-                                            <p class="color course-span">
-                                                {{ __('Prep-Course') }}<small>(on-demand)</small>
-                                            </p>
-                                        @elseif($recent_course->type == 6)
-                                            <p class="color course-span">{{ __('Prep-Course') }}<small>(Live)</small>
-                                            </p>
-                                        @elseif($recent_course->type == 7)
-                                            <p class="color course-span">{{ __('Time Table') }}</p>
-                                        @elseif($recent_course->type == 8)
-                                            <p class="color course-span">{{ __('Repeat Course') }}</p>
-                                        @elseif($recent_course->type == 9)
-                                            <p class="color course-span">{{ __('Individual Course') }}</p>
-                                        @else
-                                            <p class="color course-span">{{ __('Course') }}</p>
-                                        @endif
-                                    </div>
-                                @empty
-                                    <div class="col-md-12 mb-md-5 mb-4">
-                                        <div
-                                            class="Nocouse_wizged d-flex align-items-center justify-content-center text-center">
-                                            <div class="thumb">
-                                                <img style="width: 20px"
-                                                    src="{{ asset('public/frontend/infixlmstheme') }}/img/not-found.png"
-                                                    alt="">
-                                            </div>
-                                            <h6>
-                                                {{ __('No Program Found') }}
-                                            </h6>
-                                        </div>
-                                    </div>
-                                @endforelse
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
+      @if ($course->user)
+        <h2>Your Instructor</h2>
+        <div class="instructor-card">
+          <div class="instructor-photo">
+            @if (!empty($course->user->image))
+              <img src="{{ getInstructorImage($course->user->image) }}" alt="{{ $course->user->name }}">
+            @else
+              @php
+                $instructorParts = preg_split('/\s+/', trim($course->user->name ?? 'I'));
+                $instructorInitials = strtoupper(substr($instructorParts[0] ?? 'I', 0, 1) . substr($instructorParts[1] ?? '', 0, 1));
+              @endphp
+              <div class="instructor-photo-placeholder">{{ $instructorInitials }}</div>
+            @endif
+          </div>
+          <div class="instructor-info">
+            <h4>
+              <a href="{{ route('instructorDetails', [$course->user->id, $course->user->name]) }}" style="color:inherit;text-decoration:none;">
+                {{ $course->user->name }}
+              </a>
+            </h4>
+            @if (!empty($course->user->headline))
+              <p class="credentials">{{ $course->user->headline }}</p>
+            @endif
+            @if (!empty($course->user->short_details))
+              <p>{{ $course->user->short_details }}</p>
+            @elseif (!empty($course->user->about))
+              <div>{!! \App\View\Components\QuizPageSection::excerpt($course->user->about, 260) !!}</div>
+            @endif
+            @if (($userRating['total'] ?? 0) > 0)
+              <p style="font-size:13px;color:var(--teal-mid);margin-top:10px;">
+                {{ $userRating['rating'] }} rating &middot; {{ $userRating['total'] }} reviews
+              </p>
+            @endif
+          </div>
         </div>
-        <!-- 2ndend -->
-        <!-- 3rdstart -->
-
-        <!-- <div class="col-12"> -->
-        <div class="container px-0">
-            <div class="row px-lg-5 small_screen course_padding">
-                <div class="col-lg-9 col-md-8 col-12">
-                    
-                    <div class="course_tabs w-100 mb-3 px-md-2">
-                        <div class="events_wrapper">
-                            <div class="pre-eventsIcon eventsIcon d-xl-none"><i id="left" class="fa-solid fa-angle-left"></i>
-                            </div>
-                        <ul class="d-flex lms_tabmenu nav w-100 text-center"
-                            id="myTab" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="Overview-tab" data-toggle="tab" href="#Overview"
-                                    role="tab" aria-controls="Overview"
-                                    aria-selected="true">{{ __('frontend.Overview') }}</a>
-                            </li>
-                            @if ($course->type != 7)
-                                @if (request()->courseType != 6)
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="Curriculum-tab" data-toggle="tab" href="#Curriculum"
-                                            role="tab" aria-controls="Curriculum"
-                                            aria-selected="false">{{ __('frontend.Curriculum') }}</a>
-                                    </li>
-                                @endif
-                                @if (isset(request()->courseType) && in_array(request()->courseType,[4,6]))
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="Classes-tab" data-toggle="tab" href="#Classes"
-                                            role="tab" aria-controls="Classes"
-                                            aria-selected="false">{{ __('Classes') }}</a>
-                                    </li>
-                                @elseif($request->has('program_id'))
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="Classes-tab" data-toggle="tab" href="#Classes"
-                                            role="tab" aria-controls="Classes"
-                                            aria-selected="false">{{ __('Classes') }}</a>
-                                    </li>
-                                @endif
-                            @else
-                                <li class="nav-item">
-                                    <a class="nav-link" id="timetable-tab" data-toggle="tab" href="#Timetable"
-                                        role="tab" aria-controls="Timetable"
-                                        aria-selected="false">{{ __('Time Table') }}</a>
-                                </li>
-                            @endif
-                            @if (Settings('hide_review_section') != '1')
-                                <li class="nav-item">
-                                    <a class="nav-link" id="Reviews-tab" data-toggle="tab" href="#Reviews"
-                                        role="tab" aria-controls="Instructor"
-                                        aria-selected="false">{{ __('frontend.Reviews') }}</a>
-                                </li>
-                            @endif
-                            @if ($course->type != 7)
-                            <li class="nav-item">
-                                <a class="nav-link" id="instructor-tab" data-toggle="tab" href="#Instructor"
-                                    role="tab" aria-controls="Instructor" aria-selected="false">Instructors</a>
-                            </li>
-                            @endif
-                            @if (Settings('hide_qa_section') != '1')
-                                <li class="nav-item">
-                                    <a class="nav-link" id="QA-tab" data-toggle="tab" href="#QASection"
-                                        role="tab" aria-controls="Instructor"
-                                        aria-selected="false">{{ __('frontend.QA') }}</a>
-                                </li>
-                            @endif
-
-                        </ul>
-                        <div class="pre-eventsIcon eventsIcon d-xl-none"><i id="right" class="fa-solid fa-angle-right"></i></div>
-                    </div>
-                    </div>
-
-                    <div class="tab-content lms_tab_content px-sm-2 mb-2 mb-md-0" id="myTabContent">
-                        <div class="tab-pane fade show active" id="Overview" role="tabpanel"
-                            aria-labelledby="Overview-tab">
-                            <!-- content  -->
-                            <div class="course_overview_description">
-
-                                <div class="">
-                                    @if (!empty($course->about))
-                                        <h5 class="font-weight-bold custom_heading_1 small_heading mt-1">
-                                            {{ __('frontend.Course Description') }}</h5>
-                                        <div class="theme_border"></div>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="table-responsive ck ckdtext ck-content clearfix">
-                                                    {{-- <iframe id="iframeAbout" style="border:unset;"></iframe> --}}
-                                                    {!! $course->about !!}
-                                                </div>
-                                            </div>
-                                        </div>
-                                      
-                                    @endif
-                                    @if (!empty($course->outcomes))
-                                        <h5 class="font-weight-bold custom_heading_1 small_heading">
-                                            {{ __('frontend.Course Outcomes') }}
-                                        </h5>
-                                        <div class="theme_border"></div>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="table-responsive ck ckdtext ck-content clearfix">
-                                                    {{-- <iframe id="iframeOutcome" style="border:unset;"></iframe> --}}
-                                                    {!! $course->outcomes !!}
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                       
-                                    @endif
-                                    @if (!empty($course->requirements))
-                                        <h5 class="font-weight-bold custom_heading_1 small_heading">
-                                            {{ __('frontend.Course Requirements') }}</h5>
-                                        <div class="theme_border"></div>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="table-responsive ck ckdtext ck-content clearfix">
-                                                    {{-- <iframe id="iframeRequirements"
-                                                                style="border:unset;"></iframe> --}}
-                                                    {!! $course->requirements !!}
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                       
-                                    @endif
-                                    {{-- @if (!Settings('hide_social_share_btn') == '1') --}}
-                                    
-                                        {{-- <div class="social_btns">
-                                            <a target="_blank" href="https://www.facebook.com/merakiicollege"
-                                                class="fb_bg social_btn theme_btn"> <i class="fab fa-facebook-f"></i>
-                                                {{ __('frontend.Facebook') }} </a>
-                                            <a target="_blank" href="https://www.tiktok.com/@merakiinursing"
-                                                class="Twitter_bg social_btn theme_btn"><i
-                                                    class="fa-brands fa-tiktok"></i>
-                                                TikTok</a>
-                                            <a target="_blank"
-                                                href="https://pinterest.com/pin/create/link/?url={{ URL::current() }}&amp;description={{ $course->title }}"
-                                                class="Pinterest_bg social_btn theme_btn"> <i
-                                                    class="fa-brands fa-youtube" style="color: #f3eceb;"></i>
-                                                Youtube
-                                            </a>
-                                            <a target="_blank" href="https://www.instagram.com/merakiinursing/"
-                                                class="Linkedin_bg social_btn theme_btn">
-                                                <i class="fa-brands fa-instagram"></i>
-                                                Instagram
-                                            </a>
-                                        </div> --}}
-                                    {{-- @endif --}}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="tab-pane fade" id="Curriculum" role="tabpanel" aria-labelledby="Curriculum-tab">
-                            <!-- content  -->
-                            <h5 class="font-weight-bold custom_heading_1 small_heading mb-3">{{ __('frontend.Course Curriculum') }}</h5>
-                            {{-- <h5 class="font-weight-bold custom_heading_1 small_heading ">{{ __('frontend.Course Curriculum') }}</h5> --}}
-                            @if(1 == 0)
-                            {{-- @if($request->courseType &&$request->courseType == 8) --}}
-                            <div class="card mb-4 p-2">
-                                <div class="theme_according" id="accordion1">
-                                    @if (isset($course_plan->course_chapters_check))
-                                        @foreach ($course_plan->course_chapters_check as $ch)
-                                        @php
-                                            $chapter = $ch->chapter;
-                                        @endphp
-                                            <div class="card">
-
-                                                <div class="card-header pink_bg" id="heading{{ $chapter->id }}">
-                                                    <h5 class="mb-0">
-                                                        <button class="btn theme_btn btn-link text_white collapsed"
-                                                            data-toggle="collapse"
-                                                            data-target="#collapse{{ $chapter->id }}"
-                                                            aria-expanded="false"
-                                                            aria-controls="collapse{{ $chapter->id }}">
-                                                            {{ $chapter->name }}
-                                                            <span class="course_length">
-                                                                {{ count($chapter->lessons) }}
-                                                                {{ __('frontend.Lectures') }}</span>
-                                                        </button>
-                                                        
-                                                    </h5>
-                                                </div>
-                                                <div class="course_collapse collapse" id="collapse{{ $chapter->id }}"
-                                                    aria-labelledby="heading{{ $chapter->id }}"
-                                                    data-parent="#accordion1">
-                                                    <div class="card-body mt-3">
-                                                        <div class="curriculam_list">
-                                                            {{-- @dd($course_plans->course_lesson_check) --}}
-                                                            <!-- curriculam_single  -->
-                                                            @foreach ($chapter->lessons as $key => $lesson)
-                                                                <div class="curriculam_single">
-                                                                    <div>
-                                                                        @if ($lesson->is_lock == 1)
-                                                                            @if (Auth::check())
-                                                                                @if ($isEnrolled)
-                                                                                    @if ($lesson->is_quiz == 1)
-                                                                                        @foreach ($lesson->quiz as $quiz)
-                                                                                            <span
-                                                                                                @if($enrollmentRecord && $enrollmentRecord->plan)
-
-                                                                                                onclick="goFullScreen({{ $course->id }},{{ $lesson->id }},{{ $request->program_id ?? 0 }},{{ $request->courseType ?? 0 }},{{$enrollmentRecord->plan->id}})"
-                                                                                                @else
-                                                                                                onclick="goFullScreen({{ $course->id }},{{ $lesson->id }},{{ $request->program_id ?? 0 }},{{ $request->courseType ?? 0 }})"
-                                                                                                @endif
-                                                                                                class="quizLink active">
-                                                                                                <i
-                                                                                                    class="ti-check-box"></i>
-                                                                                                <span
-                                                                                                    class="quiz_name">{{ @$key + 1 }}
-                                                                                                    {{ @$quiz->title }}</span>
-                                                                                            </span>
-                                                                                        @endforeach
-                                                                                    @else
-                                                                                        <i class="ti-control-play"></i>
-                                                                                        <span
-                                                                                        @if($enrollmentRecord && $enrollmentRecord->plan)
-                                                                                            onclick="goFullScreen({{ $course->id }},{{ $lesson->id }},{{ $request->program_id ?? 0 }},{{ $request->courseType ?? 0 }},{{$enrollmentRecord->plan->id}})"
-                                                                                        @else
-                                                                                            onclick="goFullScreen({{ $course->id }},{{ $lesson->id }},{{ $request->program_id ?? 0 }},{{ $request->courseType ?? 0 }})"
-                                                                                        @endif
-                                                                                        >{{ @$key + 1 }}
-                                                                                            {{ @$lesson->name }}</span>
-                                                                                    @endif
-                                                                                @else
-                                                                                    <i class="ti-lock"></i>
-                                                                                    @if ($lesson->is_quiz == 1)
-                                                                                        @foreach ($lesson->quiz as $quiz)
-                                                                                            <span
-                                                                                                style="font-weight: 500;"
-                                                                                                class="quiz_name">{{ @$key + 1 }}
-                                                                                                {{ @$quiz->title }}
-                                                                                                [Quiz]</span>
-                                                                                        @endforeach
-                                                                                    @else
-                                                                                        <span
-                                                                                            data-host="{{ $lesson->host }}"
-                                                                                            data-url="{{ youtubeVideo($lesson->video_url) }}">{{ @$key + 1 }}
-                                                                                            {{ @$lesson->name }}</span>
-                                                                                    @endif
-                                                                                @endif
-                                                                            @else
-                                                                                <i class="ti-lock"></i>
-                                                                                @if ($lesson->is_quiz == 1)
-                                                                                    @foreach ($lesson->quiz as $quiz)
-                                                                                        <span style="font-weight: 500;"
-                                                                                            class="quiz_name">{{ @$key + 1 }}
-                                                                                            {{ @$quiz->title }}
-                                                                                            [Quiz]</span>
-                                                                                    @endforeach
-                                                                                @else
-                                                                                    <span
-                                                                                        data-host="{{ $lesson->host }}"
-                                                                                        data-url="{{ youtubeVideo($lesson->video_url) }}">{{ @$key + 1 }}
-                                                                                        {{ @$lesson->name }}</span>
-                                                                                @endif
-                                                                            @endif
-                                                                        @else
-                                                                            @if ($lesson->is_quiz == 1)
-                                                                                @foreach ($lesson->quiz as $quiz)
-                                                                                    @if (Auth::check() && $isEnrolled)
-                                                                                        <span
-                                                                                        @if($enrollmentRecord && $enrollmentRecord->plan)
-                                                                                            
-                                                                                            onclick="goFullScreen({{ $course->id }},{{ $lesson->id }},{{ $request->program_id ?? 0 }},{{ $request->courseType ?? 0 }},{{$enrollmentRecord->plan->id}})"
-                                                                                        @else
-                                                                                            onclick="goFullScreen({{ $course->id }},{{ $lesson->id }},{{ $request->program_id ?? 0 }},{{ $request->courseType ?? 0 }})"
-                                                                                        @endif
-                                                                                            class="quizLink active">
-                                                                                            <i
-                                                                                                class="ti-check-box"></i>
-                                                                                            <span
-                                                                                                class="quiz_name">{{ @$key + 1 }}
-                                                                                                {{ @$quiz->title }}
-                                                                                                [Quiz]</span>
-                                                                                        </span>
-                                                                                    @else
-                                                                                        <i class="ti-check-box"></i>
-                                                                                        <span
-                                                                                            class="quiz_name">{{ @$key + 1 }}
-                                                                                            {{ @$quiz->title }}
-                                                                                            [Quiz]</span>
-                                                                                    @endif
-                                                                                @endforeach
-                                                                            @else
-                                                                                @if ($lesson->host == 'Youtube')
-                                                                                    <i class="ti-control-play"></i>
-                                                                                    <span class="lesson_name"
-                                                                                        style="font-weight: 500;"
-                                                                                        data-host="{{ $lesson->host }}"
-                                                                                        data-url="{{ youtubeVideo($lesson->video_url) }}">{{ @$key + 1 }}
-                                                                                        {{ @$lesson->name }}</span>
-                                                                                @elseif($lesson->host == 'Self' || $lesson->host == 'AmazonS3')
-                                                                                    <i class="ti-control-play"></i>
-
-                                                                                    <span
-                                                                                        class="lesson_name"style="font-weight: 500;"
-                                                                                        data-host="{{ $lesson->host }}"
-                                                                                        data-url="{{ asset($lesson->video_url) }}">{{ @$key + 1 }}
-                                                                                        {{ @$lesson->name }}</span>
-                                                                                @else
-                                                                                    <i class="ti-control-play"></i>
-                                                                                    <span
-                                                                                        class="lesson_name"style="font-weight: 500;"
-                                                                                        data-host="{{ $lesson->host }}"
-                                                                                        data-url="{{ $lesson->video_url }}">{{ @$key + 1 }}
-                                                                                        {{ @$lesson->name }}</span>
-                                                                                @endif
-                                                                            @endif
-                                                                        @endif
-
-                                                                    </div>
-                                                                    <div class="curriculam_right">
-                                                                        @if ($lesson->is_lock == 0)
-                                                                            @if ($lesson->is_quiz == 0)
-                                                                                <a href="#" target="_blank"
-                                                                                    data-course="{{ $course->id }}"
-                                                                                    data-lesson="{{ $lesson->id }}"
-                                                                                    @if (request()->has('program_id')) data-program_id="{{ $request->program_id }}" @endif
-                                                                                    @if (request()->has('courseType')) data-courseType="{{ $request->courseType }}" @endif
-                                                                                    class="theme_btn_lite"
-                                                                                    @if($enrollmentRecord && $enrollmentRecord->plan)
-
-                                                                                    onclick="goFullScreen({{ $course->id }},{{ $lesson->id }},{{ $request->program_id ?? 0 }},{{ $request->courseType ?? 0 }},{{$enrollmentRecord->plan->id}})"
-                                                                                    @else
-                                                                                    onclick="goFullScreen({{ $course->id }},{{ $lesson->id }},{{ $request->program_id ?? 0 }},{{ $request->courseType ?? 0 }})"
-                                                                                    @endif
-                                                                                >{{ __('frontend.Preview') }}</a>
-                                                                            @else
-                                                                                <a href="#"
-                                                                                    class="theme_btn_lite quizLink"
-                                                                                    @if($enrollmentRecord && $enrollmentRecord->plan)
-                                                                                    onclick="goFullScreen({{ $course->id }},{{ $lesson->id }},{{ $request->program_id ?? 0 }},{{ $request->courseType ?? 0 }},{{$enrollmentRecord->plan->id}})"
-                                                                                    @else
-                                                                                    onclick="goFullScreen({{ $course->id }},{{ $lesson->id }},{{ $request->program_id ?? 0 }},{{ $request->courseType ?? 0 }})"
-
-                                                                                    @endif
-                                                                                    >{{ __('frontend.Start') }}</a>
-                                                                            @endif
-                                                                        @else
-                                                                            @if (Auth::check() && $isEnrolled)
-                                                                                @if ($lesson->is_quiz == 0)
-                                                                                    <a href="javascript:void(0)"
-                                                                                        {{-- data-course="{{ $course->id }}" --}}
-                                                                                        {{-- data-lesson="{{ $lesson->id }}" --}}
-                                                                                        {{-- @if (request()->has('program_id')) data-program_id="{{ $request->program_id }}" @endif --}}
-                                                                                        {{-- @if (request()->has('courseType')) data-courseType="{{ $request->courseType }}" @endif --}}
-                                                                                        @if($enrollmentRecord && $enrollmentRecord->plan)
-                                                                                        onclick="goFullScreen({{ $course->id }},{{ $lesson->id }},{{ $request->program_id ?? 0 }},{{ $request->courseType ?? 0 }},{{$enrollmentRecord->plan->id}})"
-                                                                                        @else
-                                                                                        onclick="goFullScreen({{ $course->id }},{{ $lesson->id }},{{ $request->program_id ?? 0 }},{{ $request->courseType ?? 0 }})"
-
-                                                                                        @endif
-                                                                                        class="theme_btn_lite">{{ __('common.View') }}</a>
-                                                                                @else
-                                                                                    <a href="#"
-                                                                                    @if($enrollmentRecord && $enrollmentRecord->plan)
-
-                                                                                    onclick="goFullScreen({{ $course->id }},{{ $lesson->id }},{{ $request->program_id ?? 0 }},{{ $request->courseType ?? 0 }},{{$enrollmentRecord->plan->id}})"
-                                                                                    @else
-                                                                                        onclick="goFullScreen({{ $course->id }},{{ $lesson->id }},{{ $request->program_id ?? 0 }},{{ $request->courseType ?? 0 }})"
-                                                                                    @endif
-                                                                                        class="theme_btn_lite quizLink">{{ __('frontend.Start') }}</a>
-                                                                                @endif
-                                                                            @endif
-                                                                        @endif
-
-                                                                        @php
-                                                                            $duration = 0;
-                                                                            if (
-                                                                                $lesson->is_quiz == 0 ||
-                                                                                count($lesson->quiz) == 0
-                                                                            ) {
-                                                                                $duration = $lesson->duration;
-                                                                            } else {
-                                                                                $quiz = $lesson->quiz[0];
-                                                                                $type = $quiz->question_time_type;
-                                                                                if ($type == 0) {
-                                                                                    $duration =
-                                                                                        $quiz->question_time *
-                                                                                        count($quiz->assign);
-                                                                                } else {
-                                                                                    $duration = $quiz->question_time;
-                                                                                }
-                                                                            }
-                                                                        @endphp
-                                                                        <span
-                                                                            class="nowrap">{{ MinuteFormat($duration) }}</span>
-                                                                    </div>
-                                                                </div>
-                                                                <p>
-                                                                    {{ $lesson->description }}
-                                                                </p>
-                                                                <hr>
-                                                            @endforeach
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    @endif
-                                </div>
-                            </div>
-                            @else
-                            <div class="card mb-4 p-2">
-                                <div class="theme_according" id="accordion1">
-                                    @if (isset($course->chapters))
-                                        @foreach ($course->chapters as $chapter)
-                                            <div class="card">
-
-                                                <div class="card-header pink_bg" id="heading{{ $chapter->id }}">
-                                                    <h5 class="mb-0">
-                                                        <button class="btn theme_btn btn-link text_white collapsed"
-                                                            data-toggle="collapse"
-                                                            data-target="#collapse{{ $chapter->id }}"
-                                                            aria-expanded="false"
-                                                            aria-controls="collapse{{ $chapter->id }}">
-                                                            {{ $chapter->name }}
-                                                            <span class="course_length">
-                                                                {{ count($chapter->lessons) }}
-                                                                {{ __('frontend.Lectures') }}</span>
-                                                        </button>
-                                                        
-                                                    </h5>
-                                                </div>
-                                                <div class="course_collapse collapse" id="collapse{{ $chapter->id }}"
-                                                    aria-labelledby="heading{{ $chapter->id }}"
-                                                    data-parent="#accordion1">
-                                                    <div class="card-body mt-3">
-                                                        <div class="curriculam_list">
-                                                            <!-- curriculam_single  -->
-                                                            @foreach ($chapter->lessons as $key => $lesson)
-                                                                <div class="curriculam_single">
-                                                                    <div>
-                                                                        @if ($lesson->is_lock == 1)
-                                                                            @if (Auth::check())
-                                                                                @if ($isEnrolled)
-                                                                                    @if ($lesson->is_quiz == 1)
-                                                                                        @foreach ($lesson->quiz as $quiz)
-                                                                                            <span
-                                                                                            @if($enrollmentRecord && $enrollmentRecord->plan)
-                                                                                            onclick="goFullScreen({{ $course->id }},{{ $lesson->id }},{{ $request->program_id ?? 0 }},{{ $request->courseType ?? 0 }},{{$enrollmentRecord->plan->id}})"
-                                                                                            @else
-                                                                                                onclick="goFullScreen({{ $course->id }},{{ $lesson->id }},{{ $request->program_id ?? 0 }},{{ $request->courseType ?? 0 }})"
-                                                                                            @endif
-                                                                                                class="quizLink active">
-                                                                                                <i
-                                                                                                    class="ti-check-box"></i>
-                                                                                                <span
-                                                                                                    class="quiz_name">{{ @$key + 1 }}
-                                                                                                    {{ @$quiz->title }}</span>
-                                                                                            </span>
-                                                                                        @endforeach
-                                                                                    @else
-                                                                                        <i class="ti-control-play"></i>
-                                                                                        <span
-                                                                                            @if($enrollmentRecord && $enrollmentRecord->plan)
-
-                                                                                            onclick="goFullScreen({{ $course->id }},{{ $lesson->id }},{{ $request->program_id ?? 0 }},{{ $request->courseType ?? 0 }},{{$enrollmentRecord->plan->id}})"
-                                                                                            @else
-                                                                                            onclick="goFullScreen({{ $course->id }},{{ $lesson->id }},{{ $request->program_id ?? 0 }},{{ $request->courseType ?? 0 }})"
-                                                                                            @endif
-                                                                                        >{{ @$key + 1 }}
-                                                                                            {{ @$lesson->name }}
-                                                                                        </span>
-                                                                                    @endif
-                                                                                @else
-                                                                                    <i class="ti-lock"></i>
-                                                                                    @if ($lesson->is_quiz == 1)
-                                                                                        @foreach ($lesson->quiz as $quiz)
-                                                                                            <span
-                                                                                                style="font-weight: 500;"
-                                                                                                class="quiz_name">{{ @$key + 1 }}
-                                                                                                {{ @$quiz->title }}
-                                                                                                [Quiz]</span>
-                                                                                        @endforeach
-                                                                                    @else
-                                                                                        <span
-                                                                                            data-host="{{ $lesson->host }}"
-                                                                                            data-url="{{ youtubeVideo($lesson->video_url) }}">{{ @$key + 1 }}
-                                                                                            {{ @$lesson->name }}</span>
-                                                                                    @endif
-                                                                                @endif
-                                                                            @else
-                                                                                <i class="ti-lock"></i>
-                                                                                @if ($lesson->is_quiz == 1)
-                                                                                    @foreach ($lesson->quiz as $quiz)
-                                                                                        <span style="font-weight: 500;"
-                                                                                            class="quiz_name">{{ @$key + 1 }}
-                                                                                            {{ @$quiz->title }}
-                                                                                            [Quiz]</span>
-                                                                                    @endforeach
-                                                                                @else
-                                                                                    <span
-                                                                                        data-host="{{ $lesson->host }}"
-                                                                                        data-url="{{ youtubeVideo($lesson->video_url) }}">{{ @$key + 1 }}
-                                                                                        {{ @$lesson->name }}</span>
-                                                                                @endif
-                                                                            @endif
-                                                                        @else
-                                                                            @if ($lesson->is_quiz == 1)
-                                                                                @foreach ($lesson->quiz as $quiz)
-                                                                                    @if (Auth::check() && $isEnrolled)
-                                                                                        <span
-                                                                                            @if($enrollmentRecord && $enrollmentRecord->plan)
-
-                                                                                            onclick="goFullScreen({{ $course->id }},{{ $lesson->id }},{{ $request->program_id ?? 0 }},{{ $request->courseType ?? 0 }},{{$enrollmentRecord->plan->id}})"
-                                                                                            @else
-                                                                                            onclick="goFullScreen({{ $course->id }},{{ $lesson->id }},{{ $request->program_id ?? 0 }},{{ $request->courseType ?? 0 }})"
-                                                                                            @endif
-                                                                                            class="quizLink active">
-                                                                                            <i
-                                                                                                class="ti-check-box"></i>
-                                                                                            <span
-                                                                                                class="quiz_name">{{ @$key + 1 }}
-                                                                                                {{ @$quiz->title }}
-                                                                                                [Quiz]</span>
-                                                                                        </span>
-                                                                                    @else
-                                                                                        <i class="ti-check-box"></i>
-                                                                                        <span
-                                                                                            class="quiz_name">{{ @$key + 1 }}
-                                                                                            {{ @$quiz->title }}
-                                                                                            [Quiz]</span>
-                                                                                    @endif
-                                                                                @endforeach
-                                                                            @else
-                                                                                @if ($lesson->host == 'Youtube')
-                                                                                    <i class="ti-control-play"></i>
-                                                                                    <span class="lesson_name"
-                                                                                        style="font-weight: 500;"
-                                                                                        data-host="{{ $lesson->host }}"
-                                                                                        data-url="{{ youtubeVideo($lesson->video_url) }}">{{ @$key + 1 }}
-                                                                                        {{ @$lesson->name }}</span>
-                                                                                @elseif($lesson->host == 'Self' || $lesson->host == 'AmazonS3')
-                                                                                    <i class="ti-control-play"></i>
-
-                                                                                    <span
-                                                                                        class="lesson_name"style="font-weight: 500;"
-                                                                                        data-host="{{ $lesson->host }}"
-                                                                                        data-url="{{ asset($lesson->video_url) }}">{{ @$key + 1 }}
-                                                                                        {{ @$lesson->name }}</span>
-                                                                                @else
-                                                                                    <i class="ti-control-play"></i>
-                                                                                    <span
-                                                                                        class="lesson_name"style="font-weight: 500;"
-                                                                                        data-host="{{ $lesson->host }}"
-                                                                                        data-url="{{ $lesson->video_url }}">{{ @$key + 1 }}
-                                                                                        {{ @$lesson->name }}</span>
-                                                                                @endif
-                                                                            @endif
-                                                                        @endif
-
-                                                                    </div>
-                                                                    <div class="curriculam_right">
-                                                                        @if ($lesson->is_lock == 0)
-                                                                            @if ($lesson->is_quiz == 0)
-                                                                                <a href="#" target="_blank"
-                                                                                    data-course="{{ $course->id }}"
-                                                                                    data-lesson="{{ $lesson->id }}"
-                                                                                    @if (request()->has('program_id')) data-program_id="{{ $request->program_id }}" @endif
-                                                                                    @if (request()->has('courseType')) data-courseType="{{ $request->courseType }}" @endif
-                                                                                    class="theme_btn_lite"
-                                                                                    @if($enrollmentRecord && $enrollmentRecord->plan)
-
-                                                                                    onclick="goFullScreen({{ $course->id }},{{ $lesson->id }},{{ $request->program_id ?? 0 }},{{ $request->courseType ?? 0 }},{{$enrollmentRecord->plan->id}})"
-                                                                                    @else
-                                                                                    onclick="goFullScreen({{ $course->id }},{{ $lesson->id }},{{ $request->program_id ?? 0 }},{{ $request->courseType ?? 0 }})"
-                                                                                    @endif
-                                                                                    >{{ __('frontend.Preview') }}
-                                                                                </a>
-                                                                            @else
-                                                                                <a href="#"
-                                                                                    class="theme_btn_lite quizLink"
-                                                                                    @if($enrollmentRecord && $enrollmentRecord->plan)
-
-                                                                                    onclick="goFullScreen({{ $course->id }},{{ $lesson->id }},{{ $request->program_id ?? 0 }},{{ $request->courseType ?? 0 }},{{$enrollmentRecord->plan->id}})"
-                                                                                    @else
-                                                                                    onclick="goFullScreen({{ $course->id }},{{ $lesson->id }},{{ $request->program_id ?? 0 }},{{ $request->courseType ?? 0 }})"
-                                                                                    @endif
-                                                                                    >{{ __('frontend.Start') }}</a>
-                                                                            @endif
-                                                                        @else
-                                                                            @if (Auth::check() && $isEnrolled)
-                                                                                @if ($lesson->is_quiz == 0)
-                                                                                    <a href="javascript:void(0)"
-                                                                                        {{-- data-course="{{ $course->id }}" --}}
-                                                                                        {{-- data-lesson="{{ $lesson->id }}" --}}
-                                                                                        {{-- @if (request()->has('program_id')) data-program_id="{{ $request->program_id }}" @endif --}}
-                                                                                        {{-- @if (request()->has('courseType')) data-courseType="{{ $request->courseType }}" @endif --}}
-                                                                                        @if($enrollmentRecord && $enrollmentRecord->plan)
-
-                                                                                        onclick="goFullScreen({{ $course->id }},{{ $lesson->id }},{{ $request->program_id ?? 0 }},{{ $request->courseType ?? 0 }},{{$enrollmentRecord->plan->id}})"
-                                                                                        @else
-                                                                                        onclick="goFullScreen({{ $course->id }},{{ $lesson->id }},{{ $request->program_id ?? 0 }},{{ $request->courseType ?? 0 }})"
-                                                                                        @endif
-                                                                                        class="theme_btn_lite">{{ __('common.View') }}</a>
-                                                                                @else
-                                                                                    <a href="#"
-                                                                                    @if($enrollmentRecord && $enrollmentRecord->plan)
-                                                                                        onclick="goFullScreen({{ $course->id }},{{ $lesson->id }},{{ $request->program_id ?? 0 }},{{ $request->courseType ?? 0 }},{{$enrollmentRecord->plan->id}})"
-                                                                                    @else
-                                                                                        onclick="goFullScreen({{ $course->id }},{{ $lesson->id }},{{ $request->program_id ?? 0 }},{{ $request->courseType ?? 0 }})"
-                                                                                    @endif
-                                                                                        class="theme_btn_lite quizLink">{{ __('frontend.Start') }}</a>
-                                                                                @endif
-                                                                            @endif
-                                                                        @endif
-
-                                                                        @php
-                                                                            $duration = 0;
-                                                                            if (
-                                                                                $lesson->is_quiz == 0 ||
-                                                                                count($lesson->quiz) == 0
-                                                                            ) {
-                                                                                $duration = $lesson->duration;
-                                                                            } else {
-                                                                                $quiz = $lesson->quiz[0];
-                                                                                $type = $quiz->question_time_type;
-                                                                                if ($type == 0) {
-                                                                                    $duration =
-                                                                                        $quiz->question_time *
-                                                                                        count($quiz->assign);
-                                                                                } else {
-                                                                                    $duration = $quiz->question_time;
-                                                                                }
-                                                                            }
-                                                                        @endphp
-                                                                        <span
-                                                                            class="nowrap">{{ MinuteFormat($duration) }}</span>
-                                                                    </div>
-                                                                </div>
-                                                                <p>
-                                                                    {{ $lesson->description }}
-                                                                </p>
-                                                                <hr>
-                                                            @endforeach
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    @endif
-                                </div>
-                            </div>
-                            @endif
-                            @if (isset($course_exercises))
-                                @if (count($course_exercises) != 0)
-                                    <div class="card p-2">
-                                        <div class="theme_according" id="accordion0">
-
-                                            <div class="card">
-
-                                                <div class="card-header pink_bg" id="heading">
-                                                    <h5 class="mb-0">
-                                                        <button class="btn theme_btn btn-link text_white"
-                                                            data-toggle="collapse" data-target="#collapse"
-                                                            aria-expanded="false" aria-controls="collapse">
-                                                            {{ __('courses.Exercise') }}
-                                                            {{ __('common.Files') }}
-
-                                                        </button>
-                                                    </h5>
-                                                </div>
-                                                <div class="course_collapse show collapse" id="collapse" aria-labelledby="heading"
-                                                    data-parent="#accordion1">
-                                                    <div class="card-body mt-3">
-                                                        <div class="curriculam_list">
-
-                                                            <!-- curriculam_single  -->
-                                                            @if (isset($course_exercises))
-                                                                @foreach ($course_exercises as $key2 => $file)
-                                                                    <div class="curriculam_single">
-                                                                        <div>
-                                                                            @if ($file->lock == 0)
-                                                                                <i class="ti-unlock"></i>
-                                                                            @else
-                                                                                @if (Auth::check() && $isEnrolled)
-                                                                                    <i class="ti-unlock"></i>
-                                                                                @else
-                                                                                    <i class="ti-lock"></i>
-                                                                                @endif
-                                                                            @endif
-
-                                                                            <span
-                                                                                style="font-weight: 500;">{{ @$key2 + 1 }}.
-                                                                                {{ @$file->fileName }}</span>
-                                                                        </div>
-
-                                                                        <div class="curriculam_right">
-
-                                                                            @if ($file->lock == 0)
-                                                                                <a href="{{ asset($file->file) }}"
-                                                                                    class="theme_btn_lite mr-0"
-                                                                                    download>Download</a>
-                                                                            @else
-                                                                                @if (Auth::check() && $isEnrolled)
-                                                                                    <a href="{{ asset($file->file) }}"
-                                                                                        class="theme_btn_lite mr-0"
-                                                                                        download>Download</a>
-                                                                                @endif
-                                                                            @endif
-                                                                        </div>
-                                                                    </div>
-                                                                @endforeach
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
-                            @endif
-
-                        </div>
-                        {{-- @if (count($Classes))
-
-                                @endif --}}
-                        @if ((isset(request()->courseType) && in_array(request()->courseType,[4,6])) || $request->has('program_id'))
-                        <div class="tab-pane fade" id="Classes" role="tabpanel" aria-labelledby="Curriculum-tab">
-                            <!-- content  -->
-                            <h5 class="small_heading font_22 f_w_$program_plan700">{{ __('Classes') }}</h5>
-                            <div class="theme_according" id="accordion1">
-                                <div class="row">
-                                    @if ($request->has('program_id'))
-                                        @if (count($Classes))
-                                            @foreach ($Classes as $Class)
-                                                @if (isset($Class->program_types) && $Class->program_types == 'true')
-                                                    <div class="col-lg-6 col-xl-4">
-                                                        <div class="couse_wizged card">
-                                                            <a
-                                                                href="{{ courseDetailsUrl(@$Class->id, @$Class->type, @$Class->slug) . '?program_id=' . $request->program_id }}">
-                                                                <div class="thumb" style="height: 100px;">
-
-                                                                    <div class="thumb_inner lazy"
-                                                                        style="background-image: url({{ getCourseImage($course->thumbnail) }});">
-                                                                    </div>
-                                                                </div>
-                                                            </a>
-                                                            <div class="course_content">
-                                                                <a
-                                                                    href="{{ courseDetailsUrl(@$Class->id, @$Class->type, @$Class->slug) . '?program_id=' . $request->program_id }}">
-
-                                                                    <h5 class="noBrake" title="{{ $Class->title }}">
-                                                                        {{ $Class->title }}
-                                                                    </h5>
-                                                                </a>
-                                                            </div>
-                                                            <div class="rating_cart">
-                                                                <div class="rateing">
-                                                                    <span>{{ $Class->totalReview }}/5</span>
-                                                                    <i class="fas fa-star"></i>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @endif
-                                            @endforeach
-                                        @endif
-                                    @else
-                                    {{-- @dd($Classes) --}}
-                                        @if (count($Classes))
-                                            @foreach ($Classes as $Class)
-                                                @if ($request->has('courseType') && in_array($request->courseType, json_decode($Class->course_types)))
-                                                    <div class="col-lg-6 col-xl-4" style="">
-                                                        <div class="couse_wizged my-2">
-                                                            <a
-                                                                href="{{ courseDetailsUrl(@$Class->id, @$Class->type, @$Class->slug) . '?courseType=' . $request->courseType . '&course_id=' . $course->id }}">
-                                                                <div class="thumb">
-
-                                                                    <div class="thumb_inner lazy"
-                                                                        style="background-image: url({{ $Class->thumbnail ? getCourseImage($Class->thumbnail) : getCourseImage($course->thumbnail) }});">
-                                                                    </div>
-                                                                </div>
-                                                            </a>
-                                                            <div class="course_content">
-                                                                <a
-                                                                    href="{{ courseDetailsUrl(@$Class->id, @$Class->type, @$Class->slug) . '?courseType=' . $request->courseType . '&course_id=' . $course->id }}">
-
-                                                                    <h5 class="noBrake" title="{{ $Class->title }}">
-                                                                        {{ $Class->title }}
-                                                                    </h5>
-                                                                </a>
-                                                            </div>
-                                                            <div class="rating_cart">
-                                                                <div class="rateing">
-                                                                    <span>{{ $Class->totalReview }}/5</span>
-                                                                    <i class="fas fa-star"></i>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @endif
-                                            @endforeach
-                                        @endif
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                        @endif
-                        <div class="tab-pane fade" id="Timetable" role="tabpanel" aria-labelledby="Curriculum-tab">
-                            <!-- content  -->
-                            <h5 class="font_22 f_w_$program_plan700 mb_20">{{ __('Time Table') }}</h5>
-                            <div class="theme_according" id="accordion1">
-                                <div id="timetable_print">
-                                <div class="row p-2">
-                                    <div class="text-center w-100 tt_moredata d-none">
-                                        <h3>Merkaii Xcellence Prep</h3>
-                                        <h5>{{$course->title}}</h5>
-                                    </div>
-                                    <div class="">
-                                        <table id="lms_table" class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col" style="width: 9%;">
-                                                        {{ __('Weeks') }}</th>
-                                                    <th scope="col" style="width: 13%;">
-                                                        {{ __('Monday') }}</th>
-                                                    <th scope="col" style="width: 13%;">
-                                                        {{ __('Tuesday') }}</th>
-                                                    <th scope="col" style="width: 13%;">
-                                                        {{ __('Wednesday') }}</th>
-                                                    <th scope="col" style="width: 13%;">
-                                                        {{ __('Thursday') }}</th>
-                                                    <th scope="col" style="width: 13%;">
-                                                        {{ __('Friday') }}</th>
-                                                    <th scope="col" style="width: 13%;">
-                                                        {{ __('Saturday') }}</th>
-                                                    <th scope="col" style="width: 13%;">
-                                                        {{ __('Sunday') }}</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($time_tables as $time_table)
-                                                    <tr>
-                                                        <td>Week {{ $time_table->week }}</td>
-                                                        @foreach ($time_table->weekWiseDays as $WeekWiseDay)
-                                                            <td class="p-1">
-                                                                <div
-                                                                    id="block_{{ $time_table->week }}_{{ $WeekWiseDay->week }}">
-                                                                    @if (!empty($WeekWiseDay->date))
-                                                                        <p class="text-nowrap" style="color:black">({{ Carbon\Carbon::parse($WeekWiseDay->date)->format('d M Y') }})
-                                                                        </p>
-                                                                        @if (!empty($WeekWiseDay->Instructor_id))
-                                                                            <p style="color:black"><strong>{{ !empty($WeekWiseDay->Instructor_id) ? (!empty($WeekWiseDay->instructor) ? $WeekWiseDay->instructor->name : 'Deleted User') : '' }}</strong>
-                                                                            </p>
-                                                                        @endif
-                                                                        <div class="text-center @if($WeekWiseDay->week != 1) tt_moredata d-none" @endif style="width: 100%;">
-                                                                            @if (!empty($WeekWiseDay->image))
-                                                                                <img src="{{ getCourseImage($WeekWiseDay->image) }}"
-                                                                                class="preview image-editor-preview-img-1" id="image_preview-1" style="width:65px;height:80px;"/>
-                                                                            @endif
-                                                                            @if(!empty($WeekWiseDay->comment))
-                                                                            <p style="color:black">
-                                                                                {{$WeekWiseDay->comment}}
-                                                                            </p>
-                                                                            @endif
-                                                                        </div>
-                                                                    @else
-                                                                        <h1>-</h1>
-                                                                    @endif
-                                                                </div>
-                                                            </td>
-                                                        @endforeach
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                                @if (auth()->check())
-                                    @if ($isEnrolled || isAdmin())
-                                        <div class="table_btn_wrap">
-                                            <ul>
-                                                <li>
-                                                    {{-- <s
-                                                        class="theme_btn d-block printBtn my-2 text-center">{{ __('student.Print') }}</s> --}}
-                                                    <a class="theme_line_btn d-block downloadTimeTable text-center" data-title="{{$course->title}}"
-                                                        style="cursor:pointer;">{{ __('student.Download') }}</a>
-
-
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    @endif
-                                @endif
-                            </div>
-                        </div>
-                        @if ($course->type != 7)
-                        <div class="tab-pane fade" id="Instructor" role="tabpanel" aria-labelledby="">
-                            <div class="instractor_details_wrapper">
-                                <div class="instractor_title">
-                                    <h5 class="font_22 f_w_700">{{ __('frontend.Instructor') }}</h5>
-                                    <p class="font_16 f_w_400">{{ @$course->user->headline }}</p>
-                                </div>
-                                <div class="instractor_details_inner">
-                                    <div class="thumb">
-                                        <img class="w-100 h-100" style="border-radius:25px;"
-                                            src="{{ getInstructorImage(@$course->user->image) }}" alt="">
-                                    </div>
-                                    <div class="instractor_details_info">
-                                        <a
-                                            href="{{ route('instructorDetails', [$course->user->id, $course->user->name]) }}">
-                                            <h5 class="font_22 f_w_700">{{ @$course->user->name }}</h5>
-                                        </a>
-                                        <h5> {{ @$course->user->headline }}</h5>
-                                        <div class="ins_details">
-                                            <p> {{ @$course->user->short_details }}</p>
-                                        </div>
-                                        <div class="intractor_qualification">
-                                            <div class="single_qualification">
-                                                <i class="ti-star"></i> {{ @$userRating['rating'] }}
-                                                {{ __('frontend.Rating') }}
-                                            </div>
-                                            <div class="single_qualification">
-                                                <i class="ti-comments"></i> {{ @$userRating['total'] }}
-                                                {{ __('frontend.Reviews') }}
-                                            </div>
-                                            <div class="single_qualification">
-                                                <i class="ti-user"></i> {{ @$course->user->totalEnrolled() }}
-                                                {{ __('frontend.Students') }}
-                                            </div>
-                                            <div class="single_qualification">
-                                                <i class="ti-layout-media-center-alt"></i>
-                                                {{ @$course->user->totalCourses() }}
-                                                {{ __('frontend.Courses') }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <p>
-                                    {!! @$course->user->about !!}
-                                </p>
-                            </div>
-
-                            <div class="author_courses">
-                                <div class="section__title mb-4">
-                                    <h5 class="font-weight-bold custom_heading_1 small_heading">
-                                        {{ __('frontend.More Courses by Author') }}
-                                    </h5>
-                                </div>
-                                @php
-                                $otherCourses = $course->user->courses()->where(function($q){
-                                                    $q->where('price', '!=', '0.00')
-                                                    ->orHas('effectiveCoursePlan');
-                                                })->where('id','<>',$course_plan->id)->take(4)->get();
-                                                // dd($otherCourses);
-                                @endphp
-                                <div class="row">
-                                    @foreach ($otherCourses as $c)
-                                    @php
-                                        if(count($c->effectiveCoursePlan)){
-                                            $price = $c->effectiveCoursePlan[0]->amount;
-                                        }else{
-                                            $price = $c->price + $c->tax;
-                                        }
-                                        $c_slug = ($c->parent) ? $c->parent->slug : $c->slug;
-                                    @endphp
-                                        <div class="col-sm-6 col-xl-4 d-flex justify-content-center mb-3">
-                                            <div class="card quiz_wizged rounded-card shadow">
-                                                <div class="rounded-card-img thumb">
-                                                    @if($c->type == 2)
-
-                                                    <a href="{{ route('quizDetailsView',['slug' => $c_slug, 'courseType' => $c->type]) }}">
-                                                    @else
-                                                    <a href="{{ route('courseDetailsView',['slug' => $c_slug, 'courseType' => $c->type]) }}">
-                                                    @endif
-                                                        <img src="{{ getCourseImage($c->thumbnail) }}"
-                                                            alt="" class="img-fluid w-100 img_circle">
-                                                        <x-price-tag :price="$price" :discount="$c->discount_price" />
-                                                        <span class="quiz_tag">{{ $c->type }}</span>
-                                                        @switch($c->type)
-                                                            @case(2)
-                                                                <span class="quiz_tag">{{ __('Big Quiz') }}</span>
-                                                            @break
-
-                                                            @case(3)
-                                                                <span class="quiz_tag">{{ __('Full Course') }}</span>
-                                                            @break
-
-                                                            @case(4)
-                                                                <span class="quiz_tag">{{ __('Full Course') }}</span>
-                                                            @break
-
-                                                            @case(5)
-                                                                <span
-                                                                    class="quiz_tag">{{ __('Prep-Course') }}<small>(On-Demand)</small></span>
-                                                            @break
-
-                                                            @case(6)
-                                                                <span
-                                                                    class="quiz_tag">{{ __('Prep-Course') }}<small>(Live)</small></span>
-                                                            @break
-
-                                                            @case(7)
-                                                                <span class="quiz_tag">{{ __('Time Table') }}</span>
-                                                            @break
-
-                                                            @case(8)
-                                                                <span class="quiz_tag">{{ __('Repeat Course') }}</span>
-                                                            @break
-
-                                                            @default
-                                                            @break
-                                                        @endswitch
-                                                    </a>
-                                                </div>
-                                                <div class="card-body course_content">
-                                                    <a href="{{ route('courseDetailsView',['slug' => $c_slug, 'courseType' => $c->type]) }}">
-                                                        <h5 class="nobrake">{{ $c->parent->title ?? $c->title }}</h5>
-                                                    </a>
-                                                    <div
-                                                        class="align-items-baseline d-flex justify-content-between rating_cart">
-                                                        <div class="rateing px-0">
-                                                            <span>{{ $c->totalReview }}/5</span>
-                                                            <i class="fas fa-star"></i>
-                                                        </div>
-                                                        {{-- @auth()
-                                                            @if (!$c->isLoginUserEnrolled && !$c->isLoginUserCart)
-                                                                <a href="#" class="cart_store"
-                                                                    data-id="{{ $c->id }}">
-                                                                    <i class="fas fa-shopping-cart"></i>
-                                                                </a>
-                                                            @endif
-                                                        @endauth
-                                                        @guest()
-                                                            @if (!$c->isGuestUserCart)
-                                                                <a href="#" class="cart_store"
-                                                                    data-id="{{ $c->id }}">
-                                                                    <i class="fas fa-shopping-cart"></i>
-                                                                </a>
-                                                            @endif
-                                                        @endguest --}}
-                                                    </div>
-                                                    <div class="course_less_students d-flex justify-content-between course_detail_items" >
-                                                        <a href="#"> <i class="ti-agenda course-span"></i>
-                                                            {{ ($c->parent) ? count($c->parent->lessons) : count($c->lessons) }}
-                                                            {{ __('frontend.Lessons') }}</a>
-                                                        <a href="#"> <i class="ti-user"></i>
-                                                            {{ $c->total_enrolled }}
-                                                            {{ __('frontend.Students') }} </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                        @endif
-                        <div class="tab-pane fade" id="Reviews" role="tabpanel" aria-labelledby="Reviews-tab">
-                            <!-- content  -->
-                            <div class="course_review_wrapper">
-                                <div class="details_title">
-                                    <h5 class="font_22 f_w_700">{{ __('frontend.Student Feedback') }}</h5>
-                                    <p class="font_16 f_w_400">{{ $course->title }}</p>
-                                </div>
-                                <div class="course_feedback">
-                                    <div class="course_feedback_left mr-3">
-                                        <h2>{{ $course->totalReview }}</h2>
-                                        <div class="feedmak_stars">
-                                            @php
-                                                $main_stars = $course->totalReview;
-                                                $stars = intval($course->totalReview);
-                                            @endphp
-                                            @for ($i = 0; $i < $stars; $i++)
-                                                <i class="fas fa-star"></i>
-                                            @endfor
-                                            @if ($main_stars > $stars)
-                                                <i class="fas fa-star-half"></i>
-                                            @endif
-                                            @if ($main_stars == 0)
-                                                @for ($i = 0; $i < 5; $i++)
-                                                    <i class="far fa-star"></i>
-                                                @endfor
-                                            @endif
-                                        </div>
-                                        <span>{{ __('frontend.Course Rating') }}</span>
-                                    </div>
-                                    <div class="feedbark_progressbar">
-                                        <div class="single_progrssbar">
-                                            <div class="progress">
-                                                <div class="progress-bar" role="progressbar"
-                                                    style="width: {{ getPercentageRating($course->starWiseReview, 5) }}%"
-                                                    aria-valuenow="{{ getPercentageRating($course->starWiseReview, 5) }}"
-                                                    aria-valuemin="0" aria-valuemax="100">
-                                                </div>
-                                            </div>
-                                            <div class="rating_percent d-flex align-items-center">
-                                                <div class="feedmak_stars d-flex align-items-center">
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                </div>
-                                                <span>{{ getPercentageRating($course->starWiseReview, 5) }}%</span>
-                                            </div>
-                                        </div>
-                                        <div class="single_progrssbar">
-                                            <div class="progress">
-                                                <div class="progress-bar" role="progressbar"
-                                                    style="width: {{ getPercentageRating($course->starWiseReview, 4) }}%"
-                                                    aria-valuenow="{{ getPercentageRating($course->starWiseReview, 4) }}"
-                                                    aria-valuemin="0" aria-valuemax="100">
-                                                </div>
-                                            </div>
-                                            <div class="rating_percent d-flex align-items-center">
-                                                <div class="feedmak_stars d-flex align-items-center">
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                </div>
-                                                <span>{{ getPercentageRating($course->starWiseReview, 4) }}%</span>
-                                            </div>
-                                        </div>
-                                        <div class="single_progrssbar">
-                                            <div class="progress">
-                                                <div class="progress-bar" role="progressbar"
-                                                    style="width: {{ getPercentageRating($course->starWiseReview, 3) }}%"
-                                                    aria-valuenow="{{ getPercentageRating($course->starWiseReview, 3) }}"
-                                                    aria-valuemin="0" aria-valuemax="100">
-                                                </div>
-                                            </div>
-                                            <div class="rating_percent d-flex align-items-center">
-                                                <div class="feedmak_stars d-flex align-items-center">
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-
-                                                </div>
-                                                <span>{{ getPercentageRating($course->starWiseReview, 3) }}%</span>
-                                            </div>
-                                        </div>
-                                        <div class="single_progrssbar">
-                                            <div class="progress">
-                                                <div class="progress-bar" role="progressbar"
-                                                    style="width: {{ getPercentageRating($course->starWiseReview, 2) }}%"
-                                                    aria-valuenow="{{ getPercentageRating($course->starWiseReview, 2) }}"
-                                                    aria-valuemin="0" aria-valuemax="100">
-                                                </div>
-                                            </div>
-                                            <div class="rating_percent d-flex align-items-center">
-                                                <div class="feedmak_stars d-flex align-items-center">
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                </div>
-                                                <span>{{ getPercentageRating($course->starWiseReview, 2) }}%</span>
-                                            </div>
-                                        </div>
-                                        <div class="single_progrssbar">
-                                            <div class="progress">
-                                                <div class="progress-bar" role="progressbar"
-                                                    style="width: {{ getPercentageRating($course->starWiseReview, 1) }}%"
-                                                    aria-valuenow="{{ getPercentageRating($course->starWiseReview, 1) }}"
-                                                    aria-valuemin="0" aria-valuemax="100">
-                                                </div>
-                                            </div>
-                                            <div class="rating_percent d-flex align-items-center">
-                                                <div class="feedmak_stars d-flex align-items-center">
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                </div>
-                                                <span>{{ getPercentageRating($course->starWiseReview, 1) }}%</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div class="course_review_header mb_20">
-                                    <div class="row align-items-center">
-                                        <div class="col-md-6">
-                                            <div class="review_poients">
-                                                @if ($course->reviews->count() < 1)
-                                                    @if (Auth::check() && $isEnrolled)
-                                                        <p class="theme_color font_16 mb-0">
-                                                            {{ __('frontend.Be the first reviewer') }}</p>
-                                                    @else
-                                                        <p class="theme_color font_16 mb-0">
-                                                            {{ __('frontend.No Review found') }}</p>
-                                                    @endif
-                                                @else
-                                                @endif
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="rating_star text-lg-right text-md-right">
-
-                                                @php
-                                                    $PickId = $course->id;
-                                                @endphp
-                                                @if (Auth::check() && Auth::user()->role_id == 3)
-                                                    @if (!in_array(Auth::user()->id, $reviewer_user_ids) && $isEnrolled)
-                                                        <div
-                                                            class="star_icon d-flex align-items-center justify-content-end">
-                                                            <a class="rating">
-                                                                <input type="radio" id="star5" name="rating"
-                                                                    value="5" class="rating" /><label
-                                                                    class="full" for="star5" id="star5"
-                                                                    title="Awesome - 5 stars"
-                                                                    onclick="Rates(5, {{ @$PickId }})"></label>
-
-                                                                <input type="radio" id="star4" name="rating"
-                                                                    value="4" class="rating" /><label
-                                                                    class="full" for="star4"
-                                                                    title="Pretty good - 4 stars"
-                                                                    onclick="Rates(4, {{ @$PickId }})"></label>
-
-                                                                <input type="radio" id="star3" name="rating"
-                                                                    value="3" class="rating" /><label
-                                                                    class="full" for="star3"
-                                                                    title="Meh - 3 stars"
-                                                                    onclick="Rates(3, {{ @$PickId }})"></label>
-
-                                                                <input type="radio" id="star2" name="rating"
-                                                                    value="2" class="rating" /><label
-                                                                    class="full" for="star2"
-                                                                    title="Kinda bad - 2 stars"
-                                                                    onclick="Rates(2, {{ @$PickId }})"></label>
-
-                                                                <input type="radio" id="star1" name="rating"
-                                                                    value="1" class="rating" /><label
-                                                                    class="full" for="star1"
-                                                                    title="Bad  - 1 star"
-                                                                    onclick="Rates(1,{{ @$PickId }})"></label>
-
-                                                            </a>
-                                                        </div>
-                                                    @endif
-                                                @else
-                                                    <p class="font_14 f_w_400 mt-0"><a href="{{ url('login') }}"
-                                                            class="theme_color2">{{ __('frontend.Sign In') }}</a>
-                                                        {{ __('frontend.or') }} <a class="theme_color2"
-                                                            href="{{ url('register') }}">{{ __('frontend.Sign Up') }}</a>
-                                                        {{ __('frontend.as student to post a review') }}</p>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="course_cutomer_reviews pt-2">
-                                    <div class="details_title">
-                                        <h5 class="font_22 f_w_700">{{ __('frontend.Reviews') }}</h5>
-
-                                    </div>
-                                    <div class="customers_reviews" id="customers_reviews">
-
-
-                                    </div>
-                                </div>
-
-                            </div>
-                            <!-- content  -->
-                        </div>
-
-                        <div class="tab-pane fade" id="instructortab" role="tabpanel" aria-labelledby="QA-tab">
-                            <!-- content  -->
-                            <div class="conversition_box">
-                                <div id="conversition_box"></div>
-                                <div class="row">
-                                    @if ($isEnrolled)
-                                        <div class="col-lg-12" id="mainComment">
-                                            <form action="{{ route('saveComment') }}" method="post"
-                                                class="">
-                                                @csrf
-                                                <input type="hidden" name="course_id" value="{{ @$course->id }}">
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                        <div class="section_title3 mb_20">
-                                                            <h5>{{ __('frontend.Leave a question/comment') }}
-                                                            </h5>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-12">
-                                                        <div class="single_input mb_25">
-                                                            <textarea placeholder="{{ __('frontend.Leave a question/comment') }}" name="comment"
-                                                                class="primary_textarea gray_input"></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-12 mb_30">
-
-                                                        <button type="submit" class="theme_btn height_50">
-                                                            <i class="fas fa-comments"></i>
-                                                            {{ __('frontend.Question') }}/
-                                                            {{ __('frontend.comment') }}
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="instructor" role="tabpanel" aria-labelledby="QA-tab">
-
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- 3rdmid -->
-
-
-                {{-- new card_2 starts  --}}
-                {{-- this one needs to be fixed  --}}
-                <div class="col-xl-3 col-lg-3 col-md-4 col-12 pb- py-sm-0">
-                     @if($course->type != '7')
-                     @if(request()->has('courseType') && in_array(request()->get('courseType'),[4,6]))
-                    <div class="custom_section_color rounded_section p-2 img_round mb-md-4 mb-2" style="background-color: #eee; ">
-                        <h5 class="font-weight-bold custom_heading_1 small_heading">Start Your Application:</h5>
-                        <p class="my-1 program-span"><i class="fa fa-calendar-days"></i>&nbsp;&nbsp; Current Cohort
-                            End :
-
-                            {{-- <br class="mt-2"> --}}
-                            @if ($course->totalseats)
-                            <span class="font-weight-bold">
-                                    {{ \Carbon\Carbon::parse($course->totalseats->edate)->format('d M Y') }}
-                            </span>
-                        @else
-                            <span class="font-weight-bold">Not Given</span>
-                            @endif
-
-
-                        </p>
-                        <p class="my-1 program-span"><i class="fa fa-calendar-days"></i>&nbsp;&nbsp; Current Cohort
-                            Class :
-
-                            {{-- <br class="mt-2"> --}}
-                            @if ($course->totalseats)
-                            <span class="font-weight-bold">
-                                    {{ \Carbon\Carbon::parse($course->totalseats->cdate)->format('d M Y') }}
-                            </span>
-                        @else
-                            <span class="font-weight-bold">Not Given</span>
-                            @endif
-
-
-                        </p>
-                        <p class="my-1 program-span"><i class="fa fa-calendar-days"></i>&nbsp;&nbsp; Next Cohort Start
-                            :
-
-                            {{-- <br class="mt-2"> --}}
-                            @if (isset($course_plan->effectiveCoursePlan[1]))
-                            {{-- @if ($course->futurePlan) --}}
-                            <span class="font-weight-bold">
-                                    {{ \Carbon\Carbon::parse($course_plan->effectiveCoursePlan[1]->sdate)->format('d M Y') }}
-                            </span>
-                             @else
-
-                                <span class="font-weight-bold">Not Given</span>
-                                @endif
-
-                        </p>
-
-
-                    </div>
-                    @endif
-                    @endif    
-                    {{-- new card_2 ends  --}}
-
-
-
-                    <div class="">
-                        <div class="sidebar__widget p-2 p-sm-0">
-
-                            @if (!onlySubscription())
-                                @if (Auth::check())
-                                    @if ($isEnrolled || isAdmin())
-                                        @if (request()->has('program_id'))
-                                            <a href="{{ route('continueCourse', [$course->slug]) . '?program_id=' . $request->program_id }}"
-                                                class="d-block mb_10 small_btn theme_btn text-center mt-2">{{ __('common.Continue Watch') }}</a>
-                                        @endif
-                                        @if (request()->has('courseType') && in_array(request()->courseType, [4, 5, 9]))
-                                            <a href="{{ route('continueCourse', [$course->slug]) . '?courseType=' . $request->courseType }}"
-                                                class="d-block mb_10 small_btn theme_btn text-center mt-2">{{ __('common.Continue Watch') }}</a>
-                                        @endif
-                                    @elseif(isStudent())
-                                        @php
-                                            $eplan = '';
-                                            $display = true;
-                                            if(request()->has('courseType') && in_array(request()->get('courseType'),[4,6])){
-                                                if(isset($course_plan->effectiveCoursePlan[0])){
-                                                    $eplan = '&plan_id='.$course_plan->effectiveCoursePlan[0]->id;
-                                                }else{
-                                                    $display=false;
-                                                }
-                                            }
-                                        @endphp
-                                        @if($display == true)
-                                        @if ($is_cart == 1)
-                                            <a href="javascript:void(0)"
-                                                class="d-block mb_10 small_btn theme_btn text-center mt-2 mt-sm-0">{{ __('common.Added To Cart') }}</a>
-                                        @else
-                                            
-                                            <a href=" {{ request()->has('courseType') ? route('addToCartQuiz', [@$course->id]) . '?courseType=' . $request->courseType.$eplan : route('addToCartQuiz', [@$course->id]) }}"
-                                                class="d-block mb_10 small_btn theme_btn text-center mt-2 mt-sm-0">{{ __('common.Add To Cart') }}</a>
-                                            <a href="{{ request()->has('courseType') ? route('buyNowQuiz', [@$course->id]) . '?courseType=' . $request->courseType.$eplan : route('buyNowQuiz', [@$course->id]) }}"
-                                                class="d-block mb_10 small_btn theme_btn text-center">{{ __('common.Buy Now') }}</a>
-                                        @endif
-                                        @else
-                                            <span
-                                            class="d-block mb_10 small_btn theme_btn text-center">Enrollment Completed</span>
-                                        @endif
-                                        {{-- @endif --}}
-                                    @endif
-                                @else
-                                @php
-                                            $eplan = '';
-                                            $display = true;
-                                            if(request()->has('courseType') && in_array(request()->get('courseType'),[4,6])){
-                                                if(isset($course_plan->effectiveCoursePlan[0])){
-                                                    $eplan = '&plan_id='.$course_plan->effectiveCoursePlan[0]->id;
-                                                }else{
-                                                    $display=false;
-                                                }
-                                            }
-                                        @endphp
-                                    @if ($is_cart == 1)
-                                        <a href="javascript:void(0)"
-                                            class="d-block mb_10 small_btn theme_btn text-center mt-2">{{ __('common.Added To Cart') }}</a>
-                                    @else
-                                        <a href=" {{ request()->has('courseType') ? route('addToCartQuiz', [@$course->id]) . '?courseType=' . $request->courseType.$eplan : route('addToCartQuiz', [@$course->id]) }} "
-                                            class="d-block mb_10 small_btn theme_btn text-center mt-2 mt-sm-0">{{ __('common.Add To Cart') }}</a>
-                                        <a href="{{ request()->has('courseType') ? route('buyNowQuiz', [@$course->id]) . '?courseType=' . $request->courseType.$eplan : route('buyNowQuiz', [@$course->id]) }}"
-                                            class="d-block mb_10 small_btn theme_btn text-center ">{{ __('common.Buy Now') }}</a>
-                                    @endif
-                                @endif
-                            @endif
-                            @if(request()->has('courseType') && in_array(request()->get('courseType'),[4,6]))
-                            <p class="font_14 f_w_500 mb-md-4 mb-3 text-center"></p>
-                            <h5 class="small_heading f_w_700 mb_10 course-span">{{ __('frontend.This course includes') }}:</h5>
-                            <ul class="course_includes">
-                                @if(request()->has('courseType') && request()->courseType !=9)
-                                <li><i class="ti-alarm-clock"></i>
-                                    <p class="nowrap course-span"> {{ __('frontend.Duration') }}
-                                        @if ($course_duration <= 1)
-                                            1 Week
-                                        @else
-                                            {{ round($course_duration,1) . ' Weeks' }}
-                                        @endif
-
-                                    </p>
-                                </li>
-                                @endif
-                                {{-- <li><i class="ti-thumb-up"></i>
-                                <p>{{ __('frontend.Skill Level') }}
-                                @foreach ($levels as $level)
-                                    @if (@$course->level == $level->id)
-                                      {{ $level->title }}
-                                    @endif
-                                @endforeach
-                                </p></li> --}}
-                                <li><i class="ti-agenda"></i>
-                                    <p>{{ __('Classes') }}: {{ @$course->total_classes }}
-                                        {{ __('classes') }}</p>
-                                </li>
-                                {{-- <li><i class="ti-agenda"></i>
-                                    <p>{{ __('frontend.Lectures') }} {{ count($course->lessons) }}
-                                        {{ __('frontend.lessons') }}</p>
-                                </li> --}}
-                                {{--                                    <li><i class="ti-user"></i> --}}
-                                {{--                                        <p>{{__('frontend.EnrolledEnrolled')}} {{$course->total_enrolled}} {{__('frontend.students')}}</p> --}}
-                                {{--                                    </li> --}}
-                                {{--                                    <li><i class="ti-user"></i> --}}
-                                {{--                                        <p>{{__('frontend.Certificate of Completion')}}</p></li> --}}
-                                <!--<li><i class="ti-blackboard"></i>-->
-                                <!--    <p>{{ __('frontend.Full lifetime access') }}</p></li>-->
-                                {{--                                    <li><i class="ti-blackboard"></i> --}}
-                                {{--                                        <p>120 days access </p></li> --}}
-                            </ul>
-                            @endif
-                        </div>
-                        <div class="custom_section_color img_round course_tab px-2 pt-2">
-                                        <h5 class="custom_small_heading font-weight-bold custom_heading_1 mt-2">Social Links:</h5>
-                                        <div class="row my-md-4">
-                                            @foreach($socials as $social)
-                                            <div class="col-auto p-2">
-                                                <div class="instabox mt-1 p-2 rounded" style="background-color:{{ $social->color }}; ">
-                                                    <a target="_blank" href="{{$social->link}}"> <i class="{{ $social->icon }}"
-                                                        style="color:white;font-size: 30px;"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
-                        @if ($course->review_id != '0' && !empty($course->review()))
-                            @if (!empty($course->review()->first()))
-
-                                <div class="prog_blk mt-3"
-                                    style="background-image: url({{ !empty($course->review()->first()->user()) ? asset($course->review()->first()->user()->first()->image) : asset('public/assets/c1.jpg') }})">
-                                    <div class="txt">
-
-                                        <h6>
-                                            <div class="rating_star">
-                                                <div class="stars">
-                                                    @php
-                                                        $main_stars = $course->review()->first()->star;
-                                                        $stars = intval($course->review()->first()->star);
-                                                    @endphp
-                                                    @for ($i = 0; $i < $stars; $i++)
-                                                        <i class="fas fa-star"></i>
-                                                    @endfor
-                                                    @if ($main_stars > $stars)
-                                                        <i class="fas fa-star-half"></i>
-                                                    @endif
-                                                    @if ($main_stars == 0)
-                                                        @for ($i = 0; $i < 5; $i++)
-                                                            <i class="far fa-star"></i>
-                                                        @endfor
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </h6>
-                                        <h5 class="text-white">
-                                            {{ $course->review()->first()->user()->first()->name }} </h5>
-
-                                        <h5 class="text-white">
-                                            {{ !empty($course->review()->first()->course()) ? $course->review()->first()->course()->first()->title : '' }}
-                                        </h5>
-                                        <p class="paragraph_custom_height text-white">
-                                            {{ $course->review()->first()->comment }}
-                                        </p>
-                                    </div>
-                                </div>
-                            @endif
-                        @endif
-                    </div>
-                </div>
-            </div>
+      @endif
+
+      @if (($instructorCourses ?? collect())->count())
+        <div class="instructor-courses">
+          <h3>More Courses by This Instructor</h3>
+          <div class="instructor-courses-grid">
+            @foreach ($instructorCourses as $instructorCourse)
+              @php
+                $icCategory = $instructorCourse->category
+                  ? (is_array($instructorCourse->category->name) ? ($instructorCourse->category->name[app()->getLocale()] ?? reset($instructorCourse->category->name)) : $instructorCourse->category->name)
+                  : 'Course';
+                $icPrice = \App\View\Components\QuizPageSection::listingPriceLabel($instructorCourse);
+                $icExcerpt = \App\View\Components\QuizPageSection::excerpt($instructorCourse->about, 90);
+              @endphp
+              <a href="{{ route('courseDetailsView', $instructorCourse->slug) }}" class="instructor-course-card">
+                <p class="ic-tag">{{ $icCategory }}</p>
+                <h4>{{ $instructorCourse->title }}</h4>
+                <p>{{ $icExcerpt ?: 'Explore this prep-course.' }}</p>
+                <p class="ic-price">{{ $icPrice ?: 'View options' }}</p>
+              </a>
+            @endforeach
+          </div>
         </div>
+      @endif
+
     </div>
-</div>
-{{-- </div> --}}
-<!-- 3rdend -->
-<div class="modal cs_modal fade admin-query" id="myModal" role="dialog">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">{{ __('frontend.Review') }}</h5>
-                <button type="button" class="close" data-dismiss="modal"><i class="ti-close"></i></button>
-            </div>
 
-            <form action="{{ route('submitReview') }}" method="Post">
-                <div class="modal-body">
-                    @csrf
-                    <input type="hidden" name="course_id" id="rating_course_id" value="">
-                    <input type="hidden" name="rating" id="rating_value" value="">
-                    @if(request()->has('courseType'))
-                    <input type="hidden" name="type" id="rating_course_type" value="{{request()->get('courseType')}}">
-                    @endif
-                    <div class="text-center">
-                        <textarea class="lms_summernote" name="review" name="" id=""
-                            placeholder="{{ __('frontend.Write your review') }}" cols="30" rows="10">{{ old('review') }}</textarea>
-                        <span class="text-danger" role="alert">{{ $errors->first('review') }}</span>
-                    </div>
-
-
-                </div>
-                <div class="modal-footer justify-content-center">
-                    <div class="mt-40">
-                        <button type="button" class="theme_line_btn mr-2"
-                            data-dismiss="modal">{{ __('common.Cancel') }}
-                        </button>
-                        <button class="theme_btn" type="submit">{{ __('common.Submit') }}</button>
-                    </div>
-                </div>
-            </form>
-
+    @if (!empty($sidebarPurchases))
+      <aside class="sidebar-pricing">
+        <div class="sidebar-pricing-stack">
+          @foreach ($sidebarPurchases as $sidebarPurchase)
+            @include(theme('components.partials.course-detail-purchase-card'), ['option' => $sidebarPurchase, 'variant' => 'sidebar'])
+          @endforeach
         </div>
+      </aside>
+    @endif
+
+  </div>
+</section>
+
+<!-- ============================================================
+     STUDENT REVIEWS
+     ============================================================ -->
+<section class="reviews-section">
+  <div class="reviews-inner">
+    <div class="reviews-header">
+      <h2>What Students Are Saying</h2>
+      <p>Real feedback from students who completed this course.</p>
+      @if (($detailReviewStats['total'] ?? 0) > 0)
+        <div class="reviews-summary">
+          <span class="reviews-avg">{{ $detailReviewStats['rating'] }}</span>
+          <div class="reviews-avg-detail">
+            <div class="reviews-stars">
+              @for ($star = 1; $star <= 5; $star++)
+                <svg viewBox="0 0 24 24" @if($star > round($detailReviewStats['rating'])) fill="none" stroke="currentColor" stroke-width="2" @endif><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              @endfor
+            </div>
+            <p class="reviews-count">Based on {{ $detailReviewStats['total'] }} {{ $detailReviewStats['total'] === 1 ? 'review' : 'reviews' }}</p>
+          </div>
+        </div>
+      @endif
     </div>
+
+    @if (($detailReviews ?? collect())->count())
+      <div class="reviews-grid">
+        @foreach ($detailReviews as $review)
+          @php
+            $reviewName = $review->user->name ?? 'Student';
+            $nameParts = preg_split('/\s+/', trim($reviewName));
+            $reviewInitials = strtoupper(substr($nameParts[0] ?? 'S', 0, 1) . substr($nameParts[1] ?? '', 0, 1));
+          @endphp
+          <div class="review-card">
+            <div class="review-top">
+              <div class="review-avatar">{{ $reviewInitials }}</div>
+              <div class="review-meta">
+                <h4>{{ $reviewName }}</h4>
+                <p>Student Review</p>
+              </div>
+            </div>
+            <div class="review-stars">
+              @for ($star = 1; $star <= 5; $star++)
+                <svg viewBox="0 0 24 24" @if($star > (int) $review->star) fill="none" stroke="currentColor" stroke-width="2" @endif><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              @endfor
+            </div>
+            <p class="review-text">{{ $review->comment }}</p>
+            <span class="review-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Verified Student</span>
+          </div>
+        @endforeach
+      </div>
+    @else
+      <p class="section-empty">No reviews yet. Be the first to share your experience after enrolling.</p>
+    @endif
+  </div>
+</section>
+
+<!-- ============================================================
+     STUDENTS ALSO ENROLLED IN (with images + course type badges)
+     ============================================================ -->
+@if (($relatedCourses ?? collect())->count())
+  <section class="related-section">
+    <div class="container">
+      <div class="related-header">
+        <h2>Students Also Enrolled In</h2>
+        <p>Build a complete study plan with these complementary courses.</p>
+      </div>
+      <div class="related-grid">
+        @foreach ($relatedCourses as $relatedCourse)
+          @php
+            $relatedCategory = $relatedCourse->category
+              ? (is_array($relatedCourse->category->name) ? ($relatedCourse->category->name[app()->getLocale()] ?? reset($relatedCourse->category->name)) : $relatedCourse->category->name)
+              : 'Course';
+            $relatedPrice = \App\View\Components\QuizPageSection::listingPriceLabel($relatedCourse);
+            $relatedExcerpt = \App\View\Components\QuizPageSection::excerpt($relatedCourse->about, 100);
+            $relatedImage = !empty($relatedCourse->thumbnail) ? getCourseImage($relatedCourse->thumbnail) : null;
+            $relatedBadges = \App\View\Components\QuizPageSection::listingTypeBadges($relatedCourse);
+            $relatedTypeLabel = count($relatedBadges) === 1 ? $relatedBadges[0]['label'] : (count($relatedBadges) > 1 ? count($relatedBadges) . ' Options' : 'Prep-Course');
+          @endphp
+          <a href="{{ route('courseDetailsView', $relatedCourse->slug) }}" class="related-card">
+            <div class="related-card-image">
+              @if ($relatedImage)
+                <img src="{{ $relatedImage }}" alt="{{ $relatedCourse->title }}" style="width:100%;height:100%;object-fit:cover;display:block;">
+              @else
+                <div class="related-card-image-placeholder">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  {{ $relatedCourse->title }}
+                </div>
+              @endif
+            </div>
+            <div class="related-card-body">
+              <p class="related-tag">{{ $relatedCategory }}</p>
+              <h3>{{ $relatedCourse->title }}</h3>
+              <p class="related-desc">{{ $relatedExcerpt ?: 'Explore this prep-course.' }}</p>
+              <div class="related-card-footer">
+                <span class="related-price">{{ $relatedPrice ?: 'View options' }}</span>
+                <span class="related-course-type {{ count($relatedBadges) === 1 && ($relatedBadges[0]['class'] ?? '') === 'pc-badge-ondemand' ? 'self-study' : 'instructor-led' }}">{{ $relatedTypeLabel }}</span>
+              </div>
+            </div>
+          </a>
+        @endforeach
+      </div>
+    </div>
+  </section>
+@endif
+
+<!-- ============================================================
+     FINAL CTA
+     ============================================================ -->
+<section class="final-cta">
+  <div class="final-cta-inner">
+    <h2>Ready to start <em>{{ $course->title }}?</em></h2>
+    <p>Choose the learning format that fits your style &mdash; self-paced or instructor-led.</p>
+    @if (!empty($purchaseOptions))
+      <div class="cta-price-row">
+        @foreach ($purchaseOptions as $ctaOption)
+          <div class="cta-option">
+            <p class="cta-option-price">{{ $ctaOption['price_label'] ?? 'TBA' }}</p>
+            <p class="cta-option-label">{{ $ctaOption['title'] }}</p>
+          </div>
+        @endforeach
+      </div>
+      @if (!empty($headerPurchase) && $headerPurchase['can_purchase'])
+        <a href="{{ $headerPurchase['buy_url'] }}" class="btn-primary">Get Started Now &rarr;</a>
+      @endif
+    @endif
+  </div>
+</section>
+
 </div>
-@include(theme('partials._delete_model'))
-
-
-</div>
-@include(theme('partials._custom_footer'))
-<script src="{{ asset('public/frontend/infixlmstheme') }}/js/html2pdf.bundle.js"></script>
-<script src="{{ asset('public/frontend/infixlmstheme/js/my_invoice.js') }}"></script>
-
-
-<script>
-    $(document).ready(function() {
-
-        // set About iframe
-        var iframeAbout = document.getElementById("iframeAbout");
-        var iframeDocAbout = iframeAbout.contentDocument || iframeAbout.contentWindow.document;
-        var dynamicDivAbout = document.createElement("div");
-
-        dynamicDivAbout.innerHTML = '{!! $course->about !!}';
-
-        iframeDocAbout.body.appendChild(dynamicDivAbout);
-
-        var bodyHeight2 = iframeDocAbout.body.querySelector("div").scrollHeight + 25;
-        $("#iframeAbout").css('height', bodyHeight2);
-
-        // set outcome iframe
-        var iframe = document.getElementById("iframeOutcome");
-        var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-        var dynamicDiv = document.createElement("div");
-
-        dynamicDiv.innerHTML = '{!! $course->outcomes !!}';
-
-        iframeDoc.body.appendChild(dynamicDiv);
-
-        var bodyHeight = iframeDoc.body.querySelector("div").scrollHeight + 25;
-        $("#iframeOutcome").css('height', bodyHeight);
-
-        // set requirement iframe
-        var iframeReq = document.getElementById("iframeRequirements");
-        var iframeDocReq = iframeReq.contentDocument || iframeReq.contentWindow.document;
-        var dynamicDivReq = document.createElement("div");
-
-        dynamicDivReq.innerHTML = '{!! $course->requirements !!}';
-
-        iframeDocReq.body.appendChild(dynamicDivReq);
-
-        var bodyHeight1 = iframeDocReq.body.querySelector("div").scrollHeight + 25;
-        $("#iframeRequirements").css('height', bodyHeight1);
-
-
-
-    });
-</script>
-<script>
-        $(document).ready(function() {
-    const $tabsBox = $(".lms_tabmenu"),
-        $allTabs = $tabsBox.find(".nav-item"),
-        $arrowEventsIcons = $(".eventsIcon i");
-
-    const handleEventsIcons = () => {
-        let maxScrollableWidth = $tabsBox[0].scrollWidth - $tabsBox[0].clientWidth;
-        if (maxScrollableWidth <= 0) {
-            // Hide both arrows if there's no overflow
-            $arrowEventsIcons.parent().css("display", "none");
-        } else {
-            // Handle visibility based on scroll position
-            $arrowEventsIcons.eq(0).parent().css("display", $tabsBox.scrollLeft() <= 0 ? "none" : "flex");
-            $arrowEventsIcons.eq(1).parent().css("display", maxScrollableWidth - $tabsBox.scrollLeft() <= 1 ? "none" : "flex");
-        }
-    };
-
-    // Initial check
-    handleEventsIcons();
-
-    $arrowEventsIcons.on("click", function() {
-        if ($(this).attr("id") === "left") {
-            $tabsBox.animate({
-                scrollLeft: "-=340"
-            }, 400);
-        } else {
-            $tabsBox.animate({
-                scrollLeft: "+=340"
-            }, 400);
-        }
-    });
-
-    $allTabs.on("click", function() {
-        $tabsBox.find(".active").removeClass("active");
-        $(this).addClass("active");
-    });
-
-    $tabsBox.on("scroll", handleEventsIcons);
-    $(window).on("resize", handleEventsIcons); // Check on resize as well
-});
-
-</script>

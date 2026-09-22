@@ -2,11 +2,10 @@
 
 namespace App\View\Components;
 
+use Illuminate\Support\Str;
 use Illuminate\View\Component;
 use Modules\CourseSetting\Entities\Course;
 use Modules\CourseSetting\Entities\CourseLevel;
-use Modules\Localization\Entities\Language;
-use Carbon\Carbon;
 
 class QuizPageSection extends Component
 {
@@ -19,255 +18,154 @@ class QuizPageSection extends Component
         $this->languages = $languages;
     }
 
-
     public function render()
     {
-        $query = Course::with(
-    ['enrollUsers',
-    'userRoleId',
-    'cartUsers',
-    'quiz',
-    'quiz.assign',
-    'user',
-    'reviews',
-    'courseLevel',
-    'BookmarkUsers',
-    'parent.chapters',
-    'parent.classes',
-]);
-        // if(isset($this->request->tutor_courses)){
-        //   $query->has('userRoleId');
-        // }
+        $search = trim((string) $this->request->get('filter_search_by', ''));
 
-        $type = $this->request->type;
-        if (empty($type)) {
-            $type = '';
-        } else {
-            $types = explode(',', $type);
-            if (count($types) == 1) {
-                foreach ($types as $t) {
-                    if ($t == 'free') {
-                        $query->where('price', 0);
-                    } elseif ($t == 'paid') {
-                        $query = $query->where('price', '>', 0);
-                    }
-                }
-            }
+        $query = Course::query()
+            ->where('type', 1)
+            ->where('status', 1)
+            ->with(['category', 'children' => fn ($q) => $q->where('status', 1)])
+            ->latest();
+
+        if ($search !== '') {
+            $query->where('title', 'LIKE', '%' . $search . '%');
         }
 
-        $language = $this->request->language;
-        if (empty($language)) {
-            $language = '';
-        } else {
-            $row_languages = explode(',', $language);
-            $languages = [];
-            $LanguageList = Language::whereIn('code', $row_languages)->first();
-            foreach ($row_languages as $l) {
-                $lang = $LanguageList->where('code', $l)->first();
-                if ($lang) {
-                    $languages[] = $lang->id;
-                }
-            }
-            $query->whereIn('lang_id', $languages);
-        }
+        $courses = $query->get()
+            ->filter(fn (Course $course) => $this->hasSellableChild($course))
+            ->values();
 
+        $categoryFilters = $courses
+            ->groupBy('category_id')
+            ->map(function ($group, $categoryId) {
+                $category = $group->first()->category;
+                $name = $category ? $this->translatableText($category->name) : 'Uncategorized';
 
-        $level = $this->request->level;
-        if (empty($level)) {
-            $level = '';
-        } else {
-            $levels = explode(',', $level);
-            $query->whereIn('level', $levels);
-        }
-        if (isModuleActive('Org')) {
-            $required_type_request = $this->request->required_type;
-            if (!empty($required_type_request)) {
-                $required_type = [];
-                $types = explode(',', $required_type_request);
-                foreach ($types as $type) {
-                    if ($type == 'compulsory') {
-                        $required_type[] = 1;
-                    } elseif ($type == 'open') {
-                        $required_type[] = 0;
-                    }
-                }
-                $query->whereIn('required_type', $required_type);
-            }
-        }
-        $mode = $this->request->mode;
-        if (empty($mode)) {
-            $mode = '';
-        } else {
-            $modes = explode(',', $mode);
-            $query->whereIn('mode_of_delivery', $modes);
-        }
+                return (object) [
+                    'id' => $categoryId ?: 0,
+                    'name' => $name,
+                    'count' => $group->count(),
+                ];
+            })
+            ->sortBy('name')
+            ->values();
 
-        $category = $this->request->category;
-        if (empty($category)) {
-            $category = '';
-        } else {
-            $categories = explode(',', $category);
-
-            $query->whereHas('quiz', function ($q) use ($categories) {
-                $q->whereIn('category_id', $categories);
-            });
-        }
-        $subCategory = $this->request->get('sub-category');
-        if (!empty($subCategory)) {
-
-            $query->whereHas('quiz', function ($q) use ($subCategory) {
-                $q->where('sub_category_id', $subCategory);
-            });
-        }
-
-        if (currentTheme() == 'tvt') {
-            $subject = $this->request->get('subject');
-            if (!empty($subject)) {
-                $subjects = explode(',', $subject);
-                $query->whereIn('school_subject_id', $subjects);
-            }
-        }
-        // if(isset($this->request->tutor_courses)){
-        //   $included_types = [9];
-        // }else{
-        //   $included_types = [2,  5, 7, 8];
-        // }
-        
-        if(isset($this->request->tutor_courses)){
-            $typeset = [9];
-        }else{
-
-            $typeset = $this->request->filter_by_course_type ?? [2,4,5,6,7,8];
-        }
-        // if(isset($this->request->filter_by_course_type)){
-        //   $query->whereIn('type',$this->request->filter_by_course_type);
-        // }
-        // else{
-        // $query->where(function ($q) {
-        //   if(isset($this->request->tutor_courses)){
-        //     $q->where('type',9)->where('price','<>','0.00');
-        //   }else{
-            
-            // $query->where(function ($q) use ($typeset) {
-            //     $q->whereIn('type', $typeset)
-            //     ->where(function($q){
-            //         $q->where('price', '!=', '0.00')
-            //         ->orHas('effectiveCoursePlan');
-            //         ->orWhere(function($q){
-            //             $q->where('type',8)
-            //             ->where('end_date','>',date('Y-m-d'));
-            //         })
-            //     });
-            $query->where(function ($q) use ($typeset) {
-                // General filter by types
-                $q->whereIn('type', $typeset)
-                ->where(function ($q) use ($typeset) {
-                    // dd($q->get());
-                    // Apply price or effectiveCoursePlan conditions for all types
-                    $q->where('price', '!=', '0.00')
-                        ->orWhere(function($q){
-                            $q->whereHas('effectiveCoursePlan',function($q){
-                                $q->havingRaw('COUNT(*) > 0');
-                            });
-                        });
-                        
-                });
-                // Apply type = 8 and end_date condition separately, but only if $typeset contains 8
-                // if (in_array(8, $typeset)) {
-                    $q->where(function ($q) {
-                        $q->whereNull('end_date')
-                        ->orWhere('end_date', '>=', date('Y-m-d'));
-                    });
-                // }
-            });
-              
-            //   ->where('price', '!=', '0.00');
-            // //  $q->whereIn('type', [2,  5, 7, 8])->where('price', '!=', '0.00');
-            //   $q->orWhere(function($q){
-            //     $q->where('type','=',8)
-            //     ->where('price', '!=', '0.00')
-            //     ->where('start_date','<=',Carbon::now()->format('Y-m-d'))
-            //     ->where('end_date','>=',Carbon::now()->format('Y-m-d'));
-            //   })
-            //   ->orWhere(function ($q) {
-            //     $q->whereIn('type',[4,6])
-            //     ->has('effectiveCoursePlan');
-            // });
-            // });
-        //   }
-        // });
-    // }   
-        $query->where('status', 1);
-        // dd($query->get());
-        $q1 = $query;
-        $max_price = $q1->get()->max(function ($query) {
-          if(count($query->effectiveCoursePlan)>0){
-            return $query->effectiveCoursePlan[0]->amount;
-          }else{
-            return $query->price;
-          }
-        });
-        $order = $this->request->order;
-
-        if (currentTheme() == 'wetech') {
-            if (empty($order)) {
-                $query->latest();
-            } else {
-                if ($order == "title") {
-                    $query->orderBy('title');
-                } elseif ($order == "enroll") {
-                    $query->orderBy('total_enrolled');
-                } elseif ($order == "created_at") {
-                    $query->orderBy('created_at');
-                } elseif ($order == "end_date") {
-                    $query->orderBy('required_type', 'desc');
-                } elseif ($order == "most_popular") {
-                    $query->orderBy('total_enrolled','desc');
-                }
-            }
-        } else {
-            if (empty($order)) {
-                $query->latest();
-            } else {
-                if ($order == "price") {
-                    $query->orderBy('price', 'desc');
-                } elseif ($order == "most_popular") {
-                  $query->orderBy('total_enrolled','desc');
-                } else {
-                    $query->latest();
-                }
-            }
-        }
-      //  $max_price = $query->max('price');
-        // $max_price = $query->get()->max(function ($query) {
-        //   if(!$query->price){
-        //     return $query->effectiveCoursePlan[0]->amount;
-        //   }else{
-        //     return $query->price;
-        //   }
-        // });
-        if(isset($this->request->filter_search_by) && !empty($this->request->filter_search_by)){
-          $query->where('title','LIKE','%'.$this->request->filter_search_by.'%');
-        }
-        // if(isset($this->request->filter_by_course_type)){
-        //   $query->whereIn('type',$this->request->filter_by_course_type);
-        // }
-        if(isset($this->request->filter_by_price_max) && isset($this->request->filter_by_price_min)){
-          $filter_max_price = floatval($this->request->filter_by_price_max);
-          $filter_min_price = floatval($this->request->filter_by_price_min);
-          $query->where(function($query) use ($filter_min_price,$filter_max_price){
-          $query->whereBetween('price',[$filter_min_price,$filter_max_price])->orWhere(function($query) use ($filter_min_price,$filter_max_price){
-            $query->whereNull('price')
-            ->whereHas('effectiveCoursePlan',function($query) use ($filter_min_price,$filter_max_price){
-              $query->whereBetween('amount',[$filter_min_price,$filter_max_price]);
-            });
-          });
-          });
-        }
-        // dd($query->toSql(),$query->getBindings());
-        $courses = $query->paginate(8);
-        $total = $courses->total();
         $levels = CourseLevel::select('id', 'title')->where('status', 1)->get();
-        return view(theme('components.quiz-page-section'), compact('levels', 'order', 'category', 'level', 'order', 'language', 'type', 'total', 'courses', 'mode','max_price'));
+        $total = $courses->count();
+
+        return view(theme('components.quiz-page-section'), compact('courses', 'categoryFilters', 'levels', 'total'));
+    }
+
+    private function hasSellableChild(Course $parent): bool
+    {
+        foreach ($parent->children as $child) {
+            if ($this->childListingPrice($child) !== null) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function childListingPrice(Course $child): ?float
+    {
+        return self::resolveChildListingPrice($child);
+    }
+
+    public static function resolveChildListingPrice(Course $child): ?float
+    {
+        if ((int) $child->type === 5) {
+            $price = floatval($child->price) + floatval($child->tax ?? 0);
+
+            return $price > 0 ? $price : null;
+        }
+
+        if (in_array((int) $child->type, [4, 6], true)) {
+            $plan = $child->effectiveCoursePlan()->first();
+
+            return $plan ? floatval($plan->amount) : null;
+        }
+
+        return null;
+    }
+
+    public static function listingPriceLabel(Course $parent): ?string
+    {
+        $prices = [];
+
+        foreach ($parent->children as $child) {
+            $price = self::resolveChildListingPrice($child);
+            if ($price !== null) {
+                $prices[] = $price;
+            }
+        }
+
+        if (!count($prices)) {
+            return null;
+        }
+
+        $min = min($prices);
+
+        return count($prices) > 1
+            ? __('From') . ' ' . getPriceFormat($min)
+            : getPriceFormat($min);
+    }
+
+    public static function excerpt(?string $html, int $limit = 120): string
+    {
+        $text = trim(preg_replace('/\s+/', ' ', strip_tags($html ?? '')));
+
+        return Str::limit($text, $limit);
+    }
+
+    public static function thumbClass(int $index): string
+    {
+        $classes = [
+            'pc-thumb-foundations',
+            'pc-thumb-physiological',
+            'pc-thumb-psychosocial',
+            'pc-thumb-health-promo',
+            'pc-thumb-safe-care',
+            'pc-thumb-high-yield',
+            'pc-thumb-ngn',
+        ];
+
+        return $classes[$index % count($classes)];
+    }
+
+    public static function listingTypeBadges(Course $parent): array
+    {
+        $childTypes = $parent->children
+            ->pluck('type')
+            ->map(fn ($type) => (int) $type)
+            ->unique();
+
+        $typeMap = [
+            5 => ['label' => 'On Demand', 'class' => 'pc-badge-ondemand'],
+            6 => ['label' => 'Live', 'class' => 'pc-badge-live'],
+            4 => ['label' => 'Full Course', 'class' => 'pc-badge-full'],
+        ];
+
+        $badges = [];
+
+        foreach ([5, 6, 4] as $type) {
+            if ($childTypes->contains($type)) {
+                $badges[] = $typeMap[$type];
+            }
+        }
+
+        return $badges;
+    }
+
+    private function translatableText($value): string
+    {
+        if (is_array($value)) {
+            $locale = app()->getLocale();
+
+            return (string) ($value[$locale] ?? reset($value) ?? '');
+        }
+
+        return (string) $value;
     }
 }

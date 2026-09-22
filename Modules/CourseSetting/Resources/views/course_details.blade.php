@@ -643,7 +643,7 @@
                                                                             id="cna_prep_type_check" value="1"
                                                                             onchange="showCnaPrepPrice()"
                                                                             class="change_state"
-                                                                            {{ isset($cna_prep_price->thumbnail) ? 'checked' : '' }}>
+                                                                            {{ $cna_prep_price ? 'checked' : '' }}>
                                                                         <span
                                                                             class="checkmark mr-2"></span>{{ __('Full Course') }}
                                                                     </label>
@@ -667,7 +667,7 @@
                                                                             id="test_prep_graded_type_check"
                                                                             onchange="showPrepGradedPrice()"
                                                                             value="1" class="change_state"
-                                                                            {{ isset($test_prep_graded_price->thumbnail) ? 'checked' : '' }}>
+                                                                            {{ $test_prep_graded_price ? 'checked' : '' }}>
                                                                         <span class="checkmark mr-2"></span>
                                                                         {{ __('Prep-Course ') }} <br> {{ __('(live)') }}
                                                                     </label>
@@ -708,54 +708,14 @@
                                                         {{ __('No') }}</label>
                                                     </div> --}}
                                                 <div class="row align-items-center">
-                                                    <div
-                                                        class="col-xl-2 {{ isset($cna_prep_price->thumbnail) ? '' : 'd-none' }} full_course_image cna_prep_type text-center">
-                                                            <div class="primary_input">
-                                                            <p class="primary_input_label">Featured</p>
+                                                    <div class="col-xl-4 {{ $cna_prep_price ? '' : 'd-none' }} cna_prep_type text-center">
+                                                        <div class="primary_input">
+                                                            <p class="primary_input_label">Featured (Full Course)</p>
                                                             <label class="switch_toggle" for="cna_prep_price_checkbox">
                                                                 <input type="checkbox" class="" id="cna_prep_price_checkbox" name="cna_prep_featured" @if($cna_prep_price && $cna_prep_price->featured == 1) checked @endif value="1">
                                                                 <i class="slider round"></i>
                                                             </label>
                                                         </div>
-                                                    </div>
-                                                        <div
-                                                        class="col-xl-8 {{ isset($cna_prep_price->thumbnail) ? '' : 'd-none' }} full_course_image cna_prep_type">
-                                                        <div class="primary_input">
-                                                            <label class="primary_input_label"
-                                                                for="">{{ __('Image (RECOMMENDED DIMENSIONS: 1170X600)') }}</label>
-                                                            <div class="primary_file_uploader" id="image_file-2">
-
-                                                                <input class="primary-input filePlaceholder"
-                                                                    type="text" id="input-2"
-                                                                    {{ $errors->has('image') ? 'autofocus' : '' }}
-                                                                    placeholder="{{ __('courses.Browse Image file') }}"
-                                                                    readonly=""
-                                                                    data-imgtitle="{{ isset($cna_prep_price->thumbnail) ? showPicName($cna_prep_price->thumbnail) : '' }}"
-                                                                    value="{{ isset($cna_prep_price->thumbnail) ? showPicName($cna_prep_price->thumbnail) : '' }}">
-                                                                <button onclick="destroyCropper2()" class=""
-                                                                    type="button">
-                                                                    <label class="primary-btn small fix-gr-bg"
-                                                                        id="avatar"
-                                                                        for="document_file_thumb-2">{{ __('common.Browse') }}</label>
-                                                                    <input type="file"
-                                                                        class="d-none fileUpload upload-editor-2"
-                                                                        name="full_course_main_image"
-                                                                        accept=".jpg, .jpeg, .png, .gif"
-                                                                        id="document_file_thumb-2">
-                                                                    <input type="hidden"
-                                                                        name="full_course_thumbnail_image"
-                                                                        id="cropper_img"
-                                                                        class="upload-editor-hidden-file-2">
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div
-                                                        class="col-xl-2 {{ isset($cna_prep_price->thumbnail) ? '' : 'd-none' }} full_course_image cna_prep_type text-xl-center text-right">
-                                                        <img src="{{ !empty($cna_prep_price->thumbnail) ? getCourseImage(@$cna_prep_price->thumbnail) : asset('public/assets/course/image-375x500.png') }}"
-                                                            class="preview image-editor-preview-img-2"
-                                                            id="image_preview-2" />
                                                     </div>
                                                 </div>
                                                 <div class="row align-items-center">
@@ -782,44 +742,6 @@
                                                                 value="{{ isset($test_prep_price->price) && @$test_prep_price->price != '0.00' ? @$test_prep_price->price : null }}">
                                                         </div>
                                                     </div>
-                                                    <div
-                                                        class="col-xl-5 prep_course_demand_image {{ isset($test_prep_price->price) && $test_prep_price->price != '0.00' ? '' : 'd-none' }} test_prep_type">
-                                                        <div class="primary_input">
-                                                            <label class="primary_input_label"
-                                                                for="">{{ __('Image (RECOMMENDED DIMENSIONS: 1170X600)') }}</label>
-                                                            <div class="primary_file_uploader" id="image_file-3">
-                                                                <input class="primary-input filePlaceholder"
-                                                                    type="text" id="input-3"
-                                                                    {{ $errors->has('image') ? 'autofocus' : '' }}
-                                                                    placeholder="{{ __('courses.Browse Image file') }}"
-                                                                    readonly=""
-                                                                    data-imgtitle="{{ showPicName(@$test_prep_price->thumbnail) }}"
-                                                                    value="{{ showPicName(@$test_prep_price->thumbnail) }}">
-                                                                <button onclick="destroyCropper3()" class=""
-                                                                    type="button">
-                                                                    <label class="primary-btn small fix-gr-bg"
-                                                                        id="avatar"
-                                                                        for="document_file_thumb-3">{{ __('common.Browse') }}</label>
-                                                                    <input type="file"
-                                                                        class="d-none fileUpload upload-editor-3"
-                                                                        name="demand_course_main_image"
-                                                                        accept=".jpg, .jpeg, .png, .gif"
-                                                                        id="document_file_thumb-3">
-                                                                    <input type="hidden"
-                                                                        name="demand_course_thumbnail_image"
-                                                                        id="cropper_img"
-                                                                        class="upload-editor-hidden-file-3">
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div
-                                                        class="col-xl-2 prep_course_demand_image {{ isset($test_prep_price->price) && $test_prep_price->price != '0.00' ? '' : 'd-none' }} test_prep_type text-xl-center text-right">
-                                                        <img src="{{ isset($test_prep_price->thumbnail) ? getCourseImage(@$test_prep_price->thumbnail) : asset('public/assets/course/image-375x500.png') }}"
-                                                            class="preview image-editor-preview-img-3"
-                                                            id="image_preview-3" />
-                                                    </div>
                                                 </div>
                                                     {{-- Prep Course (Live) --}}
                                                     {{-- <div id="test_prep_graded_type"
@@ -834,53 +756,14 @@
                                                         </div>
                                                     </div> --}}
                                                 <div class="row align-items-center">
-                                                    <div
-                                                        class="col-xl-2 prep_course_live_image {{ isset($test_prep_graded_price->thumbnail) ? '' : 'd-none' }} test_prep_graded_type text-center">
+                                                    <div class="col-xl-4 {{ $test_prep_graded_price ? '' : 'd-none' }} test_prep_graded_type text-center">
                                                         <div class="primary_input">
-                                                            <p class="primary_input_label">Featured</p>
+                                                            <p class="primary_input_label">Featured (Live)</p>
                                                             <label class="switch_toggle" for="test_prep_graded_checkbox">
                                                                 <input type="checkbox" class="" id="test_prep_graded_checkbox" name="test_prep_graded_featured" @if($test_prep_graded_price && $test_prep_graded_price->featured == 1) checked @endif value="1">
                                                                 <i class="slider round"></i>
                                                             </label>
                                                         </div>
-                                                    </div>
-                                                    <div
-                                                        class="col-xl-8 prep_course_live_image {{ isset($test_prep_graded_price->thumbnail) ? '' : 'd-none' }} test_prep_graded_type">
-                                                        <div class="primary_input">
-                                                            <label class="primary_input_label"
-                                                                for="">{{ __('Image (RECOMMENDED DIMENSIONS: 1170X600)') }}</label>
-                                                            <div class="primary_file_uploader" id="image_file-4">
-                                                                <input class="primary-input filePlaceholder"
-                                                                    type="text" id="input-4"
-                                                                    {{ $errors->has('image') ? 'autofocus' : '' }}
-                                                                    placeholder="{{ __('courses.Browse Image file') }}"
-                                                                    readonly=""
-                                                                    data-imgtitle="{{ isset($test_prep_graded_price->thumbnail) ? showPicName(@$test_prep_graded_price->thumbnail) : '' }}"
-                                                                    value="{{ isset($test_prep_graded_price->thumbnail) ? showPicName(@$test_prep_graded_price->thumbnail) : '' }}">
-                                                                <button onclick="destroyCropper4()" class=""
-                                                                    type="button">
-                                                                    <label class="primary-btn small fix-gr-bg"
-                                                                        id="avatar"
-                                                                        for="document_file_thumb-4">{{ __('common.Browse') }}</label>
-                                                                    <input type="file"
-                                                                        class="d-none fileUpload upload-editor-4"
-                                                                        name="live_course_main_image"
-                                                                        accept=".jpg, .jpeg, .png, .gif"
-                                                                        id="document_file_thumb-4">
-                                                                    <input type="hidden"
-                                                                        name="live_course_thumbnail_image"
-                                                                        id="cropper_img"
-                                                                        class="upload-editor-hidden-file-4">
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div
-                                                        class="col-xl-2 prep_course_live_image {{ isset($test_prep_graded_price->thumbnail) ? '' : 'd-none' }} test_prep_graded_type text-xl-center text-right">
-                                                        <img src="{{ isset($test_prep_graded_price->thumbnail) ? getCourseImage(@$test_prep_graded_price->thumbnail) : asset('public/assets/course/image-375x500.png') }}"
-                                                            class="preview image-editor-preview-img-4"
-                                                            id="image_preview-4" />
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -1327,9 +1210,9 @@
                                                                             </label>
                                                             <select class="primary_select" name="quiz" id="quiz_id">
                                                                 <option
-                                                                    data-display="{{ __('common.Select') }} {{ __('Quiz') }}"
+                                                                    data-display="{{ __('common.Select') }} {{ __('quiz.Quiz') }}"
                                                                     value="">{{ __('common.Select') }}
-                                                                    {{ __('Quiz') }} </option>
+                                                                    {{ __('quiz.Quiz') }} </option>
                                                                 @foreach ($quizzes as $quiz)
                                                                     <option value="{{ $quiz->id }}"
                                                                         @if ($quiz->id == $course->quiz_id) selected @endif>
@@ -1841,9 +1724,7 @@
                                                     <div class="row mt-20">
                                                         <div class="col-xl-5">
                                                             <label class="primary_input_label">
-                                                                Thumbnail (Max Image Size 2MB, Recommended
-                                                                Dimensions: 1170X600 — crop after upload)
-
+                                                                Course Thumbnail (Max 2MB, Recommended 1170×600 — used for listing &amp; detail; shared across all course types)
                                                             </label>
                                                         </div>
                                                         <div class="col-xl-5">
@@ -3389,32 +3270,17 @@
                 $('#price_div').addClass('d-none');
             }
             $('.cna_prep_type').toggleClass('d-none');
-            let preview_2 = `{{ asset('public/assets/course/image-375x500.png') }}`;
-            $('#image_preview-2').attr('src', preview_2);
             $('#cna_prep_price').val('');
-            $('#document_file_thumb-2').val('');
-            $('#input-2').val('');
-            $('#cropper_img_2').val('');
         }
 
         function showPrepDemandPrice() {
             $('.test_prep_type').toggleClass('d-none');
-            let preview_3 = `{{ asset('public/assets/course/image-375x500.png') }}`;
-            $('#image_preview-3').attr('src', preview_3);
             $('#test_prep_price').val('');
-            $('#document_file_thumb-3').val('');
-            $('#input-3').val('');
-            $('#cropper_img_3').val('');
         }
 
         function showPrepGradedPrice() {
             $('.test_prep_graded_type').toggleClass('d-none');
-            let preview_4 = `{{ asset('public/assets/course/image-375x500.png') }}`;
-            $('#image_preview-4').attr('src', preview_4);
             $('#test_prep_graded_price').val('');
-            $('#document_file_thumb-4').val('');
-            $('#input-4').val('');
-            $('#cropper_img_4').val('');
         }
     </script>
 
@@ -3914,23 +3780,9 @@
                     errors.push('Course Title is required');
                 }
                 if (type == 1) {
-                    if ($("#cna_prep_type_check:checked").val() == 1) {
-                        if (isEmpty($('#input-2').val())) {
-                            errors.push("Image is required");
-                        }
-                    }
                     if ($("#test_prep_type_check:checked").val() == 1) {
-
                         if (isEmpty($('#test_prep_price1').val())) {
-                            errors.push("Prep-Course (on-demand) is required");
-                        }
-                        if (isEmpty($('#input-3').val())) {
-                            errors.push("Image is required");
-                        }
-                    }
-                    if ($("#test_prep_graded_type_check:checked").val() == 1) {
-                        if (isEmpty($('#input-4').val())) {
-                            errors.push("Image is required");
+                            errors.push("Prep-Course (on-demand) Price is required");
                         }
                     }
                     if (isEmpty($('#total_courses').val())) {

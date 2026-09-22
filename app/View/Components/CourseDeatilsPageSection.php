@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\Component;
 use Modules\CourseSetting\Entities\Course;
+use Modules\CourseSetting\Entities\CourseReveiw;
 use Modules\VirtualClass\Entities\VirtualClass;
 use Modules\CourseSetting\Entities\CourseLevel;
 use Modules\CourseSetting\Entities\TimeTableList;
@@ -156,12 +157,227 @@ class CourseDeatilsPageSection extends Component
 
         $program_plan = PaymentPlans::where('parent_id', $this->request->program_id)->where('type', 'program')->first();
 
-        $recent_courses = Course::where('id','<>',$this->course->id)->where('status', 1)->whereIn('type', [2, 4, 5, 6, 7, 8])->where(function($q){
-            $q->where('price', '!=', '0.00')
-            ->orHas('effectiveCoursePlan');
-        })->with('effectiveCoursePlan')
-        ->orderByRaw("FIELD(category_id, ".$courseCategoryId.") DESC")->inRandomOrder()->take(3)->get();
+        $this->course->loadMissing([
+            'category',
+            'user',
+            'chapters.lessons',
+            'children' => fn ($q) => $q->where('status', 1),
+        ]);
+
+        $categoryName = $this->course->category
+            ? $this->translatableText($this->course->category->name)
+            : '';
+        $courseImage = !empty($this->course->thumbnail)
+            ? getCourseImage($this->course->thumbnail)
+            : (!empty($this->course->image) ? getCourseImage($this->course->image) : null);
+        $courseExcerpt = QuizPageSection::excerpt($this->course->about, 220);
+        $typeBadges = QuizPageSection::listingTypeBadges($this->course);
+        $purchaseOptions = $this->buildPurchaseOptions();
+        $headerPurchase = collect($purchaseOptions)->firstWhere('type', 5) ?? ($purchaseOptions[0] ?? null);
+        $sidebarPurchases = collect($purchaseOptions)
+            ->filter(fn ($option) => !$headerPurchase || $option['type'] !== $headerPurchase['type'])
+            ->values()
+            ->all();
+
+        $instructorCourses = $this->course->user_id
+            ? $this->filterSellableParents(
+                Course::where('user_id', $this->course->user_id)
+                    ->where('type', 1)
+                    ->where('status', 1)
+                    ->where('id', '!=', $this->course->id)
+                    ->with(['category', 'children' => fn ($q) => $q->where('status', 1)])
+                    ->latest()
+                    ->take(6)
+                    ->get()
+            )->take(4)
+            : collect();
+
+        $relatedCourses = $this->loadRelatedCourses($courseCategoryId);
+
+        $detailReviews = CourseReveiw::where('course_id', $this->course->id)
+            ->where('status', 1)
+            ->with('user')
+            ->orderByDesc('id')
+            ->take(4)
+            ->get();
+
+        $reviewStars = CourseReveiw::where('course_id', $this->course->id)
+            ->where('status', 1)
+            ->pluck('star');
+
+        $detailReviewStats = [
+            'total' => $reviewStars->count(),
+            'rating' => $reviewStars->count() ? number_format($reviewStars->avg(), 1) : 0,
+        ];
+
+        $recent_courses = $relatedCourses;
         $socials = SocialLink::where('status',1)->orderBy('order','desc')->get();
         return view(theme('components.course-details-page-section'), get_defined_vars());
+    }
+
+    private function buildPurchaseOptions(): array
+    {
+        $options = [];
+
+        foreach ($this->course->children as $child) {
+            $type = (int) $child->type;
+
+            if (!in_array($type, [4, 5, 6], true)) {
+                continue;
+            }
+
+            $option = $this->mapPurchaseOption($child, $type);
+
+            if ($option) {
+                $options[] = $option;
+            }
+        }
+
+        usort($options, fn ($a, $b) => array_search($a['type'], [5, 6, 4], true) <=> array_search($b['type'], [5, 6, 4], true));
+
+        return $options;
+    }
+
+    private function mapPurchaseOption(Course $child, int $type): ?array
+    {
+        $configs = [
+            5 => [
+                'label' => 'Self-Study',
+                'title' => 'On-Demand (Self-Study)',
+                'badge' => null,
+                'buy_label' => 'Buy Now',
+                'includes' => [
+                    'Self-paced video lessons',
+                    'Practice questions & rationales',
+                    'Downloadable study resources',
+                    'Learn on your schedule',
+                ],
+            ],
+            6 => [
+                'label' => 'Live Instructor',
+                'title' => 'Prep-Course (Live)',
+                'badge' => 'Live Instructor',
+                'buy_label' => 'Enroll Now',
+                'includes' => [
+                    'Live instructor-led sessions',
+                    'Q&A and guided review',
+                    'Session recordings included',
+                    'Structured cohort schedule',
+                ],
+            ],
+            4 => [
+                'label' => 'Full Course',
+                'title' => 'Full Course (Instructor-Led)',
+                'badge' => 'Full Course',
+                'buy_label' => 'Enroll Now',
+                'includes' => [
+                    'Complete instructor-led program',
+                    'Live classes and guided review',
+                    'Full curriculum access',
+                    'Cohort-based learning',
+                ],
+            ],
+        ];
+
+        if (!isset($configs[$type])) {
+            return null;
+        }
+
+        $config = $configs[$type];
+        $plan = null;
+        $priceLabel = null;
+        $canPurchase = false;
+        $planQuery = '';
+        $cohortStart = null;
+        $durationWeeks = null;
+        $subNote = null;
+
+        if ($type === 5) {
+            $amount = floatval($child->price) + floatval($child->tax ?? 0);
+            if ($amount > 0) {
+                $priceLabel = getPriceFormat($amount);
+                $canPurchase = true;
+            }
+            $subNote = 'Self-paced access';
+        } else {
+            $plan = $child->effectiveCoursePlan()->first();
+            if ($plan) {
+                $priceLabel = getPriceFormat($plan->amount);
+                $canPurchase = true;
+                $planQuery = '&plan_id=' . $plan->id;
+                $cohortStart = date('d M Y', strtotime($plan->sdate));
+                $durationWeeks = round((strtotime($plan->edate) - strtotime($plan->sdate)) / 604800, 1);
+                $subNote = 'Starts ' . $cohortStart;
+            } else {
+                $subNote = 'Plan coming soon';
+            }
+        }
+
+        $parentId = $this->course->id;
+        $typeQuery = '?courseType=' . $type . $planQuery;
+
+        return [
+            'type' => $type,
+            'child' => $child,
+            'label' => $config['label'],
+            'title' => $config['title'],
+            'badge' => $config['badge'],
+            'buy_label' => $config['buy_label'],
+            'includes' => $config['includes'],
+            'price_label' => $priceLabel,
+            'can_purchase' => $canPurchase,
+            'cart_url' => route('addToCartQuiz', [$parentId]) . $typeQuery,
+            'buy_url' => route('buyNowQuiz', [$parentId]) . $typeQuery,
+            'sub_note' => $subNote,
+            'cohort_start' => $cohortStart,
+            'duration_weeks' => $durationWeeks,
+            'plan' => $plan,
+        ];
+    }
+
+    private function translatableText($value): string
+    {
+        if (is_array($value)) {
+            $locale = app()->getLocale();
+
+            return (string) ($value[$locale] ?? reset($value) ?? '');
+        }
+
+        return (string) $value;
+    }
+
+    private function filterSellableParents($courses)
+    {
+        return collect($courses)->filter(function (Course $course) {
+            foreach ($course->children as $child) {
+                if (QuizPageSection::resolveChildListingPrice($child) !== null) {
+                    return true;
+                }
+            }
+
+            return false;
+        })->values();
+    }
+
+    private function loadRelatedCourses(int $courseCategoryId)
+    {
+        $baseQuery = fn () => Course::where('type', 1)
+            ->where('status', 1)
+            ->where('id', '!=', $this->course->id)
+            ->with(['category', 'children' => fn ($q) => $q->where('status', 1)]);
+
+        if ($courseCategoryId) {
+            $related = $this->filterSellableParents(
+                $baseQuery()->where('category_id', $courseCategoryId)->latest()->take(6)->get()
+            );
+
+            if ($related->isNotEmpty()) {
+                return $related->take(3);
+            }
+        }
+
+        return $this->filterSellableParents(
+            $baseQuery()->latest()->take(6)->get()
+        )->take(3);
     }
 }

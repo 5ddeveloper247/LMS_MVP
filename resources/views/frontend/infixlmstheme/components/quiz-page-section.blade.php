@@ -1,873 +1,510 @@
+<div class="mxp-prep-courses">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
-    .object-fit-cover {
-        object-fit: cover
-    }
+  .mxp-prep-courses {
+    --teal-mid: #1A8A6F; --teal-deep: #0F6E56; --teal-darkest: #0A4D3C;
+    --terracotta: #C65D3A; --terracotta-deep: #A84B2D;
+    --cream: #F5EDE0; --cream-warm: #EFE3D0;
+    --charcoal: #2B2B2B; --charcoal-soft: #4A4A4A;
+    --white: #FFFFFF; --gray-line: #E8DFD0;
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'Montserrat', system-ui, sans-serif;
+    --shadow-sm: 0 2px 8px rgba(10, 77, 60, 0.06);
+    --shadow-md: 0 8px 24px rgba(10, 77, 60, 0.10);
+    --shadow-lg: 0 20px 50px rgba(10, 77, 60, 0.15);
+    font-family: var(--sans);
+    color: var(--charcoal);
+    background: var(--cream);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .mxp-prep-courses * { box-sizing: border-box; }
+  .mxp-prep-courses h1, .mxp-prep-courses h2, .mxp-prep-courses h3, .mxp-prep-courses h4 {
+    font-family: var(--serif); font-weight: 700; line-height: 1.2; color: var(--teal-darkest);
+  }
 
-    .fw-bold {
-        font-weight: 700;
-    }
+  .mxp-prep-courses .pc-breadcrumb { background: var(--cream-warm); padding: 14px 32px; border-bottom: 1px solid var(--gray-line); }
+  .mxp-prep-courses .pc-breadcrumb-inner { max-width: 1240px; margin: 0 auto; font-size: 13px; color: var(--charcoal-soft); }
+  .mxp-prep-courses .pc-breadcrumb-inner a { color: var(--teal-mid); text-decoration: none; font-weight: 500; }
+  .mxp-prep-courses .pc-breadcrumb-inner a:hover { color: var(--terracotta); }
+  .mxp-prep-courses .pc-breadcrumb-inner span { margin: 0 8px; opacity: 0.5; }
 
-    h6 {
-        font-weight: 600;
-    }
+  .mxp-prep-courses .pc-hero { background: linear-gradient(135deg, var(--teal-darkest) 0%, var(--teal-deep) 100%); color: var(--white); padding: 90px 32px 100px; position: relative; overflow: hidden; }
+  .mxp-prep-courses .pc-hero::before { content: ''; position: absolute; top: -100px; right: -100px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(198, 93, 58, 0.18) 0%, transparent 70%); border-radius: 50%; }
+  .mxp-prep-courses .pc-hero-inner { max-width: 900px; margin: 0 auto; text-align: center; position: relative; z-index: 1; }
+  .mxp-prep-courses .pc-hero-eyebrow { display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--terracotta); margin-bottom: 24px; padding: 6px 16px; border: 1px solid var(--terracotta); border-radius: 30px; }
+  .mxp-prep-courses .pc-hero h1 { font-size: clamp(36px, 5vw, 54px); color: var(--white); margin-bottom: 20px; letter-spacing: -1px; }
+  .mxp-prep-courses .pc-hero h1 em { font-style: italic; color: var(--cream); font-weight: 400; }
+  .mxp-prep-courses .pc-hero-sub { font-size: 18px; line-height: 1.6; color: var(--cream-warm); max-width: 720px; margin: 0 auto 32px; }
+  .mxp-prep-courses .pc-hero-meta { display: flex; gap: 32px; justify-content: center; flex-wrap: wrap; font-size: 14px; color: var(--cream); }
+  .mxp-prep-courses .pc-hero-meta-item { display: flex; align-items: center; gap: 8px; }
+  .mxp-prep-courses .pc-hero-meta-item svg { width: 18px; height: 18px; color: var(--terracotta); }
 
-    .grid-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 30px;
-    }
+  .mxp-prep-courses .pc-container { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+  .mxp-prep-courses .pc-section { padding: 70px 0; }
 
-    @media (min-width: 1800px) {
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
-        }
-    }
+  .mxp-prep-courses .pc-how-section { background: var(--white); padding: 70px 0; }
+  .mxp-prep-courses .pc-how-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; max-width: 1080px; margin: 0 auto; }
+  .mxp-prep-courses .pc-how-step { text-align: center; position: relative; }
+  .mxp-prep-courses .pc-how-step::after { content: '→'; position: absolute; right: -18px; top: 28px; font-size: 22px; color: var(--teal-mid); font-weight: 700; }
+  .mxp-prep-courses .pc-how-step:last-child::after { display: none; }
+  .mxp-prep-courses .pc-how-number { font-family: var(--serif); font-size: 42px; font-weight: 700; color: var(--cream-warm); margin-bottom: 10px; }
+  .mxp-prep-courses .pc-how-step h4 { font-family: var(--sans); font-size: 14px; font-weight: 700; color: var(--teal-darkest); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .mxp-prep-courses .pc-how-step p { font-size: 13px; color: var(--charcoal-soft); line-height: 1.6; margin: 0; }
 
+  .mxp-prep-courses .pc-filter-section { background: var(--cream); padding: 0; position: sticky; top: 58px; z-index: 50; border-bottom: 1px solid var(--gray-line); }
+  .mxp-prep-courses .pc-filter-inner { max-width: 1240px; margin: 0 auto; padding: 0 24px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .mxp-prep-courses .pc-filter-tabs { display: flex; gap: 4px; padding: 14px 0; min-width: max-content; }
+  .mxp-prep-courses .pc-filter-tab {
+    padding: 8px 18px; border-radius: 30px; font-size: 13px; font-weight: 600;
+    color: var(--charcoal-soft); background: transparent; border: 1.5px solid transparent;
+    cursor: pointer; transition: all 0.2s; white-space: nowrap; font-family: var(--sans);
+  }
+  .mxp-prep-courses .pc-filter-tab:hover { color: var(--teal-mid); background: var(--white); }
+  .mxp-prep-courses .pc-filter-tab.active { background: var(--teal-darkest); color: var(--white); border-color: var(--teal-darkest); }
+  .mxp-prep-courses .pc-filter-count { font-size: 11px; opacity: 0.7; margin-left: 4px; }
 
-    /* ===============BANNER================ */
-    .breadcrumb_area {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100% !important;
-        text-align: center;
-    }
+  .mxp-prep-courses .pc-courses-section { background: var(--cream); padding: 50px 0 80px; }
+  .mxp-prep-courses .pc-courses-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .mxp-prep-courses .pc-course-card {
+    background: var(--white); border-radius: 14px; overflow: hidden;
+    border: 1px solid var(--gray-line); transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .mxp-prep-courses .pc-course-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+  .mxp-prep-courses .pc-course-thumb {
+    height: 160px; display: flex; align-items: center; justify-content: center;
+    padding: 24px; position: relative; overflow: hidden;
+  }
+  .mxp-prep-courses .pc-course-thumb img {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  }
+  .mxp-prep-courses .pc-course-thumb::after {
+    content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: linear-gradient(to top, rgba(10, 77, 60, 0.55) 0%, transparent 55%);
+  }
+  .mxp-prep-courses .pc-course-type-badges {
+    position: absolute; bottom: 12px; left: 12px; right: 12px;
+    display: flex; flex-wrap: wrap; gap: 6px; z-index: 2;
+  }
+  .mxp-prep-courses .pc-type-badge {
+    display: inline-flex; align-items: center;
+    padding: 5px 11px; border-radius: 999px;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+    text-transform: uppercase; line-height: 1;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    backdrop-filter: blur(4px);
+  }
+  .mxp-prep-courses .pc-badge-live { background: rgba(198, 93, 58, 0.94); color: var(--white); }
+  .mxp-prep-courses .pc-badge-ondemand { background: rgba(26, 138, 111, 0.94); color: var(--white); }
+  .mxp-prep-courses .pc-badge-full { background: rgba(10, 77, 60, 0.94); color: var(--white); }
+  .mxp-prep-courses .pc-empty-state {
+    grid-column: 1 / -1; text-align: center; padding: 48px 24px;
+    background: var(--white); border-radius: 14px; border: 1px solid var(--gray-line);
+  }
+  .mxp-prep-courses .pc-course-thumb-label {
+    font-family: var(--serif); font-weight: 700; font-size: 20px;
+    color: var(--white); text-align: center; line-height: 1.2;
+    position: relative; z-index: 1;
+  }
+  .mxp-prep-courses .pc-thumb-foundations { background: linear-gradient(135deg, var(--teal-mid) 0%, var(--teal-deep) 100%); }
+  .mxp-prep-courses .pc-thumb-physiological { background: linear-gradient(135deg, #1A8A6F 0%, #0A4D3C 100%); }
+  .mxp-prep-courses .pc-thumb-psychosocial { background: linear-gradient(135deg, #4A7C6B 0%, #2D5A4A 100%); }
+  .mxp-prep-courses .pc-thumb-health-promo { background: linear-gradient(135deg, #3D8B6E 0%, #1A6B4F 100%); }
+  .mxp-prep-courses .pc-thumb-safe-care { background: linear-gradient(135deg, #0F6E56 0%, #073D30 100%); }
+  .mxp-prep-courses .pc-thumb-high-yield { background: linear-gradient(135deg, var(--terracotta) 0%, var(--terracotta-deep) 100%); }
+  .mxp-prep-courses .pc-thumb-bundle { background: linear-gradient(135deg, var(--teal-darkest) 0%, #041F18 100%); }
+  .mxp-prep-courses .pc-thumb-ngn { background: linear-gradient(135deg, #8B5E3C 0%, #5D3A22 100%); }
+  .mxp-prep-courses .pc-thumb-remedial { background: linear-gradient(135deg, #C65D3A 0%, #8B3E24 100%); }
 
-    .breadcrumb_area:before {
-        display: none
-    }
+  .mxp-prep-courses .pc-course-body { padding: 22px 24px 24px; }
+  .mxp-prep-courses .pc-course-tag {
+    display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--teal-mid); margin-bottom: 8px;
+  }
+  .mxp-prep-courses .pc-course-body h3 { font-size: 18px; margin-bottom: 8px; color: var(--teal-darkest); }
+  .mxp-prep-courses .pc-course-body p { font-size: 13.5px; color: var(--charcoal-soft); line-height: 1.6; margin-bottom: 18px; min-height: 44px; }
+  .mxp-prep-courses .pc-course-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 16px; border-top: 1px solid var(--gray-line); }
+  .mxp-prep-courses .pc-course-price { font-family: var(--serif); font-size: 22px; font-weight: 700; color: var(--terracotta); }
+  .mxp-prep-courses .pc-course-enroll {
+    font-size: 13px; font-weight: 600; color: var(--teal-mid); text-decoration: none;
+    padding: 8px 18px; border: 1.5px solid var(--teal-mid); border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .mxp-prep-courses .pc-course-enroll:hover { background: var(--teal-mid); color: var(--white); }
 
-    .breadcrumb_area:after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 100%;
-        background: #2ca6a49d !important;
-    }
+  .mxp-prep-courses .pc-course-card.is-pc-hidden { display: none !important; }
+  .mxp-prep-courses .pc-load-more-wrap { text-align: center; margin-top: 40px; }
+  .mxp-prep-courses .pc-load-more-btn {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--teal-mid);
+    background: var(--white);
+    border: 1.5px solid var(--teal-mid);
+    border-radius: 6px;
+    padding: 12px 32px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .mxp-prep-courses .pc-load-more-btn:hover {
+    background: var(--teal-mid);
+    color: var(--white);
+  }
+  .mxp-prep-courses .pc-load-more-wrap.is-pc-hidden { display: none; }
 
-    .breadcam_wrap {
-        padding: 0 !important;
-        position: relative;
-        z-index: 99
-    }
+  .mxp-prep-courses .pc-bundle-section {
+    background: linear-gradient(135deg, var(--teal-darkest) 0%, var(--teal-deep) 100%);
+    padding: 80px 32px;
+    text-align: center;
+    color: var(--white);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .mxp-prep-courses .pc-bundle-section::before { content: ''; position: absolute; top: -100px; left: 50%; transform: translateX(-50%); width: 500px; height: 500px; background: radial-gradient(circle, rgba(198, 93, 58, 0.12) 0%, transparent 70%); border-radius: 50%; }
+  .mxp-prep-courses .pc-bundle-inner {
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+    box-sizing: border-box;
+  }
+  .mxp-prep-courses .pc-bundle-eyebrow { display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--terracotta); margin-bottom: 20px; }
+  .mxp-prep-courses .pc-bundle-section h2 { color: var(--white); font-size: clamp(30px, 4vw, 42px); margin-bottom: 16px; }
+  .mxp-prep-courses .pc-bundle-section h2 em { font-style: italic; color: var(--cream); font-weight: 400; }
+  .mxp-prep-courses .pc-bundle-intro { font-size: 17px; color: var(--cream-warm); line-height: 1.6; margin: 0 auto 36px; max-width: 680px; }
+  .mxp-prep-courses .pc-bundle-cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    margin: 0 auto 36px;
+    width: 100%;
+    max-width: 752px;
+  }
+  .mxp-prep-courses .pc-bundle-card {
+    background: rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 28px 20px;
+    border: 1px solid rgba(245,237,224,0.15);
+    text-align: center;
+    min-height: 196px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+  .mxp-prep-courses .pc-bundle-card p { margin: 0; }
+  .mxp-prep-courses .pc-bundle-card-name { font-family: var(--serif); font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 6px !important; line-height: 1.25; }
+  .mxp-prep-courses .pc-bundle-card-desc {
+    font-size: 13px;
+    color: var(--cream-warm);
+    margin-bottom: 14px !important;
+    line-height: 1.5;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+  }
+  .mxp-prep-courses .pc-bundle-card-price { font-family: var(--serif); font-size: 28px; font-weight: 700; color: var(--terracotta); line-height: 1.1; margin-bottom: 0 !important; }
+  .mxp-prep-courses .pc-bundle-card-save { font-size: 12px; color: var(--cream); margin-top: 4px !important; line-height: 1.4; }
+  .mxp-prep-courses .pc-btn-primary { background: var(--terracotta); color: var(--white); padding: 16px 36px; border-radius: 6px; text-decoration: none; font-size: 15px; font-weight: 600; letter-spacing: 0.5px; transition: all 0.2s; display: inline-block; border: 2px solid var(--terracotta); }
+  .mxp-prep-courses .pc-btn-primary:hover { background: var(--terracotta-deep); border-color: var(--terracotta-deep); transform: translateY(-1px); color: var(--white); }
 
-    .breadcam_wrap h1,
-    .breadcam_wrap p {
-        text-shadow: 1px 0px 5px #737373;
-    }
+  .mxp-prep-courses .pc-notice-section { background: var(--white); padding: 50px 32px; }
+  .mxp-prep-courses .pc-notice-card { max-width: 900px; margin: 0 auto; background: var(--cream); border-radius: 12px; padding: 28px 32px; border-left: 5px solid var(--terracotta); }
+  .mxp-prep-courses .pc-notice-card h4 { font-family: var(--sans); font-size: 14px; font-weight: 700; color: var(--terracotta); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .mxp-prep-courses .pc-notice-card p { font-size: 14px; color: var(--charcoal-soft); line-height: 1.7; margin: 0; }
+  .mxp-prep-courses .pc-notice-card a { color: var(--terracotta); font-weight: 600; }
 
-    .theme_btn {
-        border-radius: 50px !important;
-        font-weight: 600 !important
-    }
+  .mxp-prep-courses .pc-stats-band { background: var(--teal-darkest); padding: 50px 32px; }
+  .mxp-prep-courses .pc-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; max-width: 900px; margin: 0 auto; text-align: center; }
+  .mxp-prep-courses .pc-stat-number { font-family: var(--serif); font-size: 42px; font-weight: 700; color: var(--white); line-height: 1; margin-bottom: 6px; }
+  .mxp-prep-courses .pc-stat-label { font-size: 13px; color: var(--cream-warm); text-transform: uppercase; letter-spacing: 1px; margin: 0; }
 
-    h1,
-    h2 {
-        font-family: "Inter" !important;
-        font-weight: 600 !important;
-    }
+  .mxp-prep-courses .pc-final-cta { background: var(--cream-warm); padding: 80px 32px; text-align: center; }
+  .mxp-prep-courses .pc-final-cta-inner { max-width: 700px; margin: 0 auto; }
+  .mxp-prep-courses .pc-final-cta h2 { font-size: clamp(28px, 4vw, 38px); margin-bottom: 16px; }
+  .mxp-prep-courses .pc-final-cta h2 em { font-style: italic; color: var(--terracotta); }
+  .mxp-prep-courses .pc-final-cta p { font-size: 16px; color: var(--charcoal-soft); line-height: 1.6; margin-bottom: 30px; }
+  .mxp-prep-courses .pc-final-cta .pc-btn-primary { padding: 16px 40px; }
 
-    h2 {
-        font-size: clamp(1.3rem, 4vw, 2.5rem) !important;
-        font-family: "Rubik" !important;
-        font-weight: 600 !important;
-    }
-
-    p,
-    a {
-        font-family: "Rubik" !important;
-    }
-
-    .breadcrumb_area a {
-        border-radius: 50px !important;
-        font-weight: 400 !important
-    }
-
-    li {
-        font-family: "Inter" !important;
-        font-size: clamp(14px, 1.5vw, 18px) !important;
-        font-weight: 500
-    }
-
-    .course-work {
-        box-shadow: 0px 4px 10px 0px #0000001A !important;
-    }
+  @media (max-width: 960px) {
+    .mxp-prep-courses .pc-hero { padding: 70px 24px 80px; }
+    .mxp-prep-courses .pc-how-grid { grid-template-columns: repeat(2, 1fr); }
+    .mxp-prep-courses .pc-how-step::after { display: none; }
+    .mxp-prep-courses .pc-courses-grid { grid-template-columns: repeat(2, 1fr); }
+    .mxp-prep-courses .pc-bundle-cards { grid-template-columns: 1fr; max-width: 340px; margin: 0 auto 36px; }
+    .mxp-prep-courses .pc-bundle-card { min-height: 180px; }
+    .mxp-prep-courses .pc-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  }
+  @media (max-width: 640px) {
+    .mxp-prep-courses .pc-courses-grid { grid-template-columns: 1fr; }
+    .mxp-prep-courses .pc-filter-section { top: 56px; }
+  }
 </style>
 
-<div class="row">
-    <div class="col-md-12 px-0 inter">
+<div class="pc-breadcrumb">
+  <div class="pc-breadcrumb-inner">
+    <a href="{{ url('/') }}">Home</a><span>›</span>Prep-Courses
+  </div>
+</div>
+
+<header class="pc-hero">
+  <div class="pc-hero-inner">
+    <span class="pc-hero-eyebrow">Shop Prep-Courses</span>
+    <h1>Master One Subject. <em>Or All of Them.</em></h1>
+    <p class="pc-hero-sub">Self-paced subject mastery, built on the NCLEX PASS Method™. Buy individual courses or bundle for savings. Every course includes practice questions, clinical judgment scenarios, and lifetime access.</p>
+    <div class="pc-hero-meta">
+      <div class="pc-hero-meta-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        {{ $total ?? 0 }}+ Subjects
+      </div>
+      <div class="pc-hero-meta-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Self-Paced
+      </div>
+      <div class="pc-hero-meta-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Lifetime Access
+      </div>
+      <div class="pc-hero-meta-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        NGN-Aligned
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="pc-how-section">
+  <div class="pc-container">
+    <div class="pc-how-grid">
+      <div class="pc-how-step">
+        <div class="pc-how-number">01</div>
+        <h4>Choose a Subject</h4>
+        <p>Browse by NCLEX test plan domain or pick your weakest area.</p>
+      </div>
+      <div class="pc-how-step">
+        <div class="pc-how-number">02</div>
+        <h4>Enroll Instantly</h4>
+        <p>One-time purchase. No subscription. Immediate access.</p>
+      </div>
+      <div class="pc-how-step">
+        <div class="pc-how-number">03</div>
+        <h4>Learn at Your Pace</h4>
+        <p>Video lessons, clinical scenarios, and practice Qbank included.</p>
+      </div>
+      <div class="pc-how-step">
+        <div class="pc-how-number">04</div>
+        <h4>Master &amp; Move On</h4>
+        <p>Track your progress. Lifetime access for review anytime.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="pc-filter-section" id="catalog">
+  <div class="pc-filter-inner">
+    <div class="pc-filter-tabs">
+      <button type="button" class="pc-filter-tab active" data-filter="all">All Courses<span class="pc-filter-count">({{ $total ?? 0 }})</span></button>
+      @foreach ($categoryFilters ?? [] as $filterCategory)
+        <button type="button" class="pc-filter-tab" data-filter="cat-{{ $filterCategory->id }}">
+          {{ $filterCategory->name }}<span class="pc-filter-count">({{ $filterCategory->count }})</span>
+        </button>
+      @endforeach
+    </div>
+  </div>
+</div>
+
+<section class="pc-courses-section">
+  <div class="pc-container">
+    <div class="pc-courses-grid">
+      @forelse ($courses ?? [] as $course)
         @php
-            $banner_title = 'New Page';
-            $banner_image = 'public/frontend/infixlmstheme/img/images/courses-4.jpg';
-            $btn_title = auth()->check() ? '' : 'Sell With Us';
-            $sub_title = 'YOUR COMEBACK STARTS HERE';
+          $categoryName = $course->category
+            ? (is_array($course->category->name) ? ($course->category->name[app()->getLocale()] ?? reset($course->category->name)) : $course->category->name)
+            : 'Course';
+          $priceLabel = \App\View\Components\QuizPageSection::listingPriceLabel($course);
+          $excerpt = \App\View\Components\QuizPageSection::excerpt($course->about);
+          $thumbClass = \App\View\Components\QuizPageSection::thumbClass($loop->index);
+          $typeBadges = \App\View\Components\QuizPageSection::listingTypeBadges($course);
         @endphp
-        <x-breadcrumb :title="$banner_title" :btntitle="$btn_title" :sub_title="$sub_title" :btnclass="'hit openModal'" />
-    </div>
-</div>
-
-
-<section>
-    <div class="container px-lg-5 py-5">
-        <div class="d-flex align-items-start justify-content-between mb-4 px-xl-5 px-3">
-            <div>
-                <h2 class="fw-bold">
-                    How Do Our Courses Work?
-                </h2>
-
-                <p>
-                    Our prep course is designed for students who need a second chance at success. With expert
-                    coaching, <br class="d-none d-md-block">
-                    Florida BON approval, and a proven step-by-step curriculum, you’ll gain the knowledge,
-                    confidence, <br class="d-none d-md-block">
-                    and hands-on practice to pass the NCLEX and move forward in your nursing career.
-                </p>
-            </div>
-
-            <button class="theme_btn py-2 px-5 border-0">
-                Explore Courses
-            </button>
-        </div>
-
-        <div class="row px-xl-5 px-3 mt-4">
-
-            <div class="col-md-6 col-lg-4 col-xl-3">
-                <div class="card h-100 course-work p-4 border-0" style="border-radius: 30px;">
-                    <svg style="position: absolute; top: 30px; left: 20px" width="22" height="75"
-                        viewBox="0 0 22 75" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="10" r="10" fill="#26235C" />
-                        <path
-                            d="M0 72.2158L2.83209 71.083C3.37839 71.7232 3.87539 72.2652 5.06758 72.2652C6.21034 72.2652 6.93083 71.9696 6.93083 70.8204L10.4088 63.0033V70.8529C10.4088 73.234 8.2975 74.3179 5.21677 74.3179C2.43455 74.3179 0.819516 73.3654 0 72.2158Z"
-                            fill="#F7DF1E" />
-                        <path
-                            d="M8.77282 62.7458C9.73088 62.7458 10.5075 62.243 10.5075 61.6229C10.5075 61.0027 9.73088 60.5 8.77282 60.5C7.81475 60.5 7.03809 61.0027 7.03809 61.6229C7.03809 62.243 7.81475 62.7458 8.77282 62.7458Z"
-                            fill="#F7DF1E" />
-                        <path
-                            d="M21.6834 64.9432L18.8511 66.076C18.3048 65.4357 17.8077 64.8938 16.6155 64.8938C15.4729 64.8938 14.7523 65.1893 14.7523 66.3387L11.2744 74.1557V66.3063C11.2744 63.9252 13.3857 62.8413 16.4665 62.8413C19.2484 62.8413 20.8634 63.7938 21.6831 64.9434"
-                            fill="#F7DF1E" />
-                    </svg>
-
-                    <div class="d-flex align-items-center justify-content-center">
-                        <img src="https://plus.unsplash.com/premium_photo-1755001060420-7a561e278353?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8"
-                            width="100" height="100" style="border-radius: 50px" alt="">
-                    </div>
-
-                    <h5 class="text-center text-dark mt-4 mb-3 inter">Choose a Course</h5>
-                    <p style="line-height: 1.2" class="text-center inter">
-                        From foundational to advanced, high-quality courses in all areas, created and instructed by
-                        professionals in academia and the healthcare sector.
-                    </p>
-
-                    <img src="{{ asset('public/assets/c-rec.png') }}"
-                        style="position: absolute; bottom: 0; left: 0; width: 100%" width="100%" alt="">
-                </div>
-            </div>
-
-            <div class="col-md-6 col-lg-4 col-xl-3">
-                <div class="card h-100 course-work p-4 border-0" style="border-radius: 30px;">
-                    <svg style="position: absolute; top: 30px; left: 20px" width="22" height="75"
-                        viewBox="0 0 22 75" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="10" r="10" fill="#26235C" />
-                        <path
-                            d="M0 72.2158L2.83209 71.083C3.37839 71.7232 3.87539 72.2652 5.06758 72.2652C6.21034 72.2652 6.93083 71.9696 6.93083 70.8204L10.4088 63.0033V70.8529C10.4088 73.234 8.2975 74.3179 5.21677 74.3179C2.43455 74.3179 0.819516 73.3654 0 72.2158Z"
-                            fill="#F7DF1E" />
-                        <path
-                            d="M8.77282 62.7458C9.73088 62.7458 10.5075 62.243 10.5075 61.6229C10.5075 61.0027 9.73088 60.5 8.77282 60.5C7.81475 60.5 7.03809 61.0027 7.03809 61.6229C7.03809 62.243 7.81475 62.7458 8.77282 62.7458Z"
-                            fill="#F7DF1E" />
-                        <path
-                            d="M21.6834 64.9432L18.8511 66.076C18.3048 65.4357 17.8077 64.8938 16.6155 64.8938C15.4729 64.8938 14.7523 65.1893 14.7523 66.3387L11.2744 74.1557V66.3063C11.2744 63.9252 13.3857 62.8413 16.4665 62.8413C19.2484 62.8413 20.8634 63.7938 21.6831 64.9434"
-                            fill="#F7DF1E" />
-                    </svg>
-
-                    <div class="d-flex align-items-center justify-content-center">
-                        <img src="https://plus.unsplash.com/premium_photo-1755001060420-7a561e278353?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8"
-                            width="100" height="100" style="border-radius: 50px" alt="">
-                    </div>
-
-                    <h5 class="text-center text-dark mt-4 mb-3 inter">Register or Login</h5>
-                    <p style="line-height: 1.2" class="text-center inter">
-                        Join Merkaii Xcel to access our educational resources for NCLEX, nursing school, and more.
-                    </p>
-
-                    <img src="{{ asset('public/assets/c-rec.png') }}"
-                        style="position: absolute; bottom: 0; left: 0; width: 100%" width="100%" alt="">
-                </div>
-            </div>
-
-            <div class="col-md-6 col-lg-4 col-xl-3">
-                <div class="card h-100 course-work p-4 border-0" style="border-radius: 30px;">
-                    <svg style="position: absolute; top: 30px; left: 20px" width="22" height="75"
-                        viewBox="0 0 22 75" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="10" r="10" fill="#26235C" />
-                        <path
-                            d="M0 72.2158L2.83209 71.083C3.37839 71.7232 3.87539 72.2652 5.06758 72.2652C6.21034 72.2652 6.93083 71.9696 6.93083 70.8204L10.4088 63.0033V70.8529C10.4088 73.234 8.2975 74.3179 5.21677 74.3179C2.43455 74.3179 0.819516 73.3654 0 72.2158Z"
-                            fill="#F7DF1E" />
-                        <path
-                            d="M8.77282 62.7458C9.73088 62.7458 10.5075 62.243 10.5075 61.6229C10.5075 61.0027 9.73088 60.5 8.77282 60.5C7.81475 60.5 7.03809 61.0027 7.03809 61.6229C7.03809 62.243 7.81475 62.7458 8.77282 62.7458Z"
-                            fill="#F7DF1E" />
-                        <path
-                            d="M21.6834 64.9432L18.8511 66.076C18.3048 65.4357 17.8077 64.8938 16.6155 64.8938C15.4729 64.8938 14.7523 65.1893 14.7523 66.3387L11.2744 74.1557V66.3063C11.2744 63.9252 13.3857 62.8413 16.4665 62.8413C19.2484 62.8413 20.8634 63.7938 21.6831 64.9434"
-                            fill="#F7DF1E" />
-                    </svg>
-
-                    <div class="d-flex align-items-center justify-content-center">
-                        <img src="https://plus.unsplash.com/premium_photo-1755001060420-7a561e278353?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8"
-                            width="100" height="100" style="border-radius: 50px" alt="">
-                    </div>
-
-                    <h5 class="text-center text-dark mt-4 mb-3 inter">Purchase Your Weakest Subject</h5>
-                    <p style="line-height: 1.2" class="text-center inter">
-                        Purchase the course that caused you discomfort and made it hard for you to sleep after failing.
-                    </p>
-
-                    <img src="{{ asset('public/assets/c-rec.png') }}"
-                        style="position: absolute; bottom: 0; left: 0; width: 100%" width="100%" alt="">
-                </div>
-            </div>
-
-            <div class="col-md-6 col-lg-4 col-xl-3">
-                <div class="card h-100 course-work p-4 border-0" style="border-radius: 30px;">
-                    <svg style="position: absolute; top: 30px; left: 20px" width="22" height="75"
-                        viewBox="0 0 22 75" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="10" r="10" fill="#26235C" />
-                        <path
-                            d="M0 72.2158L2.83209 71.083C3.37839 71.7232 3.87539 72.2652 5.06758 72.2652C6.21034 72.2652 6.93083 71.9696 6.93083 70.8204L10.4088 63.0033V70.8529C10.4088 73.234 8.2975 74.3179 5.21677 74.3179C2.43455 74.3179 0.819516 73.3654 0 72.2158Z"
-                            fill="#F7DF1E" />
-                        <path
-                            d="M8.77282 62.7458C9.73088 62.7458 10.5075 62.243 10.5075 61.6229C10.5075 61.0027 9.73088 60.5 8.77282 60.5C7.81475 60.5 7.03809 61.0027 7.03809 61.6229C7.03809 62.243 7.81475 62.7458 8.77282 62.7458Z"
-                            fill="#F7DF1E" />
-                        <path
-                            d="M21.6834 64.9432L18.8511 66.076C18.3048 65.4357 17.8077 64.8938 16.6155 64.8938C15.4729 64.8938 14.7523 65.1893 14.7523 66.3387L11.2744 74.1557V66.3063C11.2744 63.9252 13.3857 62.8413 16.4665 62.8413C19.2484 62.8413 20.8634 63.7938 21.6831 64.9434"
-                            fill="#F7DF1E" />
-                    </svg>
-
-                    <div class="d-flex align-items-center justify-content-center">
-                        <img src="https://plus.unsplash.com/premium_photo-1755001060420-7a561e278353?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8"
-                            width="100" height="100" style="border-radius: 50px" alt="">
-                    </div>
-
-                    <h5 class="text-center text-dark mt-4 mb-3 inter">Learn, Connect and Discuss</h5>
-                    <p style="line-height: 1.2" class="text-center inter">
-                        Courses are organized into weeks and steps. You can connect with other students and tutors
-                        during your learning experience.
-                    </p>
-
-                    <img src="{{ asset('public/assets/c-rec.png') }}"
-                        style="position: absolute; bottom: 0; left: 0; width: 100%" width="100%" alt="">
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-<section>
-    <div class="container px-lg-5 py-5">
-        <div class="box_header d-flex align-items-center justify-content-between flex-wrap row px-xl-5 px-3">
-            <div class="d-flex justify-content-between w-100 align-items-center mb-3 mb-md-4">
-                <h4 class="custom_small_heading inter f_w_700 ">
-                    {{ $total > 1 ? $total . ' Prep-Course' : $total . ' Prep-Course' }}
-                    {{ __(' Found') }}</h4>
-                <a class="font-weight-500 pull-bs-canvas-left filter_btn" id="filter_btn"
-                    style="cursor: pointer; text-align: center;">
-                    Show Filter
-                    <svg width="22" height="16" viewBox="0 0 22 16" xmlns="http://www.w3.org/2000/svg">
-                        <g id="icon-filter" fill-rule="nonzero" fill="none">
-                            <rect fill="#D8D8D8" y="2" width="22" height="2" rx="1">
-                            </rect>
-                            <rect fill="#D8D8D8" y="12" width="22" height="2" rx="1">
-                            </rect>
-                            <circle fill="#373737" cx="15.5" cy="13" r="2.5">
-                            </circle>
-                            <circle fill="#373737" cx="6.5" cy="3" r="2.5">
-                            </circle>
-                        </g>
-                    </svg>
-                </a>
-            </div>
-
-            <div class="box_header_right mb_30">
-                <div class="short_select d-flex align-items-center">
-                    <div class="mobile_filter mr_10">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="19.5" height="13" viewBox="0 0 19.5 13">
-                            <g transform="translate(28)">
-                                <rect id="Rectangle_1" data-name="Rectangle 1" width="19.5" height="2"
-                                    rx="1" transform="translate(-28)" fill="var(--system_primery_color)" />
-                                <rect id="Rectangle_2" data-name="Rectangle 2" width="15.5" height="2"
-                                    rx="1" transform="translate(-26 5.5)"
-                                    fill="var(--system_primery_color)" />
-                                <rect id="Rectangle_3" data-name="Rectangle 3" width="5" height="2"
-                                    rx="1" transform="translate(-20.75 11)"
-                                    fill="var(--system_primery_color)" />
-                            </g>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        @if (isset($courses))
-            <div class="row px-xl-5 px-3 mt-4">
-                @foreach ($courses as $course)
-                    @php
-                        // Determine the price (respecting effectiveCoursePlan if available)
-                        if (isset($course->effectiveCoursePlan[0])) {
-                            $price = $course->effectiveCoursePlan[0]->amount;
-                        } else {
-                            $price = $course->price + $course->tax;
-                        }
-
-                        // Determine course title (parent if applicable)
-                        $courseTitle = !empty($course->parent_id) ? $course->parent->title : $course->title;
-
-                        // Determine course link
-                        $courseUrl = !empty($course->parent_id)
-                            ? courseDetailsUrl(@$course->parent->id, @$course->type, @$course->parent->slug) .
-                                '?courseType=' .
-                                $course->type
-                            : courseDetailsUrl(
-                                @$course->id,
-                                @$course->type,
-                                @$course->slug . '?courseType=' . $course->type,
-                            );
-
-                        // Determine tag text
-                        if ($course->type == 4) {
-                            $tagText = __('Full Course');
-                        } elseif ($course->type == 5) {
-                            $tagText = __('Prep-Course') . ' (On-Demand)';
-                        } elseif ($course->type == 6) {
-                            $tagText = __('Prep-Course') . ' (Live)';
-                        } elseif ($course->type == 7) {
-                            $tagText = __('Time Table');
-                        } elseif ($course->type == 2) {
-                            $tagText = __('Big Quiz');
-                        } else {
-                            $tagText = __('Course');
-                        }
-
-                        // Determine chapters / lessons count
-                        $lessonCount =
-                            $course->type == 6
-                                ? collect($course->parent->classes)
-                                    ->filter(function ($class) use ($course) {
-                                        return $class->course_types != null &&
-                                            in_array($course->type, json_decode($class->course_types));
-                                    })
-                                    ->count()
-                                : ($course->type != 7 && $course->type != 9
-                                    ? count($course->parent->chapters)
-                                    : null);
-
-                        // Duration (weeks for live courses)
-                        $duration = null;
-                        if ($course->type == 4 || $course->type == 6) {
-                            if (isset($course->effectiveCoursePlan[0])) {
-                                $duration =
-                                    round(
-                                        (strtotime($course->effectiveCoursePlan[0]->edate) -
-                                            strtotime($course->effectiveCoursePlan[0]->sdate)) /
-                                            604800,
-                                        1,
-                                    ) . ' Weeks';
-                            }
-                        }
-
-                        // Student count
-                        if ($course->type == 4 || $course->type == 6) {
-                            $studentCount = isset($course->effectiveCoursePlan[0])
-                                ? $course->effectiveCoursePlan[0]->enrolls->count()
-                                : $course->course_enrolled_count;
-                        } elseif ($course->type == 2 || $course->type == 7) {
-                            $studentCount = $course->total_enrolled;
-                        } else {
-                            $studentCount = $course->course_enrolled_count;
-                        }
-                    @endphp
-
-                    <div class="col-md-6 col-lg-4 mb-4">
-                        <div class="card p-3 p-md-4 inter border-0 h-100"
-                            style="border-radius: 10px; box-shadow: 0px 4px 30px 0px #00000026;">
-                            <a href="{{ $courseUrl }}" class="text-decoration-none text-dark">
-                                <div class="position-relative">
-                                    <img class="" src="{{ getCourseImage($course->thumbnail) }}"
-                                        alt="{{ $courseTitle }}" width="100%" height="350"
-                                        style="border-radius: 10px; object-fit: cover;">
-                                    <span class="py-2 px-4 text-white"
-                                        style="background-color: var(--footer_text_hover_color); border-radius: 7px; position: absolute; top: 30px !important; left: 30px !important">
-                                        {{ $tagText }}
-                                    </span>
-                                </div>
-
-                                <div class="mt-3">
-                                    <div class="d-flex align-items-center gap-1">
-                                        <img src="{{ asset('public/assets/star.svg') }}" width="80px"
-                                            alt="Rating">
-                                        <small class="rating">
-                                            ({{ $course->totalReview ?? 0 }} | 5)
-                                        </small>
-                                    </div>
-
-                                    <h5 class="fw-bold mt-3 inter noBrake text-dark"
-                                        style="text-transform: capitalize !important">{{ $courseTitle }}</h5>
-
-                                    <div class="d-flex align-items-center justify-content-between my-4 flex-wrap gap-2"
-                                        style="border-bottom: 2px dashed #00000075">
-                                        @if ($lessonCount)
-                                            <div class="d-flex align-items-center gap-2">
-                                                <i class="fa-solid fa-file"></i>
-                                                <small class="inter">Lessons {{ $lessonCount }}</small>
-                                            </div>
-                                        @endif
-
-                                        @if ($duration)
-                                            <div class="d-flex align-items-center gap-2">
-                                                <i class="fa-solid fa-clock"></i>
-                                                <small class="inter">{{ $duration }}</small>
-                                            </div>
-                                        @endif
-
-                                        <div class="d-flex align-items-center gap-2">
-                                            <i class="fa-solid fa-user"></i>
-                                            <small class="inter">Students {{ $studentCount }}</small>
-                                        </div>
-                                    </div>
-
-                                    <div
-                                        class="d-flex align-items-center justify-content-between mt-3 flex-wrap gap-2">
-                                        <h5 class="inter fw-bold text-dark">${{ number_format($price, 2) }}</h5>
-                                        <small class="inter">{{ $tagText }}</small>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        @endif
-
-    </div>
-</section>
-
-{{-- <div>
-    <input type="hidden" class="class_route" name="class_route" value="{{ route('quizzes') }}">
-    <div class="py-lg-5 py-4 pt-md-5 pb-md-4">
-        <div class="container px-lg-5">
-            <div class="row px-lg-5 px-4 prep-course-padding">
-                <div class="col-12">
-                    <div class="box_header d-flex align-items-center justify-content-between flex-wrap">
-                        <div class="d-flex justify-content-between w-100 align-items-center mb-3 mb-md-4">
-                            <h4 class="custom_small_heading f_w_700 ">
-                                {{ $total > 1 ? $total . ' Prep-Course' : $total . ' Prep-Course' }}
-                                {{ __(' Found') }}</h4>
-                            <a class="font-weight-500 pull-bs-canvas-left filter_btn" id="filter_btn"
-                                style="cursor: pointer; text-align: center;">
-                                Show Filter
-                                <svg width="22" height="16" viewBox="0 0 22 16"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <g id="icon-filter" fill-rule="nonzero" fill="none">
-                                        <rect fill="#D8D8D8" y="2" width="22" height="2" rx="1">
-                                        </rect>
-                                        <rect fill="#D8D8D8" y="12" width="22" height="2" rx="1">
-                                        </rect>
-                                        <circle fill="#373737" cx="15.5" cy="13" r="2.5">
-                                        </circle>
-                                        <circle fill="#373737" cx="6.5" cy="3" r="2.5">
-                                        </circle>
-                                    </g>
-                                </svg>
-                            </a>
-                        </div>
-
-                        <div class="box_header_right mb_30">
-                            <div class="short_select d-flex align-items-center">
-                                <div class="mobile_filter mr_10">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="19.5" height="13"
-                                        viewBox="0 0 19.5 13">
-                                        <g transform="translate(28)">
-                                            <rect id="Rectangle_1" data-name="Rectangle 1" width="19.5"
-                                                height="2" rx="1" transform="translate(-28)"
-                                                fill="var(--system_primery_color)" />
-                                            <rect id="Rectangle_2" data-name="Rectangle 2" width="15.5"
-                                                height="2" rx="1" transform="translate(-26 5.5)"
-                                                fill="var(--system_primery_color)" />
-                                            <rect id="Rectangle_3" data-name="Rectangle 3" width="5"
-                                                height="2" rx="1" transform="translate(-20.75 11)"
-                                                fill="var(--system_primery_color)" />
-                                        </g>
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                @if (isset($courses))
-                    @foreach ($courses as $course)
-                        @if ($course->type == 2)
-                            <div class="col-sm-6 col-md-4 col-lg-4 col-xl-3 d-flex justify-content-center p-3">
-                                <div class="quiz_wizged card rounded-card shadow mb-md-4 mb-3 w-100">
-                                    <a
-                                        href="{{ courseDetailsUrl(@$course->id, @$course->type, @$course->slug . '?courseType=' . $course->type) }}">
-                                        <div class="thumb rounded-card-img">
-                                            <img src="{{ getCourseImage($course->thumbnail) }}" alt=""
-                                                class="img-fluid w-100 img-thumb course-page-img">
-                                            <x-price-tag :price="$course->price + $course->tax" :discount="$course->discount_price" />
-                                            <span class="quiz_tag">{{ __('Big Quiz') }}</span>
-                                        </div>
-                                    </a>
-
-                                    <div class="card-body course_content">
-                                        <a
-                                            href="{{ courseDetailsUrl(@$course->id, @$course->type, @$course->slug . '?courseType=' . $course->type) }}">
-                                            <h5 class="custom_small_heading noBrake font-weight-bold"
-                                                title=" {{ $course->title }}">
-                                                {{ $course->title }}
-                                            </h5>
-                                        </a>
-                                        <div class="rating_cart">
-                                            <div class="rateing">
-                                                <span>{{ $course->totalReview }} | 5</span>
-                                                <i class="fas fa-star"></i>
-                                            </div>
-                                            @if (!onlySubscription())
-                                                @auth()
-                                                    @if (!$course->isLoginUserEnrolled && !$course->isLoginUserCart)
-                                                    @endif
-                                                @endauth
-                                                @guest()
-                                                    @if (!$course->isGuestUserCart)
-                                                    @endif
-                                                @endguest
-                                            @endif
-                                        </div>
-                                        <div class="course_less_students d-flex justify-content-between">
-                                            <small class="small_tag_color"> <i class="ti-agenda"></i>
-                                                {{ count($course->quiz->assign) }}
-                                                {{ __('frontend.Question') }}</small>
-                                            <small class="small_tag_color">
-                                                <i class="ti-user"></i> {{ $course->total_enrolled }}
-                                                {{ __('frontend.Students') }}
-                                            </small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @elseif ($course->type == 8)
-                            @php
-                                $today = \Carbon\Carbon::now()->format('Y-m-d');
-                                $start_date = \Carbon\Carbon::parse($course->start_date)->format('Y-m-d');
-                                $end_date = \Carbon\Carbon::parse($course->end_date)->format('Y-m-d');
-                            @endphp
-                            <div class="col-sm-6 col-md-4 col-lg-4 col-xl-3 d-flex justify-content-center">
-                                <div class="quiz_wizged card rounded-card shadow mb-md-4 mb-3 w-100">
-                                    <a href="{{ route('repeat-course') . '?course_id=' . $course->id }}">
-                                        <div class="thumb rounded-card-img">
-
-                                            <img src="{{ getCourseImage($course->thumbnail) }}"
-                                                class="img-fluid w-100 rounded-card-img img-thumb course-page-img"
-                                                alt="">
-
-                                            <x-price-tag :price="$course->price + $course->tax" :discount="$course->discount_price" />
-                                            <span class="quiz_tag">{{ __('Repeat Course') }}</span>
-                                        </div>
-                                    </a>
-
-                                    <div class="card-body course_content">
-                                        <a href="{{ route('repeat-course') . '?course_id=' . $course->id }}">
-                                            <h5 class="noBrake font-weight-bold"
-                                                title=" {{ $course->parent->title }}">
-                                                {{ $course->parent->title }}
-                                            </h5>
-                                        </a>
-                                        <div class="rating_cart">
-                                            <div class="rateing">
-                                                <span>{{ $course->totalReview }} | 5</span>
-                                                <i class="fas fa-star"></i>
-                                            </div>
-                                            @if (!onlySubscription())
-                                                @auth()
-                                                    @if (!$course->isLoginUserEnrolled && !$course->isLoginUserCart)
-                                                    @endif
-                                                @endauth
-                                                @guest()
-                                                    @if (!$course->isGuestUserCart)
-                                                    @endif
-                                                @endguest
-                                            @endif
-                                        </div>
-                                        <div class="course_less_students d-flex justify-content-between">
-                                            <small class="small_tag_color"> <i class="ti-agenda"></i>
-                                                {{ count($course->quiz->assign) }}
-                                                {{ __('frontend.Question') }}</small>
-                                            <small class="small_tag_color">
-                                                <i class="ti-user"></i> {{ $course->total_enrolled }}
-                                                {{ __('frontend.Students') }}
-                                            </small>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @else
-                            <div class="col-sm-6 col-md-4 col-lg-4 col-xl-3 d-flex justify-content-center">
-                                <div class="quiz_wizged card rounded-card shadow mb-md-4 mb-3 w-100">
-                                    <a
-                                        href="{{ !empty($course->parent_id) ? courseDetailsUrl(@$course->parent->id, @$course->type, @$course->parent->slug) . '?courseType=' . $course->type : courseDetailsUrl(@$course->id, @$course->type, @$course->slug . '?courseType=' . $course->type) }}">
-
-                                        <div class="thumb rounded-card-img">
-                                            <img src="{{ getCourseImage($course->thumbnail) }}"
-                                                class="img-fluid w-100 rounded-card-img img-thumb course-page-img"
-                                                alt="">
-                                            @php
-                                                if (isset($course->effectiveCoursePlan[0])) {
-                                                    // dd($course->effectiveCoursePlan,$course);
-                                                    $price = $course->effectiveCoursePlan[0]->amount;
-                                                } else {
-                                                    $price = $course->price + $course->tax;
-                                                }
-                                            @endphp
-
-                                            <x-price-tag :price="$price" :discount="$course->discount_price" />
-                                            @if ($course->type == 4)
-                                                <span class="quiz_tag">{{ __('Full Course') }}</span>
-                                            @elseif($course->type == 5)
-                                                <span
-                                                    class="quiz_tag">{{ __('Prep-Course') }}<small>(On-Demand)</small></span>
-                                            @elseif($course->type == 6)
-                                                <span
-                                                    class="quiz_tag">{{ __('Prep-Course') }}<small>(Live)</small></span>
-                                            @elseif($course->type == 7)
-                                                <span class="quiz_tag">{{ __('Time Table') }}</span>
-                                            @endif
-                                        </div>
-                                    </a>
-
-
-                                    <div class="card-body course_content">
-                                        <a
-                                            href="{{ !empty($course->parent_id) ? courseDetailsUrl(@$course->id, @$course->type, @$course->parent->slug) . '?courseType=' . $course->type : courseDetailsUrl(@$course->id, @$course->type, @$course->slug . '?courseType=' . $course->type) }}">
-                                            <h5 class="noBrake font-weight-bold"
-                                                title=" {{ !empty($course->parent_id) ? $course->parent->title : $course->title }}">
-                                                {{ !empty($course->parent_id) ? $course->parent->title : $course->title }}
-                                            </h5>
-                                        </a>
-                                        <div class="rating_cart">
-                                            <div class="rateing">
-                                                <span>{{ $course->totalReview }}
-                                                    | 5</span>
-                                                <i class="fas fa-star"></i>
-                                            </div>
-                                            @if (!onlySubscription())
-                                                @auth()
-                                                    @if (!$course->isLoginUserEnrolled && !$course->isLoginUserCart)
-                                                    @endif
-                                                @endauth
-                                                @guest()
-                                                    @if (!$course->isGuestUserCart)
-                                                    @endif
-                                                @endguest
-                                            @endif
-                                        </div>
-                                        <div class="course_less_students d-flex justify-content-between course-small"
-                                            style="gap: 7px; text-align: center;">
-
-                                            @if ($course->type == 6)
-                                                <small class="small_tag_color"> <i class="ti-agenda"></i>
-                                                    <?php $classcount = 0; ?>
-                                                    @foreach ($course->parent->classes as $class)
-                                                        @if ($class->course_types != null && in_array($course->type, json_decode($class->course_types)))
-                                                            <?php $classcount++; ?>
-                                                        @endif
-                                                    @endforeach
-
-                                                    {{ $classcount }}
-                                                    {{ __('Classes') }}
-                                                </small>
-                                            @else
-                                                @if ($course->type != 7 && $course->type != 9)
-                                                    <small class="small_tag_color"> <i class="ti-agenda"></i>
-                                                        {{ count($course->parent->chapters) }}
-                                                        {{ __('Chapters') }}</small>
-                                                @endif
-                                            @endif
-                                            @if ($course->type == 2 || $course->type == 7)
-                                                <small class="small_tag_color">
-                                                    <i class="ti-user"></i> {{ $course->total_enrolled }}
-                                                    {{ __('frontend.Students') }}
-                                                </small>
-                                            @elseif ($course->type == 4 || $course->type == 6)
-                                                <small class="small_tag_color">
-                                                    <i class="ti-user"></i>
-                                                    {{ $course->effectiveCoursePlan[0]->enrolls->count() }}
-                                                    {{ __('frontend.Students') }}
-                                                </small>
-                                                @if (isset($course->effectiveCoursePlan[0]))
-                                                    <small class="small_tag_color">
-                                                        <i class="fas fa-clock"></i>
-                                                        {{ round((strtotime($course->effectiveCoursePlan[0]->edate) - strtotime($course->effectiveCoursePlan[0]->sdate)) / 604800, 1) }}
-                                                        Weeks
-                                                    </small>
-                                                @endif
-                                            @else
-                                                <small class="small_tag_color">
-                                                    <i class="ti-user"></i>
-                                                    {{ $course->course_enrolled_count }}
-                                                    {{ __('frontend.Students') }}
-                                                </small>
-                                            @endif
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-                    @endforeach
-                @endif
-                @if (count($courses) == 0)
-                    <div class="col-lg-12">
-
-                        <div class="Nocouse_wizged d-flex align-items-center justify-content-center text-center">
-                            <div class="thumb">
-                                <img style="width: 50px"
-                                    src="{{ asset('public/frontend/infixlmstheme') }}/img/not-found.png"
-                                    alt="">
-                            </div>
-                            <h1>
-                                {{ __('No Prep-Course Found') }}
-                            </h1>
-                        </div>
-
-                    </div>
-                @endif
-            </div>
-            <div class="">
-                {{ $courses->appends(Request::all())->links() }}
-                <!-- </div> -->
-            </div>
-        </div>
-    </div>
-</div> --}}
-
-
-<div class="bs-canvas bs-canvas-left position-fixed bg-light h-100">
-    <header class="border-bottom bs-canvas-header p-3">
-        <h4 class="d-inline-block f_w_600 mb-0">Filter</h4>
-        <button type="button" class="bs-canvas-close close" aria-label="Close"><span aria-hidden="true"
-                class="">&times;</span></button>
-    </header>
-
-    <div class="bs-canvas-content px-3 py-1">
-
-        <form>
-
-            @if ($request->has('tutor_courses'))
-                <input type="hidden" name="tutor_courses" value="1">
+        <div class="pc-course-card" data-category="cat-{{ $course->category_id ?? 0 }}">
+          <div class="pc-course-thumb {{ $thumbClass }}">
+            @if (!empty($course->thumbnail))
+              <img src="{{ getCourseImage($course->thumbnail) }}" alt="{{ $course->title }}">
+            @else
+              <div class="pc-course-thumb-label">{{ $course->title }}</div>
             @endif
-            <div class="row">
-                <div class="col-md-12">
-                    <h6>Course Name</h6>
-                </div>
-                <div class="col-md-12">
-                    <input type="text" class="form-control form-control-sm" name="filter_search_by"
-                        id="" placeholder="Enter Course Name"
-                        value="{{ $request->filter_search_by ?? '' }}">
-                </div>
-                <div class="col-md-12 mt-3">
-                    <h6>Course Type</h6>
-                </div>
-                <div class="col-md-12">
-                    @if ($request->has('tutor_courses'))
-                        <input type="checkbox" name="filter_by_course_type[]" value="9"
-                            id="filter_course_type_9" @if (isset($request->filter_by_course_type) && in_array(9, $request->filter_by_course_type)) checked @endif>
-                        <label class="mb-0" for="filter_course_type_9">{{ __('Tutor Course') }}</label>
-                    @else
-                        <div class="input-group mb-1 gap-2">
-                            <input type="checkbox" name="filter_by_course_type[]" value="2"
-                                @if (isset($request->filter_by_course_type) && in_array(2, $request->filter_by_course_type)) checked @endif id="filter_course_type_2">
-                            <label class="mb-0" for="filter_course_type_2">{{ __('Big Quiz') }}</label>
-                        </div>
-                        <div class="input-group mb-1 gap-2">
-                            <input type="checkbox" name="filter_by_course_type[]" value="4"
-                                id="filter_course_type_4" @if (isset($request->filter_by_course_type) && in_array(4, $request->filter_by_course_type)) checked @endif>
-                            <label class="mb-0" for="filter_course_type_4">{{ __('Full Course') }}</label>
-                        </div>
-                        <div class="input-group mb-1 gap-2">
-                            <input type="checkbox" name="filter_by_course_type[]" value="5"
-                                id="filter_course_type_5" @if (isset($request->filter_by_course_type) && in_array(5, $request->filter_by_course_type)) checked @endif>
-                            <label class="mb-0"
-                                for="filter_course_type_5">{{ __('Prep-Course') }}<small>(On-Demand)</small></label>
-                        </div>
-                        <div class="input-group mb-1 gap-2">
-                            <input type="checkbox" name="filter_by_course_type[]" value="6"
-                                id="filter_course_type_6" @if (isset($request->filter_by_course_type) && in_array(6, $request->filter_by_course_type)) checked @endif>
-                            <label class="mb-0"
-                                for="filter_course_type_6">{{ __('Prep-Course') }}<small>(Live)</small></label>
-                        </div>
-                        <div class="input-group mb-1 gap-2">
-                            <input type="checkbox" name="filter_by_course_type[]" value="7"
-                                id="filter_course_type_7" @if (isset($request->filter_by_course_type) && in_array(7, $request->filter_by_course_type)) checked @endif>
-                            <label class="mb-0" for="filter_course_type_7">{{ __('Time Table') }}</label>
-                        </div>
-                        <div class="input-group mb-1 gap-2">
-                            <input type="checkbox" name="filter_by_course_type[]" value="8"
-                                id="filter_course_type_8" @if (isset($request->filter_by_course_type) && in_array(8, $request->filter_by_course_type)) checked @endif>
-                            <label class="mb-0" for="filter_course_type_8">{{ __('Repeat Course') }}</label>
-                        </div>
-                    @endif
-                </div>
-                {{-- <div class="col-md-12 mt-3">
-                        <h6>Categories</h6>
-                        <select id="categories" name="filter_by_categories" class="form-control form-control-sm mb-2">
-                            <option value="" selected>Select Category</option>
-                            <option value="1">Category 1</option>
-                            <option value="2">Category 2</option>
-                            <option value="3">Category 3</option>
-                            <option value="4">Category 4</option>
-                        </select>
-                    </div>
-                    <div class="col-md-12 mt-3">
-                        <h6>Sub Categories</h6>
-                        <select id="sub_categories" name="filter_by_sub_categories" class="form-control form-control-sm mb-2">
-                            <option value="" selected>Select Sub Category</option>
-                            <option value="2">Sub Category 2</option>
-                            <option value="1">Sub Category 1</option>
-                            <option value="3">Sub Category 3</option>
-                            <option value="4">Sub Category 4</option>
-                        </select>
-                    </div> --}}
-                <div class="col-md-12 mt-3">
-                    <h6 class="mb-3">Price</h6>
-                    <div class="d-flex flex-column">
-                        <h6 class="mb-0">From</h6>
-                        <div class="align-items-center d-flex flex-row-reverse gap-2">
-                            <p id="price_range_min" class="font-weight-bold">{{ $request->filter_by_price_min ?? 0 }}
-                            </p>
-                            <input type="range" min="0" max="{{ $max_price }}" step="1"
-                                name="filter_by_price_min" class="form-control accent-color p-0"
-                                oninput="price_range_min.innerText = this.value" id="program_price_min"
-                                value="{{ $request->filter_by_price_min ?? 0 }}">
-                        </div>
-                        <h6 class="mb-0">To</h6>
-                        <div class="align-items-center d-flex flex-row-reverse gap-2">
-                            <p id="price_range_max" class="font-weight-bold">
-                                {{ $request->filter_by_price_max ?? $max_price }}</p>
-                            <input type="range" min="0" max="{{ $max_price }}" step="1"
-                                name="filter_by_price_max" class="form-control accent-color p-0"
-                                oninput="price_range_max.innerText = this.value" id="program_price_max"
-                                value="{{ $request->filter_by_price_max ?? $max_price }}">
-                        </div>
-                    </div>
-                </div>
+            @if (count($typeBadges))
+              <div class="pc-course-type-badges">
+                @foreach ($typeBadges as $badge)
+                  <span class="pc-type-badge {{ $badge['class'] }}">{{ $badge['label'] }}</span>
+                @endforeach
+              </div>
+            @endif
+          </div>
+          <div class="pc-course-body">
+            <p class="pc-course-tag">{{ $categoryName }}</p>
+            <h3>{{ $course->title }}</h3>
+            <p>{{ $excerpt ?: 'Explore this prep-course and choose the learning option that fits you best.' }}</p>
+            <div class="pc-course-footer">
+              @if ($priceLabel)
+                <span class="pc-course-price">{{ $priceLabel }}</span>
+              @else
+                <span class="pc-course-price" style="font-size:14px;">View options</span>
+              @endif
+              <a href="{{ route('courseDetailsView', $course->slug) }}" class="pc-course-enroll">Learn More &rarr;</a>
             </div>
-            <p class="mb-0 mt-4 text-center">
-                <button type="submit" class="theme_btn small_btn2 p-2">Submit</button>
-            </p>
-        </form>
+          </div>
+        </div>
+      @empty
+        <div class="pc-empty-state">
+          <h3>No courses available yet</h3>
+          <p>Check back soon for new prep-courses.</p>
+        </div>
+      @endforelse
+
     </div>
-</div>
+    <div class="pc-load-more-wrap" id="pcLoadMoreWrap">
+      <button type="button" class="pc-load-more-btn" id="pcLoadMoreBtn">Load More</button>
+    </div>
+  </div>
+</section>
+
+<section class="pc-bundle-section">
+  <div class="pc-bundle-inner">
+    <span class="pc-bundle-eyebrow">Save with Bundles</span>
+    <h2>Buy One. Or <em>Bundle and Save.</em></h2>
+    <p class="pc-bundle-intro">Most students need more than one subject. Bundles give you the complete package at a fraction of individual pricing — with the same lifetime access and practice Qbank.</p>
+    <div class="pc-bundle-cards">
+      <div class="pc-bundle-card">
+        <p class="pc-bundle-card-name">Foundations Pack</p>
+        <p class="pc-bundle-card-desc">A&amp;P + Pharm + Fundamentals</p>
+        <p class="pc-bundle-card-price">$365</p>
+        <p class="pc-bundle-card-save">Save $92 vs. individual</p>
+      </div>
+      <div class="pc-bundle-card">
+        <p class="pc-bundle-card-name">Specialty Pack</p>
+        <p class="pc-bundle-card-desc">Mental Health + OB + Peds + Med-Surg</p>
+        <p class="pc-bundle-card-price">$529</p>
+        <p class="pc-bundle-card-save">Save $137 vs. individual</p>
+      </div>
+      <div class="pc-bundle-card">
+        <p class="pc-bundle-card-name">Full Subject Pack</p>
+        <p class="pc-bundle-card-desc">All 20+ courses included</p>
+        <p class="pc-bundle-card-price">$1,497</p>
+        <p class="pc-bundle-card-save">Best value · Save $1,000+</p>
+      </div>
+    </div>
+    <a href="#" class="pc-btn-primary">Questions? Schedule a Free Call →</a>
+  </div>
+</section>
+
+<section class="pc-notice-section">
+  <div class="pc-notice-card">
+    <h4>Important Notice</h4>
+    <p>Prep-courses are self-paced educational resources. They are not coaching programs and do not include live instruction or 1:1 support. For personalized coaching, see our NCLEX Success Coaching Program™ or Nursing School Success Program. Prep-courses do not fulfill Florida Board of Nursing remediation requirements — for that, see our FL BON Remediation Program.</p>
+  </div>
+</section>
+
+<section class="pc-stats-band">
+  <div class="pc-stats-grid">
+    <div>
+      <p class="pc-stat-number">{{ $total ?? 0 }}+</p>
+      <p class="pc-stat-label">Subject Courses</p>
+    </div>
+    <div>
+      <p class="pc-stat-number">1,500+</p>
+      <p class="pc-stat-label">Students Served</p>
+    </div>
+    <div>
+      <p class="pc-stat-number">95%</p>
+      <p class="pc-stat-label">Pass Rate</p>
+    </div>
+    <div>
+      <p class="pc-stat-number">∞</p>
+      <p class="pc-stat-label">Lifetime Access</p>
+    </div>
+  </div>
+</section>
+
+<section class="pc-final-cta">
+  <div class="pc-final-cta-inner">
+    <h2>Not sure which courses <em>you need?</em></h2>
+    <p>Schedule a free 20-minute consultation. We'll help you identify your weak areas and recommend the right courses — or the right program — for where you are right now.</p>
+    <a href="#" class="pc-btn-primary">Schedule a Free Advisor Call →</a>
+  </div>
+</section>
+
+<script>
+(function() {
+  var root = document.querySelector('.mxp-prep-courses');
+  if (!root) return;
+
+  var PER_PAGE = 3;
+  var tabs = root.querySelectorAll('.pc-filter-tab');
+  var cards = root.querySelectorAll('.pc-course-card');
+  var loadMoreWrap = root.querySelector('#pcLoadMoreWrap');
+  var loadMoreBtn = root.querySelector('#pcLoadMoreBtn');
+  var activeFilter = 'all';
+  var shownCount = PER_PAGE;
+
+  function getMatchingCards() {
+    return Array.prototype.filter.call(cards, function(card) {
+      return activeFilter === 'all' || card.dataset.category === activeFilter;
+    });
+  }
+
+  function applyCourseVisibility() {
+    var matching = getMatchingCards();
+
+    cards.forEach(function(card) {
+      card.classList.add('is-pc-hidden');
+    });
+
+    matching.forEach(function(card, index) {
+      if (index < shownCount) {
+        card.classList.remove('is-pc-hidden');
+      }
+    });
+
+    if (loadMoreWrap) {
+      if (matching.length <= shownCount) {
+        loadMoreWrap.classList.add('is-pc-hidden');
+      } else {
+        loadMoreWrap.classList.remove('is-pc-hidden');
+      }
+    }
+  }
+
+  tabs.forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      tabs.forEach(function(t) { t.classList.remove('active'); });
+      this.classList.add('active');
+      activeFilter = this.dataset.filter;
+      shownCount = PER_PAGE;
+      applyCourseVisibility();
+    });
+  });
+
+  if (loadMoreBtn) {
+    loadMoreBtn.addEventListener('click', function() {
+      shownCount += PER_PAGE;
+      applyCourseVisibility();
+    });
+  }
+
+  applyCourseVisibility();
+})();
+</script>
 </div>

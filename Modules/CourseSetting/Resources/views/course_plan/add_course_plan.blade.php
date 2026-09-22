@@ -116,7 +116,7 @@
                 <div class="row">
                     <div class="col-xl-12 courseBox">
                         <div class="primary_input mb-25">
-                            <label class="primary_input_label" for="course_id">{{ __('Courses') }}<strong
+                            <label class="primary_input_label" for="course_id">{{ __('courses.Courses') }}<strong
                                 class="text-danger">*</strong>
                             </label>
                             <select class="primary_select" name="course_id" id="course_id"

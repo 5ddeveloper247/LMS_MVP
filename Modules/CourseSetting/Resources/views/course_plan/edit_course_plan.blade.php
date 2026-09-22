@@ -126,7 +126,7 @@
                 <div class="row">
                     <div class="col-xl-12 courseBox">
                         <div class="primary_input mb-25">
-                            <label class="primary_input_label" for="course_id">{{ __('Courses') }}
+                            <label class="primary_input_label" for="course_id">{{ __('courses.Courses') }}
                             </label>
                             <select class="primary_select disabled" name="course_id" id="course_id"
                                 {{ $errors->has('courses') ? 'autofocus' : '' }}>

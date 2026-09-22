@@ -302,13 +302,9 @@ class CourseSettingController extends Controller
             'language' => 'nullable',
             'duration' => 'nullable',
             'course_code' => 'unique:courses,course_code',
-            'full_course_main_image' => 'required_if:cna_prep_type_check,==,1',
+            'parent_course_image' => 'required_if:type,==,1',
             //'assign_instructor' => 'required_unless:type,7',
             'test_prep_price' => 'required_if:test_prep_type,==,1',
-            'demand_course_main_image' => 'required_if:test_prep_type,==,1',
-
-            // 'test_prep_graded_price' => 'required_if:test_prep_graded_type,==,1',
-            'live_course_main_image' => 'required_if:test_prep_graded_type,==,1',
             // 'image' => 'nullable|mimes:jpeg,bmp,png,jpg|max:4096',
             // 'hidden_file' => 'nullable|mimes:jpeg,bmp,png,jpg|max:4096',
             //         	'parent_course_thumbnail_image' => 'required|mimes:jpeg,bmp,png,jpg|max:4096',
@@ -545,8 +541,8 @@ class CourseSettingController extends Controller
                 $child_course->type = 4;
                 if ($request->has('cna_prep_type') && $request->cna_prep_type == 1) {
                     $child_course->price = '';
-                    $child_course->thumbnail = $this->saveCroppedImage($request->full_course_thumbnail_image);
-                    $child_course->image = $this->saveImage($request->full_course_main_image);
+                    $child_course->thumbnail = $course->thumbnail;
+                    $child_course->image = $course->image;
                     $child_course->featured = ($request->has('cna_prep_featured') && $request->cna_prep_featured == 1) ? 1 : 0;
                     $child_course->parent_id = $course->id;
                     $art = $child_course->getAttributes();
@@ -565,8 +561,8 @@ class CourseSettingController extends Controller
                 $child_course->type = 5;
                 if ($request->has('test_prep_type') && $request->test_prep_type == 1) {
                     $child_course->price = $request->test_prep_price;
-                    $child_course->thumbnail = $this->saveCroppedImage($request->demand_course_thumbnail_image);
-                    $child_course->image = $this->saveImage($request->demand_course_main_image);
+                    $child_course->thumbnail = $course->thumbnail;
+                    $child_course->image = $course->image;
                     $child_course->featured = ($request->has('test_prep_featured') && $request->test_prep_featured == 1) ? 1 : 0;
                     $child_course->parent_id = $course->id;
                     $art = $child_course->getAttributes();
@@ -585,8 +581,8 @@ class CourseSettingController extends Controller
                 $child_course->type = 6;
                 if ($request->has('test_prep_graded_type') && $request->test_prep_graded_type == 1) {
                     $child_course->price = '';
-                    $child_course->thumbnail = $this->saveCroppedImage($request->live_course_thumbnail_image);
-                    $child_course->image = $this->saveImage($request->live_course_main_image);
+                    $child_course->thumbnail = $course->thumbnail;
+                    $child_course->image = $course->image;
                     $child_course->featured = ($request->has('test_prep_graded_featured') && $request->test_prep_graded_featured == 1) ? 1 : 0;
                     $child_course->parent_id = $course->id;
                     $art = $child_course->getAttributes();
@@ -601,6 +597,8 @@ class CourseSettingController extends Controller
                     }
                     Course::create($art);
                 }
+
+                $this->syncParentImagesToChildren($course);
 
                 checkGamification('each_course', 'courses');
                 if (isModuleActive('Membership')) {
@@ -903,11 +901,8 @@ class CourseSettingController extends Controller
                     
                     if ($request->has('cna_prep_type') && $request->cna_prep_type == 1) {
 
-                        if ($request->file('full_course_main_image') != "") {
-
-                            $child_course->thumbnail = $this->saveCroppedImage($request->full_course_thumbnail_image);
-                            $child_course->image = $this->saveImage($request->full_course_main_image);
-                        }
+                        $child_course->thumbnail = $course->thumbnail;
+                        $child_course->image = $course->image;
 
                         $art = $child_course->getAttributes();
                         if (array_key_exists('id', $art)) {
@@ -925,10 +920,8 @@ class CourseSettingController extends Controller
                 } else {
                     if ($request->has('cna_prep_type') && $request->cna_prep_type == 1) {
 
-                        if ($request->file('full_course_main_image') != "") {
-                            $child_course1->thumbnail = $this->saveCroppedImage($request->full_course_thumbnail_image);
-                            $child_course1->image = $this->saveImage($request->full_course_main_image);
-                        }
+                        $child_course1->thumbnail = $course->thumbnail;
+                        $child_course1->image = $course->image;
                         $child_course1->price = null;
                         $child_course1->featured = ($request->has('cna_prep_featured') && $request->cna_prep_featured == 1) ? 1 : 0;
                         $child_course1->save();
@@ -952,12 +945,9 @@ class CourseSettingController extends Controller
                     if ($request->has('test_prep_type') && $request->test_prep_type == 1) {
 
                         $child_course->price = $request->test_prep_price;
+                        $child_course->thumbnail = $course->thumbnail;
+                        $child_course->image = $course->image;
 
-                        if ($request->file('demand_course_main_image') != "") {
-                            $child_course->thumbnail = $this->saveCroppedImage($request->demand_course_thumbnail_image);
-                            $child_course->image = $this->saveImage($request->demand_course_main_image);
-                        }
-                        
                         $art = $child_course->getAttributes();
                         if (array_key_exists('id', $art)) {
                             unset($art['id']);
@@ -976,11 +966,8 @@ class CourseSettingController extends Controller
                     if ($request->has('test_prep_type') && $request->test_prep_type == 1) {
 
                         $child_course2->price = $request->test_prep_price;
-
-                        if ($request->file('demand_course_main_image') != "") {
-                            $child_course2->thumbnail = $this->saveCroppedImage($request->demand_course_thumbnail_image);
-                            $child_course2->image = $this->saveImage($request->demand_course_main_image);
-                        }
+                        $child_course2->thumbnail = $course->thumbnail;
+                        $child_course2->image = $course->image;
                         $child_course2->featured = ($request->has('test_prep_featured') && $request->test_prep_featured == 1) ? 1 : 0;
                         $child_course2->save();
                     } else {
@@ -1002,10 +989,8 @@ class CourseSettingController extends Controller
                     $child_course->course_code = null;
                     $child_course->featured = ($request->has('test_prep_graded_featured') && $request->test_prep_graded_featured == 1) ? 1 : 0;
                     if ($request->has('test_prep_graded_type') && $request->test_prep_graded_type == 1) {
-                        if ($request->file('live_course_main_image') != "") {
-                            $child_course->thumbnail = $this->saveCroppedImage($request->live_course_thumbnail_image);
-                            $child_course->image = $this->saveImage($request->live_course_main_image);
-                        }
+                        $child_course->thumbnail = $course->thumbnail;
+                        $child_course->image = $course->image;
 
                         $art = $child_course->getAttributes();
                         if (array_key_exists('id', $art)) {
@@ -1021,11 +1006,9 @@ class CourseSettingController extends Controller
                     }
                 } else {
                     if ($request->has('test_prep_graded_type') && $request->test_prep_graded_type == 1) {
-                        if ($request->file('live_course_main_image') != "") {
-                            $child_course3->thumbnail = $this->saveCroppedImage($request->live_course_thumbnail_image);
-                            $child_course3->image = $this->saveImage($request->live_course_main_image);
-                        }
-                        
+                        $child_course3->thumbnail = $course->thumbnail;
+                        $child_course3->image = $course->image;
+
                         $child_course3->featured = ($request->has('test_prep_graded_featured') && $request->test_prep_graded_featured == 1) ? 1 : 0;
                         $child_course3->price = null;
                         $child_course3->save();
@@ -1035,6 +1018,8 @@ class CourseSettingController extends Controller
                         }
                     }
                 }
+
+                $this->syncParentImagesToChildren($course);
             }
 
 
@@ -2646,5 +2631,22 @@ class CourseSettingController extends Controller
                 'message' => 'Server error occurred'
             ], 500);
         }
+    }
+
+    /**
+     * Keep child course images in sync with the parent (single image for listing/detail).
+     */
+    private function syncParentImagesToChildren(Course $parent): void
+    {
+        if ((int) $parent->type !== 1 || empty($parent->thumbnail)) {
+            return;
+        }
+
+        Course::where('parent_id', $parent->id)
+            ->whereIn('type', [4, 5, 6])
+            ->update([
+                'thumbnail' => $parent->thumbnail,
+                'image' => $parent->image,
+            ]);
     }
 }
