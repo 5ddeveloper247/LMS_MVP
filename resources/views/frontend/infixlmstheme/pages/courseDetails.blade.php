@@ -13,4 +13,9 @@
 
 @section('js')
     <script src="{{ asset('public/frontend/infixlmstheme/js/class_details.js') }}"></script>
+    @if ($errors->has('review') || $errors->has('rating'))
+        <script>
+            $(function () { $('#myModal').modal('show'); });
+        </script>
+    @endif
 @endsection

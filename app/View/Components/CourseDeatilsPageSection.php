@@ -35,14 +35,31 @@ class CourseDeatilsPageSection extends Component
     {
         // $duration = $this->duration;
         $courseType = $this->request->get('courseType') ?? 0;
+        $this->course->loadMissing([
+            'children' => fn ($q) => $q->where('status', 1),
+        ]);
+        $effectiveCourseType = (int) $courseType;
+        if (!$effectiveCourseType) {
+            foreach ($this->course->children as $child) {
+                if (in_array((int) $child->type, [5, 6, 4], true)) {
+                    $effectiveCourseType = (int) $child->type;
+                    break;
+                }
+            }
+        }
+
         $related = Course::where('category_id', $this->course->category_id)->with('activeReviews', 'enrollUsers', 'cartUsers', 'lessons')
             ->where('id', '!=', $this->course->id)->with('lessons')->take(2)->get();
 
         $userRating = userRating($this->course->user_id);
-        $courseRating = courseRating($this->course->id,$this->request->get('courseType'));
+        $courseRating = courseRating($this->course->id, $effectiveCourseType ?: null);
         $course_exercises = DB::table('course_exercises')
             ->select('file', 'fileName', 'lock')->where('course_id', $this->course->id)->get();
-        $course_reviews = DB::table('course_reveiws')->select('user_id')->where('course_id', $this->course->id)->where('courseType',$courseType)->get();
+        $courseReviewsQuery = DB::table('course_reveiws')->select('user_id')->where('course_id', $this->course->id);
+        if ($effectiveCourseType) {
+            $courseReviewsQuery->where('courseType', $effectiveCourseType);
+        }
+        $course_reviews = $courseReviewsQuery->get();
         $course_enrolls = DB::table('course_enrolleds')->select('user_id')->where('course_id', $this->course->id)->get();
 
         $bookmarked = BookmarkCourse::where('user_id', Auth::id())->where('course_id', $this->course->id)->count();
@@ -194,16 +211,18 @@ class CourseDeatilsPageSection extends Component
 
         $relatedCourses = $this->loadRelatedCourses($courseCategoryId);
 
-        $detailReviews = CourseReveiw::where('course_id', $this->course->id)
-            ->where('status', 1)
+        $detailReviewsQuery = CourseReveiw::where('course_id', $this->course->id)
+            ->where('status', 1);
+        if ($effectiveCourseType) {
+            $detailReviewsQuery->where('courseType', $effectiveCourseType);
+        }
+        $detailReviews = (clone $detailReviewsQuery)
             ->with('user')
             ->orderByDesc('id')
             ->take(4)
             ->get();
 
-        $reviewStars = CourseReveiw::where('course_id', $this->course->id)
-            ->where('status', 1)
-            ->pluck('star');
+        $reviewStars = (clone $detailReviewsQuery)->pluck('star');
 
         $detailReviewStats = [
             'total' => $reviewStars->count(),

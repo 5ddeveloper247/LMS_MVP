@@ -270,6 +270,56 @@
 .mxp-course-detail .review-card p.review-text { font-size: 14px; color: var(--charcoal-soft); line-height: 1.7; margin: 0; }
 .mxp-course-detail .review-verified { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: var(--teal-mid); font-weight: 500; margin-top: 12px; }
 .mxp-course-detail .review-verified svg { width: 13px; height: 13px; }
+.mxp-course-detail .review-submit-box {
+  background: var(--white); border: 1px solid var(--gray-line); border-radius: 14px;
+  padding: 28px 32px; margin: 0 auto 36px; max-width: 640px; text-align: center;
+}
+.mxp-course-detail .review-submit-box h3 {
+  font-family: var(--serif); font-size: 22px; color: var(--teal-darkest); margin-bottom: 8px;
+}
+.mxp-course-detail .review-submit-box p { font-size: 14px; color: var(--charcoal-soft); margin-bottom: 18px; }
+.mxp-course-detail .review-rate-stars { display: inline-flex; flex-direction: row-reverse; gap: 6px; }
+.mxp-course-detail .review-rate-stars button {
+  border: none; background: none; padding: 0; cursor: pointer; line-height: 1;
+}
+.mxp-course-detail .review-rate-stars button svg {
+  width: 32px; height: 32px; color: var(--gray-line); fill: var(--gray-line); transition: color 0.15s, fill 0.15s;
+}
+.mxp-course-detail .review-rate-stars button:hover svg,
+.mxp-course-detail .review-rate-stars button:hover ~ button svg { color: var(--gold-star); fill: var(--gold-star); }
+.mxp-course-detail .review-submit-note { font-size: 13px; color: var(--charcoal-soft); margin-top: 14px; }
+.mxp-course-detail .review-submit-note a { color: var(--teal-mid); font-weight: 600; text-decoration: none; }
+.mxp-course-detail .review-submit-note a:hover { color: var(--terracotta); }
+.mxp-course-detail .review-signin-wrap { text-align: center; margin-bottom: 28px; }
+.mxp-course-detail .btn-review-signin {
+  display: inline-block; background: var(--teal-darkest); color: var(--white); padding: 12px 28px;
+  border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600;
+  border: 2px solid var(--teal-darkest); transition: all 0.2s;
+}
+.mxp-course-detail .btn-review-signin:hover { background: var(--teal-deep); border-color: var(--teal-deep); color: var(--white); }
+.mxp-course-detail .review-modal .modal-content { border: none; border-radius: 14px; overflow: hidden; }
+.mxp-course-detail .review-modal .modal-header {
+  background: linear-gradient(135deg, var(--teal-darkest), var(--teal-deep)); color: var(--white);
+  border: none; padding: 20px 24px;
+}
+.mxp-course-detail .review-modal .modal-header h5 { font-family: var(--serif); font-size: 20px; margin: 0; color: var(--white); }
+.mxp-course-detail .review-modal .modal-header .close { color: var(--white); opacity: 0.85; text-shadow: none; }
+.mxp-course-detail .review-modal .modal-body { padding: 24px; }
+.mxp-course-detail .review-modal textarea {
+  width: 100%; min-height: 140px; border: 1px solid var(--gray-line); border-radius: 10px;
+  padding: 14px 16px; font-family: var(--sans); font-size: 14px; color: var(--charcoal); resize: vertical;
+}
+.mxp-course-detail .review-modal textarea:focus { outline: none; border-color: var(--teal-mid); box-shadow: 0 0 0 3px rgba(26,138,111,0.12); }
+.mxp-course-detail .review-modal .modal-footer { border-top: 1px solid var(--gray-line); padding: 16px 24px 24px; justify-content: center; gap: 10px; }
+.mxp-course-detail .review-modal .btn-review-cancel {
+  background: transparent; border: 1.5px solid var(--gray-line); color: var(--charcoal-soft);
+  padding: 10px 22px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer;
+}
+.mxp-course-detail .review-modal .btn-review-submit {
+  background: var(--terracotta); border: 2px solid var(--terracotta); color: var(--white);
+  padding: 10px 22px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer;
+}
+.mxp-course-detail .review-modal .btn-review-submit:hover { background: var(--terracotta-deep); border-color: var(--terracotta-deep); }
 
   /* ============ RELATED COURSES (category color + title) ============ */
 .mxp-course-detail .related-section { background: var(--white); padding: 70px 32px; }
@@ -381,6 +431,7 @@
 @php
   $studentIsEnrolled = ($isEnrolled ?? 0) > 0 || (Auth::check() && isAdmin());
   $defaultCourseType = (int) ($request->courseType ?? ($headerPurchase['type'] ?? ($purchaseOptions[0]['type'] ?? 0)));
+  $reviewCourseType = (int) ($effectiveCourseType ?? $defaultCourseType);
   $continueCourseUrl = null;
   if ($studentIsEnrolled) {
       if (request()->has('program_id')) {
@@ -634,6 +685,34 @@
       @endif
     </div>
 
+    @php
+      $canSubmitReview = Auth::check()
+          && Auth::user()->role_id == 3
+          && ($isEnrolled ?? 0) > 0
+          && !in_array(Auth::id(), $reviewer_user_ids ?? [], true);
+    @endphp
+
+    @if ($canSubmitReview)
+      <div class="review-submit-box">
+        <h3>{{ __('frontend.Write your review') }}</h3>
+        <p>{{ __('frontend.Rate this course') }}</p>
+        <div class="review-rate-stars" aria-label="Rate this course">
+          @for ($star = 5; $star >= 1; $star--)
+            <button type="button" title="{{ $star }} {{ $star === 1 ? 'star' : 'stars' }}" onclick="Rates({{ $star }}, {{ $course->id }})" aria-label="{{ $star }} stars">
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </button>
+          @endfor
+        </div>
+        <p class="review-submit-note">{{ __('frontend.Click a star to write your review') }}</p>
+      </div>
+    @elseif (!Auth::check())
+      <div class="review-signin-wrap">
+        <a href="{{ url('login') }}" class="btn-review-signin">{{ __('frontend.Sign In') }}</a>
+      </div>
+    @elseif (Auth::check() && Auth::user()->role_id == 3 && ($isEnrolled ?? 0) > 0 && in_array(Auth::id(), $reviewer_user_ids ?? [], true))
+      <p class="review-submit-note" style="text-align:center;margin-bottom:28px;">{{ __('frontend.You have already reviewed this course') ?? 'You have already submitted a review for this course.' }}</p>
+    @endif
+
     @if (($detailReviews ?? collect())->count())
       <div class="reviews-grid">
         @foreach ($detailReviews as $review)
@@ -665,6 +744,38 @@
     @endif
   </div>
 </section>
+
+<div class="modal fade review-modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="courseReviewModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="courseReviewModalLabel">{{ __('frontend.Review') }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <form action="{{ route('submitReview') }}" method="post">
+        @csrf
+        <div class="modal-body">
+          <input type="hidden" name="course_id" id="rating_course_id" value="{{ $course->id }}">
+          <input type="hidden" name="rating" id="rating_value" value="">
+          @if ($reviewCourseType)
+            <input type="hidden" name="type" id="rating_course_type" value="{{ $reviewCourseType }}">
+          @endif
+          <textarea name="review" placeholder="{{ __('frontend.Write your review') }}" required>{{ old('review') }}</textarea>
+          @error('review')
+            <p style="color:#c65d3a;font-size:13px;margin-top:8px;">{{ $message }}</p>
+          @enderror
+          @error('rating')
+            <p style="color:#c65d3a;font-size:13px;margin-top:8px;">{{ $message }}</p>
+          @enderror
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-review-cancel" data-dismiss="modal">{{ __('common.Cancel') }}</button>
+          <button type="submit" class="btn-review-submit">{{ __('common.Submit') }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 <!-- ============================================================
      STUDENTS ALSO ENROLLED IN
