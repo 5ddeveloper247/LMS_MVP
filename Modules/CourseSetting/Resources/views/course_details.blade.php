@@ -1046,14 +1046,15 @@
                                                                         <div class="primary_input mb-35">
                                                                             <label class="primary_input_label"
                                                                                 for="addOutcomes-en">
-                                                                                {{ __('Outcomes') }} *
+                                                                                Learning Objectives *
                                                                             </label>
                                                                             <textarea class="custom_summernote" name="outcomes[{{ $language->code }}]" id="addOutcomes-{{ $language->code }}"
                                                                                 cols="30" rows="10">{!! $course->outcomes !!}</textarea>
                                                                         </div>
                                                                     </div>
 
-                                                                    <div class="col-xl-12">
+                                                                    {{-- Requirements section removed --}}
+                                                                    {{-- <div class="col-xl-12">
                                                                         <div class="primary_input mb-35">
                                                                             <label class="primary_input_label"
                                                                                 for="addRequirements-en">
@@ -1062,7 +1063,7 @@
                                                                             <textarea class="custom_summernote" name="requirements[{{ $language->code }}]"
                                                                                 id="addRequirements-{{ $language->code }}" cols="30" rows="10">{!! @$course->getTranslation('requirements', $language->code) !!}</textarea>
                                                                         </div>
-                                                                    </div>
+                                                                    </div> --}}
                                                                 </div>
                                                             </div>
                                                         @endforeach
@@ -2886,11 +2887,13 @@
                 $('#addOutcomes').val(text)
                 console.log(text, $('#addOutcomes').val());
             });
+            {{-- Requirements section removed
             $('.note-editable').eq(8).keydown(function() { //Use appropriate listener
                 var text = $(this).html();
                 $('#addRequirements').val(text)
                 console.log(text, $('#addRequirements').val());
             });
+            --}}
 
         });
     </script>
@@ -3803,11 +3806,13 @@
                     errors.push("Description is required");
                 }
                 if (isEmptySummernote('#addOutcomes-en')) {
-                    errors.push("Outcomes is required");
+                    errors.push("Learning Objectives is required");
                 }
+                {{-- Requirements section removed
                 if (isEmptySummernote('#addRequirements-en')) {
                     errors.push("Requirement is required");
                 }
+                --}}
 
                 if (type == 1) {
                     if (isEmpty($('#course_cat_id').val())) {

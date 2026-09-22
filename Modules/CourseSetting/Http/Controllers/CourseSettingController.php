@@ -403,8 +403,9 @@ class CourseSettingController extends Controller
 
             $about = str_replace("'", "`", $request->about['en']);
             $course->about = $about;
-            $requirements = str_replace("'", "`", $request->requirements['en']);
-            $course->requirements = $requirements;
+            // Requirements section removed from admin forms
+            // $requirements = str_replace("'", "`", $request->requirements['en']);
+            // $course->requirements = $requirements;
             $outcomes = str_replace("'", "`", $request->outcomes['en']);
             $course->outcomes = $outcomes;
             
@@ -670,14 +671,10 @@ class CourseSettingController extends Controller
                 //                    }
                 //                },
             ],
-            'requirements.en' => [
-                'required',
-                //                function ($attribute, $value, $fail) {
-                //                    if ($value === '<p><br></p>' || empty($value)) {
-                //                        $fail('The ' . $attribute . ' is required.');
-                //                    }
-                //                },
-            ],
+            // Requirements section removed from admin forms
+            // 'requirements.en' => [
+            //     'required',
+            // ],
             'course_code' => ['unique:courses,course_code,'.$request->id],
             //            'cna_prep_type' => 'required_if:type,==,2',
             //            'test_prep_type' => 'required_if:type,==,2',
@@ -755,9 +752,9 @@ class CourseSettingController extends Controller
             $about = str_replace("'", "`", $request->about['en']);
             // $about = str_replace("'", "`", $request->about['en']);
             $course->about = $about;
-            $requirements = str_replace("'", "`", $request->requirements['en']);
-            // $requirements = str_replace("'", "`", $requirements['en']);
-            $course->requirements = $requirements;
+            // Requirements section removed from admin forms
+            // $requirements = str_replace("'", "`", $request->requirements['en']);
+            // $course->requirements = $requirements;
             $outcomes = str_replace("'", "`", $request->outcomes['en']);
             // $outcomes = str_replace("'", "`", $outcomes['en']);
             $course->outcomes = $outcomes;

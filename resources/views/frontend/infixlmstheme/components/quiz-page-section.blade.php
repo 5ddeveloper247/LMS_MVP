@@ -75,15 +75,8 @@
   }
   .mxp-prep-courses .pc-course-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
   .mxp-prep-courses .pc-course-thumb {
-    height: 160px; display: flex; align-items: center; justify-content: center;
-    padding: 24px; position: relative; overflow: hidden;
-  }
-  .mxp-prep-courses .pc-course-thumb img {
-    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-  }
-  .mxp-prep-courses .pc-course-thumb::after {
-    content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-    background: linear-gradient(to top, rgba(10, 77, 60, 0.55) 0%, transparent 55%);
+    min-height: 180px; display: flex; align-items: center; justify-content: center;
+    padding: 28px 24px 52px; position: relative; overflow: hidden;
   }
   .mxp-prep-courses .pc-course-type-badges {
     position: absolute; bottom: 12px; left: 12px; right: 12px;
@@ -106,9 +99,9 @@
     background: var(--white); border-radius: 14px; border: 1px solid var(--gray-line);
   }
   .mxp-prep-courses .pc-course-thumb-label {
-    font-family: var(--serif); font-weight: 700; font-size: 20px;
-    color: var(--white); text-align: center; line-height: 1.2;
-    position: relative; z-index: 1;
+    font-family: var(--serif); font-weight: 700; font-size: clamp(18px, 2.2vw, 24px);
+    color: var(--white); text-align: center; line-height: 1.25;
+    position: relative; z-index: 1; max-width: 100%;
   }
   .mxp-prep-courses .pc-thumb-foundations { background: linear-gradient(135deg, var(--teal-mid) 0%, var(--teal-deep) 100%); }
   .mxp-prep-courses .pc-thumb-physiological { background: linear-gradient(135deg, #1A8A6F 0%, #0A4D3C 100%); }
@@ -335,16 +328,12 @@
             : 'Course';
           $priceLabel = \App\View\Components\QuizPageSection::listingPriceLabel($course);
           $excerpt = \App\View\Components\QuizPageSection::excerpt($course->about);
-          $thumbClass = \App\View\Components\QuizPageSection::thumbClass($loop->index);
+          $thumbClass = \App\View\Components\QuizPageSection::thumbClass((int) ($course->category_id ?? 0));
           $typeBadges = \App\View\Components\QuizPageSection::listingTypeBadges($course);
         @endphp
         <div class="pc-course-card" data-category="cat-{{ $course->category_id ?? 0 }}">
           <div class="pc-course-thumb {{ $thumbClass }}">
-            @if (!empty($course->thumbnail))
-              <img src="{{ getCourseImage($course->thumbnail) }}" alt="{{ $course->title }}">
-            @else
-              <div class="pc-course-thumb-label">{{ $course->title }}</div>
-            @endif
+            <div class="pc-course-thumb-label">{{ $course->title }}</div>
             @if (count($typeBadges))
               <div class="pc-course-type-badges">
                 @foreach ($typeBadges as $badge)

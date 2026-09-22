@@ -400,7 +400,8 @@
                                     <input type="hidden" name="id" class="course_id" id="editCourseId"
                                         value="">
 
-                                    <div class="row">
+                                    {{-- Requirements section removed --}}
+                                    {{-- <div class="row">
                                         <div class="col-xl-12">
                                             <div class="primary_input mb-35">
                                                 <label class="primary_input_label"
@@ -409,7 +410,7 @@
                                                 <textarea class="lms_summernote" name="requirements" id="requirementsEdit" cols="30" rows="10"> </textarea>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                     <div class="row">
                                         <div class="col-xl-12">
@@ -426,8 +427,7 @@
                                         <div class="col-xl-12">
                                             <div class="primary_input mb-35">
                                                 <label class="primary_input_label"
-                                                    for="about">{{ __('courses.Course') }}
-                                                    {{ __('courses.Outcomes') }} </label>
+                                                    for="about">Learning Objectives</label>
                                                 <textarea class="lms_summernote" name="outcomes" id="outcomesEdit" cols="30" rows="10"> </textarea>
                                             </div>
                                         </div>

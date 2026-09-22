@@ -562,14 +562,15 @@
                                     <div class="col-xl-12">
                                         <div class="primary_input mb-35">
                                             <label class="primary_input_label" for="addOutcomes-en">
-                                                {{ __('Outcomes') }} *
+                                                Learning Objectives *
                                             </label>
                                             <textarea class="custom_summernote" name="outcomes[{{ $language->code }}]" id="addOutcomes-{{ $language->code }}"
                                                 cols="30" rows="10"></textarea>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
+                                {{-- Requirements section removed --}}
+                                {{-- <div class="row">
                                     <div class="col-xl-12">
                                         <div class="primary_input mb-35">
                                             <label class="primary_input_label" for="addRequirements-en">
@@ -579,7 +580,7 @@
                                                 id="addRequirements-{{ $language->code }}" cols="30" rows="10"></textarea>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         @endforeach
                     </div>
@@ -1214,11 +1215,13 @@
                 $('#addOutcomes-en').val(text)
                 console.log(text, $('#addOutcomes-en').val());
             });
+            {{-- Requirements section removed
             $('.note-editable').eq(8).keydown(function() { //Use appropriate listener
                 var text = $(this).html();
                 $('#addRequirements-en').val(text)
                 console.log(text, $('#addRequirements-en').val());
             });
+            --}}
         });
     </script>
     <script>
@@ -1585,11 +1588,13 @@
                     errors.push("Description is required");
                 }
                 if (isEmptySummernote('#addOutcomes-en')) {
-                    errors.push("Outcomes is required");
+                    errors.push("Learning Objectives is required");
                 }
+                {{-- Requirements section removed
                 if (isEmptySummernote('#addRequirements-en')) {
                     errors.push("Requirement is required");
                 }
+                --}}
 
                 if (type == 9) {
                     if (isEmpty($('#category_id').val())) {

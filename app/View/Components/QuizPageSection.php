@@ -119,7 +119,7 @@ class QuizPageSection extends Component
         return Str::limit($text, $limit);
     }
 
-    public static function thumbClass(int $index): string
+    public static function thumbClass(int $categoryId): string
     {
         $classes = [
             'pc-thumb-foundations',
@@ -131,7 +131,9 @@ class QuizPageSection extends Component
             'pc-thumb-ngn',
         ];
 
-        return $classes[$index % count($classes)];
+        $bucket = $categoryId > 0 ? $categoryId : crc32('uncategorized');
+
+        return $classes[$bucket % count($classes)];
     }
 
     public static function listingTypeBadges(Course $parent): array
