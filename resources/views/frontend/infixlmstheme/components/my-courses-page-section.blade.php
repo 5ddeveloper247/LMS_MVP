@@ -198,6 +198,7 @@
                                             $course_title = $course->title;
                                         }
                                         $childCourse = Modules\CourseSetting\Entities\Course::where('type', $SingleCourse->course_type)->where('parent_id',$course->id)->first();
+                                        $prepCourseUrl = route('continueCourse', [$course->slug]) . '?courseType=' . $SingleCourse->course_type;
                                         // $courseCompletion = 0;
                                         $courseCompletion = round($course->userTotalPercentage($SingleCourse->user->id, $course->id));
                                         $quizPass = true;
@@ -211,8 +212,7 @@
                                     <div class="col-xl-4 col-sm-6 col-12">
                                         @if ($course->type == 1)
                                             <div class="quiz_wizged border w-100">
-                                                <a
-                                                    href="{{ courseDetailsUrl($course->id, $course->type, $course->slug) . '?courseType=' . $SingleCourse->course_type }}">
+                                                <a href="{{ $prepCourseUrl }}">
                                                     <div class="thumb course_student-thumb" >
                                                         <div class="thumb_inner lazy"
                                                            @if($childCourse) data-src="{{ getCourseImage($childCourse->thumbnail) }}" @else 
@@ -236,8 +236,7 @@
                                                 <div class="course_content pb-2 px-2">
                                                     <div class="d-flex justify-content-between align-items-center">
 
-                                                        <a
-                                                            class="text-truncate"    href="{{ courseDetailsUrl($course->id, $course->type, $course->slug) . '?courseType=' . $SingleCourse->course_type }}">
+                                                        <a class="text-truncate" href="{{ $prepCourseUrl }}">
                                                             <h4 class="noBrake" title="{{ $course->title }}">
                                                                 {{ $course->title }}
                                                             </h4>

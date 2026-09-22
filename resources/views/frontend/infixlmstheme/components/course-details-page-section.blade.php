@@ -331,6 +331,18 @@
   }
 </style>
 
+@php
+  $studentIsEnrolled = ($isEnrolled ?? 0) > 0 || (Auth::check() && isAdmin());
+  $continueCourseUrl = null;
+  if ($studentIsEnrolled) {
+      if (request()->has('program_id')) {
+          $continueCourseUrl = route('continueCourse', [$course->slug]) . '?program_id=' . $request->program_id;
+      } elseif (request()->has('courseType')) {
+          $continueCourseUrl = route('continueCourse', [$course->slug]) . '?courseType=' . $request->courseType;
+      }
+  }
+@endphp
+
 <div class="breadcrumb">
   <div class="breadcrumb-inner">
     <a href="{{ url('/') }}">Home</a><span>&rsaquo;</span><a href="{{ route('quizzes') }}">Prep-Courses</a><span>&rsaquo;</span>{{ $course->title ?? 'Medical-Surgical Nursing' }}
@@ -390,7 +402,12 @@
       </div>
     </div>
 
-    @if (!empty($headerPurchase))
+    @if ($continueCourseUrl)
+      <div class="purchase-card">
+        <p class="purchase-card-label">{{ __('frontend.Enrolled') }}</p>
+        <a href="{{ $continueCourseUrl }}" class="btn-buy">{{ __('common.Continue Watch') }}</a>
+      </div>
+    @elseif (!empty($headerPurchase))
       @include(theme('components.partials.course-detail-purchase-card'), ['option' => $headerPurchase, 'variant' => 'header'])
     @endif
   </div>
@@ -516,7 +533,16 @@
 
     </div>
 
-    @if (!empty($sidebarPurchases))
+    @if ($continueCourseUrl)
+      <aside class="sidebar-pricing">
+        <div class="sidebar-pricing-stack">
+          <div class="sidebar-card">
+            <p class="purchase-card-label">{{ __('frontend.Enrolled') }}</p>
+            <a href="{{ $continueCourseUrl }}" class="btn-enroll-il">{{ __('common.Continue Watch') }}</a>
+          </div>
+        </div>
+      </aside>
+    @elseif (!empty($sidebarPurchases))
       <aside class="sidebar-pricing">
         <div class="sidebar-pricing-stack">
           @foreach ($sidebarPurchases as $sidebarPurchase)
@@ -640,7 +666,9 @@
   <div class="final-cta-inner">
     <h2>Ready to start <em>{{ $course->title }}?</em></h2>
     <p>Choose the learning format that fits your style &mdash; self-paced or instructor-led.</p>
-    @if (!empty($purchaseOptions))
+    @if ($continueCourseUrl)
+      <a href="{{ $continueCourseUrl }}" class="btn-primary">{{ __('common.Continue Watch') }} &rarr;</a>
+    @elseif (!empty($purchaseOptions))
       <div class="cta-price-row">
         @foreach ($purchaseOptions as $ctaOption)
           <div class="cta-option">
