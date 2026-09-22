@@ -10,3 +10,7 @@
     <x-course-deatils-page-section :course="$course" :request="$request" :isEnrolled="$isEnrolled" :enrollmentRecord="$enrollmentRecord" />
     @include(theme('partials._custom_footer'))
 @endsection
+
+@section('js')
+    <script src="{{ asset('public/frontend/infixlmstheme/js/class_details.js') }}"></script>
+@endsection

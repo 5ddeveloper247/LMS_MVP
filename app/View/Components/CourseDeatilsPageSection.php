@@ -160,7 +160,7 @@ class CourseDeatilsPageSection extends Component
         $this->course->loadMissing([
             'category',
             'user',
-            'chapters.lessons',
+            'chapters.lessons.quiz',
             'children' => fn ($q) => $q->where('status', 1),
         ]);
 

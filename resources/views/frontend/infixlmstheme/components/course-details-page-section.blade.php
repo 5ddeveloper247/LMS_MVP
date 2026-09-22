@@ -190,9 +190,36 @@
 .mxp-course-detail .module-item[open] summary::after { content: '\2212'; }
 .mxp-course-detail .module-item summary .module-meta { font-family: var(--sans); font-size: 12px; color: var(--charcoal-soft); font-weight: 500; margin-left: auto; margin-right: 12px; }
 .mxp-course-detail .module-body { padding: 0 22px 18px; }
-.mxp-course-detail .module-body ul { list-style: none; }
-.mxp-course-detail .module-body li { padding: 6px 0 6px 20px; position: relative; font-size: 14px; color: var(--charcoal-soft); line-height: 1.6; }
-.mxp-course-detail .module-body li::before { content: '\00B7'; position: absolute; left: 6px; color: var(--teal-mid); font-weight: 700; font-size: 18px; }
+.mxp-course-detail .lesson-rows { display: flex; flex-direction: column; }
+.mxp-course-detail .lesson-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 11px 0; border-bottom: 1px solid var(--gray-line);
+}
+.mxp-course-detail .lesson-row:last-child { border-bottom: none; }
+.mxp-course-detail .lesson-row-main { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+.mxp-course-detail .lesson-icon {
+  width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.mxp-course-detail .lesson-icon svg { width: 14px; height: 14px; }
+.mxp-course-detail .lesson-icon--play { background: rgba(26,138,111,0.12); color: var(--teal-mid); }
+.mxp-course-detail .lesson-icon--quiz { background: rgba(198,93,58,0.12); color: var(--terracotta); }
+.mxp-course-detail .lesson-icon--lock { background: rgba(43,43,43,0.08); color: var(--charcoal-soft); }
+.mxp-course-detail .lesson-name { font-size: 14px; line-height: 1.5; color: var(--charcoal); }
+.mxp-course-detail .lesson-name.is-clickable { cursor: pointer; color: var(--teal-darkest); transition: color 0.2s; }
+.mxp-course-detail .lesson-name.is-clickable:hover { color: var(--teal-mid); }
+.mxp-course-detail .lesson-name.is-locked { color: var(--charcoal-soft); }
+.mxp-course-detail .lesson-tag {
+  display: inline-block; margin-left: 6px; padding: 1px 7px; border-radius: 999px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase;
+  background: rgba(198,93,58,0.12); color: var(--terracotta);
+}
+.mxp-course-detail .lesson-action-btn {
+  flex-shrink: 0; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;
+  border: 1.5px solid var(--teal-mid); color: var(--teal-mid); background: var(--white); cursor: pointer; transition: all 0.2s;
+}
+.mxp-course-detail .lesson-action-btn:hover { background: var(--teal-mid); color: var(--white); }
+.mxp-course-detail .lesson-action-btn.is-preview { border-color: var(--terracotta); color: var(--terracotta); }
+.mxp-course-detail .lesson-action-btn.is-preview:hover { background: var(--terracotta); color: var(--white); }
 
   /* ============ INSTRUCTOR (with photo) ============ */
 .mxp-course-detail .instructor-card { display: flex; gap: 28px; align-items: flex-start; background: var(--cream); border-radius: 14px; padding: 32px; margin-bottom: 20px; }
@@ -475,11 +502,18 @@
               </summary>
               <div class="module-body">
                 @if ($lessonCount)
-                  <ul>
-                    @foreach ($chapterLessons as $lesson)
-                      <li>{{ $lesson->name }}</li>
+                  <div class="lesson-rows">
+                    @foreach ($chapterLessons as $key => $lesson)
+                      @include(theme('components.partials.course-detail-lesson-row'), [
+                          'lesson' => $lesson,
+                          'lessonNumber' => $key + 1,
+                          'course' => $course,
+                          'request' => $request,
+                          'studentIsEnrolled' => $studentIsEnrolled,
+                          'enrollmentRecord' => $enrollmentRecord,
+                      ])
                     @endforeach
-                  </ul>
+                  </div>
                 @else
                   <p class="section-empty" style="margin:0;">No lessons added to this module yet.</p>
                 @endif
