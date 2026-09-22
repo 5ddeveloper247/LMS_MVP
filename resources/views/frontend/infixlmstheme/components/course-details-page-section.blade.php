@@ -173,7 +173,6 @@
   background: var(--cream); border-radius: 10px; padding: 16px 18px;
   font-size: 14px; color: var(--charcoal); line-height: 1.5; margin-bottom: 14px;
 }
-.mxp-course-detail .related-card-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .mxp-course-detail .section-empty {
   background: var(--cream); border: 1px dashed var(--gray-line); border-radius: 10px;
   padding: 24px; color: var(--charcoal-soft); font-size: 14px;
@@ -245,7 +244,7 @@
 .mxp-course-detail .review-verified { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: var(--teal-mid); font-weight: 500; margin-top: 12px; }
 .mxp-course-detail .review-verified svg { width: 13px; height: 13px; }
 
-  /* ============ RELATED COURSES (with images + course type) ============ */
+  /* ============ RELATED COURSES (category color + title) ============ */
 .mxp-course-detail .related-section { background: var(--white); padding: 70px 32px; }
 .mxp-course-detail .related-header { text-align: center; margin-bottom: 40px; }
 .mxp-course-detail .related-header h2 { font-size: 32px; margin-bottom: 10px; }
@@ -253,15 +252,21 @@
 .mxp-course-detail .related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1080px; margin: 0 auto; }
 .mxp-course-detail .related-card { background: var(--cream); border-radius: 12px; overflow: hidden; border: 1px solid var(--gray-line); transition: transform 0.2s, box-shadow 0.2s; text-decoration: none; color: inherit; display: block; }
 .mxp-course-detail .related-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
-.mxp-course-detail .related-card-image { width: 100%; height: 160px; overflow: hidden; }
-.mxp-course-detail .related-card-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.mxp-course-detail .related-card-image-placeholder {
-    width: 100%; height: 100%;
-    background: linear-gradient(135deg, rgba(26,138,111,0.15) 0%, rgba(15,110,86,0.25) 100%);
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
-    color: var(--teal-mid); font-size: 12px;
+.mxp-course-detail .related-card-thumb {
+    min-height: 160px; display: flex; align-items: center; justify-content: center;
+    padding: 24px; overflow: hidden;
   }
-.mxp-course-detail .related-card-image-placeholder svg { width: 28px; height: 28px; opacity: 0.35; }
+.mxp-course-detail .related-card-thumb-label {
+    font-family: var(--serif); font-weight: 700; font-size: clamp(16px, 2vw, 20px);
+    color: var(--white); text-align: center; line-height: 1.25; max-width: 100%;
+  }
+.mxp-course-detail .related-card-thumb.pc-thumb-foundations { background: linear-gradient(135deg, var(--teal-mid) 0%, var(--teal-deep) 100%); }
+.mxp-course-detail .related-card-thumb.pc-thumb-physiological { background: linear-gradient(135deg, #1A8A6F 0%, #0A4D3C 100%); }
+.mxp-course-detail .related-card-thumb.pc-thumb-psychosocial { background: linear-gradient(135deg, #4A7C6B 0%, #2D5A4A 100%); }
+.mxp-course-detail .related-card-thumb.pc-thumb-health-promo { background: linear-gradient(135deg, #3D8B6E 0%, #1A6B4F 100%); }
+.mxp-course-detail .related-card-thumb.pc-thumb-safe-care { background: linear-gradient(135deg, #0F6E56 0%, #073D30 100%); }
+.mxp-course-detail .related-card-thumb.pc-thumb-high-yield { background: linear-gradient(135deg, var(--terracotta) 0%, var(--terracotta-deep) 100%); }
+.mxp-course-detail .related-card-thumb.pc-thumb-ngn { background: linear-gradient(135deg, #8B5E3C 0%, #5D3A22 100%); }
 .mxp-course-detail .related-card-body { padding: 22px 24px 24px; }
 .mxp-course-detail .related-tag { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--teal-mid); margin-bottom: 6px; }
 .mxp-course-detail .related-card h3 { font-size: 18px; margin-bottom: 6px; color: var(--teal-darkest); }
@@ -626,7 +631,7 @@
 </section>
 
 <!-- ============================================================
-     STUDENTS ALSO ENROLLED IN (with images + course type badges)
+     STUDENTS ALSO ENROLLED IN
      ============================================================ -->
 @if (($relatedCourses ?? collect())->count())
   <section class="related-section">
@@ -643,20 +648,13 @@
               : 'Course';
             $relatedPrice = \App\View\Components\QuizPageSection::listingPriceLabel($relatedCourse);
             $relatedExcerpt = \App\View\Components\QuizPageSection::excerpt($relatedCourse->about, 100);
-            $relatedImage = !empty($relatedCourse->thumbnail) ? getCourseImage($relatedCourse->thumbnail) : null;
+            $relatedThumbClass = \App\View\Components\QuizPageSection::thumbClass((int) ($relatedCourse->category_id ?? 0));
             $relatedBadges = \App\View\Components\QuizPageSection::listingTypeBadges($relatedCourse);
             $relatedTypeLabel = count($relatedBadges) === 1 ? $relatedBadges[0]['label'] : (count($relatedBadges) > 1 ? count($relatedBadges) . ' Options' : 'Prep-Course');
           @endphp
           <a href="{{ route('courseDetailsView', $relatedCourse->slug) }}" class="related-card">
-            <div class="related-card-image">
-              @if ($relatedImage)
-                <img src="{{ $relatedImage }}" alt="{{ $relatedCourse->title }}" style="width:100%;height:100%;object-fit:cover;display:block;">
-              @else
-                <div class="related-card-image-placeholder">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                  {{ $relatedCourse->title }}
-                </div>
-              @endif
+            <div class="related-card-thumb {{ $relatedThumbClass }}">
+              <div class="related-card-thumb-label">{{ $relatedCourse->title }}</div>
             </div>
             <div class="related-card-body">
               <p class="related-tag">{{ $relatedCategory }}</p>
