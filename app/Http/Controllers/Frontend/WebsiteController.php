@@ -323,6 +323,7 @@ class WebsiteController extends Controller
             $plan_id = $request->plan_id ?? null;
             $check_lesson = Lesson::where('id', $lesson_id)->with('online_test')->first();
             $isEnrolled = true;
+            $enrollmentRecord = null;
             $user_id = Auth::check() ? Auth::id() : 0;
             if ($request->has('program_id')) {
                 $isEnrolled = CourseEnrolled::where('program_id', $request->program_id)->where('plan_id',$plan_id)->where('user_id', $user_id)->count();
@@ -621,12 +622,9 @@ class WebsiteController extends Controller
             //     ->where('user_id', Auth::id())->where('courseType', $request->get('courseType'))
             //     ->first();
             // if ($lessonPercentage) {
-                if(Auth::check())
-                {
-                    $percentage = round($course->userTotalPercentagewrtPlan(auth()->user()->id,$course->id,$enrollmentRecord->id));
-                }
-                else
-                {
+                if (Auth::check() && $enrollmentRecord) {
+                    $percentage = round($course->userTotalPercentagewrtPlan(auth()->user()->id, $course->id, $enrollmentRecord->id));
+                } else {
                     $percentage = 0;
                 }
             // } else {

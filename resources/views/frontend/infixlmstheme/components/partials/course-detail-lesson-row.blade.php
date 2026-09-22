@@ -3,13 +3,15 @@
     $canAccess = !$isLocked || $studentIsEnrolled;
     $isQuiz = (int) $lesson->is_quiz === 1;
     $fsProgramId = (int) ($request->program_id ?? 0);
-    $fsCourseType = (int) ($request->courseType ?? 0);
+    $fsCourseType = (int) ($request->courseType ?? ($defaultCourseType ?? 0));
     $fsPlanId = (int) ($enrollmentRecord->plan_id ?? optional($enrollmentRecord->plan ?? null)->id ?? 0);
-    $fsArgs = $course->id . ', ' . $lesson->id . ', ' . $fsProgramId . ', ' . $fsCourseType;
-    if ($fsPlanId > 0) {
-        $fsArgs .= ', ' . $fsPlanId;
-    }
-    $fsOnClick = 'goFullScreen(' . $fsArgs . ')';
+    $lessonPlayerQuery = array_filter([
+        'program_id' => $fsProgramId > 0 ? $fsProgramId : null,
+        'courseType' => $fsCourseType > 0 ? $fsCourseType : null,
+        'plan_id' => $fsPlanId > 0 ? $fsPlanId : null,
+    ], fn ($value) => $value !== null && $value !== '');
+    $lessonPlayerUrl = route('fullScreenView', [$course->id, $lesson->id])
+        . ($lessonPlayerQuery ? '?' . http_build_query($lessonPlayerQuery) : '');
     $actionLabel = $isQuiz
         ? __('frontend.Start')
         : ($isLocked ? __('common.View') : __('frontend.Preview'));
@@ -27,7 +29,7 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                 </span>
             @endif
-            <span class="lesson-name is-clickable" onclick="{{ $fsOnClick }}" role="button" tabindex="0">
+            <span class="lesson-name is-clickable" onclick="window.location.href='{{ $lessonPlayerUrl }}'" role="button" tabindex="0">
                 {{ $lessonNumber }}. {{ $lesson->name }}@if ($isQuiz) <span class="lesson-tag">Quiz</span>@endif
             </span>
         @else
@@ -41,7 +43,7 @@
     </div>
 
     @if ($canAccess)
-        <button type="button" class="lesson-action-btn {{ $isLocked ? '' : 'is-preview' }}" onclick="{{ $fsOnClick }}">
+        <button type="button" class="lesson-action-btn {{ $isLocked ? '' : 'is-preview' }}" onclick="window.location.href='{{ $lessonPlayerUrl }}'">
             {{ $actionLabel }}
         </button>
     @endif

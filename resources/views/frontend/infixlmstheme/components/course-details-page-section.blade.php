@@ -380,6 +380,7 @@
 
 @php
   $studentIsEnrolled = ($isEnrolled ?? 0) > 0 || (Auth::check() && isAdmin());
+  $defaultCourseType = (int) ($request->courseType ?? ($headerPurchase['type'] ?? ($purchaseOptions[0]['type'] ?? 0)));
   $continueCourseUrl = null;
   if ($studentIsEnrolled) {
       if (request()->has('program_id')) {
@@ -511,6 +512,7 @@
                           'request' => $request,
                           'studentIsEnrolled' => $studentIsEnrolled,
                           'enrollmentRecord' => $enrollmentRecord,
+                          'defaultCourseType' => $defaultCourseType,
                       ])
                     @endforeach
                   </div>
