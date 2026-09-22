@@ -665,7 +665,7 @@
 <!-- ============================================================
      STUDENT REVIEWS
      ============================================================ -->
-<section class="reviews-section">
+<section class="reviews-section" id="course-reviews">
   <div class="reviews-inner">
     <div class="reviews-header">
       <h2>What Students Are Saying</h2>
@@ -706,8 +706,11 @@
         <p class="review-submit-note">{{ __('frontend.Click a star to write your review') }}</p>
       </div>
     @elseif (!Auth::check())
+      @php
+        $reviewLoginReturnUrl = request()->fullUrl() . '#course-reviews';
+      @endphp
       <div class="review-signin-wrap">
-        <a href="{{ url('login') }}" class="btn-review-signin">{{ __('frontend.Sign In') }}</a>
+        <a href="{{ route('login', ['redirect' => $reviewLoginReturnUrl]) }}" class="btn-review-signin">{{ __('frontend.Sign In') }}</a>
       </div>
     @elseif (Auth::check() && Auth::user()->role_id == 3 && ($isEnrolled ?? 0) > 0 && in_array(Auth::id(), $reviewer_user_ids ?? [], true))
       <p class="review-submit-note" style="text-align:center;margin-bottom:28px;">{{ __('frontend.You have already reviewed this course') ?? 'You have already submitted a review for this course.' }}</p>

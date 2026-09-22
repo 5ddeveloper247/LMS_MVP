@@ -332,8 +332,13 @@ class LoginController extends Controller
                 }
             }
         }
-        session()->forget('previous_url');
+        $redirect = request('redirect');
+        if ($redirect && $this->isValidRedirectUrl($redirect)) {
+            session(['redirectTo' => $redirect]);
+        } else {
+            session()->forget('previous_url');
             session(['previous_url' => url()->previous()]);
+        }
         $page = LoginPage::getData();
         return view(theme('authnew.login'), compact('page'));
     }
@@ -633,6 +638,9 @@ class LoginController extends Controller
     {
 
         $goto = \session('redirectTo') ?  \session('redirectTo') :  redirect()->intended($this->redirectPath())->getTargetUrl();
+        if (session()->has('redirectTo')) {
+            session()->forget('redirectTo');
+        }
 
         $request->session()->regenerate();
 
@@ -766,6 +774,19 @@ class LoginController extends Controller
         } else {
             return redirect()->back();
         }
+    }
+
+    private function isValidRedirectUrl($url): bool
+    {
+        if (!is_string($url) || $url === '') {
+            return false;
+        }
+
+        if (Str::startsWith($url, '/') && !Str::startsWith($url, '//')) {
+            return true;
+        }
+
+        return Str::startsWith($url, rtrim(url('/'), '/'));
     }
 
     private function classAttendance($user)
