@@ -3,7 +3,6 @@
   $wrapperClass = $isSidebar ? 'sidebar-card' : 'purchase-card';
   $buyClass = $isSidebar ? 'btn-enroll-il' : 'btn-buy';
   $cartClass = $isSidebar ? 'btn-cart-il' : 'btn-cart';
-  $bundleClass = $isSidebar ? 'btn-bundle-il' : 'btn-bundle-link';
   $includesClass = $isSidebar ? 'sidebar-includes' : 'purchase-includes';
 @endphp
 
@@ -46,8 +45,6 @@
   @else
     <span class="{{ $buyClass }} is-disabled">{{ $option['type'] === 5 ? 'Not Available' : 'Enrollment Coming Soon' }}</span>
   @endif
-
-  <a href="{{ route('quizzes') }}#catalog" class="{{ $bundleClass }}">Save with a Bundle</a>
 
   <div class="purchase-divider"></div>
   <ul class="{{ $includesClass }}">

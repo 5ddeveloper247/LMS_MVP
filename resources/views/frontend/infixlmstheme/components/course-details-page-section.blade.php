@@ -840,9 +840,6 @@
           </div>
         @endforeach
       </div>
-      @if (!empty($headerPurchase) && $headerPurchase['can_purchase'])
-        <a href="{{ $headerPurchase['buy_url'] }}" class="btn-primary">Get Started Now &rarr;</a>
-      @endif
     @endif
   </div>
 </section>
