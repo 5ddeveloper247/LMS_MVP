@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 use Modules\Blog\Entities\Blog;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -189,28 +191,64 @@ class FrontendHomeController extends Controller
     }
     public function resource()
     {
-        $tabs = ResourceTab::where('status',1)->oldest()->get();
-        $is_allow = false;
-        //        $course_count = 2;
-        $isEnrolled = false;
+        $studentResources = ResourceTab::active()
+            ->forCategory(ResourceTab::CATEGORY_STUDENT)
+            ->orderBy('pos')
+            ->orderByDesc('id')
+            ->get();
 
+        $ceResources = ResourceTab::active()
+            ->forCategory(ResourceTab::CATEGORY_CE)
+            ->orderBy('pos')
+            ->orderByDesc('id')
+            ->get();
 
-        //        program faqs
-        $faqs = HomePageFaq::where('status', 1)->orderBy('order','desc')->take(10)->get();
-        // $faqs = HomePageFaq::whereIn('id', json_decode($program_detail->faqs) ?? [])->orderBy('order', 'desc')->where('status', 1)->get();
-        $socials = SocialLink::where('status',1)->orderBy('order','desc')->get();
-        //        program course
-        $courses = Course::whereNull('parent_id')->with('enrollUsers', 'user', 'user.courses', 'user.courses.enrollUsers', 'user.courses.lessons', 'chapters.lessons', 'enrolls', 'lessons', 'reviews', 'chapters', 'activeReviews')->take(3)->orderBy('created_at', 'DESC')->get();
-        //      resent progrm
-        $recent_program = Program::where('status', 1)->has('effectiveProgramPlan')->with('effectiveProgramPlan')->inRandomOrder()->take(1)->get();
-        $recent_courses = Course::whereIn('type',[2,4,5,6,9])
-                ->where('status', 1)->where(function($q){
-                    $q->where('price', '!=', '0.00')
-                    ->orHas('effectiveCoursePlan');
-                })
-            ->with('user', 'parent','effectiveCoursePlan','enrolls', 'comments', 'reviews', 'lessons', 'activeReviews', 'enrollUsers', 'class', 'cartUsers', 'quiz', 'quiz.assign', 'courseLevel')
-            ->inRandomOrder()->take(2)->get();
-            return view(theme('pages.resource'),get_defined_vars());
+        $studentFeatured = $studentResources->firstWhere('is_featured', true);
+        $ceFeatured = $ceResources->firstWhere('is_featured', true);
+        $allResources = $studentResources->concat($ceResources);
+
+        return view(theme('pages.resource'), compact(
+            'studentResources',
+            'ceResources',
+            'studentFeatured',
+            'ceFeatured',
+            'allResources'
+        ));
+    }
+
+    public function resourceDownload($id)
+    {
+        $resource = ResourceTab::active()->findOrFail($id);
+        $absolutePath = $this->resolveResourceFilePath($resource->file_path);
+
+        if (!$absolutePath) {
+            abort(404);
+        }
+
+        $downloadName = Str::slug($resource->name) . '.pdf';
+
+        return response()->download($absolutePath, $downloadName);
+    }
+
+    private function resolveResourceFilePath(?string $path): ?string
+    {
+        if (!$path) {
+            return null;
+        }
+
+        $candidates = [
+            storage_path('app/' . ltrim($path, '/')),
+            public_path(ltrim($path, '/')),
+            base_path(ltrim($path, '/')),
+        ];
+
+        foreach ($candidates as $candidate) {
+            if (File::exists($candidate)) {
+                return $candidate;
+            }
+        }
+
+        return null;
     }
     
     public function ourNursing(Request $request){

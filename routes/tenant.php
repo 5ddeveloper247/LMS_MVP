@@ -49,6 +49,7 @@ Route::group(['namespace' => 'Frontend'], function () {
     Route::get('/randomProgram', 'FrontendHomeController@getRandomProgram')->name('getRandomProgram');
     Route::post('/fetch-blogs-by-tag', 'FrontendHomeController@fetchBlogsByTag')->name('fetchBlogsByTag');
     Route::get('/resource', 'FrontendHomeController@resource')->name('resource');
+    Route::get('/resource/download/{id}', 'FrontendHomeController@resourceDownload')->name('resource.download');
     Route::get('/our-nursing', 'FrontendHomeController@ourNursing')->name('ourNursing');
     
     Route::get('/shop', 'ShopController@index')->name('shop.index');

@@ -3,66 +3,73 @@
 namespace Modules\FrontendManage\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Traits\ImageStore;
+use App\Traits\FileStore;
 use Brian2694\Toastr\Facades\Toastr;
 use Exception;
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Intervention\Image\Facades\Image;
-use Modules\CourseSetting\Entities\Course;
-use Modules\FrontendManage\Entities\Slider;
+use Illuminate\Support\Facades\File;
 use Modules\FrontendManage\Entities\ResourceTab;
 
 class ResourceController extends Controller
 {
-    use ImageStore;
+    use FileStore;
 
     public function index()
     {
         try {
-            $sliders = ResourceTab::all();
-            $data = [];
-            return view('frontendmanage::resource.index', $data, compact('sliders'));
+            $resources = ResourceTab::orderBy('category')
+                ->orderByDesc('is_featured')
+                ->orderBy('pos')
+                ->orderByDesc('id')
+                ->get();
+
+            return view('frontendmanage::resource.index', compact('resources'));
         } catch (Exception $e) {
             GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
         }
     }
 
-    public function create(){
+    public function create()
+    {
         return view('frontendmanage::resource.add');
     }
-
 
     public function store(Request $request)
     {
         $rules = [
-            'name' => 'required',
+            'name' => 'required|max:255',
+            'short_description' => 'required|max:1000',
+            'category' => 'required|in:' . ResourceTab::CATEGORY_STUDENT . ',' . ResourceTab::CATEGORY_CE,
+            'file' => 'required|file|mimes:pdf|max:20480',
         ];
         $this->validate($request, $rules, validationMessage($rules));
 
         try {
-            $slider = new ResourceTab();
-            $slider->name = $request->name;
-            $slider->content = $request->content ?? '';
-            $slider->status = 1;
-            $slider->save();
+            $resource = new ResourceTab();
+            $resource->name = $request->name;
+            $resource->short_description = $request->short_description;
+            $resource->category = $request->category;
+            $resource->file_path = static::saveFile($request->file('file'));
+            $resource->is_featured = $request->boolean('is_featured');
+            $resource->status = 1;
+            $resource->pos = (ResourceTab::max('pos') ?? 0) + 1;
+            $resource->save();
+
+            $this->syncFeaturedFlag($resource);
 
             Toastr::success(trans('common.Operation successful'), trans('common.Success'));
             return redirect()->route('frontend.resource_center.index');
-            // return redirect()->back();
         } catch (Exception $e) {
             GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
         }
     }
 
-
     public function edit($id)
     {
         try {
-           // $sliders = ResourceTab::all();
             $tab = ResourceTab::findOrFail($id);
-            $data = [];
-            return view('frontendmanage::resource.add', $data, compact('tab'));
+
+            return view('frontendmanage::resource.add', compact('tab'));
         } catch (Exception $e) {
             GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
         }
@@ -70,15 +77,33 @@ class ResourceController extends Controller
 
     public function update(Request $request)
     {
+        $rules = [
+            'id' => 'required|exists:resource_tabs,id',
+            'name' => 'required|max:255',
+            'short_description' => 'required|max:1000',
+            'category' => 'required|in:' . ResourceTab::CATEGORY_STUDENT . ',' . ResourceTab::CATEGORY_CE,
+            'file' => 'nullable|file|mimes:pdf|max:20480',
+        ];
+        $this->validate($request, $rules, validationMessage($rules));
 
         try {
-            $slider = ResourceTab::find($request->id);
-            $slider->name = $request->name;
-            $slider->content = $request->content ?? '';
-            $slider->save();
+            $resource = ResourceTab::findOrFail($request->id);
+            $resource->name = $request->name;
+            $resource->short_description = $request->short_description;
+            $resource->category = $request->category;
+            $resource->is_featured = $request->boolean('is_featured');
+
+            if ($request->hasFile('file')) {
+                $this->deleteStoredFile($resource->file_path);
+                $resource->file_path = static::saveFile($request->file('file'));
+            }
+
+            $resource->save();
+
+            $this->syncFeaturedFlag($resource);
+
             Toastr::success(trans('common.Operation successful'), trans('common.Success'));
             return redirect()->route('frontend.resource_center.index');
-            // return redirect()->back();
         } catch (Exception $e) {
             GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
         }
@@ -87,7 +112,10 @@ class ResourceController extends Controller
     public function destroy($id)
     {
         try {
-            ResourceTab::destroy($id);
+            $resource = ResourceTab::findOrFail($id);
+            $this->deleteStoredFile($resource->file_path);
+            $resource->delete();
+
             Toastr::success(trans('common.Operation successful'), trans('common.Success'));
             return redirect()->back();
         } catch (Exception $e) {
@@ -95,34 +123,60 @@ class ResourceController extends Controller
         }
     }
 
-    public function settingSubmit(Request $request)
-    {
-        // dd($request);
-            if ($request->hasFile('sidebar_image')) {
-                UpdateGeneralSetting('resource_center_sidebar_image', $this->saveImage($request->sidebar_image));
-            }
-
-
-        UpdateGeneralSetting('resource_center_image_heading', $request->image_heading ?? '');
-        UpdateGeneralSetting('resource_center_image_text', $request->image_text ?? '');
-        Toastr::success(trans('common.Operation successful'), trans('common.Success'));
-        return redirect()->back();
-    }
-
     public function changeTabSequence()
     {
         $payload = json_decode(file_get_contents('php://input'), true);
-        $order = $payload['order'];
+        $order = $payload['order'] ?? [];
 
         foreach ($order as $item) {
-            $id = $item['id'];
-            $course_new_seq = ResourceTab::find($id);
-            $course_new_seq->pos = $item['new_position'];
-            $course_new_seq->save();
-
-            ResourceTab::where('id', $id)->update(['pos' => $item['new_position']]);
+            ResourceTab::where('id', $item['id'])->update(['pos' => $item['new_position']]);
         }
 
         return response()->json(200);
+    }
+
+    private function syncFeaturedFlag(ResourceTab $resource): void
+    {
+        if (!$resource->is_featured) {
+            return;
+        }
+
+        ResourceTab::where('category', $resource->category)
+            ->where('id', '!=', $resource->id)
+            ->update(['is_featured' => false]);
+    }
+
+    private function deleteStoredFile(?string $path): void
+    {
+        if (!$path) {
+            return;
+        }
+
+        $absolutePath = $this->resolveFilePath($path);
+
+        if ($absolutePath && File::exists($absolutePath)) {
+            File::delete($absolutePath);
+        }
+    }
+
+    private function resolveFilePath(?string $path): ?string
+    {
+        if (!$path) {
+            return null;
+        }
+
+        $candidates = [
+            storage_path('app/' . ltrim($path, '/')),
+            public_path(ltrim($path, '/')),
+            base_path(ltrim($path, '/')),
+        ];
+
+        foreach ($candidates as $candidate) {
+            if (File::exists($candidate)) {
+                return $candidate;
+            }
+        }
+
+        return null;
     }
 }
