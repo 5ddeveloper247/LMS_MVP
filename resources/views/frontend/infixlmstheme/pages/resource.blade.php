@@ -158,7 +158,7 @@
     <div class="resource-cta">
       <h3>Ready to complete your renewal?</h3>
       <p>Browse our Florida Board of Nursing approved CEU courses and bundles. Auto-reported to CE Broker.</p>
-      <a href="{{ url('/courses') }}" class="btn-res">View CE Courses &rarr;</a>
+      <a href="{{ url('/prep-courses') }}" class="btn-res">View CE Courses &rarr;</a>
     </div>
   </div>
 </div>
