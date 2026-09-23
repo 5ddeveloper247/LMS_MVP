@@ -1,0 +1,21 @@
+{
+    "name": "nwidart/ceprofessional",
+    "description": "CE Professional module for Infix LMS",
+    "authors": [
+        {
+            "name": "Merkaii Xcel Prep",
+            "email": "info@merkaiixcelprep.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {}
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\CeProfessional\\": ""
+        }
+    }
+}

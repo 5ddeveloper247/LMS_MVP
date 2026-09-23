@@ -177,6 +177,9 @@ class LoginController extends Controller
 
     public function redirectPath()
     {
+        if (Auth::user()->role_id == config('ceprofessional.role_id', 10)) {
+            return route('cePortal');
+        }
 
         if (Auth::user()->role_id == 3) {
             $path = route('studentDashboard');
@@ -735,6 +738,9 @@ class LoginController extends Controller
     //user logout method
     public function logout(Request $request)
     {
+        $redirectToLogin = Auth::check()
+            && (int) Auth::user()->role_id === (int) config('ceprofessional.role_id', 10);
+
         if (Auth::check()) {
             if (Auth::user()->role_id == 3) {
                 $login = UserLogin::where('user_id', Auth::id())->where('status', 1)->latest()->first();
@@ -752,7 +758,7 @@ class LoginController extends Controller
             Session::flush();
         }
 
-        return redirect('/');
+        return $redirectToLogin ? redirect()->route('login') : redirect('/');
     }
 
 

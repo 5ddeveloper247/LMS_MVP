@@ -277,31 +277,35 @@
 
       <!-- PORTAL SELECTOR TABS -->
       <div class="portal-tabs">
-        <button class="portal-tab active" onclick="switchPortal('student')">
+        <button type="button" class="portal-tab active" data-portal="student" onclick="switchPortal('student')">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
           Student
         </button>
-        <button class="portal-tab" onclick="switchPortal('ce')">
+        <button type="button" class="portal-tab" data-portal="ce" onclick="switchPortal('ce')">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           CE Professional
         </button>
-        <button class="portal-tab" onclick="switchPortal('instructor')">
+        <button type="button" class="portal-tab" data-portal="instructor" onclick="switchPortal('instructor')">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
           Instructor / Tutor
         </button>
       </div>
 
+      @php
+        $createSignupErrors = $errors->any() && in_array(old('signup_source'), ['login_create', 'ce_register'], true);
+      @endphp
+
       <!-- AUTH TOGGLE: Sign In / Create Account -->
       <div class="auth-toggle">
-        <button type="button" class="auth-btn{{ ($errors->any() && old('signup_source') === 'login_create') ? '' : ' active' }}" onclick="switchAuth('signin')">Sign In</button>
-        <button type="button" class="auth-btn{{ ($errors->any() && old('signup_source') === 'login_create') ? ' active' : '' }}" onclick="switchAuth('create')">Create Account</button>
+        <button type="button" class="auth-btn{{ $createSignupErrors ? '' : ' active' }}" onclick="switchAuth('signin')">Sign In</button>
+        <button type="button" class="auth-btn{{ $createSignupErrors ? ' active' : '' }}" onclick="switchAuth('create')">Create Account</button>
       </div>
 
       <!-- ==========================================
            SIGN IN (Universal — same for all portals)
            Wired to existing POST /login — backend redirect by role_id
            ========================================== -->
-      <div class="auth-panel{{ ($errors->any() && old('signup_source') === 'login_create') ? '' : ' active' }}" id="auth-signin">
+      <div class="auth-panel{{ $createSignupErrors ? '' : ' active' }}" id="auth-signin">
         <form action="{{ route('login') }}" method="POST" id="loginForm">
           @csrf
           @if ($errors->any())
@@ -345,15 +349,17 @@
 
       <!-- ==========================================
            CREATE ACCOUNT (fields change by portal)
-           Student portal posts to preRegister; CE/Instructor UI only for now
+           Student → preRegister | CE Professional → ceRegister
            ========================================== -->
-      <div class="auth-panel{{ ($errors->any() && old('signup_source') === 'login_create') ? ' active' : '' }}" id="auth-create">
-        <form action="{{ route('preRegister') }}" method="POST" id="createAccountForm">
+      <div class="auth-panel{{ $createSignupErrors ? ' active' : '' }}" id="auth-create">
+        <form action="{{ route('preRegister') }}" method="POST" id="createAccountForm"
+          data-action-student="{{ route('preRegister') }}"
+          data-action-ce="{{ Route::has('ceRegister') ? route('ceRegister') : '' }}">
           @csrf
-          <input type="hidden" name="signup_source" value="login_create">
+          <input type="hidden" name="signup_source" id="signupSource" value="{{ old('signup_source', 'login_create') }}">
           <input type="hidden" name="name" id="createFullName" value="{{ old('name') }}">
 
-          @if ($errors->any() && old('signup_source') === 'login_create')
+          @if ($createSignupErrors)
             <div class="form-group" style="margin-bottom:12px;">
               @foreach ($errors->all() as $error)
                 <p class="hint" style="color:var(--terracotta);font-size:12px;margin:0 0 4px;">{{ $error }}</p>
@@ -401,36 +407,36 @@
           </div>
         </div>
 
-        <!-- CE-SPECIFIC FIELDS (UI only — not submitted for student signup) -->
+        <!-- CE-SPECIFIC FIELDS -->
         <div class="ce-fields">
           <div class="form-row">
             <div class="form-group">
               <label>FL License Number <span class="req">*</span></label>
-              <input type="text" inputmode="numeric" pattern="[0-9]*" placeholder="e.g. 1234567" oninput="this.value=this.value.replace(/[^0-9]/g,'')" disabled>
-              <p class="hint">Numbers only â€” do not include RN, LPN, or APRN prefix</p>
+              <input type="text" name="fl_license_number" id="flLicenseNumber" inputmode="numeric" pattern="[0-9]*" placeholder="e.g. 1234567" value="{{ old('fl_license_number') }}" oninput="this.value=this.value.replace(/[^0-9]/g,'')" disabled>
+              <p class="hint">Numbers only — do not include RN, LPN, or APRN prefix</p>
             </div>
             <div class="form-group">
               <label>License Type <span class="req">*</span></label>
-              <select id="licenseType" onchange="handleLicenseType(this.value)" disabled>
-                <option value="" disabled selected>Select type</option>
-                <option value="rn">Registered Nurse (RN)</option>
-                <option value="lpn">Licensed Practical Nurse (LPN)</option>
-                <option value="aprn">Advanced Practice RN (APRN)</option>
+              <select name="license_type" id="licenseType" onchange="handleLicenseType(this.value)" disabled>
+                <option value="" disabled {{ old('license_type') ? '' : 'selected' }}>Select type</option>
+                <option value="rn" {{ old('license_type') === 'rn' ? 'selected' : '' }}>Registered Nurse (RN)</option>
+                <option value="lpn" {{ old('license_type') === 'lpn' ? 'selected' : '' }}>Licensed Practical Nurse (LPN)</option>
+                <option value="aprn" {{ old('license_type') === 'aprn' ? 'selected' : '' }}>Advanced Practice RN (APRN)</option>
               </select>
             </div>
           </div>
 
-          <!-- APRN DYNAMIC FIELDS â€” only visible when APRN selected -->
+          <!-- APRN DYNAMIC FIELDS — only visible when APRN selected -->
           <div class="aprn-fields" id="aprnFields">
 
             <div class="radio-group">
               <label>Are you a Nationally Certified APRN? <span class="req">*</span></label>
               <label class="radio-option">
-                <input type="radio" name="aprn_certified_ui" value="yes" onchange="handleCertified(true)" disabled>
+                <input type="radio" name="aprn_nationally_certified" value="yes" {{ old('aprn_nationally_certified') === 'yes' ? 'checked' : '' }} onchange="handleCertified(true)" disabled>
                 <span>Yes, I hold an active national certification (ANCC, AANP, NCC, NBCRNA, etc.)</span>
               </label>
               <label class="radio-option">
-                <input type="radio" name="aprn_certified_ui" value="no" onchange="handleCertified(false)" disabled>
+                <input type="radio" name="aprn_nationally_certified" value="no" {{ old('aprn_nationally_certified') === 'no' ? 'checked' : '' }} onchange="handleCertified(false)" disabled>
                 <span>No</span>
               </label>
               <div class="promo-banner" id="certifiedPromo">
@@ -441,11 +447,11 @@
             <div class="radio-group">
               <label>Are you registered as an Autonomous APRN in Florida? <span class="req">*</span></label>
               <label class="radio-option">
-                <input type="radio" name="aprn_autonomous_ui" value="yes" onchange="handleAutonomous(true)" disabled>
+                <input type="radio" name="aprn_autonomous" value="yes" {{ old('aprn_autonomous') === 'yes' ? 'checked' : '' }} onchange="handleAutonomous(true)" disabled>
                 <span>Yes, I practice without a supervisory protocol</span>
               </label>
               <label class="radio-option">
-                <input type="radio" name="aprn_autonomous_ui" value="no" onchange="handleAutonomous(false)" disabled>
+                <input type="radio" name="aprn_autonomous" value="no" {{ old('aprn_autonomous') === 'no' ? 'checked' : '' }} onchange="handleAutonomous(false)" disabled>
                 <span>No</span>
               </label>
               <div class="flag-banner" id="autonomousFlag">
@@ -460,17 +466,17 @@
             <p class="consent-label">Legal &amp; Reporting Consents</p>
 
             <label class="consent-item">
-              <input type="checkbox" class="consent-mandatory" onchange="checkConsents()" disabled>
+              <input type="checkbox" name="consent_license_accurate" value="1" class="consent-mandatory" {{ old('consent_license_accurate') ? 'checked' : '' }} onchange="checkConsents()" disabled>
               <span><span class="consent-tag required">Required</span> I certify that the nursing license information provided above is accurate, active, and belongs to me. I understand that typographical errors may result in credit reporting delays or failures with <a href="https://cebroker.com" target="_blank">CE Broker</a>.</span>
             </label>
 
             <label class="consent-item">
-              <input type="checkbox" class="consent-mandatory" onchange="checkConsents()" disabled>
+              <input type="checkbox" name="consent_ce_broker_reporting" value="1" class="consent-mandatory" {{ old('consent_ce_broker_reporting') ? 'checked' : '' }} onchange="checkConsents()" disabled>
               <span><span class="consent-tag required">Required</span> I authorize Merkaii Xcellence Prep to electronically transmit my course completion data, license number, and registration details to CE Broker and the Florida Department of Health for licensure compliance tracking.</span>
             </label>
 
             <label class="consent-item optional">
-              <input type="checkbox" disabled>
+              <input type="checkbox" name="consent_marketing_email" value="1" {{ old('consent_marketing_email') ? 'checked' : '' }} disabled>
               <span><span class="consent-tag opt">Optional</span> Send me email updates regarding upcoming Florida nursing renewal deadlines, new pharmacology electives, and bundle discounts.</span>
             </label>
           </div>
@@ -577,8 +583,9 @@ function switchPortal(portal) {
 
   currentPortal = portal;
   // Update portal tabs
-  document.querySelectorAll('.portal-tab').forEach(t => t.classList.remove('active'));
-  event.currentTarget.classList.add('active');
+  document.querySelectorAll('.portal-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.portal === portal);
+  });
 
   // Update brand panel theme + content
   const bp = document.getElementById('brandPanel');
@@ -601,8 +608,10 @@ function switchPortal(portal) {
 
   // Update button styles and consent state
   updateButtons();
-  checkConsents();
+  syncFormAction();
   syncStudentFieldRequirements();
+  syncCeFieldRequirements();
+  checkConsents();
 }
 
 function switchAuth(mode) {
@@ -675,11 +684,15 @@ function handleStudentCredential(value) {
   const journey = document.getElementById('studentJourney');
   if (value === 'rn' || value === 'pn') {
     journeyGroup.style.display = 'block';
-    if (journey) journey.required = currentPortal === 'student';
+    if (journey) {
+      journey.required = currentPortal === 'student';
+      journey.disabled = currentPortal !== 'student';
+    }
   } else {
     journeyGroup.style.display = 'none';
     if (journey) {
       journey.required = false;
+      journey.disabled = true;
       journey.selectedIndex = 0;
     }
   }
@@ -691,10 +704,55 @@ function syncStudentFieldRequirements() {
   if (!cred) return;
   if (currentPortal === 'student') {
     cred.required = true;
+    cred.disabled = false;
     handleStudentCredential(cred.value);
   } else {
     cred.required = false;
-    if (journey) journey.required = false;
+    cred.disabled = true;
+    if (journey) {
+      journey.required = false;
+      journey.disabled = true;
+    }
+  }
+}
+
+function syncCeFieldRequirements() {
+  const isCe = currentPortal === 'ce';
+  const ceFieldIds = ['flLicenseNumber', 'licenseType'];
+  ceFieldIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.disabled = !isCe;
+    el.required = isCe;
+  });
+
+  document.querySelectorAll('.ce-fields input[type="radio"]').forEach(radio => {
+    radio.disabled = !isCe;
+  });
+  document.querySelectorAll('.consent-section input[type="checkbox"]').forEach(cb => {
+    cb.disabled = !isCe;
+  });
+
+  const licenseType = document.getElementById('licenseType');
+  if (isCe && licenseType && licenseType.value === 'aprn') {
+    handleLicenseType('aprn');
+  } else if (!isCe) {
+    const aprnFields = document.getElementById('aprnFields');
+    if (aprnFields) aprnFields.classList.remove('visible');
+  }
+}
+
+function syncFormAction() {
+  const form = document.getElementById('createAccountForm');
+  const signupSource = document.getElementById('signupSource');
+  if (!form || !signupSource) return;
+
+  if (currentPortal === 'ce' && form.dataset.actionCe) {
+    form.action = form.dataset.actionCe;
+    signupSource.value = 'ce_register';
+  } else {
+    form.action = form.dataset.actionStudent || form.action;
+    signupSource.value = 'login_create';
   }
 }
 
@@ -727,17 +785,38 @@ function checkConsents() {
 
 // Initialize consent state on load
 document.addEventListener('DOMContentLoaded', function () {
-  checkConsents();
-  syncStudentFieldRequirements();
+  const restorePortal = @json(old('signup_source') === 'ce_register' ? 'ce' : 'student');
+  if (restorePortal === 'ce') {
+    switchPortal('ce');
+  } else {
+    syncFormAction();
+    syncStudentFieldRequirements();
+    syncCeFieldRequirements();
+    checkConsents();
+  }
+
+  const licenseType = document.getElementById('licenseType');
+  if (licenseType && licenseType.value === 'aprn') {
+    handleLicenseType('aprn');
+  }
 
   const createForm = document.getElementById('createAccountForm');
   if (createForm) {
     createForm.addEventListener('submit', function (e) {
-      if (currentPortal !== 'student') {
+      if (currentPortal === 'instructor') {
         e.preventDefault();
-        alert('CE Professional and Instructor signup will be available soon. Please use the Student portal to create an account.');
+        alert('Instructor signup uses the Become a Tutor application. Please use the Instructor / Tutor tab Create Account link.');
         return false;
       }
+
+      if (currentPortal === 'ce' && !createForm.dataset.actionCe) {
+        e.preventDefault();
+        alert('CE Professional registration is not available right now. Please try again later.');
+        return false;
+      }
+
+      syncFormAction();
+
       const first = (createForm.querySelector('[name="first_name"]') || {}).value || '';
       const last = (createForm.querySelector('[name="last_name"]') || {}).value || '';
       const fullName = document.getElementById('createFullName');
