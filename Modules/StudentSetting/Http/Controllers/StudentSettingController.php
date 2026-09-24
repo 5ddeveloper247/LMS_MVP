@@ -728,7 +728,9 @@ class StudentSettingController extends Controller
                     $file = $request->file('image');
                     $user->image = $this->saveImage($file);
                 }
-                $user->role_id = 3;
+                if ((int) $user->role_id !== (int) config('ceprofessional.role_id', 10)) {
+                    $user->role_id = 3;
+                }
                 $user->save();
                 if ($request->password) {
                     SendGeneralEmail::dispatch($user, 'Offline_Enrolled', [

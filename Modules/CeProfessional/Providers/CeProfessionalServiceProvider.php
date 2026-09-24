@@ -16,8 +16,31 @@ class CeProfessionalServiceProvider extends ServiceProvider
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
+        $this->registerViewComposers();
 
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
+    }
+
+    protected function registerViewComposers()
+    {
+        view()->composer('ceprofessional::partials._topbar-user', function ($view) {
+            if (! auth()->check()) {
+                return;
+            }
+
+            if ((int) auth()->user()->role_id !== (int) config('ceprofessional.role_id', 10)) {
+                return;
+            }
+
+            if ($view->offsetExists('license_short')) {
+                return;
+            }
+
+            $profile = app(\Modules\CeProfessional\Repositories\CeProfessionalRepositoryInterface::class)
+                ->findByUserId(auth()->id());
+
+            $view->with('license_short', $profile ? strtoupper($profile->license_type) : null);
+        });
     }
 
     public function register()

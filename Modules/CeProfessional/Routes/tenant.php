@@ -8,7 +8,10 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 Route::post('ce-register', 'CeRegistrationController@register')->name('ceRegister');
-Route::get('ce-portal', 'CeRegistrationController@portal')->name('cePortal')->middleware('auth');
+
+Route::middleware(['auth', 'ceProfessional'])->group(function () {
+    Route::get('ce-portal', 'CeDashboardController@index')->name('cePortal');
+});
 
 /*
 |--------------------------------------------------------------------------

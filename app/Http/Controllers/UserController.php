@@ -242,6 +242,14 @@ class UserController extends Controller
             $hasPermission = permissionCheck('organization.secretLogin');
             $this->middleware(['organization.secretLogin']);
             $url = route('dashboard');
+        } elseif ((int) $user->role_id === (int) config('ceprofessional.role_id', 10)) {
+            if ($user->password == null) {
+                Toastr::error('Please change the password to access secret login.', trans('common.Failed'));
+
+                return redirect()->back();
+            }
+            $url = route('cePortal');
+            $hasPermission = permissionCheck('student.secretLogin');
         } else {
             $url = route('dashboard');
         }

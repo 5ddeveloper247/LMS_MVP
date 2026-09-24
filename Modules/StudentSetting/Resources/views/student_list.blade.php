@@ -18,7 +18,7 @@
             <div class="col-12">
                 <div class="box_header common_table_header">
                     <div class="main-title d-md-flex w-100">
-                        <h3 class="mr-30 mb_xs_15px mb_sm_20px mb-0">{{ __('student.Students List') }}</h3>
+                        <h3 class="mr-30 mb_xs_15px mb_sm_20px mb-0">{{ $pageTitle ?? __('student.Students List') }}</h3>
 
                         <ul class="d-flex ml-auto">
                             {{--                                @if (permissionCheck('student.store')) --}}
@@ -28,25 +28,29 @@
                             {{--                                                class="ti-plus"></i>{{__('student.Add Student')}}</a> --}}
                             {{--                                    </li> --}}
                             {{--                                @endif --}}
+                            @if ($showAgreementForm ?? true)
                                 <li><button class="primary-btn fix-gr-bg" onclick=uploadAgreementFormModal()>Agreement
                                     Form</button></li>
+                            @endif
                         </ul>
 
                     </div>
 
                 </div>
             </div>
-            <div class="col-12">
-              <ul class="nav nav-tabs no-bottom-border mt-sm-md-20 mb-10 ml-3" role="tablist">
-                  <li class="nav-item">
-                      <a class="nav-link active filter-link enrolled" href="javascript:void(0)" data-type="enrolled" onclick="populateTable('enrolled')">{{ __('Enrolled') }}</a>
-                  </li>
+            @if (!($hideEnrollmentTabs ?? false))
+                <div class="col-12">
+                  <ul class="nav nav-tabs no-bottom-border mt-sm-md-20 mb-10 ml-3" role="tablist">
+                      <li class="nav-item">
+                          <a class="nav-link active filter-link enrolled" href="javascript:void(0)" data-type="enrolled" onclick="populateTable('enrolled')">{{ __('Enrolled') }}</a>
+                      </li>
 
-                  <li class="nav-item">
-                      <a class="nav-link filter-link non-enrolled" href="javascript:void(0)" data-type="non-enrolled" onclick="populateTable('non-enrolled')">{{ __('Non Enrolled') }}</a>
-                  </li>
-              </ul>
-            </div>
+                      <li class="nav-item">
+                          <a class="nav-link filter-link non-enrolled" href="javascript:void(0)" data-type="non-enrolled" onclick="populateTable('non-enrolled')">{{ __('Non Enrolled') }}</a>
+                      </li>
+                  </ul>
+                </div>
+            @endif
           </div>
             <div class="row justify-content-center">
 
@@ -68,8 +72,10 @@
                                             <th scope="col">{{ __('common.gender') }}</th>
                                             <th scope="col">{{ __('common.Date of Birth') }}</th>
                                             <th scope="col">{{ __('common.Country') }}</th>
-                                            <th scope="col">{{ __('Enrolled') }}</th>
-                                            <th scope="col" id="dateTitle">{{ __('Enrollment Date') }}</th>
+                                            @if (!($hideEnrollmentTabs ?? false))
+                                                <th scope="col">{{ __('Enrolled') }}</th>
+                                            @endif
+                                            <th scope="col" id="dateTitle">{{ ($hideEnrollmentTabs ?? false) ? __('Registration Date') : __('Enrollment Date') }}</th>
                                             <th scope="col">{{ __('Registration Source') }}</th>
                                             <th scope="col">{{ __('common.Status') }}</th>
                                             <th scope="col">{{ __('common.Action') }}</th>
@@ -634,7 +640,7 @@
 
 
     @php
-        $url = route('student.getAllStudentData');
+        $url = $dataUrl ?? route('student.getAllStudentData');
     @endphp
     <script>
 
@@ -754,12 +760,20 @@
             $('#agreement_form').trigger('reset');
 
         });
-      populateTable('enrolled');
+      @if ($hideEnrollmentTabs ?? false)
+        populateTable();
+      @else
+        populateTable('enrolled');
+      @endif
       function populateTable(type){
+        @if ($hideEnrollmentTabs ?? false)
+        let headtitle = '{{ __('Registration Date') }}';
+        @else
         let headtitle = (type == 'enrolled') ? 'Enrollment Date' : 'Pre Register Date';
-        $('#dateTitle').html(headtitle);
         $('.filter-link').removeClass('active');
         $('.filter-link.'+type).addClass('active');
+        @endif
+        $('#dateTitle').html(headtitle);
         let table = $('#lms_table').DataTable({
             bLengthChange: true,
             "bDestroy": true,
@@ -775,9 +789,11 @@
             ],
             "ajax": $.fn.dataTable.pipeline({
                 url: '{!! $url !!}',
+                @if (!($hideEnrollmentTabs ?? false))
                 data: {
                     type: type
                 },
+                @endif
                 pages: 5 // number of pages to cache
             }),
             columns: [{
@@ -822,13 +838,20 @@
                     data: 'country',
                     name: 'country'
                 },
+                @if (!($hideEnrollmentTabs ?? false))
                 {
                     data: 'enrolled',
                     name: 'enrolled'
                 },
+                @endif
                 {
+                    @if ($hideEnrollmentTabs ?? false)
+                    data: 'preregister_date',
+                    name: 'preregister_date'
+                    @else
                     data: (type == 'enrolled') ? 'enrolled_date' : 'preregister_date',
                     name: (type == 'enrolled') ? 'enrolled_date' : 'preregister_date'
+                    @endif
                 },
                 {
                     data: 'reg_src',

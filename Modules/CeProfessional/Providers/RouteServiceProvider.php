@@ -12,6 +12,11 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
+
+        Route::aliasMiddleware(
+            'ceProfessional',
+            \Modules\CeProfessional\Http\Middleware\CeProfessionalMiddleware::class
+        );
     }
 
     public function map()
