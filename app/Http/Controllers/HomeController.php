@@ -31,7 +31,10 @@ class HomeController extends Controller
 
     public function index()
     {
-       
+        if ((int) Auth::user()->role_id === (int) config('ceprofessional.role_id', 10)) {
+            return redirect()->route('cePortal');
+        }
+
         if (Auth::user()->role_id == 1) {
             return redirect()->route('dashboard');
         } else if (Auth::user()->role_id == 2 || Auth::user()->role_id == 9) {
@@ -48,6 +51,10 @@ class HomeController extends Controller
     {
 
         try {
+            if ((int) Auth::user()->role_id === (int) config('ceprofessional.role_id', 10)) {
+                return redirect()->route('cePortal');
+            }
+
             if (Auth::user()->role_id == 3) {
                 return redirect()->route('studentDashboard');
             }

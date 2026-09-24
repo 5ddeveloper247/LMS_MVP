@@ -678,12 +678,7 @@
                                         @endguest
                                         @auth
                                             <div class="login_btn text-center d-lg-none d-flex">
-                                                @if (Auth::user()->role_id == 3)
-                                                    
-                                                        href="{{ route('studentDashboard') }}">{{ __('dashboard.Dashboard') }}</a>
-                                                @else
-                                                    <a href="{{ route('dashboard') }}">{{ __('dashboard.Dashboard') }}</a>
-                                                @endif
+                                                @include('ceprofessional::partials._auth-dashboard-link')
                                                 <a href="{{ route('logout') }}">{{ __('frontend.Log Out') }}</a>
                                             </div>
                                         @endauth
@@ -721,21 +716,18 @@
                                             </div>
                                             <div class="profile_info_iner collaps_part_content">
                                                 @if (Auth::user()->role_id == 3)
-                                                    
-                                                        href="{{ route('studentDashboard') }}">{{ __('dashboard.Dashboard') }}</a>
-                                                    
-                                                        href="{{ route('myProfile') }}">{{ __('frontendmanage.My Profile') }}</a>
-                                                    
-                                                        href="{{ route('myAccount') }}">{{ __('frontend.Account Settings') }}</a>
+                                                    @include('ceprofessional::partials._auth-dashboard-link')
+                                                    @include('ceprofessional::partials._auth-profile-link')
+                                                    @include('ceprofessional::partials._auth-account-link')
                                                     @if (isModuleActive('Affiliate') && auth()->user()->affiliate_request != 1)
-                                                        
-                                                            href="{{ routeIsExist('affiliate.users.request') ? route('affiliate.users.request') : '' }}">{{ __('frontend.Join Affiliate Program') }}</a>
+                                                        <a href="{{ routeIsExist('affiliate.users.request') ? route('affiliate.users.request') : '' }}">{{ __('frontend.Join Affiliate Program') }}</a>
                                                     @endif
                                                 @else
-                                                    
-                                                        href="{{ route('dashboard') }}">{{ __('dashboard.Dashboard') }}</a>
-                                                    
-                                                        href="{{ route('changePassword') }}">{{ __('frontendmanage.My Profile') }}</a>
+                                                    @include('ceprofessional::partials._auth-dashboard-link')
+                                                    @include('ceprofessional::partials._auth-profile-link')
+                                                    @if (isModuleActive('CeProfessional') && (int) Auth::user()->role_id === (int) config('ceprofessional.role_id', 10))
+                                                        @include('ceprofessional::partials._auth-account-link')
+                                                    @endif
                                                 @endif
                                                 @if (isModuleActive('UserType'))
                                                     @foreach (auth()->user()->userRoles as $role)
@@ -1609,15 +1601,18 @@
         </div>
         <div class="mxp-profile-dropdown">
           @if (Auth::user()->role_id == 3)
-            <a href="{{ route('studentDashboard') }}">{{ __('dashboard.Dashboard') }}</a>
-            <a href="{{ route('myProfile') }}">{{ __('frontendmanage.My Profile') }}</a>
-            <a href="{{ route('myAccount') }}">{{ __('frontend.Account Settings') }}</a>
+            @include('ceprofessional::partials._auth-dashboard-link')
+            @include('ceprofessional::partials._auth-profile-link')
+            @include('ceprofessional::partials._auth-account-link')
             @if (isModuleActive('Affiliate') && auth()->user()->affiliate_request != 1)
               <a href="{{ routeIsExist('affiliate.users.request') ? route('affiliate.users.request') : '' }}">{{ __('frontend.Join Affiliate Program') }}</a>
             @endif
           @else
-            <a href="{{ route('dashboard') }}">{{ __('dashboard.Dashboard') }}</a>
-            <a href="{{ route('changePassword') }}">{{ __('frontendmanage.My Profile') }}</a>
+            @include('ceprofessional::partials._auth-dashboard-link')
+            @include('ceprofessional::partials._auth-profile-link')
+            @if (isModuleActive('CeProfessional') && (int) Auth::user()->role_id === (int) config('ceprofessional.role_id', 10))
+              @include('ceprofessional::partials._auth-account-link')
+            @endif
           @endif
           @if (isModuleActive('UserType'))
             @foreach (auth()->user()->userRoles as $role)
@@ -1725,12 +1720,15 @@
     <div class="mxp-mobile-nav-group">
       <div class="mxp-mobile-nav-label">Account</div>
       @if (Auth::user()->role_id == 3)
-        <a href="{{ route('studentDashboard') }}" class="mxp-mobile-nav-link">{{ __('dashboard.Dashboard') }}</a>
-        <a href="{{ route('myProfile') }}" class="mxp-mobile-nav-link">{{ __('frontendmanage.My Profile') }}</a>
-        <a href="{{ route('myAccount') }}" class="mxp-mobile-nav-link">{{ __('frontend.Account Settings') }}</a>
+        @include('ceprofessional::partials._auth-dashboard-link', ['class' => 'mxp-mobile-nav-link'])
+        @include('ceprofessional::partials._auth-profile-link', ['class' => 'mxp-mobile-nav-link'])
+        @include('ceprofessional::partials._auth-account-link', ['class' => 'mxp-mobile-nav-link'])
       @else
-        <a href="{{ route('dashboard') }}" class="mxp-mobile-nav-link">{{ __('dashboard.Dashboard') }}</a>
-        <a href="{{ route('changePassword') }}" class="mxp-mobile-nav-link">{{ __('frontendmanage.My Profile') }}</a>
+        @include('ceprofessional::partials._auth-dashboard-link', ['class' => 'mxp-mobile-nav-link'])
+        @include('ceprofessional::partials._auth-profile-link', ['class' => 'mxp-mobile-nav-link'])
+        @if (isModuleActive('CeProfessional') && (int) Auth::user()->role_id === (int) config('ceprofessional.role_id', 10))
+          @include('ceprofessional::partials._auth-account-link', ['class' => 'mxp-mobile-nav-link'])
+        @endif
       @endif
       <a href="{{ route('logout') }}" class="mxp-mobile-nav-link">{{ __('frontend.Log Out') }}</a>
     </div>

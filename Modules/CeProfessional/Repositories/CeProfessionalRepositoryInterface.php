@@ -9,4 +9,6 @@ interface CeProfessionalRepositoryInterface
     public function create(array $attributes): CeProfessional;
 
     public function findByUserId(int $userId): ?CeProfessional;
+
+    public function updateByUserId(int $userId, array $attributes): bool;
 }

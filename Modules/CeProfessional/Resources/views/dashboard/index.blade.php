@@ -4,7 +4,7 @@
     {{ Settings('site_title') ? Settings('site_title') : 'Merkaii Xcellence Prep' }} | CE Dashboard
 @endsection
 
-@section('content')
+@section('mainContent')
     @include('ceprofessional::components.welcome-header')
 
     <div class="ce-stats-grid">

@@ -40,4 +40,30 @@ return [
             'url' => '/prep-courses',
         ],
     ],
+
+    // Top navbar profile dropdown — CE portal only.
+    'navbar_menu' => [
+        [
+            'label' => 'Home',
+            'url' => '/',
+            'translation' => 'frontendmanage.Home',
+        ],
+        [
+            'label' => 'My Profile',
+            'route' => 'cePortal.profile',
+            'translation' => 'frontendmanage.My Profile',
+            'active' => ['cePortal.profile'],
+        ],
+        [
+            'label' => 'Account Settings',
+            'route' => 'cePortal.account',
+            'translation' => 'frontend.Account Settings',
+            'active' => ['cePortal.account'],
+        ],
+        [
+            'label' => 'Log Out',
+            'route' => 'logout',
+            'translation' => 'frontend.Log Out',
+        ],
+    ],
 ];

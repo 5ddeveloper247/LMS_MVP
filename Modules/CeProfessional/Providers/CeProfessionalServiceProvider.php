@@ -17,8 +17,27 @@ class CeProfessionalServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->registerViewComposers();
+        $this->registerCeMiddleware();
+        $this->loadHelpers();
 
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
+    }
+
+    protected function loadHelpers()
+    {
+        $helperPath = module_path($this->moduleName, 'helpers/helper.php');
+        if (is_file($helperPath)) {
+            require_once $helperPath;
+        }
+    }
+
+    protected function registerCeMiddleware()
+    {
+        $this->app->make(\Illuminate\Contracts\Http\Kernel::class)
+            ->appendMiddlewareToGroup(
+                'web',
+                \Modules\CeProfessional\Http\Middleware\RedirectCeProfessionalDashboard::class
+            );
     }
 
     protected function registerViewComposers()

@@ -11,6 +11,13 @@ Route::post('ce-register', 'CeRegistrationController@register')->name('ceRegiste
 
 Route::middleware(['auth', 'ceProfessional'])->group(function () {
     Route::get('ce-portal', 'CeDashboardController@index')->name('cePortal');
+
+    Route::get('ce-portal/profile', 'CeProfileController@show')->name('cePortal.profile');
+    Route::post('ce-portal/profile', 'CeProfileController@update')->name('cePortal.profile.update');
+    Route::post('ce-portal/profile/photo', 'CeProfileController@uploadPhoto')->name('cePortal.profile.photo');
+
+    Route::get('ce-portal/account', 'CeAccountController@show')->name('cePortal.account');
+    Route::post('ce-portal/account/password', 'CeAccountController@updatePassword')->name('cePortal.account.password');
 });
 
 /*

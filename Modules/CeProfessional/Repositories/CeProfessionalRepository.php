@@ -22,4 +22,11 @@ class CeProfessionalRepository implements CeProfessionalRepositoryInterface
     {
         return $this->ceProfessional->newQuery()->where('user_id', $userId)->first();
     }
+
+    public function updateByUserId(int $userId, array $attributes): bool
+    {
+        return (bool) $this->ceProfessional->newQuery()
+            ->where('user_id', $userId)
+            ->update($attributes);
+    }
 }
