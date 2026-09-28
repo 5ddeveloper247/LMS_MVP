@@ -170,53 +170,11 @@
         </div>
 
         <div class="ce-license-grid">
-            <div class="ce-license-card rn-lpn" id="rn-lpn-packages">
-                <div class="ce-license-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
-                <h3>Florida RN &amp; LPN</h3>
-                <p class="ce-license-subtitle">License Renewal Packages</p>
-                <p>The Florida Board of Nursing requires RNs and LPNs to complete 26 contact hours every two years. Don&rsquo;t waste time buying random individual courses &mdash; our Board-approved bundles give you exactly what you need in a single checkout.</p>
-                <ul class="ce-license-req">
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>6 mandatory courses (11 contact hours)</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>15 hours of clinical electives to reach 26</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Auto-reported to CE Broker within 48&ndash;72 hours</li>
-                </ul>
-                <div class="ce-license-bundles">
-                    <h4>Available Bundles</h4>
-                    <div class="ce-bundle-row">
-                        <div><p class="ce-bundle-name">Florida Mandatory Core</p><p class="ce-bundle-detail">6 courses &middot; 11 hours</p></div>
-                        <span class="ce-bundle-price">$39&ndash;$49</span>
-                    </div>
-                    <div class="ce-bundle-row">
-                        <div><p class="ce-bundle-name">Complete 26-Hour Renewal</p><p class="ce-bundle-detail">All mandatory + electives</p></div>
-                        <span class="ce-bundle-price">$69&ndash;$79</span>
-                    </div>
-                </div>
-                <a href="{{ route('continuingEducationRnLpn') }}" class="ce-btn-portal teal">View RN &amp; LPN Packages &rarr;</a>
-            </div>
-
-            <div class="ce-license-card aprn" id="aprn-packages">
-                <div class="ce-license-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-                <h3>Florida APRN / NP</h3>
-                <p class="ce-license-subtitle">Prescribing &amp; Renewal Packages</p>
-                <p>Advanced practice requires advanced compliance. Your renewal path depends on whether you hold an active national certification. We have your curriculum ready for either route &mdash; including the mandatory controlled substance prescribing update.</p>
-                <ul class="ce-license-req">
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Certified-Exempt path: 5 hours total</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Standard full renewal: 27 hours total</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Autonomous APRNs: +10 additional hours</li>
-                </ul>
-                <div class="ce-license-bundles">
-                    <h4>Available Bundles</h4>
-                    <div class="ce-bundle-row">
-                        <div><p class="ce-bundle-name">APRN Certified-Exempt</p><p class="ce-bundle-detail">2 courses &middot; 5 hours</p></div>
-                        <span class="ce-bundle-price">$39&ndash;$45</span>
-                    </div>
-                    <div class="ce-bundle-row">
-                        <div><p class="ce-bundle-name">APRN Executive Renewal</p><p class="ce-bundle-detail">All mandatory + prescribing + electives</p></div>
-                        <span class="ce-bundle-price">$89&ndash;$99</span>
-                    </div>
-                </div>
-                <a href="{{ route('continuingEducationAprn') }}" class="ce-btn-portal terra">View APRN Packages &rarr;</a>
-            </div>
+            @forelse ($licenseTypes ?? [] as $license)
+                @include(theme('components.ce._license-card'), compact('license'))
+            @empty
+                <p class="ce-catalog-empty" style="grid-column:1/-1;">No license types are published yet.</p>
+            @endforelse
         </div>
     </div>
 </section>

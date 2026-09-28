@@ -38,4 +38,20 @@ return [
         'Domestic Violence',
         'General Electives',
     ],
+
+    'license_card_styles' => [
+        'teal' => 'Teal (RN / LPN)',
+        'terra' => 'Terracotta (APRN)',
+    ],
+
+    // Card style → frontend packages page (button URL is derived automatically).
+    'license_detail_routes' => [
+        'teal' => 'continuingEducationRnLpn',
+        'terra' => 'continuingEducationAprn',
+    ],
+
+    'license_anchor_ids' => [
+        'teal' => 'rn-lpn-packages',
+        'terra' => 'aprn-packages',
+    ],
 ];

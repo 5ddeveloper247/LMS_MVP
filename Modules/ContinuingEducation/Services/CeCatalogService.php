@@ -7,6 +7,15 @@ use Modules\ContinuingEducation\Entities\CeCourse;
 
 class CeCatalogService
 {
+    public function __construct(
+        protected CeLicenseService $licenseService
+    ) {}
+
+    public function listPublishedLicenses()
+    {
+        return $this->licenseService->listPublished();
+    }
+
     public function listPublishedCatalog(): array
     {
         $courses = CeCourse::query()

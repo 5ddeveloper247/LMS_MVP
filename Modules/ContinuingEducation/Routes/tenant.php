@@ -53,4 +53,32 @@ Route::group([
     Route::get('/students/{id}', 'CeStudentsController@show')
         ->name('continuing-education.students.show')
         ->middleware('RoutePermissionCheck:continuing-education.students.index');
+
+    Route::get('/licenses', 'CeLicenseController@index')
+        ->name('continuing-education.licenses.index')
+        ->middleware('RoutePermissionCheck:continuing-education.licenses.index');
+
+    Route::get('/licenses/create', 'CeLicenseController@create')
+        ->name('continuing-education.licenses.create')
+        ->middleware('RoutePermissionCheck:continuing-education.licenses.index');
+
+    Route::post('/licenses/store', 'CeLicenseController@store')
+        ->name('continuing-education.licenses.store')
+        ->middleware('RoutePermissionCheck:continuing-education.licenses.index');
+
+    Route::get('/licenses/edit/{id}', 'CeLicenseController@edit')
+        ->name('continuing-education.licenses.edit')
+        ->middleware('RoutePermissionCheck:continuing-education.licenses.index');
+
+    Route::post('/licenses/update/{id}', 'CeLicenseController@update')
+        ->name('continuing-education.licenses.update')
+        ->middleware('RoutePermissionCheck:continuing-education.licenses.index');
+
+    Route::get('/licenses/delete/{id}', 'CeLicenseController@destroy')
+        ->name('continuing-education.licenses.destroy')
+        ->middleware('RoutePermissionCheck:continuing-education.licenses.index');
+
+    Route::get('/licenses/status/{id}', 'CeLicenseController@status')
+        ->name('continuing-education.licenses.status')
+        ->middleware('RoutePermissionCheck:continuing-education.licenses.index');
 });

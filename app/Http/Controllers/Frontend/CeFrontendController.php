@@ -23,6 +23,7 @@ class CeFrontendController extends Controller
             'mandatoryCourses' => $catalog['mandatory'],
             'electiveCourses' => $catalog['elective'],
             'catalogCourseCount' => $catalog['total'],
+            'licenseTypes' => $this->catalogService->listPublishedLicenses(),
             'ceCatalog' => $this->catalogService,
         ]);
     }
