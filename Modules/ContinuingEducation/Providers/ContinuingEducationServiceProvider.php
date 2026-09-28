@@ -33,6 +33,7 @@ class ContinuingEducationServiceProvider extends ServiceProvider
 
         $this->app->singleton(\Modules\ContinuingEducation\Services\CeCourseService::class);
         $this->app->singleton(\Modules\ContinuingEducation\Services\CeCourseFormDataService::class);
+        $this->app->singleton(\Modules\ContinuingEducation\Services\CeCatalogService::class);
     }
 
     protected function registerConfig()

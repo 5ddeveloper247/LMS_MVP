@@ -214,9 +214,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 
-@section('css')
-  <style>
-    :root {
+<style>
+    .footer-main {
       --teal-mid: #1A8A6F;
       --teal-deep: #0F6E56;
       --teal-darkest: #0A4D3C;
@@ -231,45 +230,6 @@
       --serif: 'Playfair Display', Georgia, serif;
       --sans: 'Montserrat', system-ui, sans-serif;
     }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: var(--sans) !important;
-      color: var(--charcoal);
-      background: var(--cream);
-      line-height: 1.6;
-    }
-
-    /* Demo content placeholder */
-    .demo-content {
-      max-width: 800px;
-      margin: 60px auto;
-      padding: 0 24px;
-    }
-    .demo-content h1 {
-      font-family: var(--serif) !important;
-      font-size: 36px;
-      color: var(--teal-darkest);
-      margin-bottom: 20px;
-    }
-    .demo-content p {
-      font-size: 15px;
-      color: var(--charcoal-soft);
-      line-height: 1.8;
-      margin-bottom: 16px;
-    }
-    .demo-note {
-      background: var(--cream-warm);
-      border: 2px dashed var(--terracotta);
-      border-radius: 12px;
-      padding: 28px;
-      margin-bottom: 40px;
-      font-size: 14px;
-      color: var(--charcoal-soft);
-      line-height: 1.7;
-    }
-    .demo-note strong { color: var(--terracotta); }
-
 
     /* ================================================================
        ROW 1: FOOTER NAV GRID
@@ -375,14 +335,20 @@
     .footer-col li {
       margin-bottom: 11px;
     }
-    .footer-col  p a {
+    .footer-main .footer-col p,
+    .footer-main .footer-col p a {
       color: rgba(255, 255, 255, 0.75) !important;
       text-decoration: none;
       font-size: 13.5px !important;
       transition: color 0.2s !important;
       font-family: var(--sans) !important;
+      margin-bottom: 0;
     }
-    .footer-col a:hover {
+    .footer-main .footer-col h5,
+    .footer-main .footer-col .text-white {
+      color: var(--cream) !important;
+    }
+    .footer-main .footer-col a:hover {
       color: var(--terracotta) !important;
     }
 
@@ -542,18 +508,16 @@
       .footer-contact-inner { padding: 0 16px; }
       .footer-legal-inner { padding: 0 16px; }
     }
-  </style>
-@endsection
+</style>
 
-
- <footer class="footer-main">
+<footer class="footer-main">
 
   <!-- ROW 1: NAV GRID -->
   <div class="footer-grid">
 
     <!-- Brand Column -->
     <div class="footer-col footer-brand-col">
-      <a href="index.html" class="footer-logo-mark">
+      <a href="{{ url('/') }}" class="footer-logo-mark">
         <div class="footer-seal-wrap">
           <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <circle cx="50" cy="50" r="48" fill="#1A8A6F" stroke="#C65D3A" stroke-width="1.5"/>
