@@ -27,8 +27,8 @@
                 class="dropdown-item edit_brand">{{ trans('common.Delete') }}</a>
         @endif
 
-        @if (permissionCheck('continuing-education.students.index'))
-            <a href="{{ route('continuing-education.students.index') }}" class="dropdown-item edit_brand">
+        @if (permissionCheck('continuing-education.courses.index'))
+            <a href="{{ route('continuing-education.courses.enrolled_students', $course->id) }}" class="dropdown-item edit_brand">
                 {{ trans('student.Students') }}
             </a>
         @endif

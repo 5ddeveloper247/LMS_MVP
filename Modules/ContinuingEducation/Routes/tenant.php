@@ -34,6 +34,14 @@ Route::group([
         ->name('continuing-education.courses.status')
         ->middleware('RoutePermissionCheck:continuing-education.courses.index');
 
+    Route::get('/courses/{id}/students', 'CeCourseController@enrolledStudents')
+        ->name('continuing-education.courses.enrolled_students')
+        ->middleware('RoutePermissionCheck:continuing-education.courses.index');
+
+    Route::get('/courses/{id}/students/data', 'CeCourseController@enrolledStudentsData')
+        ->name('continuing-education.courses.enrolled_students.data')
+        ->middleware('RoutePermissionCheck:continuing-education.courses.index');
+
     Route::get('/students', 'CeStudentsController@index')
         ->name('continuing-education.students.index')
         ->middleware('RoutePermissionCheck:continuing-education.students.index');

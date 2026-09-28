@@ -10,6 +10,7 @@ use Modules\ContinuingEducation\Http\Requests\StoreCeCourseRequest;
 use Modules\ContinuingEducation\Http\Requests\UpdateCeCourseRequest;
 use Modules\ContinuingEducation\Services\CeCourseFormDataService;
 use Modules\ContinuingEducation\Services\CeCourseService;
+use Yajra\DataTables\Facades\DataTables;
 
 class CeCourseController extends Controller
 {
@@ -154,5 +155,76 @@ class CeCourseController extends Controller
 
             return redirect()->back();
         }
+    }
+
+    public function enrolledStudents($id)
+    {
+        try {
+            $course = $this->courseService->findForLms((int) $id);
+
+            return view('continuingeducation::courses.enrolled_students', compact('course'));
+        } catch (\Exception $e) {
+            Toastr::error(trans('common.Operation failed'), trans('common.Failed'));
+
+            return redirect()->route('continuing-education.courses.index');
+        }
+    }
+
+    public function enrolledStudentsData(Request $request, $id)
+    {
+        $course = $this->courseService->findForLms((int) $id);
+        $linkedCourse = $course->linkedCourse;
+        $query = $course->enrollments()->with(['user.userCountry']);
+
+        return DataTables::of($query)
+            ->addIndexColumn()
+            ->addColumn('image', function ($enrollment) {
+                $user = $enrollment->user;
+
+                return '<div class="profile_info"><img src="' . getStudentImage($user->image) . '" alt="' . e($user->name) . ' image"></div>';
+            })
+            ->addColumn('student_name', function ($enrollment) {
+                $user = $enrollment->user;
+
+                if (permissionCheck('continuing-education.students.index')) {
+                    return '<a class="dropdown-item" target="_blank" href="' . route('continuing-education.students.show', $user->id) . '" data-id="' . $user->id . '" type="button">' . e($user->name) . '</a>';
+                }
+
+                return e($user->name);
+            })
+            ->editColumn('email', fn ($enrollment) => $enrollment->user->email ?? '')
+            ->addColumn('enrollment_status', function ($enrollment) {
+                return ucwords(str_replace('_', ' ', (string) $enrollment->status));
+            })
+            ->addColumn('progressbar', function ($enrollment) use ($linkedCourse) {
+                $percent = (int) $enrollment->progress;
+
+                if ($linkedCourse && $enrollment->user) {
+                    $percent = max(
+                        $percent,
+                        (int) round($linkedCourse->userTotalPercentage($enrollment->user->id, $linkedCourse->id))
+                    );
+                }
+
+                return '<div class="progress_percent flex-fill text-right">
+                    <div class="progress theme_progressBar">
+                        <div class="progress-bar" role="progressbar"
+                            style="width:' . $percent . '%"
+                            aria-valuenow="' . $percent . '"
+                            aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p class="font_14 f_w_400">' . $percent . '% Complete</p>
+                </div>';
+            })
+            ->addColumn('enrolled_at', fn ($enrollment) => showDate($enrollment->created_at))
+            ->addColumn('action', function ($enrollment) {
+                if (!permissionCheck('continuing-education.students.index')) {
+                    return '';
+                }
+
+                return '<a href="' . route('continuing-education.students.show', $enrollment->user_id) . '" class="primary-btn tr-bg" target="_blank">' . __('common.View') . '</a>';
+            })
+            ->rawColumns(['image', 'student_name', 'progressbar', 'action'])
+            ->make(true);
     }
 }
