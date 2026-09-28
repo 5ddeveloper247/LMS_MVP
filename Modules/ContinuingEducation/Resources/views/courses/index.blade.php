@@ -1,9 +1,26 @@
 @extends('backend.master')
 
+@push('styles')
+    <style>
+        /* Bootstrap .table-responsive clips dropdown menus (overflow-y becomes auto). */
+        .ce-courses-index .table-responsive,
+        .ce-courses-index .QA_table,
+        .ce-courses-index .white_box,
+        .ce-courses-index .tab-content,
+        .ce-courses-index .tab-pane {
+            overflow: visible !important;
+        }
+
+        .ce-courses-index .CRM_dropdown .dropdown-menu {
+            z-index: 1050;
+        }
+    </style>
+@endpush
+
 @section('mainContent')
     {!! generateBreadcrumb() !!}
 
-    <section class="admin-visitor-area up_st_admin_visitor student-details">
+    <section class="admin-visitor-area up_st_admin_visitor student-details ce-courses-index">
         <div class="container-fluid p-0">
             <div class="row pt-0">
                 <ul class="nav nav-tabs no-bottom-border mt-sm-md-20 mb-10 ml-3" role="tablist">
