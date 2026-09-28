@@ -103,7 +103,7 @@
         isUnique(
             {
                 columns: [
-                    ['chapters', 'name', $('#addchapter_name').val()]
+                    ['chapters', 'name', $('#addchapter_name').val(), '', 'course_id', $('input[name="course_id"]').val()]
                 ]
             }
             , function (res) {
@@ -143,7 +143,7 @@
        	isUnique(
             {
                 columns: [
-                    ['lessons', 'name', form.find("input[name='name']").val(), '{{isset($editLesson) ? $editLesson->id : ''}}']
+                    ['lessons', 'name', form.find("input[name='name']").val(), '{{isset($editLesson) ? $editLesson->id : ''}}', 'course_id', form.find('input[name="course_id"]').val()]
                 ]
             }
             , function (res) {

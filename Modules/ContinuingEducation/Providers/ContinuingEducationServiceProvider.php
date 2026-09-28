@@ -14,13 +14,25 @@ class ContinuingEducationServiceProvider extends ServiceProvider
     {
         $this->registerConfig();
         $this->registerViews();
+        $this->loadHelpers();
 
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
+    }
+
+    protected function loadHelpers()
+    {
+        $helperPath = module_path($this->moduleName, 'helpers/helper.php');
+        if (is_file($helperPath)) {
+            require_once $helperPath;
+        }
     }
 
     public function register()
     {
         $this->app->register(RouteServiceProvider::class);
+
+        $this->app->singleton(\Modules\ContinuingEducation\Services\CeCourseService::class);
+        $this->app->singleton(\Modules\ContinuingEducation\Services\CeCourseFormDataService::class);
     }
 
     protected function registerConfig()

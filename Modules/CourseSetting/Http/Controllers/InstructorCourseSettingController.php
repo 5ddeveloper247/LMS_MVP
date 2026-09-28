@@ -51,7 +51,7 @@ class InstructorCourseSettingController extends Controller
 
         if ($request->input_type == 1) {
             $request->validate([
-                'chapter_name' => 'required|unique:chapters,name',
+                'chapter_name' => 'required|unique:chapters,name,NULL,id,course_id,' . $request->course_id,
             ]);
         } else if ($request->input_type == 2) {
             $request->validate([
@@ -62,7 +62,7 @@ class InstructorCourseSettingController extends Controller
             ]);
         } else {
             $request->validate([
-                'name' => 'required|unique:lessons,name',
+                'name' => 'required|unique:lessons,name,NULL,id,course_id,' . $request->course_id,
                 'chapter_id' => 'required',
                 'course_id' => 'required',
             ]);
@@ -217,10 +217,10 @@ class InstructorCourseSettingController extends Controller
                     //                    }
 
                     Toastr::success(trans('common.Operation successful'), trans('common.Success'));
-                    return redirect()->route('courseDetails', ['id' => $request->course_id, 'type' => 'courses']);
+                    return redirect()->to(courseDetailsRedirectUrl($request->course_id, ['type' => 'courses']));
                 } else {
                     Toastr::error('Invalid Access !', 'Failed');
-                    return redirect()->route('courseDetails', ['id' => $request->course_id, 'type' => 'courses']);
+                    return redirect()->to(courseDetailsRedirectUrl($request->course_id, ['type' => 'courses']));
                 }
             } catch (Exception $e) {
                 GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
@@ -322,11 +322,11 @@ class InstructorCourseSettingController extends Controller
                     }
 
                     Toastr::success(trans('common.Operation successful'), trans('common.Success'));
-                    return redirect()->route('courseDetails', ['id' => $request->course_id, 'type' => 'courses']);
+                    return redirect()->to(courseDetailsRedirectUrl($request->course_id, ['type' => 'courses']));
                 }
 
                 Toastr::error('Invalid Access !', 'Failed');
-                return redirect()->route('courseDetails', ['id' => $request->course_id, 'type' => 'courses']);
+                return redirect()->to(courseDetailsRedirectUrl($request->course_id, ['type' => 'courses']));
             } catch (Exception $e) {
                 GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
             }
@@ -556,11 +556,11 @@ class InstructorCourseSettingController extends Controller
                     }
 
                     Toastr::success(trans('common.Operation successful'), trans('common.Success'));
-                    return redirect()->route('courseDetails', ['id' => $request->course_id, 'type' => 'courses']);
+                    return redirect()->to(courseDetailsRedirectUrl($request->course_id, ['type' => 'courses']));
                 }
 
                 Toastr::error('Invalid Access !', 'Failed');
-                return redirect()->route('courseDetails', ['id' => $request->course_id, 'type' => 'courses']);
+                return redirect()->to(courseDetailsRedirectUrl($request->course_id, ['type' => 'courses']));
             } catch (Exception $e) {
                 GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
             }
@@ -605,10 +605,10 @@ class InstructorCourseSettingController extends Controller
                 $chapter->delete();
 
                 Toastr::success(trans('common.Operation successful'), trans('common.Success'));
-                return redirect()->route('courseDetails', [$course_id]);
+                return redirect()->to(courseDetailsRedirectUrl($course_id));
             } else {
                 Toastr::error('Invalid Access !', 'Failed');
-                return redirect()->route('courseDetails', [$course_id]);
+                return redirect()->to(courseDetailsRedirectUrl($course_id));
             }
         } catch (Exception $e) {
             GettingError($e->getMessage(), url()->current(), request()->iprequest()->userAgent());
@@ -627,7 +627,7 @@ class InstructorCourseSettingController extends Controller
         ]);
         if ($request->input_type == 1) {
             $request->validate([
-                'chapter_name' => 'required|unique:chapters,name,' . $request->chapter,
+                'chapter_name' => 'required|unique:chapters,name,' . $request->chapter . ',id,course_id,' . $request->course_id,
             ]);
         } else if ($request->input_type == 2) {
             $request->validate([
@@ -638,7 +638,7 @@ class InstructorCourseSettingController extends Controller
             ]);
         } else {
             $request->validate([
-                'name' => 'required|unique:lessons,name,' . $request->lesson_id,
+                'name' => 'required|unique:lessons,name,' . $request->lesson_id . ',id,course_id,' . $request->course_id,
                 'chapter_id' => 'required',
                 'course_id' => 'required',
             ]);

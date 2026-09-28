@@ -453,7 +453,7 @@ $(document).ready(function () {
         isUnique(
             {
                 columns: [
-                    ['lessons', 'name', $('#addLesson_name').val()]
+                    ['lessons', 'name', $('#addLesson_name').val(), '', 'course_id', $('input[name="course_id"]').val()]
                 ]
             }
             , function (res) {

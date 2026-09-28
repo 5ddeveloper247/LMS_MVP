@@ -194,7 +194,8 @@
             <div class="modal-body">
                 <form action="{{route('saveChapter')}}" method="post">
                     @csrf
-                    <input type="hidden" name="id" value="{{@$course->id}}">
+                    <input type="hidden" name="course_id" value="{{@$course->id}}">
+                    <input type="hidden" name="input_type" value="1">
 
                     <div class="row">
 

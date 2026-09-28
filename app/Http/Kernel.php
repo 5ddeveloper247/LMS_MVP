@@ -10,6 +10,7 @@ use App\Http\Middleware\IpCheck;
 use App\Http\Middleware\LastActivityMiddleware;
 use App\Http\Middleware\MaintenanceModeMiddleware;
 use App\Http\Middleware\SetLocale;
+use App\Http\Middleware\SharePermissionListMiddleware;
 
 //use App\Http\Middleware\XAuthorizationHeader;
 use App\Http\Middleware\XSS;
@@ -52,6 +53,7 @@ class Kernel extends HttpKernel
             \Modules\Localization\Http\Middleware\Language::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             SetLocale::class,
+            SharePermissionListMiddleware::class,
             CheckUserActiveStatus::class,
             XSS::class,
             IpCheck::class,

@@ -351,18 +351,26 @@ class AjaxController extends Controller
     public function isUnique(Request $request)
     {
         $errors = [];
-        foreach ($request->columns as $column){
-           $query = DB::table($column[0]);
-           if(isset($column[3])){
-               $query = $query->where('id','!=', $column[3]);
-           }
-           if($query->where(function ($q) use ($column){
-               $q->where($column[1], $column[2])
-                  ->orWhere($column[1], 'LIKE', '%\"' . $column[2] . '\"%');
-           })->exists()){
-                array_push($errors,ucfirst(str_replace(['_','-','.'],' ',$column[0])).' '. ucfirst(str_replace(['_','-','.'],' ',$column[1])) .' Must be Unique');
-           }
+        foreach ($request->columns as $column) {
+            $query = DB::table($column[0]);
+
+            if (isset($column[3]) && $column[3] !== '' && $column[3] !== null) {
+                $query = $query->where('id', '!=', $column[3]);
+            }
+
+            // Optional scope: column[4] = field name, column[5] = value (e.g. course_id)
+            if (isset($column[4], $column[5]) && $column[5] !== '' && $column[5] !== null) {
+                $query = $query->where($column[4], $column[5]);
+            }
+
+            if ($query->where(function ($q) use ($column) {
+                $q->where($column[1], $column[2])
+                    ->orWhere($column[1], 'LIKE', '%\"' . $column[2] . '\"%');
+            })->exists()) {
+                array_push($errors, ucfirst(str_replace(['_', '-', '.'], ' ', $column[0])) . ' ' . ucfirst(str_replace(['_', '-', '.'], ' ', $column[1])) . ' Must be Unique');
+            }
         }
+
         return response()->json(['errors' => $errors], 200);
     }
 }

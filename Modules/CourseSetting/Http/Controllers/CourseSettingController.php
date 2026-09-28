@@ -675,7 +675,7 @@ class CourseSettingController extends Controller
             // 'requirements.en' => [
             //     'required',
             // ],
-            'course_code' => ['unique:courses,course_code,'.$request->id],
+            'course_code' => ['nullable', 'unique:courses,course_code,'.$request->id],
             //            'cna_prep_type' => 'required_if:type,==,2',
             //            'test_prep_type' => 'required_if:type,==,2',
             //            'test_prep_graded_type' => 'required_if:type,==,2',
@@ -884,7 +884,13 @@ class CourseSettingController extends Controller
             $child_course = $course;
             $course->save();
 
-            if ($request->type != 9) {
+            $ceLmsType = (int) config('continuingeducation.lms_course_type', 11);
+            if ((int) $request->type === $ceLmsType) {
+                app(\Modules\ContinuingEducation\Services\CeCourseService::class)
+                    ->syncCeMetaFromLmsRequest($course, $request);
+            }
+
+            if ((int) $request->type !== 9 && (int) $request->type !== $ceLmsType) {
 
                 $child_course1 = Course::where('type', 4)->where('parent_id', $request->id)->first();
 
@@ -1032,6 +1038,10 @@ class CourseSettingController extends Controller
             }
 
             Toastr::success(trans('common.Operation successful'), trans('common.Success'));
+            if ((int) $course->type === (int) config('continuingeducation.lms_course_type', 11)) {
+                return redirect()->to(courseDetailsRedirectUrl($course->id, ['type' => 'courseDetails']));
+            }
+
             return redirect()->route('getAllCourse');
         } catch (Exception $e) {
             GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());

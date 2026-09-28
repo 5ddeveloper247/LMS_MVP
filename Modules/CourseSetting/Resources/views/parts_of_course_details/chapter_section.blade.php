@@ -110,7 +110,7 @@
         isUnique(
             {
                 columns: [
-                    ['chapters', 'name', $('#updatechapter_name').val(),'{{ @$editChapter->id }}']
+                    ['chapters', 'name', $('#updatechapter_name').val(), '{{ @$editChapter->id }}', 'course_id', $('input[name="course_id"]').val()]
                 ]
             }
             , function (res) {

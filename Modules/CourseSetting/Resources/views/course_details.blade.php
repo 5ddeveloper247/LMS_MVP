@@ -211,7 +211,15 @@
     @php
         $LanguageList = getLanguageList();
     @endphp
-    {!! generateBreadcrumb() !!}
+    @php
+        $isCeLmsCourse = function_exists('isCeLmsCourse') && isCeLmsCourse($course);
+        $ceTab = $isCeLmsCourse ? ceCourseTabForLmsCourse($course->id) : null;
+    @endphp
+    @if ($isCeLmsCourse)
+        @include('continuingeducation::partials._course_details_header', ['course' => $course, 'ceTab' => $ceTab])
+    @else
+        {!! generateBreadcrumb() !!}
+    @endif
     <section class="admin-visitor-area student-details">
         <div class="container-fluid p-0">
             <div class="row">
@@ -223,7 +231,11 @@
                 <div class="col-md-12">
                     <div class="main-title">
                         <h3 class="">
-                            {{ __('courses.Course') }} | {{ $course->title }}
+                            @if ($isCeLmsCourse)
+                                CE Course | {{ $course->title }}
+                            @else
+                                {{ __('courses.Course') }} | {{ $course->title }}
+                            @endif
                         </h3>
                     </div>
 
@@ -237,7 +249,7 @@
                         @endphp
                     @else
                         @php
-                            if ($course->type == 1) {
+                            if ($course->type == 1 || (int) $course->type === (int) config('continuingeducation.lms_course_type', 11)) {
                                 $type = 'courses';
                             } else {
                                 $type = 'courseDetails';
@@ -251,8 +263,8 @@
                     @endphp
                     <div class="row pt-0">
                         <ul class="nav nav-tabs no-bottom-border mt-sm-md-20 mb-10 ml-3" role="tablist">
-                            @if (in_array($course->type, [1,2,7,8,9]))
-                            @if($course->type == 1 || $course->type == 9)
+                            @if (in_array((int) $course->type, [1, 2, 7, 8, 9, (int) config('continuingeducation.lms_course_type', 11)]))
+                            @if($course->type == 1 || $course->type == 9 || (int) $course->type === (int) config('continuingeducation.lms_course_type', 11))
                                 <li class="nav-item">
                                     <a class="nav-link @if ($type == 'courses') active @endif"
                                         href="#course_cirriculum" role="tab"
@@ -265,7 +277,7 @@
                                         href="#course_details" role="tab" data-toggle="tab">{{ __('courses.Course') }}
                                         {{ __('common.Details') }}</a>
                                 </li>
-                            @if($course->type == 1 || $course->type == 9)
+                            @if($course->type == 1 || $course->type == 9 || (int) $course->type === (int) config('continuingeducation.lms_course_type', 11))
                                 <li class="nav-item">
                                     <a class="nav-link @if ($type == 'files') active @endif"
                                         href="#course_exercise" role="tab"
@@ -513,6 +525,15 @@
                                             <form action="{{ route('AdminUpdateCourse') }}" method="POST"
                                                 enctype="multipart/form-data" id="course_form">
                                                 @csrf
+                                                @php
+                                                    $isCeCourse = (int) $course->type === (int) config('continuingeducation.lms_course_type', 11);
+                                                    $ceCourse = $isCeCourse
+                                                        ? \Modules\ContinuingEducation\Entities\CeCourse::query()->where('course_id', $course->id)->first()
+                                                        : null;
+                                                @endphp
+                                                @if ($isCeCourse && $ceCourse)
+                                                    @include('continuingeducation::courses._prep_details_fields', ['ceCourse' => $ceCourse])
+                                                @else
                                                 <div class="row">
                                                     <div class="col-xl-6">
                                                         <div class="primary_input">
@@ -766,6 +787,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                @endif
                                                 <div class="row">
                                                     <div class="col-xl-12" id="element_course">
                                                         <div class="row">
@@ -1105,6 +1127,7 @@
                                                             </div>
                                                         @endif
 
+                                                        @if (empty($isCeCourse))
                                                         <div class="col-xl-6 courseBox mb-25" @if($course->type == 9 && $course->user_id != auth()->user()->id) style="display:none" @endif>
                                                             <label class="primary_input_label"
                                                                                 for="">
@@ -1161,6 +1184,7 @@
                                                                 @endif
                                                             </select>
                                                         </div>
+                                                        @endif
                                                         @if (courseSetting()->show_mode_of_delivery == 1 || isModuleActive('Org'))
                                                             <div class="d-none col-xl-{{ $col_size }} mb-25">
                                                                 <select class="primary_select mode_of_delivery"
