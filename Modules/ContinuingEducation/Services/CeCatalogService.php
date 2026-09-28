@@ -23,9 +23,61 @@ class CeCatalogService
         ];
     }
 
+    public function findPublishedBySlug(string $slug): CeCourse
+    {
+        return CeCourse::query()
+            ->published()
+            ->forLms()
+            ->where('slug', $slug)
+            ->firstOrFail();
+    }
+
+    public function relatedCourses(CeCourse $course, int $limit = 3)
+    {
+        return CeCourse::query()
+            ->published()
+            ->forLms()
+            ->where('course_type', $course->course_type)
+            ->where('id', '!=', $course->id)
+            ->orderByRaw('COALESCE(seq_no, 999999) ASC')
+            ->orderBy('title')
+            ->take($limit)
+            ->get();
+    }
+
     public function catalogUrl(CeCourse $course): string
     {
-        return $course->slug ? url('ce-courses/' . $course->slug) : '#';
+        if (! $course->slug) {
+            return '#';
+        }
+
+        return route('continuingEducationCourse', ['slug' => $course->slug]);
+    }
+
+    public function catalogAnchor(CeCourse $course): string
+    {
+        $tab = $course->course_type === 'mandatory' ? 'mandatory' : 'elective';
+
+        return route('continuingEducation') . '#ce-' . $tab;
+    }
+
+    public function courseTypeLabel(CeCourse $course): string
+    {
+        return config('continuingeducation.course_types.' . $course->course_type, ucfirst((string) $course->course_type));
+    }
+
+    public function bundleUrl(CeCourse $course): string
+    {
+        return $this->isAprnAudience($course)
+            ? route('continuingEducationAprn')
+            : route('continuingEducationRnLpn');
+    }
+
+    public function bundleLabel(CeCourse $course): string
+    {
+        return $this->isAprnAudience($course)
+            ? 'View APRN Packages'
+            : 'View RN & LPN Packages';
     }
 
     public function isAprnAudience(CeCourse $course): bool

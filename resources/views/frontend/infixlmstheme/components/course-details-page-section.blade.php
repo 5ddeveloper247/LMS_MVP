@@ -444,7 +444,14 @@
 
 <div class="breadcrumb">
   <div class="breadcrumb-inner">
-    <a href="{{ url('/') }}">Home</a><span>&rsaquo;</span><a href="{{ route('quizzes') }}">Prep-Courses</a><span>&rsaquo;</span>{{ $course->title ?? 'Medical-Surgical Nursing' }}
+    <a href="{{ url('/') }}">Home</a><span>&rsaquo;</span>
+    @if (!empty($isCeDetailPage))
+      <a href="{{ route('continuingEducation') }}">Continuing Education</a><span>&rsaquo;</span>
+      <a href="{{ $ceCatalog->catalogAnchor($ceCourse) }}">{{ $ceCatalog->courseTypeLabel($ceCourse) }} Courses</a><span>&rsaquo;</span>
+    @else
+      <a href="{{ route('quizzes') }}">Prep-Courses</a><span>&rsaquo;</span>
+    @endif
+    {{ $course->title ?? 'Medical-Surgical Nursing' }}
   </div>
 </div>
 
@@ -469,6 +476,12 @@
         </div>
       @endif
       <div class="course-meta">
+        @if (!empty($isCeDetailPage) && ($ceHoursLabel = $ceCatalog->contactHoursLabel($ceCourse)))
+          <div class="course-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            {{ $ceHoursLabel }}
+          </div>
+        @endif
         @if (($total ?? 0) > 0)
           <div class="course-meta-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
@@ -525,7 +538,12 @@
       @if (!empty($course->about))
         <div class="course-about-content">{!! $course->about !!}</div>
       @else
-        <p>Explore this prep-course and choose the learning option that fits you best.</p>
+        <p>{{ !empty($isCeDetailPage) ? 'Explore this Florida Board of Nursing approved continuing education course.' : 'Explore this prep-course and choose the learning option that fits you best.' }}</p>
+      @endif
+
+      @if (!empty($isCeDetailPage) && !empty($course->requirements))
+        <h2>Requirements</h2>
+        <div class="course-about-content">{!! $course->requirements !!}</div>
       @endif
 
       @if (!empty($course->outcomes))
@@ -615,7 +633,21 @@
         </div>
       @endif
 
-      @if (($instructorCourses ?? collect())->count())
+      @if (!empty($isCeDetailPage) && ($ceInstructorCourses ?? collect())->count())
+        <div class="instructor-courses">
+          <h3>More CE Courses by This Instructor</h3>
+          <div class="instructor-courses-grid">
+            @foreach ($ceInstructorCourses as $instructorCeCourse)
+              <a href="{{ $ceCatalog->catalogUrl($instructorCeCourse) }}" class="instructor-course-card">
+                <p class="ic-tag">{{ $ceCatalog->courseTypeLabel($instructorCeCourse) }}</p>
+                <h4>{{ $instructorCeCourse->title }}</h4>
+                <p>{{ $ceCatalog->summary($instructorCeCourse) ?: 'Explore this continuing education course.' }}</p>
+                <p class="ic-price">{{ $ceCatalog->displayPrice($instructorCeCourse) }}</p>
+              </a>
+            @endforeach
+          </div>
+        </div>
+      @elseif (($instructorCourses ?? collect())->count())
         <div class="instructor-courses">
           <h3>More Courses by This Instructor</h3>
           <div class="instructor-courses-grid">
@@ -783,7 +815,34 @@
 <!-- ============================================================
      STUDENTS ALSO ENROLLED IN
      ============================================================ -->
-@if (($relatedCourses ?? collect())->count())
+@if (!empty($isCeDetailPage) && ($ceRelatedCourses ?? collect())->count())
+  <section class="related-section">
+    <div class="container">
+      <div class="related-header">
+        <h2>Related {{ $ceCatalog->courseTypeLabel($ceCourse) }} Courses</h2>
+        <p>Complete your renewal requirements with these complementary CE courses.</p>
+      </div>
+      <div class="related-grid">
+        @foreach ($ceRelatedCourses as $relatedCeCourse)
+          <a href="{{ $ceCatalog->catalogUrl($relatedCeCourse) }}" class="related-card">
+            <div class="related-card-thumb pc-thumb-foundations">
+              <div class="related-card-thumb-label">{{ $relatedCeCourse->title }}</div>
+            </div>
+            <div class="related-card-body">
+              <p class="related-tag">{{ $ceCatalog->courseTypeLabel($relatedCeCourse) }}</p>
+              <h3>{{ $relatedCeCourse->title }}</h3>
+              <p class="related-desc">{{ $ceCatalog->summary($relatedCeCourse) ?: 'Explore this continuing education course.' }}</p>
+              <div class="related-card-footer">
+                <span class="related-price">{{ $ceCatalog->displayPrice($relatedCeCourse) }}</span>
+                <span class="related-course-type self-study">{{ $ceCatalog->contactHoursLabel($relatedCeCourse) ?: 'CE Course' }}</span>
+              </div>
+            </div>
+          </a>
+        @endforeach
+      </div>
+    </div>
+  </section>
+@elseif (($relatedCourses ?? collect())->count())
   <section class="related-section">
     <div class="container">
       <div class="related-header">
@@ -828,18 +887,31 @@
 <section class="final-cta">
   <div class="final-cta-inner">
     <h2>Ready to start <em>{{ $course->title }}?</em></h2>
-    <p>Choose the learning format that fits your style &mdash; self-paced or instructor-led.</p>
-    @if ($continueCourseUrl)
-      <a href="{{ $continueCourseUrl }}" class="btn-primary">{{ __('common.Continue Watch') }} &rarr;</a>
-    @elseif (!empty($purchaseOptions))
-      <div class="cta-price-row">
-        @foreach ($purchaseOptions as $ctaOption)
+    @if (!empty($isCeDetailPage))
+      <p>Complete your Florida nursing CE requirements with confidence &mdash; online, on your schedule.</p>
+      @if (!empty($headerPurchase))
+        <div class="cta-price-row">
           <div class="cta-option">
-            <p class="cta-option-price">{{ $ctaOption['price_label'] ?? 'TBA' }}</p>
-            <p class="cta-option-label">{{ $ctaOption['title'] }}</p>
+            <p class="cta-option-price">{{ $headerPurchase['price_label'] ?? 'TBA' }}</p>
+            <p class="cta-option-label">{{ $headerPurchase['title'] }}</p>
           </div>
-        @endforeach
-      </div>
+        </div>
+        <a href="{{ $headerPurchase['buy_url'] ?? '#' }}" class="btn-primary">Buy Now &rarr;</a>
+      @endif
+    @else
+      <p>Choose the learning format that fits your style &mdash; self-paced or instructor-led.</p>
+      @if ($continueCourseUrl)
+        <a href="{{ $continueCourseUrl }}" class="btn-primary">{{ __('common.Continue Watch') }} &rarr;</a>
+      @elseif (!empty($purchaseOptions))
+        <div class="cta-price-row">
+          @foreach ($purchaseOptions as $ctaOption)
+            <div class="cta-option">
+              <p class="cta-option-price">{{ $ctaOption['price_label'] ?? 'TBA' }}</p>
+              <p class="cta-option-label">{{ $ctaOption['title'] }}</p>
+            </div>
+          @endforeach
+        </div>
+      @endif
     @endif
   </div>
 </section>

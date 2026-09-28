@@ -43,7 +43,11 @@
     <a href="{{ $option['buy_url'] }}" class="{{ $buyClass }}">{{ $option['buy_label'] }}</a>
     <a href="{{ $option['cart_url'] }}" class="{{ $cartClass }}">Add to Cart</a>
   @else
-    <span class="{{ $buyClass }} is-disabled">{{ $option['type'] === 5 ? 'Not Available' : 'Enrollment Coming Soon' }}</span>
+    <span class="{{ $buyClass }} is-disabled">{{ ($option['type'] ?? 0) === 5 ? 'Not Available' : 'Enrollment Coming Soon' }}</span>
+  @endif
+
+  @if (!empty($option['bundle_url']))
+    <a href="{{ $option['bundle_url'] }}" class="{{ $isSidebar ? 'btn-bundle-il' : 'btn-bundle-link' }}">{{ $option['bundle_label'] ?? 'View Packages' }}</a>
   @endif
 
   <div class="purchase-divider"></div>

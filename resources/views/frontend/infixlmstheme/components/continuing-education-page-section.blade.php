@@ -266,7 +266,7 @@
             </p>
         </div>
 
-        <p class="ce-catalog-label">Mandatory Courses</p>
+        <p class="ce-catalog-label" id="ce-mandatory">Mandatory Courses</p>
         @if (($mandatoryCourses ?? collect())->isNotEmpty())
             <div class="ce-catalog-grid">
                 @foreach ($mandatoryCourses as $course)
@@ -279,7 +279,7 @@
 
         <div class="ce-catalog-divider"></div>
 
-        <p class="ce-catalog-label">Elective Courses</p>
+        <p class="ce-catalog-label" id="ce-elective">Elective Courses</p>
         @if (($electiveCourses ?? collect())->isNotEmpty())
             <div class="ce-catalog-grid">
                 @foreach ($electiveCourses as $course)

@@ -6,6 +6,9 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\Component;
+use Modules\ContinuingEducation\Entities\CeCourse;
+use Modules\ContinuingEducation\Entities\CeCourseReview;
+use Modules\ContinuingEducation\Services\CeCatalogService;
 use Modules\CourseSetting\Entities\Course;
 use Modules\CourseSetting\Entities\CourseReveiw;
 use Modules\VirtualClass\Entities\VirtualClass;
@@ -18,15 +21,15 @@ use Modules\SystemSetting\Entities\SocialLink;
 
 class CourseDeatilsPageSection extends Component
 {
-    public $request, $course, $isEnrolled, $enrollmentRecord;
-    public function __construct( $request, $course, $isEnrolled, $enrollmentRecord)
+    public $request, $course, $isEnrolled, $enrollmentRecord, $ceCourse;
+
+    public function __construct($request, $course, $isEnrolled, $enrollmentRecord, $ceCourse = null)
     {
         $this->request = $request;
         $this->course = $course;
         $this->isEnrolled = $isEnrolled;
         $this->enrollmentRecord = $enrollmentRecord;
-       // $this->duration = $duration;
-
+        $this->ceCourse = $ceCourse;
     }
 
 
@@ -231,7 +234,91 @@ class CourseDeatilsPageSection extends Component
 
         $recent_courses = $relatedCourses;
         $socials = SocialLink::where('status',1)->orderBy('order','desc')->get();
+
+        $isCeDetailPage = $this->ceCourse instanceof CeCourse;
+        $ceCatalog = null;
+        $ceRelatedCourses = collect();
+        $ceInstructorCourses = collect();
+
+        if ($isCeDetailPage) {
+            $ceCatalog = app(CeCatalogService::class);
+            $ceCourse = $this->ceCourse;
+
+            $categoryName = trim((string) ($ceCourse->compliance_topic ?? ''))
+                ?: $ceCatalog->courseTypeLabel($ceCourse);
+            $courseExcerpt = QuizPageSection::excerpt($ceCourse->about, 220);
+            $typeBadges = [[
+                'label' => $ceCatalog->courseTypeLabel($ceCourse),
+                'class' => 'pc-badge-ondemand',
+            ]];
+
+            $headerPurchase = $this->buildCePurchaseOption($ceCourse, $ceCatalog);
+            $purchaseOptions = [$headerPurchase];
+            $sidebarPurchases = [];
+
+            $detailReviewsQuery = CeCourseReview::query()
+                ->where('ce_course_id', $ceCourse->id)
+                ->where('status', 1);
+            $detailReviews = (clone $detailReviewsQuery)
+                ->with('user')
+                ->orderByDesc('id')
+                ->take(4)
+                ->get();
+            $reviewStars = (clone $detailReviewsQuery)->pluck('star');
+            $detailReviewStats = [
+                'total' => $reviewStars->count(),
+                'rating' => $reviewStars->count() ? number_format($reviewStars->avg(), 1) : 0,
+            ];
+            $reviewer_user_ids = (clone $detailReviewsQuery)->pluck('user_id')->all();
+
+            $ceRelatedCourses = $ceCatalog->relatedCourses($ceCourse);
+            $relatedCourses = collect();
+
+            if ($ceCourse->user_id) {
+                $ceInstructorCourses = CeCourse::query()
+                    ->published()
+                    ->forLms()
+                    ->where('user_id', $ceCourse->user_id)
+                    ->where('id', '!=', $ceCourse->id)
+                    ->orderBy('title')
+                    ->take(4)
+                    ->get();
+            }
+
+            $instructorCourses = collect();
+        }
+
         return view(theme('components.course-details-page-section'), get_defined_vars());
+    }
+
+    private function buildCePurchaseOption(CeCourse $ceCourse, CeCatalogService $ceCatalog): array
+    {
+        $amount = floatval($ceCourse->discount_price ?? $ceCourse->price ?? 0);
+        $hoursLabel = $ceCatalog->contactHoursLabel($ceCourse);
+
+        return [
+            'type' => 0,
+            'label' => 'Continuing Education',
+            'title' => 'Individual CE Course',
+            'badge' => null,
+            'buy_label' => 'Buy Now',
+            'includes' => array_values(array_filter([
+                $hoursLabel ? $hoursLabel . ' contact hours' : null,
+                'Florida Board of Nursing approved',
+                'Instant online access',
+                'Certificate upon completion',
+            ])),
+            'price_label' => $amount > 0 ? getPriceFormat($amount) : null,
+            'can_purchase' => $amount > 0,
+            'cart_url' => '#',
+            'buy_url' => '#',
+            'sub_note' => 'Self-paced online',
+            'cohort_start' => null,
+            'duration_weeks' => null,
+            'plan' => null,
+            'bundle_url' => $ceCatalog->bundleUrl($ceCourse),
+            'bundle_label' => $ceCatalog->bundleLabel($ceCourse),
+        ];
     }
 
     private function buildPurchaseOptions(): array
