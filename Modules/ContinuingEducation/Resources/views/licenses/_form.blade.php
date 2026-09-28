@@ -161,8 +161,15 @@
         </div>
     </div>
 
-    <div class="mt-3">
-        <button type="submit" class="primary-btn fix-gr-bg">{{ $isEdit ? 'Update License' : 'Save License' }}</button>
-        <a href="{{ route('continuing-education.licenses.index') }}" class="primary-btn tr-bg ml-2">Cancel</a>
+    <div class="col-lg-12 text-center mt-40 pt-3">
+        <div class="d-flex justify-content-center align-items-center">
+            <a href="{{ route('continuing-education.licenses.index') }}" class="primary-btn tr-bg mr-10">
+                {{ trans('common.Cancel') }}
+            </a>
+            <button type="submit" class="primary-btn fix-gr-bg">
+                <i class="ti-check"></i>
+                {{ $isEdit ? 'Update License' : 'Save License' }}
+            </button>
+        </div>
     </div>
 </form>
