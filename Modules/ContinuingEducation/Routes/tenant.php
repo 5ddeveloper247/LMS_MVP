@@ -86,6 +86,10 @@ Route::group([
         ->name('continuing-education.bundles.index')
         ->middleware('RoutePermissionCheck:continuing-education.bundles.index');
 
+    Route::get('/bundles/mandatory-courses', 'CeBundleController@mandatoryCourses')
+        ->name('continuing-education.bundles.mandatory-courses')
+        ->middleware('RoutePermissionCheck:continuing-education.bundles.index');
+
     Route::get('/bundles/create', 'CeBundleController@create')
         ->name('continuing-education.bundles.create')
         ->middleware('RoutePermissionCheck:continuing-education.bundles.index');

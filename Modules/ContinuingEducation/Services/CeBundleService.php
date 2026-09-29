@@ -60,7 +60,9 @@ class CeBundleService
 
     public function mandatoryCoursesForForm(?string $licenseType = null)
     {
-        $licenseType = $licenseType ?: 'rn_lpn';
+        if (! $licenseType || ! in_array($licenseType, ['rn_lpn', 'aprn'], true)) {
+            return collect();
+        }
 
         return CeCourse::query()
             ->forLms()
@@ -70,6 +72,18 @@ class CeBundleService
             ->get()
             ->filter(fn (CeCourse $course) => $course->matchesLicenseType($licenseType))
             ->values();
+    }
+
+    public function mandatoryCoursesPayloadForLicenseType(string $licenseType): array
+    {
+        return $this->mandatoryCoursesForForm($licenseType)
+            ->map(fn (CeCourse $course) => [
+                'id' => $course->id,
+                'title' => $course->title,
+                'contact_hours' => (float) $course->contact_hours,
+            ])
+            ->values()
+            ->all();
     }
 
     public function create(array $payload): CeBundle

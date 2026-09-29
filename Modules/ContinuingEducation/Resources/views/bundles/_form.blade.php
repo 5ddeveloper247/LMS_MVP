@@ -4,9 +4,12 @@
         ? route('continuing-education.bundles.update', $bundle->id)
         : route('continuing-education.bundles.store');
     $selectedCourseIds = $selectedCourseIds ?? [];
+    $selectedLicenseType = old('license_type', $selectedLicenseType ?? null);
+    $hasLicenseType = filled($selectedLicenseType);
 @endphp
 
-<form action="{{ $action }}" method="POST" id="ce_bundle_form" class="ce-bundle-form">
+<form action="{{ $action }}" method="POST" id="ce_bundle_form" class="ce-bundle-form"
+    data-mandatory-courses-url="{{ route('continuing-education.bundles.mandatory-courses') }}">
     @csrf
 
     <div class="row">
@@ -47,9 +50,10 @@
                     License Type <strong class="text-danger">*</strong>
                 </label>
                 <select class="primary_select" name="license_type" id="license_type" required>
+                    <option value="" disabled {{ $hasLicenseType ? '' : 'selected' }}>Select license type</option>
                     @foreach ($licenseTypes as $value => $label)
                         <option value="{{ $value }}"
-                            {{ old('license_type', $selectedLicenseType ?? 'rn_lpn') === $value ? 'selected' : '' }}>
+                            {{ $selectedLicenseType === $value ? 'selected' : '' }}>
                             {{ $label }}
                         </option>
                     @endforeach
@@ -96,11 +100,22 @@
                     Mandatory Courses <strong class="text-danger">*</strong>
                 </label>
                 <p class="text-muted mb-3 ce-bundle-field-hint">
-                    Select mandatory CE courses included in this bundle. Total mandatory hours update automatically below.
+                    Select mandatory CE courses included in this bundle. Courses load after you choose a license type.
                 </p>
-                @if ($mandatoryCourses->isEmpty())
-                    <p class="text-muted mb-0 ce-bundle-empty-courses">No published mandatory courses found for this license type.</p>
-                @else
+                <p id="ce_bundle_mandatory_pick_license"
+                    class="ce-bundle-empty-courses {{ $hasLicenseType ? 'd-none' : '' }}">
+                    Select a license type above to load mandatory courses.
+                </p>
+                <p id="ce_bundle_mandatory_loading"
+                    class="ce-bundle-empty-courses d-none">
+                    Loading mandatory courses...
+                </p>
+                <p id="ce_bundle_mandatory_none"
+                    class="ce-bundle-empty-courses {{ ($hasLicenseType && $mandatoryCourses->isEmpty()) ? '' : 'd-none' }}">
+                    No published mandatory courses found for this license type.
+                </p>
+                <div id="ce_bundle_mandatory_select_wrap"
+                    class="{{ ($hasLicenseType && $mandatoryCourses->isNotEmpty()) ? '' : 'd-none' }}">
                     <select class="ce-bundle-mandatory-select" name="mandatory_course_ids[]"
                         id="mandatory_course_ids" multiple
                         data-placeholder="Select mandatory courses">
@@ -112,7 +127,7 @@
                             </option>
                         @endforeach
                     </select>
-                @endif
+                </div>
                 @error('mandatory_course_ids')<span class="text-danger d-block">{{ $message }}</span>@enderror
                 @error('mandatory_course_ids.*')<span class="text-danger d-block">{{ $message }}</span>@enderror
             </div>
@@ -501,18 +516,37 @@
 @push('scripts')
     <script>
         (function () {
-            var licenseType = document.getElementById('license_type');
-            if (licenseType) {
-                licenseType.addEventListener('change', function () {
-                    var url = new URL(window.location.href);
-                    url.searchParams.set('license_type', this.value);
-                    window.location.href = url.toString();
-                });
-            }
-
+            var $form = $('#ce_bundle_form');
+            var mandatoryCoursesUrl = $form.data('mandatory-courses-url');
+            var $licenseType = $('#license_type');
             var $mandatorySelect = $('#mandatory_course_ids');
+            var $pickLicense = $('#ce_bundle_mandatory_pick_license');
+            var $loading = $('#ce_bundle_mandatory_loading');
+            var $none = $('#ce_bundle_mandatory_none');
+            var $selectWrap = $('#ce_bundle_mandatory_select_wrap');
+            var noneDefaultMessage = 'No published mandatory courses found for this license type.';
+            var select2Initialized = false;
+            var mandatoryRequestId = 0;
+
             if (!$mandatorySelect.length || typeof $.fn.select2 !== 'function') {
                 return;
+            }
+
+            function setMandatoryState(state) {
+                $pickLicense.toggleClass('d-none', state !== 'pick');
+                $loading.toggleClass('d-none', state !== 'loading');
+                $none.toggleClass('d-none', state !== 'none');
+                $selectWrap.toggleClass('d-none', state !== 'select');
+            }
+
+            function destroyMandatorySelect2() {
+                if (!select2Initialized || !$mandatorySelect.hasClass('select2-hidden-accessible')) {
+                    return;
+                }
+
+                $mandatorySelect.off('select2:open change');
+                $mandatorySelect.select2('destroy');
+                select2Initialized = false;
             }
 
             function formatMandatoryCourse(option) {
@@ -630,32 +664,148 @@
                 });
             }
 
-            $mandatorySelect.select2({
-                width: '100%',
-                placeholder: $mandatorySelect.data('placeholder') || 'Select mandatory courses',
-                closeOnSelect: false,
-                allowClear: true,
-                dropdownCssClass: 'ce-bundle-mandatory-dropdown',
-                templateResult: formatMandatoryCourse,
-                escapeMarkup: function (markup) {
-                    return markup;
+            function initMandatorySelect2() {
+                if (select2Initialized) {
+                    return;
                 }
-            });
 
-            $mandatorySelect.on('select2:open', function () {
-                setTimeout(function () {
-                    ensureMandatoryToolbar();
+                $mandatorySelect.select2({
+                    width: '100%',
+                    placeholder: $mandatorySelect.data('placeholder') || 'Select mandatory courses',
+                    closeOnSelect: false,
+                    allowClear: true,
+                    dropdownCssClass: 'ce-bundle-mandatory-dropdown',
+                    templateResult: formatMandatoryCourse,
+                    escapeMarkup: function (markup) {
+                        return markup;
+                    }
+                });
+
+                $mandatorySelect.on('select2:open', function () {
+                    setTimeout(function () {
+                        ensureMandatoryToolbar();
+                        updateMandatoryCount();
+                    }, 0);
+                });
+
+                $mandatorySelect.on('change', updateMandatoryCount);
+                select2Initialized = true;
+            }
+
+            function buildMandatoryOptions(courses, selectedIds) {
+                var selectedSet = {};
+
+                (selectedIds || []).forEach(function (id) {
+                    selectedSet[String(id)] = true;
+                });
+
+                $mandatorySelect.empty();
+
+                courses.forEach(function (course) {
+                    var $option = $('<option></option>')
+                        .val(course.id)
+                        .attr('data-hours', course.contact_hours)
+                        .text(course.title);
+
+                    if (selectedSet[String(course.id)]) {
+                        $option.prop('selected', true);
+                    }
+
+                    $mandatorySelect.append($option);
+                });
+            }
+
+            function loadMandatoryCourses(licenseType, selectedIds) {
+                if (!licenseType) {
+                    destroyMandatorySelect2();
+                    $mandatorySelect.empty();
+                    setMandatoryState('pick');
                     updateMandatoryCount();
-                }, 0);
+                    return;
+                }
+
+                setMandatoryState('loading');
+                $none.text(noneDefaultMessage);
+
+                var requestId = ++mandatoryRequestId;
+
+                $.ajax({
+                    url: mandatoryCoursesUrl,
+                    method: 'GET',
+                    data: { license_type: licenseType },
+                    dataType: 'json'
+                }).done(function (response) {
+                    if (requestId !== mandatoryRequestId) {
+                        return;
+                    }
+
+                    var courses = response.courses || [];
+
+                    destroyMandatorySelect2();
+                    buildMandatoryOptions(courses, selectedIds || []);
+
+                    if (courses.length === 0) {
+                        setMandatoryState('none');
+                    } else {
+                        setMandatoryState('select');
+                        initMandatorySelect2();
+                    }
+
+                    updateMandatoryCount();
+                }).fail(function () {
+                    if (requestId !== mandatoryRequestId) {
+                        return;
+                    }
+
+                    destroyMandatorySelect2();
+                    $mandatorySelect.empty();
+                    $none.text('Could not load mandatory courses. Please try again.');
+                    setMandatoryState('none');
+                    updateMandatoryCount();
+                });
+            }
+
+            $licenseType.on('change', function () {
+                loadMandatoryCourses(this.value, []);
             });
 
-            $mandatorySelect.on('change', updateMandatoryCount);
             $('#total_hours, #elective_hours_allowed').on('input change', updateHoursSummary);
 
-            updateMandatoryCount();
+            var initialLicenseType = $licenseType.val();
+            if (initialLicenseType) {
+                if ($mandatorySelect.find('option').length > 0) {
+                    setMandatoryState('select');
+                    initMandatorySelect2();
+                    updateMandatoryCount();
+                } else {
+                    setMandatoryState('none');
+                    updateMandatoryCount();
+                }
+            } else {
+                destroyMandatorySelect2();
+                $mandatorySelect.empty();
+                setMandatoryState('pick');
+                updateMandatoryCount();
+            }
 
             $('#ce_bundle_form').on('submit', function (event) {
                 if (!$mandatorySelect.length) {
+                    return;
+                }
+
+                if (!$licenseType.val()) {
+                    event.preventDefault();
+                    if (typeof toastr !== 'undefined') {
+                        toastr.error('Select a license type first.', 'Error');
+                    }
+                    return;
+                }
+
+                if ($selectWrap.hasClass('d-none')) {
+                    event.preventDefault();
+                    if (typeof toastr !== 'undefined') {
+                        toastr.error('No mandatory courses are available for this license type.', 'Error');
+                    }
                     return;
                 }
 

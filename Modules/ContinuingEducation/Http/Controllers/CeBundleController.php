@@ -39,15 +39,35 @@ class CeBundleController extends Controller
     {
         $licenseTypes = config('continuingeducation.bundle_license_types', []);
         $cardStyles = config('continuingeducation.bundle_card_styles', []);
-        $selectedLicenseType = old('license_type', request('license_type', 'rn_lpn'));
-        $mandatoryCourses = $this->bundleService->mandatoryCoursesForForm($selectedLicenseType);
+        $selectedLicenseType = old('license_type', request('license_type'));
+        $mandatoryCourses = $selectedLicenseType
+            ? $this->bundleService->mandatoryCoursesForForm($selectedLicenseType)
+            : collect();
+        $selectedCourseIds = array_map('intval', old('mandatory_course_ids', []));
 
         return view('continuingeducation::bundles.create', compact(
             'licenseTypes',
             'cardStyles',
             'mandatoryCourses',
-            'selectedLicenseType'
+            'selectedLicenseType',
+            'selectedCourseIds'
         ));
+    }
+
+    public function mandatoryCourses()
+    {
+        $licenseType = request('license_type');
+
+        if (! in_array($licenseType, ['rn_lpn', 'aprn'], true)) {
+            return response()->json([
+                'courses' => [],
+                'message' => 'Select a valid license type.',
+            ], 422);
+        }
+
+        return response()->json([
+            'courses' => $this->bundleService->mandatoryCoursesPayloadForLicenseType($licenseType),
+        ]);
     }
 
     public function store(StoreCeBundleRequest $request)
