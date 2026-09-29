@@ -172,6 +172,26 @@ class CeCatalogService
         return route('continuingEducationCourse', ['slug' => $course->slug]);
     }
 
+    public function canPurchaseCourse(CeCourse $course): bool
+    {
+        return $this->coursePrice($course) > 0;
+    }
+
+    public function cartUrl(CeCourse $course): string
+    {
+        return route('ce.cart.addCourse', ['id' => $course->id]);
+    }
+
+    public function buyNowUrl(CeCourse $course): string
+    {
+        return route('ce.cart.buyNowCourse', ['id' => $course->id]);
+    }
+
+    public function coursePrice(CeCourse $course): float
+    {
+        return (float) ($course->discount_price ?? $course->price ?? 0);
+    }
+
     public function catalogAnchor(CeCourse $course): string
     {
         $tab = $course->course_type === 'mandatory' ? 'mandatory' : 'elective';

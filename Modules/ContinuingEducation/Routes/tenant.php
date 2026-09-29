@@ -2,6 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 
+Route::group(['prefix' => 'ce/cart'], function () {
+    Route::get('/course/{id}', 'CeCartController@addCourse')->name('ce.cart.addCourse');
+    Route::get('/course/{id}/buy', 'CeCartController@buyNowCourse')->name('ce.cart.buyNowCourse');
+    Route::get('/bundle/{id}', 'CeCartController@addBundle')->name('ce.cart.addBundle');
+    Route::get('/bundle/{id}/buy', 'CeCartController@buyNowBundle')->name('ce.cart.buyNowBundle');
+});
+
 Route::group([
     'prefix' => 'admin/continuing-education',
     'middleware' => ['auth', 'admin'],

@@ -73,14 +73,17 @@
 
 .mxp-ce-aprn .ce-mandatory-section{background:var(--ce-white);padding:80px 32px}
 .mxp-ce-aprn .ce-mand-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;max-width:960px;margin:0 auto}
-.mxp-ce-aprn .ce-mand-card{background:var(--ce-cream);border-radius:12px;padding:22px 24px;border:1px solid var(--ce-gray-line);display:flex;justify-content:space-between;align-items:center;gap:16px;text-decoration:none;color:inherit;transition:all .2s}
-.mxp-ce-aprn a.ce-mand-card:hover{box-shadow:var(--ce-shadow-sm);border-color:var(--ce-teal-mid);transform:translateY(-1px)}
+.mxp-ce-aprn .ce-mand-card{background:var(--ce-cream);border-radius:12px;padding:22px 24px;border:1px solid var(--ce-gray-line);display:flex;justify-content:space-between;align-items:center;gap:16px;color:inherit;transition:all .2s}
+.mxp-ce-aprn .ce-mand-card:hover{box-shadow:var(--ce-shadow-sm);border-color:var(--ce-teal-mid);transform:translateY(-1px)}
 .mxp-ce-aprn .ce-mand-card.aprn-specific{border-left:3px solid var(--ce-terracotta)}
+.mxp-ce-aprn .ce-mc-info{flex:1;text-decoration:none;color:inherit}
 .mxp-ce-aprn .ce-mc-info h4{font-family:var(--ce-sans);font-size:14px;font-weight:600;color:var(--ce-teal-darkest);margin-bottom:3px}
 .mxp-ce-aprn .ce-mc-info p{font-size:12px;color:var(--ce-charcoal-soft);margin:0}
 .mxp-ce-aprn .ce-mc-right{text-align:right;flex-shrink:0}
 .mxp-ce-aprn .ce-mc-hours{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--ce-teal-mid);margin-bottom:2px}
-.mxp-ce-aprn .ce-mc-price{font-family:var(--ce-serif);font-size:17px;font-weight:700;color:var(--ce-terracotta);margin:0}
+.mxp-ce-aprn .ce-mc-price{font-family:var(--ce-serif);font-size:17px;font-weight:700;color:var(--ce-terracotta);margin:0 0 8px}
+.mxp-ce-aprn .ce-mc-add{display:inline-block;padding:8px 16px;background:var(--ce-teal-darkest);color:var(--ce-white);border-radius:6px;font-size:11px;font-weight:600;text-decoration:none;transition:all .2s;font-family:var(--ce-sans)}
+.mxp-ce-aprn .ce-mc-add:hover{background:var(--ce-teal-deep);color:var(--ce-white)}
 
 .mxp-ce-aprn .ce-faq-section{background:var(--ce-cream);padding:80px 32px}
 .mxp-ce-aprn .ce-faq-header{text-align:center;margin-bottom:50px}

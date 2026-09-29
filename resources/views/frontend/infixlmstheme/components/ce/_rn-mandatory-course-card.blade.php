@@ -23,5 +23,9 @@
             </span>
         @endif
     </div>
-    <a href="{{ $ceCatalog->catalogUrl($course) }}" class="ce-mand-card-btn">Add to Cart</a>
+    @if ($ceCatalog->canPurchaseCourse($course))
+        <a href="{{ $ceCatalog->cartUrl($course) }}" class="ce-mand-card-btn">Add to Cart</a>
+    @else
+        <a href="{{ $ceCatalog->catalogUrl($course) }}" class="ce-mand-card-btn">View Course</a>
+    @endif
 </div>

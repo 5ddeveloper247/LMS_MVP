@@ -175,7 +175,7 @@ class CeBundle extends Model
             return route('contact');
         }
 
-        return '#';
+        return route('ce.cart.buyNowBundle', ['id' => $this->id]);
     }
 
     public function getBuyButtonLabelAttribute(): string
