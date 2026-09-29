@@ -73,7 +73,8 @@
 
 .mxp-ce-aprn .ce-mandatory-section{background:var(--ce-white);padding:80px 32px}
 .mxp-ce-aprn .ce-mand-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;max-width:960px;margin:0 auto}
-.mxp-ce-aprn .ce-mand-card{background:var(--ce-cream);border-radius:12px;padding:22px 24px;border:1px solid var(--ce-gray-line);display:flex;justify-content:space-between;align-items:center;gap:16px}
+.mxp-ce-aprn .ce-mand-card{background:var(--ce-cream);border-radius:12px;padding:22px 24px;border:1px solid var(--ce-gray-line);display:flex;justify-content:space-between;align-items:center;gap:16px;text-decoration:none;color:inherit;transition:all .2s}
+.mxp-ce-aprn a.ce-mand-card:hover{box-shadow:var(--ce-shadow-sm);border-color:var(--ce-teal-mid);transform:translateY(-1px)}
 .mxp-ce-aprn .ce-mand-card.aprn-specific{border-left:3px solid var(--ce-terracotta)}
 .mxp-ce-aprn .ce-mc-info h4{font-family:var(--ce-sans);font-size:14px;font-weight:600;color:var(--ce-teal-darkest);margin-bottom:3px}
 .mxp-ce-aprn .ce-mc-info p{font-size:12px;color:var(--ce-charcoal-soft);margin:0}
@@ -115,27 +116,55 @@
     </div>
 </div>
 
+@php
+    /** @var \Modules\ContinuingEducation\Entities\CeLicenseType|null $license */
+    $licenseEyebrow = $license?->subtitle ?? config('continuingeducation.bundle_license_types.aprn', 'APRN');
+    $licenseTitle = $license?->name ?? 'Florida APRN Prescribing & Renewal';
+    $licenseDescription = $license?->description ?? '';
+    $explainerComponents = array_values(array_filter([
+        $license?->component_1,
+        $license?->component_2,
+    ]));
+    $calloutNote = $license?->component_3;
+    $mandatoryStats = $mandatoryCourseStats ?? ['count' => 0, 'hours' => '0'];
+@endphp
+
 <header class="ce-hero">
     <div class="ce-hero-inner">
-        <span class="ce-hero-eyebrow">Advanced Practice</span>
-        <h1>Florida APRN <em>Prescribing &amp; Renewal</em></h1>
-        <p class="ce-hero-sub">Advanced practice requires advanced compliance. Whether you need your mandatory 3-hour controlled substance update, are utilizing the national certification CE exemption, or are practicing as an autonomous APRN &mdash; we have your curriculum ready.</p>
+        <span class="ce-hero-eyebrow">{{ $licenseEyebrow }}</span>
+        <h1>{{ $licenseTitle }}</h1>
+        @if ($licenseDescription)
+            <p class="ce-hero-sub">{{ $licenseDescription }}</p>
+        @endif
     </div>
 </header>
 
 <section class="ce-explainer">
     <div class="ce-explainer-inner">
         <h2>Before you purchase, determine your renewal track.</h2>
-        <p>The Florida Board of Nursing allows a CE exemption for APRNs holding an active national certification (ANCC, AANP, etc.). If you qualify, you are exempt from general electives and most mandatory courses.</p>
-        <p>However, state law specifies that this exemption <strong>does not apply</strong> to controlled substance prescribing requirements and human trafficking training. These are statutory requirements regardless of certification status.</p>
-        <div class="ce-callout-important">
-            <strong>Autonomous APRNs</strong>
-            <p>If you practice as an autonomous APRN (without a supervisory protocol), you are required to complete an additional 10 contact hours on top of your standard renewal requirement. This brings your total to 37 contact hours if on the full renewal path.</p>
-        </div>
+        @if (! empty($explainerComponents))
+            @foreach ($explainerComponents as $component)
+                <p>{{ $component }}</p>
+            @endforeach
+        @else
+            <p>The Florida Board of Nursing allows a CE exemption for APRNs holding an active national certification (ANCC, AANP, etc.). If you qualify, you are exempt from general electives and most mandatory courses.</p>
+            <p>However, state law specifies that this exemption <strong>does not apply</strong> to controlled substance prescribing requirements and human trafficking training. These are statutory requirements regardless of certification status.</p>
+        @endif
+        @if ($calloutNote)
+            <div class="ce-callout-important">
+                <strong>Important</strong>
+                <p>{{ $calloutNote }}</p>
+            </div>
+        @else
+            <div class="ce-callout-important">
+                <strong>Autonomous APRNs</strong>
+                <p>If you practice as an autonomous APRN (without a supervisory protocol), you are required to complete an additional 10 contact hours on top of your standard renewal requirement. This brings your total to 37 contact hours if on the full renewal path.</p>
+            </div>
+        @endif
     </div>
 </section>
 
-<section class="ce-paths-section">
+<section class="ce-paths-section" id="aprn-packages">
     <div class="ce-container">
         <div class="ce-section-header">
             <span class="ce-section-eyebrow">Your Renewal Paths</span>
@@ -155,17 +184,22 @@
     <div class="ce-container">
         <div class="ce-section-header">
             <span class="ce-section-eyebrow">Course Catalog</span>
-            <h2>APRN Mandatory &amp; Required Courses</h2>
-            <p>All 7 mandatory courses applicable to APRN renewal. Courses marked with a terracotta bar are APRN-specific.</p>
+            @if ($mandatoryStats['count'] > 0)
+                <h2>{{ $mandatoryStats['count'] }} Mandatory Courses &middot; {{ $mandatoryStats['hours'] }} Hours</h2>
+            @else
+                <h2>APRN Mandatory &amp; Required Courses</h2>
+            @endif
+            <p>Mandatory courses applicable to APRN renewal. Courses marked with a terracotta bar are APRN-specific.</p>
         </div>
         <div class="ce-mand-grid">
-            <div class="ce-mand-card aprn-specific"><div class="ce-mc-info"><h4>Safe &amp; Effective Prescribing of Controlled Substances</h4><p>Required for all Florida APRNs</p></div><div class="ce-mc-right"><p class="ce-mc-hours">3 Hours</p><p class="ce-mc-price">$29.97</p></div></div>
-            <div class="ce-mand-card"><div class="ce-mc-info"><h4>Human Trafficking</h4><p>Screening, reporting &amp; the PEARR tool</p></div><div class="ce-mc-right"><p class="ce-mc-hours">2 Hours</p><p class="ce-mc-price">$15.97</p></div></div>
-            <div class="ce-mand-card"><div class="ce-mc-info"><h4>Prevention of Medical Errors</h4><p>Root-cause analysis &amp; patient safety</p></div><div class="ce-mc-right"><p class="ce-mc-hours">2 Hours</p><p class="ce-mc-price">$19.97</p></div></div>
-            <div class="ce-mand-card"><div class="ce-mc-info"><h4>Florida Laws &amp; Rules</h4><p>Chapter 464 &amp; Rules 64B9</p></div><div class="ce-mc-right"><p class="ce-mc-hours">2 Hours</p><p class="ce-mc-price">$19.97</p></div></div>
-            <div class="ce-mand-card"><div class="ce-mc-info"><h4>Recognizing Impairment in the Workplace</h4><p>Every other renewal cycle</p></div><div class="ce-mc-right"><p class="ce-mc-hours">2 Hours</p><p class="ce-mc-price">$19.97</p></div></div>
-            <div class="ce-mand-card"><div class="ce-mc-info"><h4>Domestic Violence</h4><p>Every third renewal cycle</p></div><div class="ce-mc-right"><p class="ce-mc-hours">2 Hours</p><p class="ce-mc-price">$19.97</p></div></div>
-            <div class="ce-mand-card"><div class="ce-mc-info"><h4>HIV/AIDS</h4><p>First-time renewals</p></div><div class="ce-mc-right"><p class="ce-mc-hours">1 Hour</p><p class="ce-mc-price">$10.97</p></div></div>
+            @forelse ($mandatoryCourses ?? [] as $course)
+                @include(theme('components.ce._aprn-mandatory-course-row'), [
+                    'course' => $course,
+                    'ceCatalog' => $ceCatalog,
+                ])
+            @empty
+                <p class="ce-path-empty-note">Mandatory courses are being updated. Please check back soon.</p>
+            @endforelse
         </div>
     </div>
 </section>
@@ -186,8 +220,19 @@
 <section class="ce-final-cta">
     <div class="ce-final-cta-inner">
         <h2>Advanced practice. <em>Simplified compliance.</em></h2>
-        <p>Complete your APRN renewal requirements online, auto-reported to CE Broker. Choose your path above or contact us for a custom package.</p>
-        <a href="#" class="ce-btn-primary">Buy APRN Exempt Bundle &rarr;</a>
+        <p>
+            Complete your APRN renewal requirements online, auto-reported to CE Broker.
+            @if ($featuredBundle ?? null)
+                Start with the {{ $featuredBundle->name }} package.
+            @else
+                Choose your path above or contact us for a custom package.
+            @endif
+        </p>
+        @if ($featuredBundle ?? null)
+            <a href="{{ $featuredBundle->buy_url }}" class="ce-btn-primary">{!! $featuredBundle->buy_button_label !!}</a>
+        @else
+            <a href="#aprn-packages" class="ce-btn-primary">View APRN Packages &rarr;</a>
+        @endif
     </div>
 </section>
 

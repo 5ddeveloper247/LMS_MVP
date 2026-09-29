@@ -41,9 +41,12 @@ class CeFrontendController extends Controller
 
     public function aprn()
     {
-        return view(theme('pages.continuingEducationAprn'), [
-            'bundles' => $this->catalogService->listPublishedBundles('aprn'),
-        ]);
+        return view(theme('pages.continuingEducationAprn'), array_merge(
+            $this->catalogService->licenseDetailPageData('aprn'),
+            [
+                'bundles' => $this->catalogService->listPublishedBundles('aprn'),
+            ]
+        ));
     }
 
     public function showCourse(string $slug, Request $request)
@@ -84,4 +87,4 @@ class CeFrontendController extends Controller
         ));
     }
 }
-
+

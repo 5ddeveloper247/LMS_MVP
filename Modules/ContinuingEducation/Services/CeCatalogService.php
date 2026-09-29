@@ -206,6 +206,13 @@ class CeCatalogService
             && ! in_array('rn', $audience, true);
     }
 
+    public function isAprnSpecificCourse(CeCourse $course): bool
+    {
+        $audience = $course->audience ?? [];
+
+        return in_array('aprn', $audience, true) && ! in_array('rn', $audience, true);
+    }
+
     public function summary(CeCourse $course, int $limit = 120): string
     {
         $text = $course->compliance_topic;
