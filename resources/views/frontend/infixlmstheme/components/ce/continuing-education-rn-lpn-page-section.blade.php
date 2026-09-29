@@ -97,6 +97,7 @@
 
 .mxp-ce-rn-lpn .ce-bundles-section{background:var(--ce-cream);padding:80px 32px}
 .mxp-ce-rn-lpn .ce-bundle-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;max-width:1040px;margin:0 auto}
+.mxp-ce-rn-lpn .ce-bundle-empty-note{grid-column:1/-1;text-align:center;color:var(--ce-charcoal-soft);font-size:15px;line-height:1.6;padding:24px 12px;margin:0}
 .mxp-ce-rn-lpn .ce-bundle-card{border-radius:20px;padding:44px 36px;position:relative;display:flex;flex-direction:column;transition:all .2s}
 .mxp-ce-rn-lpn .ce-bundle-card:hover{transform:translateY(-3px)}
 .mxp-ce-rn-lpn .ce-bundle-card.primary{background:var(--ce-teal-darkest);color:var(--ce-white);border:2px solid var(--ce-teal-darkest);box-shadow:var(--ce-shadow-lg)}
@@ -283,41 +284,11 @@
             <p>Skip the hassle of buying courses one by one. Choose the bundle that fits your renewal needs and save.</p>
         </div>
         <div class="ce-bundle-grid">
-            <div class="ce-bundle-card primary">
-                <div class="ce-bundle-badge">Best Value</div>
-                <h3>Complete 26-Hour Renewal</h3>
-                <p class="ce-bundle-subtitle">Everything you need. One checkout.</p>
-                <div class="ce-bundle-price-row"><span class="ce-bundle-price">$69&ndash;$79</span><span class="ce-bundle-price-compare">$250+</span></div>
-                <p class="ce-bundle-price-note">All mandatory + electives &middot; 26 contact hours</p>
-                <div class="ce-bundle-divider"></div>
-                <ul class="ce-bundle-features">
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>All 6 mandatory courses (11 hours)</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Curated clinical electives (15 hours)</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>EKG, De-escalation, Documentation &amp; more</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Covers ALL cycle-specific requirements</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Auto-reported to CE Broker</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Instant certificate download</li>
-                </ul>
-                <a href="#" class="ce-btn-bundle white">Buy Complete Renewal &rarr;</a>
-                <p class="ce-bundle-savings">Save over $170 vs. buying individually</p>
-            </div>
-            <div class="ce-bundle-card secondary">
-                <h3>Mandatory Core Only</h3>
-                <p class="ce-bundle-subtitle">State-required courses, no electives</p>
-                <div class="ce-bundle-price-row"><span class="ce-bundle-price">$39&ndash;$49</span><span class="ce-bundle-price-compare">$126+</span></div>
-                <p class="ce-bundle-price-note">6 mandatory courses &middot; 11 contact hours</p>
-                <div class="ce-bundle-divider"></div>
-                <ul class="ce-bundle-features">
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Prevention of Medical Errors (2h)</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Florida Laws &amp; Rules (2h)</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Human Trafficking (2h)</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Impairment + Domestic Violence + HIV/AIDS</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Covers ALL cycle-specific requirements</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Auto-reported to CE Broker</li>
-                </ul>
-                <a href="#" class="ce-btn-bundle terra">Buy Mandatory Core &rarr;</a>
-                <p class="ce-bundle-savings">Save over $75 vs. buying individually</p>
-            </div>
+            @forelse ($bundles ?? [] as $bundle)
+                @include(theme('components.ce._bundle-card'), ['bundle' => $bundle])
+            @empty
+                <p class="ce-bundle-empty-note">Renewal bundles are being updated. Please check back soon or browse individual courses below.</p>
+            @endforelse
         </div>
     </div>
 </section>

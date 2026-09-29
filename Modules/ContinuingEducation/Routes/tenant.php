@@ -81,4 +81,32 @@ Route::group([
     Route::get('/licenses/status/{id}', 'CeLicenseController@status')
         ->name('continuing-education.licenses.status')
         ->middleware('RoutePermissionCheck:continuing-education.licenses.index');
+
+    Route::get('/bundles', 'CeBundleController@index')
+        ->name('continuing-education.bundles.index')
+        ->middleware('RoutePermissionCheck:continuing-education.bundles.index');
+
+    Route::get('/bundles/create', 'CeBundleController@create')
+        ->name('continuing-education.bundles.create')
+        ->middleware('RoutePermissionCheck:continuing-education.bundles.index');
+
+    Route::post('/bundles/store', 'CeBundleController@store')
+        ->name('continuing-education.bundles.store')
+        ->middleware('RoutePermissionCheck:continuing-education.bundles.index');
+
+    Route::get('/bundles/edit/{id}', 'CeBundleController@edit')
+        ->name('continuing-education.bundles.edit')
+        ->middleware('RoutePermissionCheck:continuing-education.bundles.index');
+
+    Route::post('/bundles/update/{id}', 'CeBundleController@update')
+        ->name('continuing-education.bundles.update')
+        ->middleware('RoutePermissionCheck:continuing-education.bundles.index');
+
+    Route::get('/bundles/delete/{id}', 'CeBundleController@destroy')
+        ->name('continuing-education.bundles.destroy')
+        ->middleware('RoutePermissionCheck:continuing-education.bundles.index');
+
+    Route::get('/bundles/status/{id}', 'CeBundleController@status')
+        ->name('continuing-education.bundles.status')
+        ->middleware('RoutePermissionCheck:continuing-education.bundles.index');
 });

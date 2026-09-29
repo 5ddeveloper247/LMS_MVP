@@ -1,0 +1,59 @@
+<?php
+
+namespace Modules\ContinuingEducation\Http\Requests\Concerns;
+
+trait ValidatesCeBundle
+{
+    protected function ceBundleRules(): array
+    {
+        return [
+            'name' => ['required', 'string', 'max:255'],
+            'subtitle' => ['nullable', 'string', 'max:255'],
+            'component_1' => ['required', 'string', 'max:500'],
+            'component_2' => ['required', 'string', 'max:500'],
+            'component_3' => ['required', 'string', 'max:500'],
+            'component_4' => ['required', 'string', 'max:500'],
+            'component_5' => ['required', 'string', 'max:500'],
+            'component_6' => ['required', 'string', 'max:500'],
+            'total_hours' => ['required', 'numeric', 'min:0', 'max:999.9'],
+            'elective_hours_allowed' => ['required', 'numeric', 'min:0', 'max:999.9'],
+            'price' => ['required', 'numeric', 'min:0'],
+            'compare_at_price' => ['nullable', 'numeric', 'min:0'],
+            'license_type' => ['required', 'in:rn_lpn,aprn'],
+            'card_style' => ['required', 'in:primary,secondary'],
+            'mandatory_course_ids' => ['required', 'array', 'min:1'],
+            'mandatory_course_ids.*' => ['integer', 'exists:ce_courses,id'],
+            'seq_no' => ['nullable', 'integer', 'min:0', 'max:9999'],
+            'status' => ['nullable', 'boolean'],
+            'publish' => ['nullable', 'boolean'],
+            'featured' => ['nullable', 'boolean'],
+            'is_best_seller' => ['nullable', 'boolean'],
+        ];
+    }
+
+    protected function ceBundlePayload(): array
+    {
+        return [
+            'name' => $this->input('name'),
+            'subtitle' => $this->input('subtitle'),
+            'component_1' => $this->input('component_1'),
+            'component_2' => $this->input('component_2'),
+            'component_3' => $this->input('component_3'),
+            'component_4' => $this->input('component_4'),
+            'component_5' => $this->input('component_5'),
+            'component_6' => $this->input('component_6'),
+            'total_hours' => $this->input('total_hours'),
+            'elective_hours_allowed' => $this->input('elective_hours_allowed'),
+            'price' => $this->input('price'),
+            'compare_at_price' => $this->input('compare_at_price'),
+            'license_type' => $this->input('license_type', 'rn_lpn'),
+            'card_style' => $this->input('card_style', 'primary'),
+            'mandatory_course_ids' => array_map('intval', $this->input('mandatory_course_ids', [])),
+            'seq_no' => $this->input('seq_no'),
+            'status' => $this->has('status'),
+            'publish' => $this->has('publish'),
+            'featured' => $this->has('featured'),
+            'is_best_seller' => $this->has('is_best_seller'),
+        ];
+    }
+}

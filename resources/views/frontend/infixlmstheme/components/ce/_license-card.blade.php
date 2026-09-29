@@ -30,6 +30,20 @@
             {{ $license->component_3 }}
         </li>
     </ul>
+    @if (($bundles ?? collect())->isNotEmpty())
+        <div class="ce-license-bundles">
+            <h4>Available Bundles</h4>
+            @foreach ($bundles as $bundle)
+                <div class="ce-bundle-row">
+                    <div>
+                        <p class="ce-bundle-name">{{ $bundle->name }}</p>
+                        <p class="ce-bundle-detail">{{ $bundle->license_preview_detail }}</p>
+                    </div>
+                    <span class="ce-bundle-price">{{ $bundle->formatted_price }}</span>
+                </div>
+            @endforeach
+        </div>
+    @endif
     @if ($license->button_label)
         <a href="{{ $license->resolved_button_url }}" class="ce-btn-portal {{ $license->button_class }}">
             {{ $license->button_label }} &rarr;

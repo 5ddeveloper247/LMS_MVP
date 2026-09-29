@@ -50,6 +50,7 @@
 .mxp-ce-aprn .ce-section-header h2{font-size:clamp(28px,3.5vw,38px);margin-bottom:14px}
 .mxp-ce-aprn .ce-section-header p{font-size:16px;color:var(--ce-charcoal-soft);line-height:1.6;margin:0}
 .mxp-ce-aprn .ce-paths-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;max-width:1120px;margin:0 auto}
+.mxp-ce-aprn .ce-path-empty-note{grid-column:1/-1;text-align:center;color:var(--ce-charcoal-soft);font-size:15px;line-height:1.6;padding:24px 12px;margin:0}
 .mxp-ce-aprn .ce-path-card{background:var(--ce-white);border-radius:18px;padding:36px 30px;border:2px solid var(--ce-gray-line);display:flex;flex-direction:column;transition:all .2s;position:relative}
 .mxp-ce-aprn .ce-path-card:hover{box-shadow:var(--ce-shadow-md)}
 .mxp-ce-aprn .ce-path-card.featured{border-color:var(--ce-terracotta);box-shadow:var(--ce-shadow-md)}
@@ -141,52 +142,11 @@
             <h2>Choose the path that matches your certification status.</h2>
         </div>
         <div class="ce-paths-grid">
-            <div class="ce-path-card featured">
-                <div class="ce-path-badge">Most Common</div>
-                <p class="ce-path-hours">5 <small>Hours</small></p>
-                <h3>Certified-Exempt</h3>
-                <p class="ce-path-subtitle">Nationally certified APRNs (ANCC, AANP, etc.)</p>
-                <div class="ce-path-divider"></div>
-                <ul class="ce-path-features">
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Safe &amp; Effective Prescribing (3h)</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Human Trafficking (2h)</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Auto-reported to CE Broker</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Instant certificate download</li>
-                </ul>
-                <p class="ce-path-price">$39&ndash;$45</p>
-                <a href="#" class="ce-btn-path terra">Buy Exempt Bundle &rarr;</a>
-                <p class="ce-path-note">Fast, compliant checkout for certified NPs, CRNAs &amp; CNMs</p>
-            </div>
-            <div class="ce-path-card">
-                <p class="ce-path-hours">27 <small>Hours</small></p>
-                <h3>Standard Full Renewal</h3>
-                <p class="ce-path-subtitle">Non-exempt APRNs (no active national certification)</p>
-                <div class="ce-path-divider"></div>
-                <ul class="ce-path-features">
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>All 6 RN/LPN mandatory courses (11h)</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Safe &amp; Effective Prescribing (3h)</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>13 hours of advanced electives</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Auto-reported to CE Broker</li>
-                </ul>
-                <p class="ce-path-price">$89&ndash;$99</p>
-                <a href="#" class="ce-btn-path terra">Buy Executive Bundle &rarr;</a>
-                <p class="ce-path-note">Complete mandatory + prescribing + electives</p>
-            </div>
-            <div class="ce-path-card">
-                <p class="ce-path-hours">37 <small>Hours</small></p>
-                <h3>Autonomous APRN</h3>
-                <p class="ce-path-subtitle">Practicing without supervisory protocol</p>
-                <div class="ce-path-divider"></div>
-                <ul class="ce-path-features">
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Everything in Standard Renewal (27h)</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>+10 additional contact hours</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Advanced pharmacology electives</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Auto-reported to CE Broker</li>
-                </ul>
-                <p class="ce-path-price">Contact Us</p>
-                <a href="{{ route('contact') }}" class="ce-btn-path outline">Schedule a Consult &rarr;</a>
-                <p class="ce-path-note">Custom package built for your specific requirements</p>
-            </div>
+            @forelse ($bundles ?? [] as $bundle)
+                @include(theme('components.ce._bundle-path-card'), ['bundle' => $bundle])
+            @empty
+                <p class="ce-path-empty-note">Renewal packages are being updated. Please check back soon or contact us for a custom package.</p>
+            @endforelse
         </div>
     </div>
 </section>

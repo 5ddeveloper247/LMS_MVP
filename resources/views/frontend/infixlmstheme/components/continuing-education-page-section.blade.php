@@ -171,7 +171,10 @@
 
         <div class="ce-license-grid">
             @forelse ($licenseTypes ?? [] as $license)
-                @include(theme('components.ce._license-card'), compact('license'))
+                @include(theme('components.ce._license-card'), [
+                    'license' => $license,
+                    'bundles' => $bundlesByLicense[$license->card_style === 'terra' ? 'aprn' : 'rn_lpn'] ?? collect(),
+                ])
             @empty
                 <p class="ce-catalog-empty" style="grid-column:1/-1;">No license types are published yet.</p>
             @endforelse

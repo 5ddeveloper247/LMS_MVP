@@ -136,4 +136,15 @@ class CeCourse extends Model
     {
         return config('continuingeducation.course_types.' . $this->course_type, ucfirst($this->course_type));
     }
+
+    public function matchesLicenseType(string $licenseType): bool
+    {
+        $audience = $this->audience ?? [];
+
+        if ($licenseType === 'rn_lpn') {
+            return in_array('rn', $audience, true) || in_array('lpn', $audience, true);
+        }
+
+        return in_array('aprn', $audience, true) || in_array('lpn', $audience, true);
+    }
 }

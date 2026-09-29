@@ -8,12 +8,31 @@ use Modules\ContinuingEducation\Entities\CeCourse;
 class CeCatalogService
 {
     public function __construct(
-        protected CeLicenseService $licenseService
+        protected CeLicenseService $licenseService,
+        protected CeBundleService $bundleService
     ) {}
 
     public function listPublishedLicenses()
     {
         return $this->licenseService->listPublished();
+    }
+
+    public function listPublishedBundles(string $licenseType)
+    {
+        return $this->bundleService->listPublishedForLicenseType($licenseType);
+    }
+
+    public function listPublishedBundlePreviews(string $licenseType, int $limit = 2)
+    {
+        return $this->bundleService->listPublishedPreviewsForLicenseType($licenseType, $limit);
+    }
+
+    public function listPublishedBundlePreviewsByLicense(): array
+    {
+        return [
+            'rn_lpn' => $this->listPublishedBundlePreviews('rn_lpn'),
+            'aprn' => $this->listPublishedBundlePreviews('aprn'),
+        ];
     }
 
     public function listPublishedCatalog(): array

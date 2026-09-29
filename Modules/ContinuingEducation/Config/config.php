@@ -54,4 +54,14 @@ return [
         'teal' => 'rn-lpn-packages',
         'terra' => 'aprn-packages',
     ],
+
+    'bundle_license_types' => [
+        'rn_lpn' => 'RN & LPN',
+        'aprn' => 'APRN',
+    ],
+
+    'bundle_card_styles' => [
+        'primary' => 'Primary (dark card)',
+        'secondary' => 'Secondary (light card)',
+    ],
 ];
