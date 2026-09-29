@@ -30,6 +30,16 @@ class CeLicenseService
             ->get();
     }
 
+    public function findPublishedByCardStyle(string $cardStyle): ?CeLicenseType
+    {
+        return CeLicenseType::query()
+            ->published()
+            ->forLms()
+            ->where('card_style', $cardStyle)
+            ->orderByRaw('COALESCE(seq_no, 999999) ASC')
+            ->first();
+    }
+
     public function featuredCount(?int $exceptId = null, ?int $lmsId = null): int
     {
         $query = CeLicenseType::query()

@@ -31,9 +31,12 @@ class CeFrontendController extends Controller
 
     public function rnLpn()
     {
-        return view(theme('pages.continuingEducationRnLpn'), [
-            'bundles' => $this->catalogService->listPublishedBundles('rn_lpn'),
-        ]);
+        return view(theme('pages.continuingEducationRnLpn'), array_merge(
+            $this->catalogService->licenseDetailPageData('rn_lpn'),
+            [
+                'bundles' => $this->catalogService->listPublishedBundles('rn_lpn'),
+            ]
+        ));
     }
 
     public function aprn()

@@ -198,80 +198,110 @@
     </div>
 </div>
 
+@php
+    /** @var \Modules\ContinuingEducation\Entities\CeLicenseType|null $license */
+    /** @var \Modules\ContinuingEducation\Entities\CeBundle|null $featuredBundle */
+    $licenseEyebrow = config('continuingeducation.bundle_license_types.rn_lpn', 'RN & LPN') . ' Renewal';
+    $licenseTitle = $license?->name ?? 'Florida License Renewal Packages';
+    $licenseDescription = $license?->description ?? '';
+    $licenseComponents = array_values(array_filter([
+        $license?->component_1,
+        $license?->component_2,
+        $license?->component_3,
+    ]));
+    $bundleCount = ($bundles ?? collect())->count();
+@endphp
+
 <header class="ce-hero">
     <div class="ce-hero-inner">
         <div class="ce-hero-top">
             <div>
                 <span class="ce-hero-eyebrow">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                    RN &amp; LPN Renewal
+                    {{ $licenseEyebrow }}
                 </span>
-                <h1>Florida License <em>Renewal</em> Packages</h1>
-                <p class="ce-hero-sub">Stop buying random courses from random providers. Get everything you need for your 26-hour renewal requirement in a single checkout &mdash; Board-approved, auto-reported to CE Broker, done.</p>
-                <div class="ce-hero-trust">
-                    <span class="ce-hero-trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>FL BON Approved</span>
-                    <span class="ce-hero-trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>CE Broker Auto-Report</span>
-                    <span class="ce-hero-trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Instant Certificates</span>
+                <h1>{{ $licenseTitle }}</h1>
+                @if ($licenseDescription)
+                    <p class="ce-hero-sub">{{ $licenseDescription }}</p>
+                @endif
+                @if (! empty($licenseComponents))
+                    <div class="ce-hero-trust">
+                        @foreach ($licenseComponents as $component)
+                            <span class="ce-hero-trust-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                {{ $component }}
+                            </span>
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+            @if ($featuredBundle)
+                <aside class="ce-hero-buy" aria-label="Featured renewal package">
+                    @if ($featuredBundle->is_best_seller)
+                        <p class="ce-hero-buy-label">Most Popular</p>
+                    @endif
+                    <p class="ce-hero-buy-price">{{ $featuredBundle->formatted_price }}</p>
+                    <p class="ce-hero-buy-name">{{ $featuredBundle->name }}</p>
+                    @if ($featuredBundle->subtitle)
+                        <p class="ce-hero-buy-desc">{{ $featuredBundle->subtitle }}</p>
+                    @elseif ($featuredBundle->price_note)
+                        <p class="ce-hero-buy-desc">{!! strip_tags($featuredBundle->price_note) !!}</p>
+                    @endif
+                    <a href="{{ $featuredBundle->buy_url }}" class="ce-btn-hero-buy">{!! $featuredBundle->buy_button_label !!}</a>
+                    @if ($bundleCount > 1)
+                        <a href="#bundles" class="ce-btn-hero-alt">Compare Both Bundles</a>
+                    @endif
+                    @if ($featuredBundle->savings_text)
+                        <p class="ce-hero-buy-save">{{ $featuredBundle->savings_text }}</p>
+                    @endif
+                </aside>
+            @endif
+        </div>
+    </div>
+    @if ($hourSummary)
+        <div class="ce-req-strip">
+            <div class="ce-req-strip-inner">
+                <div class="ce-req-strip-item">
+                    <p class="ce-req-strip-num">{{ $hourSummary['total'] }}</p>
+                    <p class="ce-req-strip-label">Total Hours Required</p>
+                </div>
+                <div class="ce-req-strip-item">
+                    <p class="ce-req-strip-num">{{ $hourSummary['mandatory'] }}</p>
+                    <p class="ce-req-strip-label">Mandatory Hours</p>
+                </div>
+                <div class="ce-req-strip-item">
+                    <p class="ce-req-strip-num">{{ $hourSummary['elective'] }}</p>
+                    <p class="ce-req-strip-label">Elective Hours</p>
                 </div>
             </div>
-            <aside class="ce-hero-buy" aria-label="Featured renewal package">
-                <p class="ce-hero-buy-label">Most Popular</p>
-                <p class="ce-hero-buy-price">$69&ndash;$79</p>
-                <p class="ce-hero-buy-name">Complete 26-Hour Renewal</p>
-                <p class="ce-hero-buy-desc">All 6 mandatory courses + curated clinical electives. One checkout. Full compliance.</p>
-                <a href="#" class="ce-btn-hero-buy">Buy Complete Renewal &rarr;</a>
-                <a href="#bundles" class="ce-btn-hero-alt">Compare Both Bundles</a>
-                <p class="ce-hero-buy-save">Save over $100 vs. buying individually</p>
-            </aside>
         </div>
-    </div>
-    <div class="ce-req-strip">
-        <div class="ce-req-strip-inner">
-            <div class="ce-req-strip-item"><p class="ce-req-strip-num">26</p><p class="ce-req-strip-label">Total Hours Required</p></div>
-            <div class="ce-req-strip-item"><p class="ce-req-strip-num">11</p><p class="ce-req-strip-label">Mandatory Hours</p></div>
-            <div class="ce-req-strip-item"><p class="ce-req-strip-num">15</p><p class="ce-req-strip-label">Elective Hours</p></div>
-        </div>
-    </div>
+    @endif
 </header>
+
+@php
+    $mandatoryStats = $mandatoryCourseStats ?? ['count' => 0, 'hours' => '0'];
+@endphp
 
 <section class="ce-mandatory-section">
     <div class="ce-container">
         <div class="ce-section-header">
             <span class="ce-section-eyebrow">Required by FL Board of Nursing</span>
-            <h2>6 Mandatory Courses &middot; 11 Hours</h2>
+            @if ($mandatoryStats['count'] > 0)
+                <h2>{{ $mandatoryStats['count'] }} Mandatory Courses &middot; {{ $mandatoryStats['hours'] }} Hours</h2>
+            @else
+                <h2>Mandatory Courses</h2>
+            @endif
             <p>These are required for every RN and LPN license renewal in Florida. Cycle-specific notes are listed on each card &mdash; our bundles include all of them so you&rsquo;re covered no matter which cycle you&rsquo;re in.</p>
         </div>
         <div class="ce-mand-grid">
-            <div class="ce-mand-card">
-                <div class="ce-mand-card-top"><div class="ce-mand-card-hours">2<small>Hours</small></div><div class="ce-mand-card-price">$19.97</div></div>
-                <div class="ce-mand-card-body"><h3>Prevention of Medical Errors</h3><p>Root-cause analysis, error reduction strategies, and systems-based patient safety frameworks.</p><span class="ce-mand-card-cycle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Every renewal cycle</span></div>
-                <a href="#" class="ce-mand-card-btn">Add to Cart</a>
-            </div>
-            <div class="ce-mand-card">
-                <div class="ce-mand-card-top"><div class="ce-mand-card-hours">2<small>Hours</small></div><div class="ce-mand-card-price">$19.97</div></div>
-                <div class="ce-mand-card-body"><h3>Florida Laws &amp; Rules</h3><p>Chapter 464 (Nurse Practice Act) and Administrative Rules Chapter 64B9 updates.</p><span class="ce-mand-card-cycle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Every renewal cycle</span></div>
-                <a href="#" class="ce-mand-card-btn">Add to Cart</a>
-            </div>
-            <div class="ce-mand-card">
-                <div class="ce-mand-card-top"><div class="ce-mand-card-hours">2<small>Hours</small></div><div class="ce-mand-card-price">$15.97</div></div>
-                <div class="ce-mand-card-body"><h3>Human Trafficking</h3><p>Sex and labor trafficking signs, the PEARR screening tool, and mandatory reporting protocols.</p><span class="ce-mand-card-cycle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Every renewal cycle</span></div>
-                <a href="#" class="ce-mand-card-btn">Add to Cart</a>
-            </div>
-            <div class="ce-mand-card">
-                <div class="ce-mand-card-top"><div class="ce-mand-card-hours">2<small>Hours</small></div><div class="ce-mand-card-price">$19.97</div></div>
-                <div class="ce-mand-card-body"><h3>Recognizing Impairment in the Workplace</h3><p>Duty to report, substance use identification, and the Intervention Project for Nurses (IPN).</p><span class="ce-mand-card-cycle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Every other renewal cycle</span></div>
-                <a href="#" class="ce-mand-card-btn">Add to Cart</a>
-            </div>
-            <div class="ce-mand-card">
-                <div class="ce-mand-card-top"><div class="ce-mand-card-hours">2<small>Hours</small></div><div class="ce-mand-card-price">$19.97</div></div>
-                <div class="ce-mand-card-body"><h3>Domestic Violence</h3><p>Identification, screening, intervention strategies, and mandatory reporting requirements.</p><span class="ce-mand-card-cycle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Every third renewal cycle</span></div>
-                <a href="#" class="ce-mand-card-btn">Add to Cart</a>
-            </div>
-            <div class="ce-mand-card">
-                <div class="ce-mand-card-top"><div class="ce-mand-card-hours">1<small>Hour</small></div><div class="ce-mand-card-price">$10.97</div></div>
-                <div class="ce-mand-card-body"><h3>HIV/AIDS</h3><p>Prevention, transmission, testing protocols, and current patient care standards.</p><span class="ce-mand-card-cycle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>First-time renewals</span></div>
-                <a href="#" class="ce-mand-card-btn">Add to Cart</a>
-            </div>
+            @forelse ($mandatoryCourses ?? [] as $course)
+                @include(theme('components.ce._rn-mandatory-course-card'), [
+                    'course' => $course,
+                    'ceCatalog' => $ceCatalog,
+                ])
+            @empty
+                <p class="ce-bundle-empty-note">Mandatory courses are being updated. Please check back soon.</p>
+            @endforelse
         </div>
     </div>
 </section>
@@ -298,17 +328,24 @@
         <div class="ce-section-header">
             <span class="ce-section-eyebrow">Fill Your Remaining Hours</span>
             <h2>Clinical Elective Courses</h2>
-            <p>Need specific electives? Each course is available individually, or included in the Complete 26-Hour Renewal bundle.</p>
+            <p>
+                Need specific electives? Each course is available individually
+                @if ($featuredBundle ?? null)
+                    , or included in the {{ $featuredBundle->name }} bundle.
+                @else
+                    , or included in a renewal bundle.
+                @endif
+            </p>
         </div>
         <div class="ce-elective-grid">
-            <a href="#" class="ce-el-card"><div><h4>Child Abuse &amp; Mandated Reporting</h4><p>Recognition, documentation, and reporting obligations.</p><div class="ce-el-meta"><span class="ce-el-hours">2 Hours</span></div></div><div class="ce-el-right"><p class="ce-el-price">$19.97</p><span class="ce-el-add">Add to Cart</span></div></a>
-            <a href="#" class="ce-el-card"><div><h4>Infection Control &amp; Barrier Precautions</h4><p>Standard and transmission-based precautions.</p><div class="ce-el-meta"><span class="ce-el-hours">2 Hours</span></div></div><div class="ce-el-right"><p class="ce-el-price">$19.97</p><span class="ce-el-add">Add to Cart</span></div></a>
-            <a href="#" class="ce-el-card"><div><h4>Advanced 12-Lead EKG Interpretation</h4><p>Rhythm analysis, axis deviation, and STEMI recognition.</p><div class="ce-el-meta"><span class="ce-el-hours">4 Hours</span></div></div><div class="ce-el-right"><p class="ce-el-price">$19.97</p><span class="ce-el-add">Add to Cart</span></div></a>
-            <a href="#" class="ce-el-card"><div><h4>Workplace De-escalation</h4><p>Verbal intervention strategies for healthcare settings.</p><div class="ce-el-meta"><span class="ce-el-hours">2 Hours</span></div></div><div class="ce-el-right"><p class="ce-el-price">$19.97</p><span class="ce-el-add">Add to Cart</span></div></a>
-            <a href="#" class="ce-el-card"><div><h4>Documentation Pitfalls: Stay Out of Court</h4><p>Legal risk reduction in clinical charting and documentation.</p><div class="ce-el-meta"><span class="ce-el-hours">2 Hours</span></div></div><div class="ce-el-right"><p class="ce-el-price">$19.97</p><span class="ce-el-add">Add to Cart</span></div></a>
-            <a href="#" class="ce-el-card"><div><h4>Pressure Injury Prevention &amp; Staging</h4><p>NPUAP staging, risk assessment, and wound management.</p><div class="ce-el-meta"><span class="ce-el-hours">2 Hours</span></div></div><div class="ce-el-right"><p class="ce-el-price">$19.97</p><span class="ce-el-add">Add to Cart</span></div></a>
-            <a href="#" class="ce-el-card"><div><h4>Social Media &amp; HIPAA Rules</h4><p>Digital compliance and privacy pitfalls for modern nurses.</p><div class="ce-el-meta"><span class="ce-el-hours">1 Hour</span></div></div><div class="ce-el-right"><p class="ce-el-price">$19.97</p><span class="ce-el-add">Add to Cart</span></div></a>
-            <a href="#" class="ce-el-card"><div><h4>De-escalation for Acute Agitation</h4><p>Crisis intervention for behavioral emergencies.</p><div class="ce-el-meta"><span class="ce-el-hours">2 Hours</span></div></div><div class="ce-el-right"><p class="ce-el-price">$19.97</p><span class="ce-el-add">Add to Cart</span></div></a>
+            @forelse ($electiveCourses ?? [] as $course)
+                @include(theme('components.ce._rn-elective-course-card'), [
+                    'course' => $course,
+                    'ceCatalog' => $ceCatalog,
+                ])
+            @empty
+                <p class="ce-bundle-empty-note">Elective courses are being updated. Please check back soon.</p>
+            @endforelse
         </div>
     </div>
 </section>
@@ -344,8 +381,17 @@
 <section class="ce-final-cta">
     <div class="ce-final-cta-inner">
         <h2>Renew your license <em>in a single checkout.</em></h2>
-        <p>Stop piecing together random courses from random providers. Get everything you need in one place, auto-reported to CE Broker.</p>
-        <a href="#" class="ce-btn-primary">Buy Complete 26-Hour Renewal &rarr;</a>
+        <p>
+            Stop piecing together random courses from random providers. Get everything you need in one place, auto-reported to CE Broker.
+            @if ($featuredBundle ?? null)
+                Start with the {{ $featuredBundle->name }} package.
+            @endif
+        </p>
+        @if ($featuredBundle ?? null)
+            <a href="{{ $featuredBundle->buy_url }}" class="ce-btn-primary">{!! $featuredBundle->buy_button_label !!}</a>
+        @else
+            <a href="#bundles" class="ce-btn-primary">View Renewal Bundles &rarr;</a>
+        @endif
     </div>
 </section>
 

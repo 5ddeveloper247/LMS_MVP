@@ -37,6 +37,24 @@ class CeBundleService
             ->get();
     }
 
+    public function findFeaturedForLicenseType(string $licenseType): ?CeBundle
+    {
+        $baseQuery = fn () => CeBundle::query()
+            ->with(['mandatoryCourses' => fn ($q) => $q->select(
+                'ce_courses.id',
+                'ce_courses.title',
+                'ce_courses.contact_hours'
+            )])
+            ->published()
+            ->forLms()
+            ->where('license_type', $licenseType)
+            ->orderByRaw('COALESCE(seq_no, 999999) ASC')
+            ->orderBy('name');
+
+        return $baseQuery()->where('is_best_seller', true)->first()
+            ?? $baseQuery()->first();
+    }
+
     public function listForAdmin()
     {
         return CeBundle::query()

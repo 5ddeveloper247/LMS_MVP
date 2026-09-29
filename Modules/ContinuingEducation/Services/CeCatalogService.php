@@ -3,7 +3,9 @@
 namespace Modules\ContinuingEducation\Services;
 
 use Illuminate\Support\Str;
+use Modules\ContinuingEducation\Entities\CeBundle;
 use Modules\ContinuingEducation\Entities\CeCourse;
+use Modules\ContinuingEducation\Entities\CeLicenseType;
 
 class CeCatalogService
 {
@@ -33,6 +35,94 @@ class CeCatalogService
             'rn_lpn' => $this->listPublishedBundlePreviews('rn_lpn'),
             'aprn' => $this->listPublishedBundlePreviews('aprn'),
         ];
+    }
+
+    public function findPublishedLicenseForDetailPage(string $licenseType): ?CeLicenseType
+    {
+        $cardStyle = config('continuingeducation.license_type_card_styles.' . $licenseType);
+
+        if (! $cardStyle) {
+            return null;
+        }
+
+        return $this->licenseService->findPublishedByCardStyle($cardStyle);
+    }
+
+    public function findFeaturedBundleForLicenseType(string $licenseType): ?CeBundle
+    {
+        return $this->bundleService->findFeaturedForLicenseType($licenseType);
+    }
+
+    public function hourSummaryForBundle(?CeBundle $bundle): ?array
+    {
+        if (! $bundle) {
+            return null;
+        }
+
+        $bundle->loadMissing('mandatoryCourses');
+
+        $mandatory = (float) $bundle->mandatoryCourses->sum('contact_hours');
+        $elective = (float) $bundle->elective_hours_allowed;
+        $total = (float) $bundle->total_hours;
+
+        if ($total <= 0) {
+            $total = $mandatory + $elective;
+        }
+
+        return [
+            'total' => $this->formatHourStat($total),
+            'mandatory' => $this->formatHourStat($mandatory),
+            'elective' => $this->formatHourStat($elective),
+        ];
+    }
+
+    public function listPublishedCoursesForLicenseType(string $licenseType, ?string $courseType = null)
+    {
+        return CeCourse::query()
+            ->published()
+            ->forLms()
+            ->when($courseType, fn ($query) => $query->where('course_type', $courseType))
+            ->orderByRaw('COALESCE(seq_no, 999999) ASC')
+            ->orderBy('title')
+            ->get()
+            ->filter(fn (CeCourse $course) => $course->matchesLicenseType($licenseType))
+            ->values();
+    }
+
+    public function mandatoryCourseStats($courses): array
+    {
+        $collection = collect($courses);
+
+        return [
+            'count' => $collection->count(),
+            'hours' => $this->formatHourStat((float) $collection->sum('contact_hours')),
+        ];
+    }
+
+    public function licenseDetailPageData(string $licenseType): array
+    {
+        $featuredBundle = $this->findFeaturedBundleForLicenseType($licenseType);
+        $mandatoryCourses = $this->listPublishedCoursesForLicenseType($licenseType, 'mandatory');
+        $electiveCourses = $this->listPublishedCoursesForLicenseType($licenseType, 'elective');
+
+        return [
+            'license' => $this->findPublishedLicenseForDetailPage($licenseType),
+            'featuredBundle' => $featuredBundle,
+            'hourSummary' => $this->hourSummaryForBundle($featuredBundle),
+            'mandatoryCourses' => $mandatoryCourses,
+            'mandatoryCourseStats' => $this->mandatoryCourseStats($mandatoryCourses),
+            'electiveCourses' => $electiveCourses,
+            'ceCatalog' => $this,
+        ];
+    }
+
+    public function formatHourStat(float $hours): string
+    {
+        if ($hours <= 0) {
+            return '0';
+        }
+
+        return rtrim(rtrim(number_format($hours, 1, '.', ''), '0'), '.');
     }
 
     public function listPublishedCatalog(): array
@@ -116,7 +206,7 @@ class CeCatalogService
             && ! in_array('rn', $audience, true);
     }
 
-    public function summary(CeCourse $course): string
+    public function summary(CeCourse $course, int $limit = 120): string
     {
         $text = $course->compliance_topic;
 
@@ -128,7 +218,30 @@ class CeCatalogService
             $text = strip_tags((string) $about);
         }
 
-        return Str::limit(trim((string) $text), 120);
+        return Str::limit(trim((string) $text), $limit);
+    }
+
+    public function courseCycleNote(CeCourse $course): ?string
+    {
+        $note = trim(strip_tags((string) ($course->requirements ?? '')));
+
+        if ($note === '') {
+            return null;
+        }
+
+        return Str::limit($note, 80);
+    }
+
+    public function contactHoursCardValue(CeCourse $course): string
+    {
+        return $this->formatHourStat((float) ($course->contact_hours ?? 0));
+    }
+
+    public function contactHoursCardUnit(CeCourse $course): string
+    {
+        $hours = (float) ($course->contact_hours ?? 0);
+
+        return $hours === 1.0 ? 'Hour' : 'Hours';
     }
 
     public function displayPrice(CeCourse $course): string

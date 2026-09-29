@@ -55,6 +55,11 @@ return [
         'terra' => 'aprn-packages',
     ],
 
+    'license_type_card_styles' => [
+        'rn_lpn' => 'teal',
+        'aprn' => 'terra',
+    ],
+
     'bundle_license_types' => [
         'rn_lpn' => 'RN & LPN',
         'aprn' => 'APRN',
