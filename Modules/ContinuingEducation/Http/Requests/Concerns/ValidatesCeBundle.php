@@ -2,8 +2,67 @@
 
 namespace Modules\ContinuingEducation\Http\Requests\Concerns;
 
+use Illuminate\Validation\Validator;
+use Modules\ContinuingEducation\Entities\CeCourse;
+
 trait ValidatesCeBundle
 {
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function (Validator $validator) {
+            $this->validateCeBundleHours($validator);
+        });
+    }
+
+    protected function validateCeBundleHours(Validator $validator): void
+    {
+        if ($validator->errors()->isNotEmpty()) {
+            return;
+        }
+
+        $totalHours = (float) $this->input('total_hours', 0);
+        $electiveHours = (float) $this->input('elective_hours_allowed', 0);
+        $courseIds = array_map('intval', $this->input('mandatory_course_ids', []));
+
+        if ($electiveHours > $totalHours) {
+            $validator->errors()->add(
+                'elective_hours_allowed',
+                'Elective hours cannot exceed total hours.'
+            );
+        }
+
+        if ($courseIds === []) {
+            return;
+        }
+
+        $mandatorySum = (float) CeCourse::query()
+            ->whereIn('id', $courseIds)
+            ->sum('contact_hours');
+
+        if ($mandatorySum > $totalHours) {
+            $validator->errors()->add(
+                'mandatory_course_ids',
+                'Selected mandatory courses total ' . $this->formatHours($mandatorySum)
+                . ' hours, which exceeds total hours (' . $this->formatHours($totalHours) . ').'
+            );
+
+            return;
+        }
+
+        if (($mandatorySum + $electiveHours) > $totalHours) {
+            $validator->errors()->add(
+                'elective_hours_allowed',
+                'Mandatory hours (' . $this->formatHours($mandatorySum)
+                . ') plus elective hours cannot exceed total hours (' . $this->formatHours($totalHours) . ').'
+            );
+        }
+    }
+
+    protected function formatHours(float $hours): string
+    {
+        return rtrim(rtrim(number_format($hours, 1, '.', ''), '0'), '.');
+    }
+
     protected function ceBundleRules(): array
     {
         return [

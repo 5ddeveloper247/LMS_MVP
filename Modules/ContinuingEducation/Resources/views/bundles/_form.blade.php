@@ -83,7 +83,51 @@
                 <input class="primary_input_field" type="number" step="0.1" min="0" max="999.9"
                     name="total_hours" id="total_hours"
                     value="{{ old('total_hours', $bundle->total_hours ?? '') }}" placeholder="26" required>
+                <p class="text-muted mb-0 mt-2 ce-bundle-field-hint">
+                    Define the full bundle hour requirement first. Mandatory + elective cannot exceed this total.
+                </p>
                 @error('total_hours')<span class="text-danger d-block">{{ $message }}</span>@enderror
+            </div>
+        </div>
+
+        <div class="col-xl-12">
+            <div class="primary_input mb-25">
+                <label class="primary_input_label" for="mandatory_course_ids">
+                    Mandatory Courses <strong class="text-danger">*</strong>
+                </label>
+                <p class="text-muted mb-3 ce-bundle-field-hint">
+                    Select mandatory CE courses included in this bundle. Total mandatory hours update automatically below.
+                </p>
+                @if ($mandatoryCourses->isEmpty())
+                    <p class="text-muted mb-0 ce-bundle-empty-courses">No published mandatory courses found for this license type.</p>
+                @else
+                    <select class="ce-bundle-mandatory-select" name="mandatory_course_ids[]"
+                        id="mandatory_course_ids" multiple
+                        data-placeholder="Select mandatory courses">
+                        @foreach ($mandatoryCourses as $course)
+                            <option value="{{ $course->id }}"
+                                data-hours="{{ $course->contact_hours }}"
+                                {{ in_array($course->id, $selectedCourseIds, true) ? 'selected' : '' }}>
+                                {{ $course->title }}
+                            </option>
+                        @endforeach
+                    </select>
+                @endif
+                @error('mandatory_course_ids')<span class="text-danger d-block">{{ $message }}</span>@enderror
+                @error('mandatory_course_ids.*')<span class="text-danger d-block">{{ $message }}</span>@enderror
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="primary_input mb-25">
+                <label class="primary_input_label" for="mandatory_hours_total">
+                    Total Mandatory Hours
+                </label>
+                <input class="primary_input_field" type="text" id="mandatory_hours_total"
+                    value="0" placeholder="0" disabled readonly>
+                <p class="text-muted mb-0 mt-2 ce-bundle-field-hint">
+                    Auto-calculated from selected mandatory courses.
+                </p>
             </div>
         </div>
 
@@ -95,7 +139,22 @@
                 <input class="primary_input_field" type="number" step="0.1" min="0" max="999.9"
                     name="elective_hours_allowed" id="elective_hours_allowed"
                     value="{{ old('elective_hours_allowed', $bundle->elective_hours_allowed ?? '') }}" placeholder="15" required>
+                <p class="text-muted mb-0 mt-2 ce-bundle-field-hint">
+                    Remaining hours after mandatory courses. Must fit within total hours.
+                </p>
+                <span class="text-danger d-none ce-bundle-hours-error" id="ce_bundle_hours_error"></span>
                 @error('elective_hours_allowed')<span class="text-danger d-block">{{ $message }}</span>@enderror
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="primary_input mb-25">
+                <label class="primary_input_label" for="ce_bundle_hours_summary">Hours Summary</label>
+                <input class="primary_input_field" type="text" id="ce_bundle_hours_summary"
+                    value="0 + 0 = 0 / 0" disabled readonly>
+                <p class="text-muted mb-0 mt-2 ce-bundle-field-hint" id="ce_bundle_hours_summary_hint">
+                    Mandatory + elective vs total hours.
+                </p>
             </div>
         </div>
 
@@ -135,34 +194,6 @@
                 </div>
             </div>
         @endfor
-
-        <div class="col-xl-12">
-            <div class="primary_input mb-25">
-                <label class="primary_input_label" for="mandatory_course_ids">
-                    Mandatory Courses <strong class="text-danger">*</strong>
-                </label>
-                <p class="text-muted mb-3 ce-bundle-field-hint">
-                    Select mandatory CE courses included in this bundle. Changing license type reloads the page to refresh the course list.
-                </p>
-                @if ($mandatoryCourses->isEmpty())
-                    <p class="text-muted mb-0 ce-bundle-empty-courses">No published mandatory courses found for this license type.</p>
-                @else
-                    <select class="ce-bundle-mandatory-select" name="mandatory_course_ids[]"
-                        id="mandatory_course_ids" multiple
-                        data-placeholder="Select mandatory courses">
-                        @foreach ($mandatoryCourses as $course)
-                            <option value="{{ $course->id }}"
-                                data-hours="{{ $course->contact_hours }}"
-                                {{ in_array($course->id, $selectedCourseIds, true) ? 'selected' : '' }}>
-                                {{ $course->title }}
-                            </option>
-                        @endforeach
-                    </select>
-                @endif
-                @error('mandatory_course_ids')<span class="text-danger d-block">{{ $message }}</span>@enderror
-                @error('mandatory_course_ids.*')<span class="text-danger d-block">{{ $message }}</span>@enderror
-            </div>
-        </div>
 
         <div class="col-xl-12">
             <label class="primary_input_label d-block mb-3">Status</label>
@@ -447,6 +478,23 @@
             border-radius: 16px;
             background: #fafbff;
         }
+
+        .ce-bundle-form #mandatory_hours_total,
+        .ce-bundle-form #ce_bundle_hours_summary {
+            background: #f5f7fb;
+            color: #415094;
+            cursor: not-allowed;
+        }
+
+        .ce-bundle-form .ce-bundle-hours-error {
+            display: block;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .ce-bundle-form .ce-bundle-hours-error.is-visible {
+            display: block;
+        }
     </style>
 @endpush
 
@@ -486,9 +534,66 @@
                 );
             }
 
+            function formatHours(value) {
+                var hours = parseFloat(value) || 0;
+                return hours.toFixed(1).replace(/\.0$/, '');
+            }
+
+            function sumMandatoryHours() {
+                var total = 0;
+
+                ($mandatorySelect.val() || []).forEach(function (id) {
+                    var hours = parseFloat($mandatorySelect.find('option[value="' + id + '"]').data('hours')) || 0;
+                    total += hours;
+                });
+
+                return total;
+            }
+
+            function updateHoursSummary() {
+                var totalHours = parseFloat($('#total_hours').val()) || 0;
+                var mandatoryTotal = sumMandatoryHours();
+                var electiveHours = parseFloat($('#elective_hours_allowed').val()) || 0;
+                var combined = mandatoryTotal + electiveHours;
+                var remaining = totalHours - combined;
+                var $error = $('#ce_bundle_hours_error');
+                var $summary = $('#ce_bundle_hours_summary');
+                var $summaryHint = $('#ce_bundle_hours_summary_hint');
+
+                $('#mandatory_hours_total').val(formatHours(mandatoryTotal));
+                $summary.val(formatHours(mandatoryTotal) + ' + ' + formatHours(electiveHours) + ' = ' + formatHours(combined) + ' / ' + formatHours(totalHours));
+
+                $error.removeClass('is-visible').addClass('d-none').text('');
+                $summaryHint.removeClass('text-danger').addClass('text-muted');
+
+                if (mandatoryTotal > totalHours && totalHours > 0) {
+                    $error.removeClass('d-none').addClass('is-visible').text(
+                        'Selected mandatory courses total ' + formatHours(mandatoryTotal) + ' hours, which exceeds total hours (' + formatHours(totalHours) + ').'
+                    );
+                    $summaryHint.removeClass('text-muted').addClass('text-danger');
+                } else if (combined > totalHours && totalHours > 0) {
+                    $error.removeClass('d-none').addClass('is-visible').text(
+                        'Mandatory + elective (' + formatHours(combined) + 'h) cannot exceed total hours (' + formatHours(totalHours) + 'h).'
+                    );
+                    $summaryHint.removeClass('text-muted').addClass('text-danger');
+                } else if (totalHours > 0 && remaining >= 0) {
+                    $summaryHint.text(formatHours(remaining) + ' hour(s) remaining in this bundle total.');
+                } else {
+                    $summaryHint.text('Mandatory + elective vs total hours.');
+                }
+            }
+
             function updateMandatoryCount() {
                 var count = ($mandatorySelect.val() || []).length;
-                $('.ce-bundle-select-count').text(count + ' selected');
+                var mandatoryTotal = sumMandatoryHours();
+                var label = count + ' selected';
+
+                if (mandatoryTotal > 0) {
+                    label += ' · ' + formatHours(mandatoryTotal) + 'h mandatory';
+                }
+
+                $('.ce-bundle-select-count').text(label);
+                updateHoursSummary();
             }
 
             function ensureMandatoryToolbar() {
@@ -545,6 +650,9 @@
             });
 
             $mandatorySelect.on('change', updateMandatoryCount);
+            $('#total_hours, #elective_hours_allowed').on('input change', updateHoursSummary);
+
+            updateMandatoryCount();
 
             $('#ce_bundle_form').on('submit', function (event) {
                 if (!$mandatorySelect.length) {
@@ -556,6 +664,28 @@
                     event.preventDefault();
                     if (typeof toastr !== 'undefined') {
                         toastr.error('Select at least one mandatory course.', 'Error');
+                    }
+                    return;
+                }
+
+                updateHoursSummary();
+
+                var totalHours = parseFloat($('#total_hours').val()) || 0;
+                var mandatoryTotal = sumMandatoryHours();
+                var electiveHours = parseFloat($('#elective_hours_allowed').val()) || 0;
+
+                if (mandatoryTotal > totalHours) {
+                    event.preventDefault();
+                    if (typeof toastr !== 'undefined') {
+                        toastr.error('Selected mandatory courses exceed total hours.', 'Error');
+                    }
+                    return;
+                }
+
+                if ((mandatoryTotal + electiveHours) > totalHours) {
+                    event.preventDefault();
+                    if (typeof toastr !== 'undefined') {
+                        toastr.error('Mandatory plus elective hours cannot exceed total hours.', 'Error');
                     }
                 }
             });
