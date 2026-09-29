@@ -44,9 +44,47 @@ trait ValidatesCeCourse
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
-        return validationMessage($this->rules());
+        return [
+            'title.required' => 'Please enter a course title.',
+            'title.max' => 'The course title may not be greater than 255 characters.',
+            'course_code.max' => 'The course code may not be greater than 100 characters.',
+            'course_code.unique' => 'This course code is already in use. Please enter a different one.',
+            'assign_instructor.required' => 'Please select an instructor.',
+            'assign_instructor.integer' => 'Please select a valid instructor.',
+            'assign_instructor.exists' => 'The selected instructor could not be found.',
+            'assistant_instructors.*.integer' => 'Each assistant instructor must be valid.',
+            'assistant_instructors.*.exists' => 'One or more assistant instructors could not be found.',
+            'price.numeric' => 'Price must be a valid number.',
+            'price.min' => 'Price cannot be negative.',
+            'discount_price.numeric' => 'Discount price must be a valid number.',
+            'discount_price.min' => 'Discount price cannot be negative.',
+            'contact_hours.required' => 'Please enter contact hours.',
+            'contact_hours.numeric' => 'Contact hours must be a valid number.',
+            'contact_hours.min' => 'Contact hours cannot be negative.',
+            'contact_hours.max' => 'Contact hours may not exceed 999.9.',
+            'course_type.required' => 'Please select a course type (Mandatory or Elective).',
+            'course_type.in' => 'Please select a valid course type.',
+            'audience_group.required' => 'Please select an audience (RN or LPN/APRN).',
+            'audience_group.in' => 'Please select a valid audience.',
+            'image.image' => 'The uploaded file must be an image.',
+            'image.mimes' => 'The image must be a JPEG, PNG, JPG, GIF, BMP, or WebP file.',
+            'image.max' => 'The image may not be larger than 4 MB.',
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'title' => 'course title',
+            'course_code' => 'course code',
+            'assign_instructor' => 'instructor',
+            'contact_hours' => 'contact hours',
+            'course_type' => 'course type',
+            'audience_group' => 'audience',
+            'discount_price' => 'discount price',
+        ];
     }
 
     public function toPayload(): array
