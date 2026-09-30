@@ -154,11 +154,6 @@ class CeCourseService
             return;
         }
 
-        $audienceMap = [
-            'rn' => ['rn'],
-            'lpn_aprn' => ['lpn', 'aprn'],
-        ];
-        $group = $request->input('audience_group', 'rn');
         $courseType = $request->input('course_type');
 
         if (in_array($courseType, ['mandatory', 'elective'], true)) {
@@ -169,8 +164,10 @@ class CeCourseService
             $ceCourse->contact_hours = $request->input('contact_hours');
         }
 
-        if (isset($audienceMap[$group])) {
-            $ceCourse->audience = $audienceMap[$group];
+        if ($request->has('audience_groups')) {
+            $ceCourse->audience = ceAudienceFromGroups((array) $request->input('audience_groups', []));
+        } elseif ($request->filled('audience_group')) {
+            $ceCourse->audience = ceAudienceFromGroups([$request->input('audience_group')]);
         }
 
         $ceCourse->title = $lmsCourse->title;

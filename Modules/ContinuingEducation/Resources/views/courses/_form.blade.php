@@ -7,16 +7,13 @@
     $isFree = old('is_free', $isEdit ? ((float) ($course->price ?? 0) === 0.0) : false);
     $hasDiscount = old('is_discount', $isEdit ? !is_null($course->discount_price) : false);
 
-    $audienceGroup = old('audience_group');
-    if (!$audienceGroup && $isEdit) {
-        $storedAudience = $course->audience ?? [];
-        if (in_array('lpn', $storedAudience, true) || in_array('aprn', $storedAudience, true)) {
-            $audienceGroup = 'lpn_aprn';
-        } else {
-            $audienceGroup = 'rn';
-        }
+    $selectedAudienceGroups = old('audience_groups');
+    if (! is_array($selectedAudienceGroups) && $isEdit) {
+        $selectedAudienceGroups = ceAudienceGroupsFromAudience($course->audience ?? []);
     }
-    $audienceGroup = $audienceGroup ?: 'rn';
+    if (! is_array($selectedAudienceGroups) || $selectedAudienceGroups === []) {
+        $selectedAudienceGroups = ['rn'];
+    }
 @endphp
 
 <form action="{{ $action }}" method="POST" enctype="multipart/form-data">
@@ -104,14 +101,15 @@
                     @foreach ($audienceGroups as $value => $label)
                         <div class="col-md-4 col-sm-6 mb-25">
                             <label class="primary_checkbox d-flex nowrap mr-12" for="ce_category_{{ $value }}">
-                                <input type="radio" id="ce_category_{{ $value }}" name="audience_group"
-                                    value="{{ $value }}" {{ $audienceGroup === $value ? 'checked' : '' }}>
+                                <input type="checkbox" id="ce_category_{{ $value }}" name="audience_groups[]"
+                                    value="{{ $value }}" {{ in_array($value, $selectedAudienceGroups, true) ? 'checked' : '' }}>
                                 <span class="checkmark mr-2"></span>{{ $label }}
                             </label>
                         </div>
                     @endforeach
                 </div>
-                @error('audience_group')<span class="text-danger d-block">{{ $message }}</span>@enderror
+                @error('audience_groups')<span class="text-danger d-block">{{ $message }}</span>@enderror
+                @error('audience_groups.*')<span class="text-danger d-block">{{ $message }}</span>@enderror
             </div>
         </div>
 

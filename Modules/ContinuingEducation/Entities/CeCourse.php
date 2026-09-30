@@ -109,16 +109,17 @@ class CeCourse extends Model
     public function getAudienceLabelsAttribute(): array
     {
         $keys = $this->audience ?? [];
-
-        if (in_array('lpn', $keys, true) || in_array('aprn', $keys, true)) {
-            return ['LPN/APRN'];
-        }
+        $labels = [];
 
         if (in_array('rn', $keys, true)) {
-            return ['RN'];
+            $labels[] = 'RN';
         }
 
-        return [];
+        if (in_array('lpn', $keys, true) || in_array('aprn', $keys, true)) {
+            $labels[] = 'LPN/APRN';
+        }
+
+        return $labels;
     }
 
     public function getAssistantInstructorIdsAttribute(): array

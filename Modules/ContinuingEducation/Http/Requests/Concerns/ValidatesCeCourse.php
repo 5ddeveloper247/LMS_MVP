@@ -33,7 +33,8 @@ trait ValidatesCeCourse
             'discount_price' => 'nullable|numeric|min:0',
             'contact_hours' => 'required|numeric|min:0|max:999.9',
             'course_type' => 'required|in:mandatory,elective',
-            'audience_group' => 'required|in:rn,lpn_aprn',
+            'audience_groups' => 'required|array|min:1',
+            'audience_groups.*' => 'in:rn,lpn_aprn',
             // 'compliance_topic' => 'nullable|string|max:150',
             // 'ce_broker_course_id' => 'nullable|string|max:50',
             'image' => 'nullable|image|mimes:jpeg,bmp,png,jpg,gif,webp|max:4096',
@@ -66,8 +67,9 @@ trait ValidatesCeCourse
             'contact_hours.max' => 'Contact hours may not exceed 999.9.',
             'course_type.required' => 'Please select a course type (Mandatory or Elective).',
             'course_type.in' => 'Please select a valid course type.',
-            'audience_group.required' => 'Please select an audience (RN or LPN/APRN).',
-            'audience_group.in' => 'Please select a valid audience.',
+            'audience_groups.required' => 'Please select at least one audience (RN and/or LPN/APRN).',
+            'audience_groups.min' => 'Please select at least one audience (RN and/or LPN/APRN).',
+            'audience_groups.*.in' => 'Please select a valid audience.',
             'image.image' => 'The uploaded file must be an image.',
             'image.mimes' => 'The image must be a JPEG, PNG, JPG, GIF, BMP, or WebP file.',
             'image.max' => 'The image may not be larger than 4 MB.',
@@ -82,7 +84,7 @@ trait ValidatesCeCourse
             'assign_instructor' => 'instructor',
             'contact_hours' => 'contact hours',
             'course_type' => 'course type',
-            'audience_group' => 'audience',
+            'audience_groups' => 'audience',
             'discount_price' => 'discount price',
         ];
     }
@@ -94,12 +96,8 @@ trait ValidatesCeCourse
         $validated['user_id'] = (int) $validated['assign_instructor'];
         unset($validated['assign_instructor']);
 
-        $audienceMap = [
-            'rn' => ['rn'],
-            'lpn_aprn' => ['lpn', 'aprn'],
-        ];
-        $validated['audience'] = $audienceMap[$this->input('audience_group')] ?? ['rn'];
-        unset($validated['audience_group']);
+        $validated['audience'] = ceAudienceFromGroups($this->input('audience_groups', []));
+        unset($validated['audience_groups']);
 
         $validated['category_id'] = null;
         $validated['lang_id'] = 19;

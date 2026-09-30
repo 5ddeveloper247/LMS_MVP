@@ -1,12 +1,11 @@
 @php
-    $audienceGroup = old('audience_group');
-    if (!$audienceGroup && $ceCourse) {
-        $storedAudience = $ceCourse->audience ?? [];
-        $audienceGroup = (in_array('lpn', $storedAudience, true) || in_array('aprn', $storedAudience, true))
-            ? 'lpn_aprn'
-            : 'rn';
+    $selectedAudienceGroups = old('audience_groups');
+    if (! is_array($selectedAudienceGroups) && $ceCourse) {
+        $selectedAudienceGroups = ceAudienceGroupsFromAudience($ceCourse->audience ?? []);
     }
-    $audienceGroup = $audienceGroup ?: 'rn';
+    if (! is_array($selectedAudienceGroups) || $selectedAudienceGroups === []) {
+        $selectedAudienceGroups = ['rn'];
+    }
     $courseTypes = config('continuingeducation.course_types', []);
     $audienceGroups = config('continuingeducation.audience_groups', []);
 @endphp
@@ -51,8 +50,8 @@
                 @foreach ($audienceGroups as $value => $label)
                     <div class="col-md-4 col-sm-6 mb-25">
                         <label class="primary_checkbox d-flex nowrap mr-12" for="ce_category_{{ $value }}">
-                            <input type="radio" id="ce_category_{{ $value }}" name="audience_group"
-                                value="{{ $value }}" {{ $audienceGroup === $value ? 'checked' : '' }}>
+                            <input type="checkbox" id="ce_category_{{ $value }}" name="audience_groups[]"
+                                value="{{ $value }}" {{ in_array($value, $selectedAudienceGroups, true) ? 'checked' : '' }}>
                             <span class="checkmark mr-2"></span>{{ $label }}
                         </label>
                     </div>

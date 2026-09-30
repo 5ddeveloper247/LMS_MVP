@@ -57,6 +57,50 @@ if (! function_exists('courseDetailsRedirectUrl')) {
     }
 }
 
+if (! function_exists('ceAudienceGroupMap')) {
+    function ceAudienceGroupMap(): array
+    {
+        return [
+            'rn' => ['rn'],
+            'lpn_aprn' => ['lpn', 'aprn'],
+        ];
+    }
+}
+
+if (! function_exists('ceAudienceFromGroups')) {
+    function ceAudienceFromGroups(array $groups): array
+    {
+        $audience = [];
+
+        foreach ($groups as $group) {
+            $mapped = ceAudienceGroupMap()[$group] ?? null;
+            if ($mapped) {
+                $audience = array_merge($audience, $mapped);
+            }
+        }
+
+        return array_values(array_unique($audience));
+    }
+}
+
+if (! function_exists('ceAudienceGroupsFromAudience')) {
+    function ceAudienceGroupsFromAudience(?array $audience): array
+    {
+        $audience = $audience ?? [];
+        $groups = [];
+
+        if (in_array('rn', $audience, true)) {
+            $groups[] = 'rn';
+        }
+
+        if (in_array('lpn', $audience, true) || in_array('aprn', $audience, true)) {
+            $groups[] = 'lpn_aprn';
+        }
+
+        return $groups;
+    }
+}
+
 if (! function_exists('ceCourseDetailsLink')) {
     function ceCourseDetailsLink(int $lmsCourseId, array $query = [], ?string $tab = null): string
     {
