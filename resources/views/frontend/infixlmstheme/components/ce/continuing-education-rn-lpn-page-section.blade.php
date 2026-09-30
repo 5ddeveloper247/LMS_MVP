@@ -131,7 +131,7 @@
 
 .mxp-ce-rn-lpn .ce-electives-section{background:var(--ce-white);padding:80px 32px}
 .mxp-ce-rn-lpn .ce-elective-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;max-width:1040px;margin:0 auto}
-.mxp-ce-rn-lpn .ce-el-card{background:var(--ce-cream);border-radius:14px;padding:24px 26px;border:1px solid var(--ce-gray-line);display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;transition:all .2s;color:inherit}
+.mxp-ce-rn-lpn .ce-el-card{background:var(--ce-cream);border-radius:14px;padding:24px 26px;border:1px solid var(--ce-gray-line);display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;transition:all .2s;color:inherit;text-decoration:none}
 .mxp-ce-rn-lpn .ce-el-card:hover{box-shadow:var(--ce-shadow-sm);border-color:var(--ce-teal-mid);transform:translateY(-2px)}
 .mxp-ce-rn-lpn .ce-el-card-main{text-decoration:none;color:inherit;display:block}
 .mxp-ce-rn-lpn .ce-el-card h4{font-family:var(--ce-sans);font-size:15px;font-weight:600;color:var(--ce-teal-darkest);margin-bottom:4px}

@@ -73,7 +73,7 @@
 
 .mxp-ce-aprn .ce-mandatory-section{background:var(--ce-white);padding:80px 32px}
 .mxp-ce-aprn .ce-mand-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;max-width:960px;margin:0 auto}
-.mxp-ce-aprn .ce-mand-card{background:var(--ce-cream);border-radius:12px;padding:22px 24px;border:1px solid var(--ce-gray-line);display:flex;justify-content:space-between;align-items:center;gap:16px;color:inherit;transition:all .2s}
+.mxp-ce-aprn .ce-mand-card{background:var(--ce-cream);border-radius:12px;padding:22px 24px;border:1px solid var(--ce-gray-line);display:flex;justify-content:space-between;align-items:center;gap:16px;color:inherit;text-decoration:none;transition:all .2s}
 .mxp-ce-aprn .ce-mand-card:hover{box-shadow:var(--ce-shadow-sm);border-color:var(--ce-teal-mid);transform:translateY(-1px)}
 .mxp-ce-aprn .ce-mand-card.aprn-specific{border-left:3px solid var(--ce-terracotta)}
 .mxp-ce-aprn .ce-mc-info{flex:1;text-decoration:none;color:inherit}

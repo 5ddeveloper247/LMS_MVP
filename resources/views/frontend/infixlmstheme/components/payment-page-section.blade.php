@@ -386,6 +386,43 @@
                                     {{ getPriceFormat($price) }}
                                 </span>
                             </div>
+                        @elseif (!empty($cart->ce_course_id) && $cart->ceCourse)
+                            @php
+                                $title = $cart->ceCourse->title;
+                                $price = $cart->price;
+                                $totalSum = $totalSum + $price;
+                                $thumb = $cart->ceCourse->thumbnail ?: ($cart->ceCourse->image ?? '');
+                            @endphp
+                            <div class="single_ordered_product">
+                                <div class="product_name d-flex align-items-center">
+                                    <div class="thumb">
+                                        <img src="{{ getCourseImage($thumb) }}" class="h-100" alt="">
+                                    </div>
+                                    <span>{{ $title }} <small class="text-muted">(CE Course)</small></span>
+                                </div>
+                                <span class="order_prise f_w_500 font_16">
+                                    {{ getPriceFormat($price) }}
+                                </span>
+                            </div>
+                        @elseif (!empty($cart->ce_bundle_id) && $cart->ceBundle)
+                            @php
+                                $title = $cart->ceBundle->name ?? 'CE Bundle';
+                                $price = $cart->price;
+                                $totalSum = $totalSum + $price;
+                                $firstCeCourse = optional($cart->ceBundle)->courses->first();
+                                $thumb = $firstCeCourse ? ($firstCeCourse->thumbnail ?: ($firstCeCourse->image ?? '')) : '';
+                            @endphp
+                            <div class="single_ordered_product">
+                                <div class="product_name d-flex align-items-center">
+                                    <div class="thumb">
+                                        <img src="{{ getCourseImage($thumb) }}" class="h-100" alt="">
+                                    </div>
+                                    <span>{{ $title }} <small class="text-muted">(CE Bundle)</small></span>
+                                </div>
+                                <span class="order_prise f_w_500 font_16">
+                                    {{ getPriceFormat($price) }}
+                                </span>
+                            </div>
                         @endif
                     @endforeach
                 @endif

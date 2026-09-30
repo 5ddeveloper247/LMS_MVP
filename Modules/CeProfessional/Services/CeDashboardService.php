@@ -5,14 +5,20 @@ namespace Modules\CeProfessional\Services;
 use App\User;
 use Carbon\Carbon;
 use Modules\CeProfessional\Repositories\CeProfessionalRepositoryInterface;
+use Modules\ContinuingEducation\Services\CeEnrollmentService;
 
 class CeDashboardService
 {
     protected $ceProfessionalRepository;
 
-    public function __construct(CeProfessionalRepositoryInterface $ceProfessionalRepository)
-    {
+    protected CeEnrollmentService $ceEnrollmentService;
+
+    public function __construct(
+        CeProfessionalRepositoryInterface $ceProfessionalRepository,
+        CeEnrollmentService $ceEnrollmentService
+    ) {
         $this->ceProfessionalRepository = $ceProfessionalRepository;
+        $this->ceEnrollmentService = $ceEnrollmentService;
     }
 
     public function getDashboardData(User $user): array
@@ -22,9 +28,23 @@ class CeDashboardService
         $licenseShort = $profile ? strtoupper($profile->license_type) : 'RN';
 
         $preview = $this->getStaticPreviewData();
+        $enrollmentCards = $this->ceEnrollmentService->userEnrollmentCards($user);
 
         $renewalDate = $profile?->renewal_date ?? Carbon::parse('2027-10-31');
         $daysUntilRenewal = max(0, now()->startOfDay()->diffInDays($renewalDate, false));
+
+        $preview['stats'] = $this->ceEnrollmentService->dashboardStats($user, $preview['stats']);
+        $preview['compliance'] = $this->ceEnrollmentService->complianceData($user, $preview['compliance']);
+        $preview['active_courses'] = $enrollmentCards !== []
+            ? $enrollmentCards
+            : $preview['active_courses'];
+
+        if ($profile?->ce_broker_last_synced_at) {
+            $preview['ce_broker']['last_synced'] = $profile->ce_broker_last_synced_at->format('F j, Y \a\t g:i A');
+        }
+
+        $preview['ce_broker']['renewal_date'] = $renewalDate->format('F j, Y');
+        $preview['ce_broker']['days_remaining'] = $daysUntilRenewal;
 
         return array_merge($preview, [
             'user' => $user,
@@ -36,12 +56,25 @@ class CeDashboardService
             'license_short' => $licenseShort,
             'license_number' => $profile?->fl_license_number ?? '951234',
             'renewal_date' => $renewalDate,
-            'days_until_renewal' => $daysUntilRenewal > 0 ? $daysUntilRenewal : $preview['stats']['days_until_renewal'],
+            'days_until_renewal' => $daysUntilRenewal > 0 ? $daysUntilRenewal : $preview['stats']['days_until_renewal'] ?? 0,
+            'has_live_enrollments' => $enrollmentCards !== [],
         ]);
     }
 
+    public function getCoursesPageData(User $user): array
+    {
+        $dashboard = $this->getDashboardData($user);
+
+        return [
+            'user' => $user,
+            'profile' => $dashboard['profile'],
+            'courses' => $this->ceEnrollmentService->userEnrollmentCards($user),
+            'license_short' => $dashboard['license_short'],
+        ];
+    }
+
     /**
-     * Static Figma preview data — replace with live enrollments/compliance later.
+     * Static Figma preview data — used as fallback when no live enrollments exist.
      */
     protected function getStaticPreviewData(): array
     {
@@ -82,6 +115,7 @@ class CeDashboardService
                     'broker_status' => 'reported',
                     'action_label' => 'Download Certificate',
                     'action_style' => 'outline',
+                    'launch_url' => '#',
                 ],
                 [
                     'title' => 'Florida Laws & Rules',
@@ -94,6 +128,7 @@ class CeDashboardService
                     'broker_status' => null,
                     'action_label' => 'Resume Course',
                     'action_style' => 'primary',
+                    'launch_url' => '#',
                 ],
                 [
                     'title' => 'Recognizing Impairment in the Workplace',
@@ -106,6 +141,7 @@ class CeDashboardService
                     'broker_status' => null,
                     'action_label' => 'Launch Course',
                     'action_style' => 'primary',
+                    'launch_url' => '#',
                 ],
             ],
             'recommended_electives' => [

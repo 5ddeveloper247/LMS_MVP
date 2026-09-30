@@ -26,6 +26,23 @@
     .custom_student_img_border {
         border: 1px solid var(--footer_background_color);
     }
+
+    .custom_student_nav .notification_wrapper {
+        margin-right: 12px;
+    }
+
+    .custom_student_nav .notification_wrapper ul {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .custom_student_nav .notification_wrapper .notify_icon img {
+        filter: brightness(0) invert(1);
+    }
 </style>
 <div class="header_iner d-flex justify-content-between align-items-center custom_student_nav">
     <div class="sidebar_icon d-lg-none">
@@ -33,6 +50,56 @@
     </div>
     <div class="d-flex category_box_iner bandsha"></div>
     <div class="d-flex align-items-center ml-auto">
+        <div class="notification_wrapper" id="main-nav-for-chat">
+            <ul>
+                <li class="notification_open">
+                    <a href="#" class="notify_icon">
+                        <div class="notify_icon">
+                            <img src="{{ asset('/public/frontend/infixlmstheme/') }}/img/svg/bell.svg" alt="">
+                        </div>
+                        @if ($user->unreadNotifications->count() != 0)
+                            <span class="notify_count"></span>
+                        @endif
+                    </a>
+                    <div class="notification_area">
+                        <div class="notification_body">
+                            @foreach ($user->unreadNotifications as $notification)
+                                <a href="{{ $notification->data['actionURL'] ?? '#' }}"
+                                    class="single_nofy unread_notification" title="Mark As Read"
+                                    data-notification_id="{{ $notification->id }}">
+                                    <div class="notyfy_content">
+                                        <h4>{!! strip_tags($notification->data['body']) !!}</h4>
+                                        <p>{{ $notification->created_at->diffForHumans() }}</p>
+                                    </div>
+                                </a>
+                            @endforeach
+                        </div>
+                        <div class="notification_footer">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap px-3">
+                                @if (routeIsExist('myNotification'))
+                                    <a href="{{ route('myNotification') }}"
+                                        class="readMore_text w-50">{{ __('common.View All') }}</a>
+                                @endif
+                                @if (routeIsExist('NotificationMakeAllRead'))
+                                    <a href="{{ route('NotificationMakeAllRead') }}"
+                                        class="readMore_text w-50">{{ __('common.Mark As Read') }}</a>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <a href="#" class="cart_store">
+                        <div class="notify_icon">
+                            <img src="{{ asset('/public/frontend/infixlmstheme/') }}/img/svg/cart.svg" alt="">
+                        </div>
+                        @if (cartItem() != 0)
+                            <span class="notify_count"></span>
+                        @endif
+                    </a>
+                </li>
+            </ul>
+        </div>
         <div class="profile_info collaps_part">
             <div class="profile_img collaps_icon d-flex align-items-center">
                 <div class="profile_info_icon collaps_icon">

@@ -42,11 +42,9 @@ class CeCartController extends Controller
     protected function addCourseToCart(Request $request, int $id, bool $buyNow)
     {
         try {
-            $attemptRoute = $buyNow
-                ? route('ce.cart.buyNowCourse', ['id' => $id])
-                : route('ce.cart.addCourse', ['id' => $id]);
+            $attemptPath = $this->courseCartPath($id, $buyNow);
 
-            if ($redirect = $this->guardCeBuyer($attemptRoute)) {
+            if ($redirect = $this->guardCeBuyer($attemptPath)) {
                 return $redirect;
             }
 
@@ -87,9 +85,7 @@ class CeCartController extends Controller
             if ($exists) {
                 Toastr::error('Course already added in your cart.', trans('common.Failed'));
 
-                return $buyNow
-                    ? redirect()->route('CheckOut')
-                    : redirect()->to($detailRoute);
+                return redirect()->route('myCart');
             }
 
             $this->storeCartLine($user->id, [
@@ -99,22 +95,21 @@ class CeCartController extends Controller
 
             Toastr::success('Course added to your cart.', trans('common.Success'));
 
-            return $buyNow
-                ? redirect()->route('CheckOut')->with('back', $detailRoute)
-                : redirect()->to($detailRoute);
+            return redirect()->route('myCart')->with('back', $detailRoute);
         } catch (\Exception $e) {
-            GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
+            GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent(), true);
+            Toastr::error(trans('frontend.Something went wrong, Please check error log'), trans('common.Failed'));
+
+            return redirect()->back();
         }
     }
 
     protected function addBundleToCart(Request $request, int $id, bool $buyNow)
     {
         try {
-            $attemptRoute = $buyNow
-                ? route('ce.cart.buyNowBundle', ['id' => $id])
-                : route('ce.cart.addBundle', ['id' => $id]);
+            $attemptPath = $this->bundleCartPath($id, $buyNow);
 
-            if ($redirect = $this->guardCeBuyer($attemptRoute)) {
+            if ($redirect = $this->guardCeBuyer($attemptPath)) {
                 return $redirect;
             }
 
@@ -153,9 +148,7 @@ class CeCartController extends Controller
             if ($exists) {
                 Toastr::error('Bundle already added in your cart.', trans('common.Failed'));
 
-                return $buyNow
-                    ? redirect()->route('CheckOut')
-                    : redirect()->to($detailRoute);
+                return redirect()->route('myCart');
             }
 
             $this->storeCartLine($user->id, [
@@ -165,30 +158,40 @@ class CeCartController extends Controller
 
             Toastr::success('Bundle added to your cart.', trans('common.Success'));
 
-            return $buyNow
-                ? redirect()->route('CheckOut')->with('back', $detailRoute)
-                : redirect()->to($detailRoute);
+            return redirect()->route('myCart')->with('back', $detailRoute);
         } catch (\Exception $e) {
-            GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
-        }
-    }
-
-    protected function guardCeBuyer(string $attemptRoute): ?RedirectResponse
-    {
-        if (! Auth::check()) {
-            Toastr::error('You must login', trans('common.Error'));
-            session(['redirectTo' => $attemptRoute]);
-
-            return redirect()->route('login');
-        }
-
-        if (! isModuleActive('CeProfessional')) {
-            Toastr::error('Only CE professionals can buy this course.', trans('common.Failed'));
+            GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent(), true);
+            Toastr::error(trans('frontend.Something went wrong, Please check error log'), trans('common.Failed'));
 
             return redirect()->back();
         }
+    }
 
-        if ((int) Auth::user()->role_id !== (int) config('ceprofessional.role_id', 10)) {
+    protected function courseCartPath(int $id, bool $buyNow): string
+    {
+        return $buyNow
+            ? '/ce/cart/course/' . $id . '/buy'
+            : '/ce/cart/course/' . $id;
+    }
+
+    protected function bundleCartPath(int $id, bool $buyNow): string
+    {
+        return $buyNow
+            ? '/ce/cart/bundle/' . $id . '/buy'
+            : '/ce/cart/bundle/' . $id;
+    }
+
+    protected function guardCeBuyer(string $attemptPath): ?RedirectResponse
+    {
+        if (! Auth::check()) {
+            Toastr::error('You must login', trans('common.Error'));
+
+            return redirect()->to(ceCartLoginUrl($attemptPath));
+        }
+
+        $user = Auth::user()->fresh() ?? Auth::user();
+
+        if (! userIsCeProfessional($user)) {
             Toastr::error('Only CE professionals can buy this course.', trans('common.Failed'));
 
             return redirect()->back();

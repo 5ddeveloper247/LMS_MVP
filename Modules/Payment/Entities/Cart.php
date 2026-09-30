@@ -18,6 +18,8 @@ use Modules\StudentSetting\Entities\Program;
 use Rennokki\QueryCache\Traits\QueryCacheable;
 
 use Modules\BundleSubscription\Entities\BundleCoursePlan;
+use Modules\ContinuingEducation\Entities\CeBundle;
+use Modules\ContinuingEducation\Entities\CeCourse;
 use Modules\Shop\Entities\ShopProduct;
 use Modules\Shop\Entities\ShopBundle;
 
@@ -106,6 +108,16 @@ use Tenantable;
     public function shopBundle()
     {
         return $this->belongsTo(ShopBundle::class, 'shop_bundle_id', 'id');
+    }
+
+    public function ceCourse()
+    {
+        return $this->belongsTo(CeCourse::class, 'ce_course_id', 'id');
+    }
+
+    public function ceBundle()
+    {
+        return $this->belongsTo(CeBundle::class, 'ce_bundle_id', 'id');
     }
 
 }

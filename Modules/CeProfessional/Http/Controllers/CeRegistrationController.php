@@ -22,6 +22,10 @@ class CeRegistrationController extends Controller
     {
         $this->ceRegistrationService->register($request->validated());
 
+        if ($redirectTo = pullPendingCeCartRedirectUrl()) {
+            return redirect()->to($redirectTo);
+        }
+
         return redirect()->route('cePortal');
     }
 }

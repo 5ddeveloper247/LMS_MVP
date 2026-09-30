@@ -10,6 +10,17 @@
     $paidAt = !empty($c['paid_at'])
         ? \Carbon\Carbon::parse($c['paid_at'])->format('F j, Y')
         : now()->format('F j, Y');
+    $isCeConfirmation = ! empty($c['is_ce_order'])
+        || (function_exists('userIsCeProfessional') && userIsCeProfessional());
+    if (! $isCeConfirmation) {
+        foreach ($items as $item) {
+            if (($item['thumb_label'] ?? '') === 'CE') {
+                $isCeConfirmation = true;
+                break;
+            }
+        }
+    }
+    $ceCatalogUrl = routeIsExist('continuingEducation') ? route('continuingEducation') : url('/');
 @endphp
 <div class="mxp-confirm">
     <div class="mxp-progress-bar">
@@ -70,29 +81,55 @@
 
                 <div class="mxp-next-steps">
                     <h3>{{ __('What happens next?') }}</h3>
-                    <div class="mxp-next-step-item">
-                        <div class="mxp-next-step-number">1</div>
-                        <div class="mxp-next-step-text">
-                            <strong>{{ __('Confirmation email') }}</strong> — Check your inbox (and spam folder) for your order receipt and any digital download links.
+                    @if ($isCeConfirmation)
+                        <div class="mxp-next-step-item">
+                            <div class="mxp-next-step-number">1</div>
+                            <div class="mxp-next-step-text">
+                                <strong>{{ __('Confirmation email') }}</strong> — Check your inbox for your CE purchase receipt.
+                            </div>
                         </div>
-                    </div>
-                    <div class="mxp-next-step-item">
-                        <div class="mxp-next-step-number">2</div>
-                        <div class="mxp-next-step-text">
-                            <strong>{{ __('Shipping updates') }}</strong> — You'll receive tracking information once your order ships, typically within 1–2 business days.
+                        <div class="mxp-next-step-item">
+                            <div class="mxp-next-step-number">2</div>
+                            <div class="mxp-next-step-text">
+                                <strong>{{ __('Course access') }}</strong> — Your CE courses appear in your CE portal dashboard.
+                            </div>
                         </div>
-                    </div>
-                    <div class="mxp-next-step-item">
-                        <div class="mxp-next-step-number">3</div>
-                        <div class="mxp-next-step-text">
-                            <strong>{{ __('Start studying') }}</strong> — If your order includes digital resources or course access, check your dashboard for instant access.
+                        <div class="mxp-next-step-item">
+                            <div class="mxp-next-step-number">3</div>
+                            <div class="mxp-next-step-text">
+                                <strong>{{ __('Start learning') }}</strong> — Open My Courses from your dashboard to begin earning contact hours.
+                            </div>
                         </div>
-                    </div>
+                    @else
+                        <div class="mxp-next-step-item">
+                            <div class="mxp-next-step-number">1</div>
+                            <div class="mxp-next-step-text">
+                                <strong>{{ __('Confirmation email') }}</strong> — Check your inbox (and spam folder) for your order receipt and any digital download links.
+                            </div>
+                        </div>
+                        <div class="mxp-next-step-item">
+                            <div class="mxp-next-step-number">2</div>
+                            <div class="mxp-next-step-text">
+                                <strong>{{ __('Shipping updates') }}</strong> — You'll receive tracking information once your order ships, typically within 1–2 business days.
+                            </div>
+                        </div>
+                        <div class="mxp-next-step-item">
+                            <div class="mxp-next-step-number">3</div>
+                            <div class="mxp-next-step-text">
+                                <strong>{{ __('Start studying') }}</strong> — If your order includes digital resources or course access, check your dashboard for instant access.
+                            </div>
+                        </div>
+                    @endif
                 </div>
 
                 <div class="mxp-confirm-actions">
-                    <a href="{{ route('studentDashboard') }}" class="mxp-btn-primary">{{ __('Go to My Dashboard') }} →</a>
-                    <a href="{{ route('shop.index') }}" class="mxp-btn-secondary">{{ __('Continue Shopping') }}</a>
+                    @if ($isCeConfirmation && routeIsExist('cePortal'))
+                        <a href="{{ route('cePortal') }}" class="mxp-btn-primary">{{ __('Go to My Dashboard') }} →</a>
+                        <a href="{{ $ceCatalogUrl }}" class="mxp-btn-secondary">{{ __('Continue Shopping') }}</a>
+                    @else
+                        <a href="{{ route('studentDashboard') }}" class="mxp-btn-primary">{{ __('Go to My Dashboard') }} →</a>
+                        <a href="{{ route('shop.index') }}" class="mxp-btn-secondary">{{ __('Continue Shopping') }}</a>
+                    @endif
                 </div>
             </div>
 
@@ -157,7 +194,11 @@
                 </div>
 
                 <div style="margin-top:16px;text-align:center;">
-                    <a href="{{ route('myOrders') }}" style="color:#1A8A6F;font-size:13px;font-weight:600;text-decoration:none;">{{ __('View My Orders') }} →</a>
+                    @if ($isCeConfirmation && routeIsExist('cePortal'))
+                        <a href="{{ route('cePortal') }}" style="color:#1A8A6F;font-size:13px;font-weight:600;text-decoration:none;">{{ __('View My Courses') }} →</a>
+                    @else
+                        <a href="{{ route('myOrders') }}" style="color:#1A8A6F;font-size:13px;font-weight:600;text-decoration:none;">{{ __('View My Orders') }} →</a>
+                    @endif
                 </div>
             </aside>
         </div>

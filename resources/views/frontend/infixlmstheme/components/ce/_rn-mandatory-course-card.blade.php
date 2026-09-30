@@ -3,6 +3,7 @@
     /** @var \Modules\ContinuingEducation\Services\CeCatalogService $ceCatalog */
     $cycleNote = $ceCatalog->courseCycleNote($course);
     $summary = $ceCatalog->summary($course);
+    $detailUrl = $ceCatalog->catalogUrl($course);
 @endphp
 <div class="ce-mand-card">
     <div class="ce-mand-card-top">
@@ -23,9 +24,5 @@
             </span>
         @endif
     </div>
-    @if ($ceCatalog->canPurchaseCourse($course))
-        <a href="{{ $ceCatalog->cartUrl($course) }}" class="ce-mand-card-btn">Add to Cart</a>
-    @else
-        <a href="{{ $ceCatalog->catalogUrl($course) }}" class="ce-mand-card-btn">View Course</a>
-    @endif
+    <a href="{{ $detailUrl }}" class="ce-mand-card-btn">View Course</a>
 </div>

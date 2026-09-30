@@ -20,9 +20,10 @@ return [
             'active' => ['cePortal'],
         ],
         [
+            'route' => 'cePortal.courses',
             'label' => 'My Courses',
             'icon' => 'courses',
-            'coming_soon' => true,
+            'active' => ['cePortal.courses'],
         ],
         [
             'label' => 'Certificates',
@@ -35,9 +36,10 @@ return [
             'coming_soon' => true,
         ],
         [
+            'route' => 'continuingEducation',
             'label' => 'Browse Courses',
             'icon' => 'browse',
-            'url' => '/prep-courses',
+            'active' => ['continuingEducation', 'continuingEducationRnLpn', 'continuingEducationAprn', 'continuingEducationCourse'],
         ],
     ],
 

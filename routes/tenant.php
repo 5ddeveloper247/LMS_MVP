@@ -234,6 +234,10 @@ Route::group(['namespace' => 'Frontend'], function () {
     Route::get('invoice/{id}', 'StudentController@Invoice')->name('invoice');
 });
 
+Route::group(['namespace' => 'Frontend', 'middleware' => ['auth']], function () {
+    Route::get('checkout', 'StudentController@CheckOut')->name('CheckOut');
+});
+
 Route::group(['namespace' => 'Frontend', 'middleware' => ['student']], function () {
     Route::get('student-dashboard', 'StudentController@myDashboard')->name('studentDashboard');
     Route::get('my-programs', 'StudentController@myCourses')->name('myCourses')->middleware('UserAgreementCheck');
@@ -277,7 +281,6 @@ Route::group(['namespace' => 'Frontend', 'middleware' => ['student']], function 
     //Route::get('invoice/{id}', 'StudentController@Invoice')->name('invoice');
     Route::get('subscription-invoice/{id}', 'StudentController@subInvoice')->name('subInvoice');
     Route::get('StudentApplyCoupon', 'StudentController@StudentApplyCoupon')->name('StudentApplyCoupon');
-    Route::get('checkout', 'StudentController@CheckOut')->name('CheckOut');
     Route::get('remove-profile-pic', 'StudentController@removeProfilePic')->name('removeProfilePic');
     Route::get('course-certificate/{id}/{slug}', 'StudentController@getCertificate')->name('getCertificate');
     Route::get('program-certificate/{id}/{slug}', 'StudentController@getProgramCertificate')->name('getProgramCertificate');
@@ -297,10 +300,6 @@ Route::group(['namespace' => 'Frontend', 'middleware' => ['student']], function 
     Route::post('my-orders/bundle/{tracking}/{bundleId}/cancel', 'ShopController@cancelBundleOrder')->name('myOrder.bundleCancel');
     Route::post('my-orders/cancelOrder/{id}', 'ShopController@cancelOrder')->name('myOrderCancel');
     Route::post('my-orders/refundRequestOrder/{id}', 'ShopController@orderRefundRequest')->name('myOrderRefundReq');
-});
-Route::group(['middleware' => ['student']], function () {
-    Route::get('my-notification-setup', 'NotificationController@myNotificationSetup')->name('myNotificationSetup');
-    Route::get('my-notifications', 'NotificationController@myNotification')->name('myNotification');
 });
 
 
@@ -332,6 +331,8 @@ Route::group(['prefix' => 'subscription', 'middleware' => ['auth']], function ()
 
 
 Route::group(['middleware' => ['auth']], function () {
+    Route::get('my-notification-setup', 'NotificationController@myNotificationSetup')->name('myNotificationSetup');
+    Route::get('my-notifications', 'NotificationController@myNotification')->name('myNotification');
     Route::get('/home', 'HomeController@index')->name('home');
     Route::get('dashboard', 'HomeController@dashboard')->name('dashboard');
     Route::get('getDashboardData', 'HomeController@getDashboardData')->name('getDashboardData')->middleware('RoutePermissionCheck:dashboard');

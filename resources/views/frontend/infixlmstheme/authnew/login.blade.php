@@ -273,6 +273,12 @@
     </div>
 
     <!-- RIGHT: FORM PANEL -->
+    @php
+      $defaultPortal = old('signup_source') === 'ce_register' ? 'ce' : 'student';
+      if (! empty($pendingRedirect) && stripos($pendingRedirect, '/ce/cart/') !== false) {
+          $defaultPortal = 'ce';
+      }
+    @endphp
     <div class="form-panel portal-student">
 
       <!-- PORTAL SELECTOR TABS -->
@@ -308,6 +314,9 @@
       <div class="auth-panel{{ $createSignupErrors ? '' : ' active' }}" id="auth-signin">
         <form action="{{ route('login') }}" method="POST" id="loginForm">
           @csrf
+          @if (!empty($pendingRedirect))
+            <input type="hidden" name="redirect_to" value="{{ $pendingRedirect }}">
+          @endif
           @if ($errors->any())
             <div class="form-group" style="margin-bottom:12px;">
               @foreach ($errors->all() as $error)
@@ -356,6 +365,9 @@
           data-action-student="{{ route('preRegister') }}"
           data-action-ce="{{ Route::has('ceRegister') ? route('ceRegister') : '' }}">
           @csrf
+          @if (!empty($pendingRedirect))
+            <input type="hidden" name="redirect_to" value="{{ $pendingRedirect }}">
+          @endif
           <input type="hidden" name="signup_source" id="signupSource" value="{{ old('signup_source', 'login_create') }}">
           <input type="hidden" name="name" id="createFullName" value="{{ old('name') }}">
 
@@ -785,7 +797,7 @@ function checkConsents() {
 
 // Initialize consent state on load
 document.addEventListener('DOMContentLoaded', function () {
-  const restorePortal = @json(old('signup_source') === 'ce_register' ? 'ce' : 'student');
+  const restorePortal = @json($defaultPortal);
   if (restorePortal === 'ce') {
     switchPortal('ce');
   } else {

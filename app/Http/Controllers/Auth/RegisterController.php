@@ -571,6 +571,12 @@ class RegisterController extends Controller
             
             return redirect()->to(route("register.3"));
         }
+
+        if ($pendingCeCart = pullPendingCeCartRedirectUrl()) {
+            Toastr::success('Registration successful. Continuing with your CE purchase.', 'Success');
+
+            return redirect()->to($pendingCeCart);
+        }
         
         Toastr::success('Pre Registration Successfull. Now you can proceed with buying courses', 'Success');
         $goto = \session('redirectTo') ?  \session('redirectTo') : route('studentDashboard');
@@ -913,6 +919,12 @@ class RegisterController extends Controller
             Toastr::success('Pre Registration Successfull. Now you can proceed with buying product.', 'Success');
             session()->forget('redirectTo');
             return $redirectTo ? redirect()->to($redirectTo) : redirect()->to(route("studentDashboard"));     
+        }
+
+        if ($pendingCeCart = pullPendingCeCartRedirectUrl()) {
+            Toastr::success('Registration successful. Continuing with your CE purchase.', 'Success');
+
+            return redirect()->to($pendingCeCart);
         }
 
         session()->put(['user' => $user]);

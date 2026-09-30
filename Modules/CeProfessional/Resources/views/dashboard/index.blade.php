@@ -42,15 +42,24 @@
         <div class="ce-dashboard-col-right">
             @include('ceprofessional::components.section-header', [
                 'title' => 'Active Courses',
-                'link' => '#',
+                'link' => route('cePortal.courses'),
                 'linkLabel' => 'View All →',
             ])
 
-            <div class="ce-course-list">
-                @foreach ($active_courses as $course)
-                    @include('ceprofessional::components.active-course-card', ['course' => $course])
-                @endforeach
-            </div>
+            @if ($has_live_enrollments ?? false)
+                <div class="ce-course-list">
+                    @foreach ($active_courses as $course)
+                        @include('ceprofessional::components.active-course-card', ['course' => $course])
+                    @endforeach
+                </div>
+            @else
+                @include('ceprofessional::components.empty-state', [
+                    'title' => 'No active courses',
+                    'message' => 'Purchase a CE course to launch training and track your renewal progress here.',
+                    'buttonLabel' => 'Browse CE Courses',
+                    'buttonUrl' => route('continuingEducationRnLpn'),
+                ])
+            @endif
         </div>
     </div>
 

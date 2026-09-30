@@ -74,10 +74,10 @@
 
 
             </div>
-            <div class="view_checkout_btn d-flex justify-content-end gap_10 flex-wrap" style="display: none!important;">
-                <a href="{{ url('my-cart') }}"
+            <div class="view_checkout_btn d-flex justify-content-end gap_10 flex-wrap">
+                <a href="{{ route('myCart') }}"
                     class="theme_btn small_btn3 flex-fill text-center">{{ __('frontend.View cart') }}</a>
-                <a href="{{ route('myCart', ['checkout' => true]) }}"
+                <a href="{{ route('CheckOut') }}"
                     class="theme_btn small_btn3 flex-fill text-center">{{ __('frontend.Checkout') }}</a>
             </div>
         </div>

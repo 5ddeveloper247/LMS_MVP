@@ -394,8 +394,18 @@ if (!function_exists('cartItem')) {
     function cartItem()
     {
         if (Auth::check()) {
+            if (function_exists('userIsCeProfessional') && userIsCeProfessional()) {
+                return Cart::where('user_id', Auth::user()->id)->count();
+            }
+
             return Cart::where('user_id', Auth::user()->id)->when(isModuleActive('Appointment'), function ($query) {
-                $query->whereNotNull('course_id');
+                $query->where(function ($q) {
+                    $q->whereNotNull('course_id')
+                        ->orWhereNotNull('ce_course_id')
+                        ->orWhereNotNull('ce_bundle_id')
+                        ->orWhereNotNull('product_id')
+                        ->orWhereNotNull('shop_bundle_id');
+                });
             })->count();
         } else if (session()->get('cart')) {
             return count(session()->get('cart'));

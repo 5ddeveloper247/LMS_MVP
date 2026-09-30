@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Modules\ContinuingEducation\Services\CeCatalogService;
+use Modules\ContinuingEducation\Services\CeEnrollmentService;
 use Modules\CourseSetting\Entities\Course;
 
 class CeFrontendController extends Controller
@@ -75,8 +77,17 @@ class CeFrontendController extends Controller
 
         $ceCourse->increment('view_count');
 
+        $lmsCourseType = (int) config('continuingeducation.lms_course_type', 11);
+        $request->merge(['courseType' => $lmsCourseType]);
+
         $isEnrolled = 0;
         $enrollmentRecord = null;
+
+        if (Auth::check()) {
+            $enrollmentService = app(CeEnrollmentService::class);
+            $isEnrolled = $enrollmentService->userHasEnrollment(Auth::user(), $ceCourse) ? 1 : 0;
+            $enrollmentRecord = $enrollmentService->lmsEnrollmentFor(Auth::user(), $ceCourse);
+        }
 
         return view(theme('pages.ceCourseDetails'), compact(
             'request',

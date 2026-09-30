@@ -32,12 +32,18 @@
     </div>
 
     <div class="ce-course-card-actions">
-        <button type="button" class="ce-btn {{ $course['action_style'] === 'outline' ? 'ce-btn-outline-dark' : 'ce-btn-accent' }}" disabled>
-            @if ($course['status'] === 'in_progress')
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            @endif
-            {{ $course['action_label'] }}
-        </button>
+        @if (! empty($course['launch_url']) && $course['launch_url'] !== '#')
+            <a href="{{ $course['launch_url'] }}" class="ce-btn {{ ($course['action_style'] ?? '') === 'outline' ? 'ce-btn-outline-dark' : 'ce-btn-accent' }}">
+                @if ($course['status'] === 'in_progress')
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                @endif
+                {{ $course['action_label'] }}
+            </a>
+        @else
+            <button type="button" class="ce-btn {{ ($course['action_style'] ?? '') === 'outline' ? 'ce-btn-outline-dark' : 'ce-btn-accent' }}" disabled>
+                {{ $course['action_label'] }}
+            </button>
+        @endif
 
         @if (! empty($course['broker_status']) && $course['broker_status'] === 'reported')
             <span class="ce-broker-reported">

@@ -86,7 +86,17 @@ class PaymentPageSection extends Component
             return redirect()->route('CheckOut');
         }
         $data['balance'] = Auth::user()->balance ?? 0;
-        $data['carts'] = Cart::where('user_id', Auth::id())->with(['course', 'course.user', 'course.children', 'program', 'program.user', 'product.files', 'shopBundle.products.files'])->get();
+        $data['carts'] = Cart::where('user_id', Auth::id())->with([
+            'course',
+            'course.user',
+            'course.children',
+            'program',
+            'program.user',
+            'product.files',
+            'shopBundle.products.files',
+            'ceCourse',
+            'ceBundle.courses',
+        ])->get();
         return $data;
     }
 

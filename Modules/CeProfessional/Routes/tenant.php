@@ -11,6 +11,7 @@ Route::post('ce-register', 'CeRegistrationController@register')->name('ceRegiste
 
 Route::middleware(['auth', 'ceProfessional'])->group(function () {
     Route::get('ce-portal', 'CeDashboardController@index')->name('cePortal');
+    Route::get('ce-portal/courses', 'CeCoursesController@index')->name('cePortal.courses');
 
     Route::get('ce-portal/profile', 'CeProfileController@show')->name('cePortal.profile');
     Route::post('ce-portal/profile', 'CeProfileController@update')->name('cePortal.profile.update');

@@ -337,13 +337,24 @@ class LoginController extends Controller
         }
         $redirect = request('redirect');
         if ($redirect && $this->isValidRedirectUrl($redirect)) {
-            session(['redirectTo' => $redirect]);
-        } else {
+            session(['redirectTo' => normalizeInternalRedirectPath($redirect)]);
+            session()->save();
+        } elseif (! isCeCartRedirectUrl(session('redirectTo'))) {
             session()->forget('previous_url');
             session(['previous_url' => url()->previous()]);
         }
+
+        $pendingRedirect = session('redirectTo')
+            ? normalizeInternalRedirectPath((string) session('redirectTo'))
+            : null;
+
+        if (! $pendingRedirect && $redirect && $this->isValidRedirectUrl($redirect)) {
+            $pendingRedirect = normalizeInternalRedirectPath($redirect);
+        }
+
         $page = LoginPage::getData();
-        return view(theme('authnew.login'), compact('page'));
+
+        return view(theme('authnew.login'), compact('page', 'pendingRedirect'));
     }
 
     /**
@@ -357,7 +368,12 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $this->validateLogin($request);
-       
+
+        if ($request->filled('redirect_to') && $this->isValidRedirectUrl($request->input('redirect_to'))) {
+            session(['redirectTo' => normalizeInternalRedirectPath($request->input('redirect_to'))]);
+            session()->save();
+        }
+
         // Start
         // By Kamran, on 4 july 2023
         $userData = User::where('email', $request->email)->select('id', 'role_id')->first();
@@ -639,10 +655,29 @@ class LoginController extends Controller
      */
     protected function sendLoginResponse(Request $request)
     {
+        $redirectTo = session('redirectTo');
 
-        $goto = \session('redirectTo') ?  \session('redirectTo') :  redirect()->intended($this->redirectPath())->getTargetUrl();
-        if (session()->has('redirectTo')) {
+        if ($request->filled('redirect_to') && $this->isValidRedirectUrl($request->input('redirect_to'))) {
+            $redirectTo = normalizeInternalRedirectPath($request->input('redirect_to'));
+        } elseif ($redirectTo) {
+            $redirectTo = normalizeInternalRedirectPath((string) $redirectTo);
+        }
+
+        if (isCeCartRedirectUrl($redirectTo)) {
+            $goto = $redirectTo;
             session()->forget('redirectTo');
+            session()->forget('url.intended');
+        } elseif ($redirectTo && $this->isValidRedirectUrl($redirectTo)) {
+            $goto = $redirectTo;
+            session()->forget('redirectTo');
+            session()->forget('url.intended');
+        } else {
+            $intended = session()->pull('url.intended');
+            if ($intended && $this->isValidRedirectUrl($intended) && rtrim($intended, '/') !== rtrim(url('/'), '/')) {
+                $goto = $intended;
+            } else {
+                $goto = $this->redirectPath();
+            }
         }
 
         $request->session()->regenerate();

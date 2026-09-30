@@ -2,6 +2,8 @@
     $cartLines = [];
     $totalSum = 0;
     $taxSum = 0;
+    $isCeShopper = function_exists('userIsCeProfessional') && userIsCeProfessional();
+    $ceCatalogUrl = routeIsExist('continuingEducation') ? route('continuingEducation') : url('/');
 
     foreach ($carts as $cart) {
         $link = '#';
@@ -99,6 +101,34 @@
 
             // Bundle has its own tax_percent / total_tax (not sum of included products)
             $lineTax = (float) $shopBundle->taxAmount();
+        } elseif (!empty($cart->ce_course_id) && $cart->ceCourse) {
+            $ceCourse = $cart->ceCourse;
+            $title = $ceCourse->title;
+            $thumbnail = $ceCourse->thumbnail ?: ($ceCourse->image ?? $thumbnail);
+            $link = $ceCourse->slug && routeIsExist('continuingEducationCourse')
+                ? route('continuingEducationCourse', ['slug' => $ceCourse->slug])
+                : $ceCatalogUrl;
+            if ($resolvedPrice <= 0) {
+                $resolvedPrice = (float) ($ceCourse->discount_price ?? $ceCourse->price ?? 0);
+            }
+            $hours = rtrim(rtrim(number_format((float) ($ceCourse->contact_hours ?? 0), 1, '.', ''), '0'), '.');
+            $meta = __('CE Course') . ($hours !== '' ? ' · ' . $hours . ' ' . __('contact hours') : '');
+            $isCeShopper = true;
+        } elseif (!empty($cart->ce_bundle_id) && $cart->ceBundle) {
+            $ceBundle = $cart->ceBundle;
+            $title = $ceBundle->name ?? __('CE Bundle');
+            $firstCourse = $ceBundle->courses->first();
+            $thumbnail = $firstCourse
+                ? ($firstCourse->thumbnail ?: ($firstCourse->image ?? $thumbnail))
+                : $thumbnail;
+            $link = ($ceBundle->license_type ?? '') === 'aprn' && routeIsExist('continuingEducationAprn')
+                ? route('continuingEducationAprn')
+                : (routeIsExist('continuingEducationRnLpn') ? route('continuingEducationRnLpn') : $ceCatalogUrl);
+            if ($resolvedPrice <= 0) {
+                $resolvedPrice = (float) ($ceBundle->price ?? 0);
+            }
+            $meta = __('CE Bundle');
+            $isCeShopper = true;
         } else {
             continue;
         }
@@ -130,7 +160,11 @@
         <div class="mxp-breadcrumb-inner">
             <a href="{{ url('/') }}">{{ __('Home') }}</a>
             <span>›</span>
-            <a href="{{ route('shop.index') }}">{{ __('Shop') }}</a>
+            @if ($isCeShopper)
+                <a href="{{ $ceCatalogUrl }}">{{ __('Continuing Education') }}</a>
+            @else
+                <a href="{{ route('shop.index') }}">{{ __('Shop') }}</a>
+            @endif
             <span>›</span>
             {{ __('Cart') }}
         </div>
@@ -168,9 +202,11 @@
                 @if ($itemCount === 0)
                     <div class="mxp-cart-empty">
                         <h2>{{ __('Your cart is empty.') }}</h2>
-                        <p>{{ __('Looks like you haven’t added anything yet. Browse our study tools, books, and resources to get started.') }}</p>
-                        <a href="{{ route('shop.index') }}" class="mxp-checkout-cta" style="max-width:300px;margin:0 auto;">
-                            {{ __('Browse the Shop') }} →
+                        <p>{{ $isCeShopper
+                            ? __('Looks like you haven’t added any CE courses yet. Browse continuing education to get started.')
+                            : __('Looks like you haven’t added anything yet. Browse our study tools, books, and resources to get started.') }}</p>
+                        <a href="{{ $isCeShopper ? $ceCatalogUrl : route('shop.index') }}" class="mxp-checkout-cta" style="max-width:300px;margin:0 auto;">
+                            {{ $isCeShopper ? __('Browse CE Courses') : __('Browse the Shop') }} →
                         </a>
                     </div>
                 @else
@@ -237,7 +273,7 @@
                     <a href="{{ route('CheckOut') }}" class="mxp-checkout-cta">
                         {{ __('Proceed to Checkout') }} →
                     </a>
-                    <a href="{{ route('shop.index') }}" class="mxp-continue-shopping">
+                    <a href="{{ $isCeShopper ? $ceCatalogUrl : route('shop.index') }}" class="mxp-continue-shopping">
                         ← {{ __('Continue Shopping') }}
                     </a>
 
@@ -254,6 +290,8 @@
     <section class="mxp-explore">
         <p class="mxp-explore-eyebrow">{{ __('Keep exploring') }}</p>
         <h2>{{ __('Find your next study tool.') }}</h2>
-        <a href="{{ route('shop.index') }}" class="mxp-explore-cta">{{ __('Browse the Shop') }} →</a>
+        <a href="{{ $isCeShopper ? $ceCatalogUrl : route('shop.index') }}" class="mxp-explore-cta">
+            {{ $isCeShopper ? __('Browse CE Courses') : __('Browse the Shop') }} →
+        </a>
     </section>
 </div>

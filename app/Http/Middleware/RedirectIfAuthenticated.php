@@ -30,6 +30,13 @@ class RedirectIfAuthenticated
             } else if (Auth::user()->role_id == 3) {
                 return redirect()->route('studentDashboard');
 
+            } else if (
+                function_exists('userIsCeProfessional')
+                && userIsCeProfessional(Auth::user())
+                && routeIsExist('cePortal')
+            ) {
+                return redirect()->route('cePortal');
+
             } else {
                 return redirect('/');
             }

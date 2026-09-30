@@ -29,6 +29,7 @@ use Modules\Certificate\Entities\CertificateRecord;
 use Modules\Certificate\Http\Controllers\CertificateController;
 use Modules\CourseSetting\Entities\Chapter;
 use Modules\CourseSetting\Entities\Course;
+use Modules\ContinuingEducation\Services\CeEnrollmentService;
 use Modules\CourseSetting\Entities\CourseEnrolled;
 use Modules\CourseSetting\Entities\CourseLevel;
 use Modules\CourseSetting\Entities\Lesson;
@@ -2458,6 +2459,8 @@ class WebsiteController extends Controller
                 'program',
                 'program.user',
                 'shopBundle.products.files',
+                'ceCourse',
+                'ceBundle.courses',
             ])->when(isModuleActive('Invoice'), function ($query) {
                 $query->whereNull('type');
             })->get();
@@ -2552,6 +2555,31 @@ class WebsiteController extends Controller
                             $carts[$key]['image'] = getCourseImage($thumb);
                             $carts[$key]['price'] = getPriceFormat($displayPrice);
                         }
+                    }
+
+                    if (!empty($cart['ce_course_id']) && $cart->ceCourse) {
+                        $ceCourse = $cart->ceCourse;
+                        $thumb = $ceCourse->thumbnail ?: ($ceCourse->image ?? '');
+                        $carts[$key]['id'] = $cart['id'];
+                        $carts[$key]['ce_course_id'] = $ceCourse->id;
+                        $carts[$key]['instructor_id'] = $cart['instructor_id'] ?? null;
+                        $carts[$key]['title'] = $ceCourse->title;
+                        $carts[$key]['instructor_name'] = '';
+                        $carts[$key]['image'] = getCourseImage($thumb);
+                        $carts[$key]['price'] = getPriceFormat((float) ($cart->price ?? 0));
+                    }
+
+                    if (!empty($cart['ce_bundle_id']) && $cart->ceBundle) {
+                        $ceBundle = $cart->ceBundle;
+                        $firstCourse = $ceBundle->courses->first();
+                        $thumb = $firstCourse ? ($firstCourse->thumbnail ?: ($firstCourse->image ?? '')) : '';
+                        $carts[$key]['id'] = $cart['id'];
+                        $carts[$key]['ce_bundle_id'] = $ceBundle->id;
+                        $carts[$key]['instructor_id'] = $cart['instructor_id'] ?? null;
+                        $carts[$key]['title'] = $ceBundle->name;
+                        $carts[$key]['instructor_name'] = '';
+                        $carts[$key]['image'] = getCourseImage($thumb);
+                        $carts[$key]['price'] = getPriceFormat((float) ($cart->price ?? 0));
                     }
 
                     //                    if (isModuleActive('BundleSubscription')) {
@@ -2661,6 +2689,15 @@ class WebsiteController extends Controller
 
             // dd($request->all(), $lesson);
             $lesson->save();
+
+            if ((int) $request->courseType === (int) config('continuingeducation.lms_course_type', 11)) {
+                app(CeEnrollmentService::class)->syncProgressFromLms(
+                    (int) Auth::id(),
+                    (int) $request->course_id,
+                    (int) $request->courseType
+                );
+            }
+
             $course = Course::find($request->course_id);
             if ($course) {
                 $percentage = round($course->loginUserTotalPercentage);
@@ -2828,6 +2865,14 @@ class WebsiteController extends Controller
             $lesson->enroll_id = @$enrolled->id;
             $lesson->status = 1;
             $lesson->save();
+
+            if ((int) $request->courseType === (int) config('continuingeducation.lms_course_type', 11)) {
+                app(CeEnrollmentService::class)->syncProgressFromLms(
+                    (int) $user->id,
+                    (int) $request->course_id,
+                    (int) $request->courseType
+                );
+            }
 
             $course = Course::withCount('lessons')->find($request->course_id);
             if ($course) {

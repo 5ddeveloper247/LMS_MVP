@@ -31,7 +31,6 @@ use Modules\Coupons\Entities\UserWiseCouponSetting;
 use Modules\Survey\Http\Controllers\SurveyController;
 use Modules\BundleSubscription\Entities\BundleSetting;
 use Modules\Payment\Entities\StudentProgramPaymentPlans;
-use Modules\BundleSubscription\Entities\BundleCoursePlan;
 use Modules\Newsletter\Http\Controllers\AcelleController;
 use Modules\MercadoPago\Http\Controllers\MercadoPagoController;
 use Modules\Invoice\Repositories\Interfaces\InvoiceRepositoryInterface;
@@ -40,6 +39,14 @@ use Illuminate\Support\Facades\Validator;
 use Modules\Shop\Entities\ShopProduct;
 use Modules\Shop\Entities\ShopOrder;
 use Modules\Shop\Entities\ShopBundle;
+use Modules\ContinuingEducation\Entities\CeBundle;
+use Modules\ContinuingEducation\Entities\CeCourse;
+use Modules\ContinuingEducation\Entities\CeCourseEnrollment;
+use Modules\ContinuingEducation\Entities\CePurchase;
+use Modules\ContinuingEducation\Entities\CePurchaseItem;
+use Modules\ContinuingEducation\Services\CeEnrollmentService;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class PaymentController extends Controller
 {
@@ -140,6 +147,10 @@ class PaymentController extends Controller
                 if (Settings('frontend_active_theme') == 'tvt') {
                     return redirect('/');
                 }
+                if (function_exists('userIsCeProfessional') && userIsCeProfessional()) {
+                    return redirect()->route('orderConfirmation');
+                }
+
                 return redirect(route('studentDashboard'));
             }
 
@@ -406,7 +417,7 @@ class PaymentController extends Controller
 
         $items = [];
         $carts = Cart::where('user_id', Auth::id())
-            ->with(['product.files', 'shopBundle.products.files', 'course', 'program'])
+            ->with(['product.files', 'shopBundle.products.files', 'course', 'program', 'ceCourse', 'ceBundle.courses'])
             ->get();
 
         foreach ($carts as $cart) {
@@ -436,6 +447,26 @@ class PaymentController extends Controller
                     'price' => (float) $cart->price,
                     'thumb_label' => 'Bundle',
                     'image' => $image,
+                ];
+            } elseif (!empty($cart->ce_course_id) && $cart->ceCourse) {
+                $ceCourse = $cart->ceCourse;
+                $hours = rtrim(rtrim(number_format((float) ($ceCourse->contact_hours ?? 0), 1, '.', ''), '0'), '.');
+                $items[] = [
+                    'title' => $ceCourse->title ?? 'CE Course',
+                    'meta' => ($hours !== '' ? $hours . ' contact hours' : 'CE Course') . ' · Qty: 1',
+                    'price' => (float) $cart->price,
+                    'thumb_label' => 'CE',
+                    'image' => $ceCourse->thumbnail ?? ($ceCourse->image ?? ''),
+                ];
+            } elseif (!empty($cart->ce_bundle_id) && $cart->ceBundle) {
+                $ceBundle = $cart->ceBundle;
+                $firstCourse = $ceBundle->courses->first();
+                $items[] = [
+                    'title' => $ceBundle->name ?? 'CE Bundle',
+                    'meta' => 'CE Bundle · Qty: 1',
+                    'price' => (float) $cart->price,
+                    'thumb_label' => 'CE',
+                    'image' => $firstCourse ? ($firstCourse->thumbnail ?? ($firstCourse->image ?? '')) : '',
                 ];
             } elseif (!empty($cart->course_id) && $cart->course) {
                 $course = $cart->course;
@@ -495,6 +526,8 @@ class PaymentController extends Controller
             $tax = (float) taxAmount($checkout_info->price);
         }
 
+        $isCeOrder = collect($items)->contains(fn ($item) => ($item['thumb_label'] ?? '') === 'CE');
+
         session([
             'order_confirmation' => [
                 'checkout_id' => $checkout_info->id,
@@ -503,8 +536,9 @@ class PaymentController extends Controller
                 'email' => $billing->email ?? (Auth::user()->email ?? ''),
                 'card_last4' => $cardLast4,
                 'payment_label' => $cardLast4 !== '' ? ('Card ending in ' . $cardLast4) : 'Authorize.Net',
-                'shipping_label' => 'Standard (5–7 business days)',
+                'shipping_label' => $isCeOrder ? __('Digital delivery') : 'Standard (5–7 business days)',
                 'shipping_address' => implode(', ', $addressParts),
+                'is_ce_order' => $isCeOrder,
                 'items' => $items,
                 'subtotal' => (float) $checkout_info->price,
                 'discount' => (float) ($checkout_info->discount ?? 0),
@@ -519,9 +553,15 @@ class PaymentController extends Controller
     public function orderConfirmation()
     {
         $data = session('order_confirmation');
+        $ceFallback = function_exists('userIsCeProfessional') && userIsCeProfessional()
+            && routeIsExist('cePortal');
+
         if (empty($data) || empty($data['checkout_id'])) {
             Toastr::warning('No recent order confirmation found.', 'Notice');
-            return redirect()->route('myOrders');
+
+            return $ceFallback
+                ? redirect()->route('cePortal')
+                : redirect()->route('myOrders');
         }
 
         $checkout = Checkout::where('user_id', Auth::id())
@@ -530,7 +570,10 @@ class PaymentController extends Controller
 
         if (!$checkout) {
             Toastr::warning('Order not found.', 'Notice');
-            return redirect()->route('myOrders');
+
+            return $ceFallback
+                ? redirect()->route('cePortal')
+                : redirect()->route('myOrders');
         }
 
         return view(theme('pages.orderConfirmation'), [
@@ -1524,9 +1567,19 @@ class PaymentController extends Controller
                 }
             }
 
-        } else {
+        } elseif (! empty($cart->ce_course_id)) {
+            $this->fulfillCeCoursePurchase($checkout_info, $user, $discount, $cart, $carts, $gateWayName, $response);
+        } elseif (! empty($cart->ce_bundle_id)) {
+            $this->fulfillCeBundlePurchase($checkout_info, $user, $discount, $cart, $carts, $gateWayName, $response);
+        } elseif (
+            ! empty($cart->bundle_course_id)
+            && class_exists(\Modules\BundleSubscription\Entities\BundleCoursePlan::class)
+        ) {
 
-            $bundleCheck = BundleCoursePlan::find($cart->bundle_course_id);
+            $bundleCheck = \Modules\BundleSubscription\Entities\BundleCoursePlan::find($cart->bundle_course_id);
+            if (! $bundleCheck) {
+                return;
+            }
 
             $totalCount = count($bundleCheck->course);
             $price = $bundleCheck->price;
@@ -1656,6 +1709,185 @@ class PaymentController extends Controller
                 }
             }
         }
+    }
+
+    protected function fulfillCeCoursePurchase($checkout_info, $user, $discount, $cart, $carts, $gateWayName, $response): void
+    {
+        $ceCourse = CeCourse::query()->find($cart->ce_course_id);
+
+        if (! $ceCourse) {
+            return;
+        }
+
+        if ($discount != 0 || ! empty($discount)) {
+            $itemPrice = $cart->price - ($discount / count($carts));
+            $discountAmount = $cart->price - $itemPrice;
+        } else {
+            $itemPrice = $cart->price;
+            $discountAmount = 0.00;
+        }
+
+        $responseObj = is_string($response) ? json_decode($response) : $response;
+        $gatewayTxnId = is_object($responseObj) ? ($responseObj->id ?? null) : null;
+        $lmsId = isModuleActive('LmsSaas') ? (int) app('institute')->id : 1;
+
+        $licenseType = $this->resolveCeLicenseType($user->id);
+
+        DB::transaction(function () use (
+            $checkout_info,
+            $user,
+            $ceCourse,
+            $cart,
+            $itemPrice,
+            $discountAmount,
+            $gateWayName,
+            $gatewayTxnId,
+            $lmsId,
+            $licenseType
+        ) {
+            $purchase = CePurchase::create([
+                'tracking' => $checkout_info->tracking,
+                'checkout_id' => $checkout_info->id,
+                'user_id' => $user->id,
+                'item_type' => 'course',
+                'ce_course_id' => $ceCourse->id,
+                'item_name' => $ceCourse->title,
+                'license_type' => $licenseType,
+                'contact_hours' => $ceCourse->contact_hours,
+                'unit_price' => $cart->price,
+                'discount_amount' => $discountAmount,
+                'total_paid' => $itemPrice,
+                'payment_status' => 'paid',
+                'payment_method' => $gateWayName,
+                'gateway_transaction_id' => $gatewayTxnId,
+                'lms_id' => $lmsId,
+                'purchased_at' => now(),
+            ]);
+
+            CeCourseEnrollment::create([
+                'user_id' => $user->id,
+                'ce_course_id' => $ceCourse->id,
+                'ce_purchase_id' => $purchase->id,
+                'source' => 'direct',
+                'progress' => 0,
+                'status' => 'not_started',
+                'purchase_price' => $itemPrice,
+            ]);
+
+            app(CeEnrollmentService::class)->ensureLmsEnrollment(
+                $ceCourse,
+                $user,
+                $checkout_info->tracking,
+                (float) $itemPrice
+            );
+
+            $ceCourse->increment('total_enrolled');
+        });
+    }
+
+    protected function fulfillCeBundlePurchase($checkout_info, $user, $discount, $cart, $carts, $gateWayName, $response): void
+    {
+        $ceBundle = CeBundle::query()->with('courses')->find($cart->ce_bundle_id);
+
+        if (! $ceBundle || $ceBundle->courses->isEmpty()) {
+            return;
+        }
+
+        if ($discount != 0 || ! empty($discount)) {
+            $itemPrice = $cart->price - ($discount / count($carts));
+            $discountAmount = $cart->price - $itemPrice;
+        } else {
+            $itemPrice = $cart->price;
+            $discountAmount = 0.00;
+        }
+
+        $responseObj = is_string($response) ? json_decode($response) : $response;
+        $gatewayTxnId = is_object($responseObj) ? ($responseObj->id ?? null) : null;
+        $lmsId = isModuleActive('LmsSaas') ? (int) app('institute')->id : 1;
+        $licenseType = $this->resolveCeLicenseType($user->id);
+        if (! $licenseType && ! empty($ceBundle->license_type)) {
+            $licenseType = $ceBundle->license_type === 'aprn' ? 'aprn' : 'rn_lpn';
+        }
+
+        DB::transaction(function () use (
+            $checkout_info,
+            $user,
+            $ceBundle,
+            $cart,
+            $itemPrice,
+            $discountAmount,
+            $gateWayName,
+            $gatewayTxnId,
+            $lmsId,
+            $licenseType
+        ) {
+            $purchase = CePurchase::create([
+                'tracking' => $checkout_info->tracking,
+                'checkout_id' => $checkout_info->id,
+                'user_id' => $user->id,
+                'item_type' => 'bundle',
+                'ce_bundle_id' => $ceBundle->id,
+                'item_name' => $ceBundle->name,
+                'license_type' => $licenseType,
+                'total_hours' => $ceBundle->total_hours,
+                'elective_hours_allowed' => $ceBundle->elective_hours_allowed,
+                'unit_price' => $cart->price,
+                'discount_amount' => $discountAmount,
+                'total_paid' => $itemPrice,
+                'payment_status' => 'paid',
+                'payment_method' => $gateWayName,
+                'gateway_transaction_id' => $gatewayTxnId,
+                'lms_id' => $lmsId,
+                'purchased_at' => now(),
+            ]);
+
+            foreach ($ceBundle->courses as $index => $course) {
+                $courseRole = $course->pivot->course_role ?? 'mandatory';
+
+                $enrollment = CeCourseEnrollment::create([
+                    'user_id' => $user->id,
+                    'ce_course_id' => $course->id,
+                    'ce_purchase_id' => $purchase->id,
+                    'source' => 'bundle',
+                    'progress' => 0,
+                    'status' => 'not_started',
+                    'purchase_price' => 0,
+                ]);
+
+                CePurchaseItem::create([
+                    'ce_purchase_id' => $purchase->id,
+                    'ce_course_id' => $course->id,
+                    'course_title' => $course->title,
+                    'contact_hours' => $course->contact_hours ?? 0,
+                    'course_role' => $courseRole,
+                    'sort_order' => (int) ($course->pivot->sort_order ?? $index),
+                    'ce_course_enrollment_id' => $enrollment->id,
+                ]);
+
+                app(CeEnrollmentService::class)->ensureLmsEnrollment(
+                    $course,
+                    $user,
+                    $checkout_info->tracking,
+                    0
+                );
+
+                $course->increment('total_enrolled');
+            }
+        });
+    }
+
+    protected function resolveCeLicenseType(int $userId): ?string
+    {
+        if (! Schema::hasTable('ce_professionals')) {
+            return null;
+        }
+
+        $profile = DB::table('ce_professionals')->where('user_id', $userId)->first();
+        if (! $profile || empty($profile->license_type)) {
+            return null;
+        }
+
+        return strtolower((string) $profile->license_type) === 'aprn' ? 'aprn' : 'rn_lpn';
     }
 
     /**
