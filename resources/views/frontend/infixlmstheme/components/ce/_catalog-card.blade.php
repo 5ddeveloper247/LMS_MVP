@@ -14,6 +14,6 @@
         @if ($ceCatalog->contactHoursLabel($course))
             <p class="ce-cat-card-hours">{{ $ceCatalog->contactHoursLabel($course) }}</p>
         @endif
-        <p class="ce-cat-card-price">{{ $ceCatalog->displayPrice($course) }}</p>
+        <p class="ce-cat-card-price">@include(theme('partials.ce-course-price'), ['course' => $course])</p>
     </div>
 </a>

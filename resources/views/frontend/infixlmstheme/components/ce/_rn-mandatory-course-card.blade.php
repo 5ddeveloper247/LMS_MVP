@@ -10,7 +10,7 @@
         <div class="ce-mand-card-hours">
             {{ $ceCatalog->contactHoursCardValue($course) }}<small>{{ $ceCatalog->contactHoursCardUnit($course) }}</small>
         </div>
-        <div class="ce-mand-card-price">{{ $ceCatalog->displayPrice($course) }}</div>
+        <div class="ce-mand-card-price">@include(theme('partials.ce-course-price'), ['course' => $course])</div>
     </div>
     <div class="ce-mand-card-body">
         <h3>{{ $course->title }}</h3>

@@ -642,7 +642,7 @@
                 <p class="ic-tag">{{ $ceCatalog->courseTypeLabel($instructorCeCourse) }}</p>
                 <h4>{{ $instructorCeCourse->title }}</h4>
                 <p>{{ $ceCatalog->summary($instructorCeCourse) ?: 'Explore this continuing education course.' }}</p>
-                <p class="ic-price">{{ $ceCatalog->displayPrice($instructorCeCourse) }}</p>
+                <p class="ic-price">@include(theme('partials.ce-course-price'), ['course' => $instructorCeCourse])</p>
               </a>
             @endforeach
           </div>
@@ -833,7 +833,7 @@
               <h3>{{ $relatedCeCourse->title }}</h3>
               <p class="related-desc">{{ $ceCatalog->summary($relatedCeCourse) ?: 'Explore this continuing education course.' }}</p>
               <div class="related-card-footer">
-                <span class="related-price">{{ $ceCatalog->displayPrice($relatedCeCourse) }}</span>
+                <span class="related-price">@include(theme('partials.ce-course-price'), ['course' => $relatedCeCourse])</span>
                 <span class="related-course-type self-study">{{ $ceCatalog->contactHoursLabel($relatedCeCourse) ?: 'CE Course' }}</span>
               </div>
             </div>
@@ -892,7 +892,14 @@
       @if (!empty($headerPurchase))
         <div class="cta-price-row">
           <div class="cta-option">
-            <p class="cta-option-price">{{ $headerPurchase['price_label'] ?? 'TBA' }}</p>
+            <p class="cta-option-price">
+              {{ $headerPurchase['price_label'] ?? 'TBA' }}
+              @if (!empty($headerPurchase['compare_price_label']))
+                <span class="text-muted text-decoration-line-through ms-2" style="font-size: 0.55em;">
+                  <del>{{ $headerPurchase['compare_price_label'] }}</del>
+                </span>
+              @endif
+            </p>
             <p class="cta-option-label">{{ $headerPurchase['title'] }}</p>
           </div>
         </div>

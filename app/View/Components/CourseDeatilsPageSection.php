@@ -293,7 +293,7 @@ class CourseDeatilsPageSection extends Component
 
     private function buildCePurchaseOption(CeCourse $ceCourse, CeCatalogService $ceCatalog): array
     {
-        $amount = floatval($ceCourse->discount_price ?? $ceCourse->price ?? 0);
+        $amount = $ceCourse->salePrice();
         $hoursLabel = $ceCatalog->contactHoursLabel($ceCourse);
 
         return [
@@ -309,6 +309,9 @@ class CourseDeatilsPageSection extends Component
                 'Certificate upon completion',
             ])),
             'price_label' => $amount > 0 ? getPriceFormat($amount) : null,
+            'compare_price_label' => $amount > 0 && $ceCourse->hasCeDiscount()
+                ? getPriceFormat($ceCourse->originalPriceWithTax())
+                : null,
             'can_purchase' => $amount > 0,
             'cart_url' => $amount > 0 ? $ceCatalog->cartUrl($ceCourse) : '#',
             'buy_url' => $amount > 0 ? $ceCatalog->buyNowUrl($ceCourse) : '#',

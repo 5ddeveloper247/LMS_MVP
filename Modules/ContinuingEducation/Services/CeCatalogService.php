@@ -189,7 +189,7 @@ class CeCatalogService
 
     public function coursePrice(CeCourse $course): float
     {
-        return (float) ($course->discount_price ?? $course->price ?? 0);
+        return $course->salePrice();
     }
 
     public function catalogAnchor(CeCourse $course): string
@@ -273,9 +273,17 @@ class CeCatalogService
 
     public function displayPrice(CeCourse $course): string
     {
-        $price = $course->discount_price ?? $course->price ?? 0;
+        return getPriceFormat($course->salePrice());
+    }
 
-        return '$' . number_format((float) $price, 2);
+    public function courseHasDiscount(CeCourse $course): bool
+    {
+        return $course->hasCeDiscount();
+    }
+
+    public function courseComparePrice(CeCourse $course): string
+    {
+        return getPriceFormat($course->originalPriceWithTax());
     }
 
     public function contactHoursLabel(CeCourse $course): string

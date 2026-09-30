@@ -17,7 +17,14 @@
   @endif
 
   @if ($option['price_label'])
-    <p class="purchase-price">{{ $option['price_label'] }}</p>
+    <p class="purchase-price">
+      {{ $option['price_label'] }}
+      @if (!empty($option['compare_price_label']))
+        <span class="text-muted text-decoration-line-through ms-2" style="font-size: 0.45em; vertical-align: middle;">
+          <del>{{ $option['compare_price_label'] }}</del>
+        </span>
+      @endif
+    </p>
   @else
     <p class="purchase-price" style="font-size:24px;">Pricing TBA</p>
   @endif

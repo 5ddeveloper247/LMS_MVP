@@ -5,7 +5,10 @@
         : route('continuing-education.courses.store');
     $assistantIds = old('assistant_instructors', $course->assistant_instructor_ids ?? []);
     $isFree = old('is_free', $isEdit ? ((float) ($course->price ?? 0) === 0.0) : false);
-    $hasDiscount = old('is_discount', $isEdit ? !is_null($course->discount_price) : false);
+    $taxPercent = old('tax_percent', $isEdit ? ($course->tax_percent ?? $course->tax ?? 0) : 0);
+    $discountType = old('discount_type', $isEdit ? ($course->discount_type ?? '') : '');
+    $discountVal = old('discount', $isEdit ? ($course->discount ?? 0) : 0);
+    $totalAmount = old('total_amount', $isEdit ? ($course->total_amount ?? 0) : 0);
 
     $selectedAudienceGroups = old('audience_groups');
     if (! is_array($selectedAudienceGroups) && $isEdit) {
@@ -186,7 +189,7 @@
             </div>
         </div>
 
-        <div class="col-lg-6 mb-25">
+        <div class="col-lg-12 mb-25">
             <div class="checkbox_wrap d-flex align-items-center mt-40">
                 <label for="is_free" class="switch_toggle mr-2">
                     <input type="checkbox" id="is_free" name="is_free" value="1" {{ $isFree ? 'checked' : '' }}>
@@ -196,35 +199,60 @@
             </div>
         </div>
 
-        <div class="col-xl-6" id="price_div">
-            <div class="primary_input mb-25">
-                <label class="primary_input_label" for="price">{{ __('courses.Price') }}</label>
-                <input class="primary_input_field ce-price-field" type="number" step="0.01" min="0" name="price"
-                    id="price" value="{{ old('price', $course->price ?? 0) }}" placeholder="-">
-                @error('price')<span class="text-danger d-block">{{ $message }}</span>@enderror
-            </div>
-        </div>
+        <div class="col-xl-12" id="ce_pricing_fields">
+            <div class="row">
+                <div class="col-xl-6">
+                    <div class="primary_input mb-25">
+                        <label class="primary_input_label" for="price">
+                            {{ __('courses.Price') }}
+                            <strong class="text-danger">*</strong>
+                        </label>
+                        <input class="primary_input_field ce-price-field" type="number" step="0.01" min="0"
+                            name="price" id="price" value="{{ old('price', $course->price ?? 0) }}"
+                            placeholder="00.00" {{ $isFree ? '' : 'required' }}>
+                        @error('price')<span class="text-danger d-block">{{ $message }}</span>@enderror
+                    </div>
+                </div>
 
-        <div class="col-lg-6">
-            <div class="checkbox_wrap d-flex align-items-center mt-40">
-                <label for="is_discount" class="switch_toggle mr-2">
-                    <input type="checkbox" id="is_discount" name="is_discount" value="1"
-                        {{ $hasDiscount ? 'checked' : '' }}>
-                    <i class="slider round"></i>
-                </label>
-                <label class="mb-0">{{ __('courses.This course has discounted price') }}</label>
-            </div>
-        </div>
+                <div class="col-xl-6">
+                    <div class="primary_input mb-25">
+                        <label class="primary_input_label" for="tax_percent">
+                            {{ __('Tax Percent') }}
+                            <strong class="text-danger">*</strong>
+                        </label>
+                        <input class="primary_input_field ce-tax-field" type="number" step="0.01" min="0" max="100"
+                            name="tax_percent" id="tax_percent" value="{{ $taxPercent }}" placeholder="-"
+                            {{ $isFree ? '' : 'required' }}>
+                        @error('tax_percent')<span class="text-danger d-block">{{ $message }}</span>@enderror
+                    </div>
+                </div>
 
-        <div class="col-xl-4" id="discount_price_div" style="{{ $hasDiscount && !$isFree ? '' : 'display: none' }}">
-            <div class="primary_input mb-25">
-                <label class="primary_input_label" for="discount_price">
-                    {{ __('courses.Discount') }} {{ __('courses.Price') }}
-                </label>
-                <input class="primary_input_field ce-discount-field" type="number" step="0.01" min="0"
-                    name="discount_price" id="discount_price" placeholder="-"
-                    value="{{ old('discount_price', $course->discount_price ?? '') }}">
-                @error('discount_price')<span class="text-danger d-block">{{ $message }}</span>@enderror
+                <div class="col-xl-6 courseBox mb-25">
+                    <label class="primary_input_label" for="discount_type">{{ __('Discount Type') }}</label>
+                    <select class="primary_select ce-discount-type-field" name="discount_type" id="discount_type">
+                        <option value="">{{ __('Select Type') }}</option>
+                        <option value="percent" {{ $discountType === 'percent' ? 'selected' : '' }}>Percent</option>
+                        <option value="fixed" {{ $discountType === 'fixed' ? 'selected' : '' }}>Fixed</option>
+                    </select>
+                    @error('discount_type')<span class="text-danger d-block">{{ $message }}</span>@enderror
+                </div>
+
+                <div class="col-xl-6">
+                    <div class="primary_input mb-25">
+                        <label class="primary_input_label" for="discount">{{ __('Discount') }}</label>
+                        <input class="primary_input_field ce-discount-field" type="number" step="0.01" min="0"
+                            name="discount" id="discount" placeholder="-" value="{{ $discountVal }}">
+                        @error('discount')<span class="text-danger d-block">{{ $message }}</span>@enderror
+                    </div>
+                </div>
+
+                <div class="col-xl-6">
+                    <div class="primary_input mb-25">
+                        <label class="primary_input_label" for="total_amount">{{ __('Total Amount') }}</label>
+                        <input class="primary_input_field" id="total_amount" type="number" step="0.01"
+                            value="{{ $totalAmount }}" placeholder="0.00" disabled>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -316,24 +344,53 @@
                     });
             });
 
-            function togglePricingFields() {
-                var isFree = $('#is_free').is(':checked');
-                var hasDiscount = $('#is_discount').is(':checked');
+            function calculateCeTotal() {
+                var price = parseFloat($('#price').val()) || 0;
+                var taxPercent = parseFloat($('#tax_percent').val()) || 0;
+                var discountType = $('#discount_type').val();
+                var discountVal = parseFloat($('#discount').val()) || 0;
+                var discount = 0;
 
-                if (isFree) {
-                    $('#price_div').hide();
-                    $('#discount_price_div').hide();
-                } else {
-                    $('#price_div').show();
-                    $('#discount_price_div').toggle(hasDiscount);
+                if (discountType === 'fixed') {
+                    discount = Math.min(discountVal, price);
+                } else if (discountType === 'percent') {
+                    discount = (price * discountVal) / 100;
                 }
 
-                $('.ce-price-field').prop('disabled', isFree);
-                $('.ce-discount-field').prop('disabled', isFree || !hasDiscount);
+                var taxableAmount = price - discount;
+                var totalTax = (taxableAmount * taxPercent) / 100;
+                var totalAmount = taxableAmount + totalTax;
+
+                $('#total_amount').val(totalAmount.toFixed(2));
             }
 
-            $('#is_free, #is_discount').on('change', togglePricingFields);
+            function togglePricingFields() {
+                var isFree = $('#is_free').is(':checked');
+
+                if (isFree) {
+                    $('#ce_pricing_fields').hide();
+                    $('#price').val(0);
+                    $('#tax_percent').val(0);
+                    $('#discount_type').val('');
+                    $('#discount').val(0);
+                    $('#total_amount').val('0.00');
+                } else {
+                    $('#ce_pricing_fields').show();
+                }
+
+                $('.ce-price-field, .ce-tax-field, .ce-discount-type-field, .ce-discount-field')
+                    .prop('disabled', isFree);
+            }
+
+            $('#is_free').on('change', function() {
+                togglePricingFields();
+                calculateCeTotal();
+            });
+
+            $('#price, #tax_percent, #discount_type, #discount').on('input change', calculateCeTotal);
+
             togglePricingFields();
+            calculateCeTotal();
         });
     </script>
 @endpush

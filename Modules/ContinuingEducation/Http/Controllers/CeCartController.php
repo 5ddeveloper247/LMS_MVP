@@ -224,7 +224,7 @@ class CeCartController extends Controller
 
     protected function coursePrice(CeCourse $course): float
     {
-        return (float) ($course->discount_price ?? $course->price ?? 0);
+        return $course->salePrice();
     }
 
     protected function bundleLandingUrl(CeBundle $bundle): string

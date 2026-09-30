@@ -109,8 +109,9 @@
                 ? route('continuingEducationCourse', ['slug' => $ceCourse->slug])
                 : $ceCatalogUrl;
             if ($resolvedPrice <= 0) {
-                $resolvedPrice = (float) ($ceCourse->discount_price ?? $ceCourse->price ?? 0);
+                $resolvedPrice = $ceCourse->salePrice();
             }
+            $lineTax = (float) ($ceCourse->total_tax ?? 0);
             $hours = rtrim(rtrim(number_format((float) ($ceCourse->contact_hours ?? 0), 1, '.', ''), '0'), '.');
             $meta = __('CE Course') . ($hours !== '' ? ' · ' . $hours . ' ' . __('contact hours') : '');
             $isCeShopper = true;

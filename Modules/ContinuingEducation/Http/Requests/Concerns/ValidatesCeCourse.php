@@ -2,6 +2,8 @@
 
 namespace Modules\ContinuingEducation\Http\Requests\Concerns;
 
+use Modules\Shop\Entities\ShopProduct;
+
 trait ValidatesCeCourse
 {
     public function authorize()
@@ -30,7 +32,9 @@ trait ValidatesCeCourse
             'assistant_instructors' => 'nullable|array',
             'assistant_instructors.*' => 'integer|exists:users,id',
             'price' => 'nullable|numeric|min:0',
-            'discount_price' => 'nullable|numeric|min:0',
+            'tax_percent' => 'nullable|numeric|min:0|max:100',
+            'discount_type' => 'nullable|in:fixed,percent',
+            'discount' => 'nullable|numeric|min:0',
             'contact_hours' => 'required|numeric|min:0|max:999.9',
             'course_type' => 'required|in:mandatory,elective',
             'audience_groups' => 'required|array|min:1',
@@ -41,7 +45,6 @@ trait ValidatesCeCourse
             'status' => 'nullable',
             'is_featured' => 'nullable',
             'is_free' => 'nullable',
-            'is_discount' => 'nullable',
         ];
     }
 
@@ -59,8 +62,12 @@ trait ValidatesCeCourse
             'assistant_instructors.*.exists' => 'One or more assistant instructors could not be found.',
             'price.numeric' => 'Price must be a valid number.',
             'price.min' => 'Price cannot be negative.',
-            'discount_price.numeric' => 'Discount price must be a valid number.',
-            'discount_price.min' => 'Discount price cannot be negative.',
+            'tax_percent.numeric' => 'Tax percent must be a valid number.',
+            'tax_percent.min' => 'Tax percent cannot be negative.',
+            'tax_percent.max' => 'Tax percent may not be greater than 100.',
+            'discount_type.in' => 'Discount type must be fixed or percent.',
+            'discount.numeric' => 'Discount must be a valid number.',
+            'discount.min' => 'Discount cannot be negative.',
             'contact_hours.required' => 'Please enter contact hours.',
             'contact_hours.numeric' => 'Contact hours must be a valid number.',
             'contact_hours.min' => 'Contact hours cannot be negative.',
@@ -85,7 +92,9 @@ trait ValidatesCeCourse
             'contact_hours' => 'contact hours',
             'course_type' => 'course type',
             'audience_groups' => 'audience',
-            'discount_price' => 'discount price',
+            'tax_percent' => 'tax percent',
+            'discount_type' => 'discount type',
+            'discount' => 'discount',
         ];
     }
 
@@ -118,17 +127,47 @@ trait ValidatesCeCourse
 
         if ($this->boolean('is_free')) {
             $validated['price'] = 0;
+            $validated['tax_percent'] = 0;
+            $validated['tax'] = 0;
+            $validated['discount_type'] = null;
+            $validated['discount'] = 0;
+            $validated['total_amount'] = 0;
+            $validated['total_tax'] = 0;
+            $validated['total_discount'] = 0;
             $validated['discount_price'] = null;
         } else {
-            $validated['price'] = $validated['price'] ?? 0;
-            if (!$this->boolean('is_discount')) {
-                $validated['discount_price'] = null;
+            $price = (float) ($validated['price'] ?? 0);
+            $taxPercent = (float) $this->input('tax_percent', 0);
+            $discountType = $this->input('discount_type') ?: null;
+            $discount = (float) $this->input('discount', 0);
+
+            if ($discountType === null || $discount <= 0) {
+                $discountType = null;
+                $discount = 0;
             }
+
+            if ($discountType === 'percent' && $discount > 100) {
+                $discount = 100;
+            }
+
+            $totals = ShopProduct::calculatePricing($price, $discountType, $discount, $taxPercent);
+
+            $validated['price'] = $price;
+            $validated['tax_percent'] = $taxPercent;
+            $validated['tax'] = $taxPercent;
+            $validated['discount_type'] = $discountType;
+            $validated['discount'] = $discount;
+            $validated['total_amount'] = $totals['total_amount'];
+            $validated['total_tax'] = $totals['total_tax'];
+            $validated['total_discount'] = $totals['total_discount'];
+            $validated['discount_price'] = $totals['total_discount'] > 0.001
+                ? max($price - $totals['total_discount'], 0)
+                : null;
         }
 
         $validated['assistant_instructors'] = $this->input('assistant_instructors', []);
 
-        unset($validated['is_free'], $validated['is_discount'], $validated['image']);
+        unset($validated['is_free'], $validated['image']);
 
         return $validated;
     }
