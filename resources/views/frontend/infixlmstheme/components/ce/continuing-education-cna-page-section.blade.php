@@ -105,13 +105,17 @@
 .mxp-ce-cna .ce-bundle-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--ce-terracotta);color:var(--ce-white);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:5px 18px;border-radius:30px;white-space:nowrap}
 .mxp-ce-cna .ce-bundle-card h3{font-size:26px;margin-bottom:4px}
 .mxp-ce-cna .ce-bundle-card.primary h3{color:var(--ce-white)}
-.mxp-ce-cna .ce-bundle-subtitle{font-size:14px;margin-bottom:20px;opacity:.75}
+.mxp-ce-cna .ce-bundle-subtitle{font-size:14px;margin-bottom:20px;opacity:.75;color:inherit}
+.mxp-ce-cna .ce-bundle-card.primary .ce-bundle-subtitle{color:rgba(245,237,224,.85)!important;opacity:1}
+.mxp-ce-cna .ce-bundle-card.secondary .ce-bundle-subtitle{color:var(--ce-charcoal-soft)!important}
 .mxp-ce-cna .ce-bundle-price-row{display:flex;align-items:baseline;gap:8px;margin-bottom:4px}
 .mxp-ce-cna .ce-bundle-price{font-family:var(--ce-serif);font-size:48px;font-weight:700}
 .mxp-ce-cna .ce-bundle-card.primary .ce-bundle-price{color:var(--ce-cream)}
 .mxp-ce-cna .ce-bundle-card.secondary .ce-bundle-price{color:var(--ce-terracotta)}
 .mxp-ce-cna .ce-bundle-price-compare{font-size:16px;text-decoration:line-through;opacity:.4}
-.mxp-ce-cna .ce-bundle-price-note{font-size:12px;margin-bottom:24px;opacity:.6}
+.mxp-ce-cna .ce-bundle-price-note{font-size:12px;margin-bottom:24px;opacity:.6;color:inherit}
+.mxp-ce-cna .ce-bundle-card.primary .ce-bundle-price-note{color:rgba(245,237,224,.8)!important;opacity:1}
+.mxp-ce-cna .ce-bundle-card.secondary .ce-bundle-price-note{color:var(--ce-charcoal-soft)!important}
 .mxp-ce-cna .ce-bundle-divider{height:1px;margin:0 0 20px;opacity:.15}
 .mxp-ce-cna .ce-bundle-card.primary .ce-bundle-divider{background:var(--ce-cream)}
 .mxp-ce-cna .ce-bundle-card.secondary .ce-bundle-divider{background:var(--ce-charcoal)}
