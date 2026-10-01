@@ -34,6 +34,7 @@ class CeCatalogService
         return [
             'rn_lpn' => $this->listPublishedBundlePreviews('rn_lpn'),
             'aprn' => $this->listPublishedBundlePreviews('aprn'),
+            'cna' => $this->listPublishedBundlePreviews('cna'),
         ];
     }
 

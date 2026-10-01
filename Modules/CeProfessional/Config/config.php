@@ -39,7 +39,7 @@ return [
             'route' => 'continuingEducation',
             'label' => 'Browse Courses',
             'icon' => 'browse',
-            'active' => ['continuingEducation', 'continuingEducationRnLpn', 'continuingEducationAprn', 'continuingEducationCourse'],
+            'active' => ['continuingEducation', 'continuingEducationRnLpn', 'continuingEducationAprn', 'continuingEducationCna', 'continuingEducationCourse'],
         ],
     ],
 

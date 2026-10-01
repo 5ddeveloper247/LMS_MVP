@@ -7,7 +7,7 @@ use Modules\ContinuingEducation\Entities\CeLicenseType;
 
 class CeLicenseService
 {
-    public const MAX_FEATURED = 2;
+    public const MAX_FEATURED = 3;
 
     public function listForAdmin()
     {

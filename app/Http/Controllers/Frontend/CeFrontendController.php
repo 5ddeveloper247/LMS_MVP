@@ -51,6 +51,16 @@ class CeFrontendController extends Controller
         ));
     }
 
+    public function cna()
+    {
+        return view(theme('pages.continuingEducationCna'), array_merge(
+            $this->catalogService->licenseDetailPageData('cna'),
+            [
+                'bundles' => $this->catalogService->listPublishedBundles('cna'),
+            ]
+        ));
+    }
+
     public function showCourse(string $slug, Request $request)
     {
         $ceCourse = $this->catalogService->findPublishedBySlug($slug);

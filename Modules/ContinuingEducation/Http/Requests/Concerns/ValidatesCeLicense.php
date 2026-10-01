@@ -13,7 +13,7 @@ trait ValidatesCeLicense
             'component_1' => ['required', 'string', 'max:500'],
             'component_2' => ['required', 'string', 'max:500'],
             'component_3' => ['required', 'string', 'max:500'],
-            'card_style' => ['required', 'in:teal,terra'],
+            'card_style' => ['required', 'in:teal,terra,cna'],
             'button_label' => ['nullable', 'string', 'max:255'],
             'seq_no' => ['nullable', 'integer', 'min:0', 'max:9999'],
             'status' => ['nullable', 'boolean'],

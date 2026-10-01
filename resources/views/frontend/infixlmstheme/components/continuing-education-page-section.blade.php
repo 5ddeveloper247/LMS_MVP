@@ -45,15 +45,17 @@
 .mxp-continuing-education .ce-select-eyebrow{display:inline-block;font-size:12px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--ce-terracotta);margin-bottom:16px}
 .mxp-continuing-education .ce-select-header h2{font-size:clamp(30px,4vw,42px);margin-bottom:14px}
 .mxp-continuing-education .ce-select-header p{font-size:16px;color:var(--ce-charcoal-soft);line-height:1.6}
-.mxp-continuing-education .ce-license-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;max-width:1040px;margin:0 auto}
+.mxp-continuing-education .ce-license-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:32px;max-width:1120px;margin:0 auto}
 .mxp-continuing-education .ce-license-card{background:var(--ce-cream);border-radius:20px;padding:44px 40px;border:2px solid transparent;transition:all .3s;position:relative;overflow:hidden}
 .mxp-continuing-education .ce-license-card:hover{border-color:var(--ce-teal-mid);transform:translateY(-4px);box-shadow:var(--ce-shadow-lg)}
 .mxp-continuing-education .ce-license-card::before{content:'';position:absolute;top:0;left:0;right:0;height:5px}
 .mxp-continuing-education .ce-license-card.rn-lpn::before{background:linear-gradient(90deg,var(--ce-teal-mid),var(--ce-teal-deep))}
 .mxp-continuing-education .ce-license-card.aprn::before{background:linear-gradient(90deg,var(--ce-terracotta),var(--ce-terracotta-deep))}
+.mxp-continuing-education .ce-license-card.cna::before{background:linear-gradient(90deg,#3B6B9A,#2A4F74)}
 .mxp-continuing-education .ce-license-icon{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:20px}
 .mxp-continuing-education .ce-license-card.rn-lpn .ce-license-icon{background:rgba(26,138,111,.12);color:var(--ce-teal-mid)}
 .mxp-continuing-education .ce-license-card.aprn .ce-license-icon{background:rgba(198,93,58,.12);color:var(--ce-terracotta)}
+.mxp-continuing-education .ce-license-card.cna .ce-license-icon{background:rgba(59,107,154,.12);color:#3B6B9A}
 .mxp-continuing-education .ce-license-icon svg{width:28px;height:28px}
 .mxp-continuing-education .ce-license-card h3{font-size:24px;margin-bottom:6px}
 .mxp-continuing-education .ce-license-subtitle{font-family:var(--ce-serif);font-style:italic;font-size:14px;color:var(--ce-terracotta);margin-bottom:16px}
@@ -62,9 +64,11 @@
 .mxp-continuing-education .ce-license-req li{padding:6px 0;font-size:13.5px;color:var(--ce-charcoal-soft);display:flex;align-items:flex-start;gap:10px;line-height:1.5}
 .mxp-continuing-education .ce-license-req li svg{width:16px;height:16px;color:var(--ce-teal-mid);flex-shrink:0;margin-top:2px}
 .mxp-continuing-education .ce-license-card.aprn .ce-license-req li svg{color:var(--ce-terracotta)}
+.mxp-continuing-education .ce-license-card.cna .ce-license-req li svg{color:#3B6B9A}
 .mxp-continuing-education .ce-license-bundles{background:var(--ce-white);border-radius:12px;padding:20px 22px;margin-bottom:24px}
 .mxp-continuing-education .ce-license-bundles h4{font-family:var(--ce-sans);font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ce-teal-mid);margin-bottom:12px}
 .mxp-continuing-education .ce-license-card.aprn .ce-license-bundles h4{color:var(--ce-terracotta)}
+.mxp-continuing-education .ce-license-card.cna .ce-license-bundles h4{color:#3B6B9A}
 .mxp-continuing-education .ce-bundle-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--ce-gray-line)}
 .mxp-continuing-education .ce-bundle-row:last-child{border-bottom:none}
 .mxp-continuing-education .ce-bundle-name{font-size:14px;font-weight:600;color:var(--ce-teal-darkest);margin:0}
@@ -75,6 +79,8 @@
 .mxp-continuing-education .ce-btn-portal.teal:hover{background:var(--ce-teal-deep);border-color:var(--ce-teal-deep);color:var(--ce-white)}
 .mxp-continuing-education .ce-btn-portal.terra{background:var(--ce-terracotta);color:var(--ce-white);border:2px solid var(--ce-terracotta)}
 .mxp-continuing-education .ce-btn-portal.terra:hover{background:var(--ce-terracotta-deep);border-color:var(--ce-terracotta-deep);color:var(--ce-white)}
+.mxp-continuing-education .ce-btn-portal.cna{background:#2A4F74;color:var(--ce-white);border:2px solid #2A4F74}
+.mxp-continuing-education .ce-btn-portal.cna:hover{background:#3B6B9A;border-color:#3B6B9A;color:var(--ce-white)}
 
 .mxp-continuing-education .ce-how-section{background:var(--ce-cream);padding:80px 32px}
 .mxp-continuing-education .ce-how-header{text-align:center;margin-bottom:50px}
@@ -173,7 +179,9 @@
             @forelse ($licenseTypes ?? [] as $license)
                 @include(theme('components.ce._license-card'), [
                     'license' => $license,
-                    'bundles' => $bundlesByLicense[$license->card_style === 'terra' ? 'aprn' : 'rn_lpn'] ?? collect(),
+                    'bundles' => $bundlesByLicense[
+                        $license->card_style === 'terra' ? 'aprn' : ($license->card_style === 'cna' ? 'cna' : 'rn_lpn')
+                    ] ?? collect(),
                 ])
             @empty
                 <p class="ce-catalog-empty" style="grid-column:1/-1;">No license types are published yet.</p>

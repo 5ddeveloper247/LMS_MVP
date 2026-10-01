@@ -84,7 +84,7 @@
         <div class="col-xl-4">
             <div class="primary_input mb-25">
                 <label class="primary_input_label" for="card_style">
-                    Card Style <strong class="text-danger">*</strong>
+                    Licence Category <strong class="text-danger">*</strong>
                 </label>
                 <select class="primary_select" name="card_style" id="card_style" required>
                     @foreach ($cardStyles as $value => $label)
@@ -96,7 +96,7 @@
                 </select>
                 @error('card_style')<span class="text-danger d-block">{{ $message }}</span>@enderror
                 <p class="text-muted mb-0 mt-2" style="font-size:13px;">
-                    Teal opens the RN &amp; LPN packages page; Terracotta opens the APRN packages page.
+                    Selects which licence packages page this card opens (RN &amp; LPN, APRN &amp; NP, or CNA).
                 </p>
             </div>
         </div>
@@ -109,7 +109,7 @@
                     placeholder="View RN & LPN Packages">
                 @error('button_label')<span class="text-danger d-block">{{ $message }}</span>@enderror
                 <p class="text-muted mb-0 mt-2" style="font-size:13px;">
-                    Button destination is set automatically from card style.
+                    Button destination is set automatically from licence category.
                 </p>
             </div>
         </div>

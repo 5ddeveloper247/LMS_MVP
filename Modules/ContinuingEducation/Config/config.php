@@ -43,29 +43,35 @@ return [
     ],
 
     'license_card_styles' => [
-        'teal' => 'Teal (RN / LPN)',
-        'terra' => 'Terracotta (APRN)',
+        'teal' => 'RN & LPN',
+        'terra' => 'APRN & NP',
+        'cna' => 'CNA',
     ],
 
     // Card style → frontend packages page (button URL is derived automatically).
     'license_detail_routes' => [
         'teal' => 'continuingEducationRnLpn',
         'terra' => 'continuingEducationAprn',
+        'cna' => 'continuingEducationCna',
     ],
 
     'license_anchor_ids' => [
         'teal' => 'rn-lpn-packages',
         'terra' => 'aprn-packages',
+        'cna' => 'cna-packages',
     ],
 
     'license_type_card_styles' => [
         'rn_lpn' => 'teal',
         'aprn' => 'terra',
+        'aprn_np' => 'terra',
+        'cna' => 'cna',
     ],
 
     'bundle_license_types' => [
         'rn_lpn' => 'RN & LPN',
-        'aprn' => 'APRN',
+        'aprn' => 'APRN & NP',
+        'cna' => 'CNA',
     ],
 
     'bundle_card_styles' => [

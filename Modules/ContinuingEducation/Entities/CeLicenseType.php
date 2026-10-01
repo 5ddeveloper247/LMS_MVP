@@ -51,12 +51,28 @@ class CeLicenseType extends Model
 
     public function getCardClassAttribute(): string
     {
-        return $this->card_style === 'terra' ? 'aprn' : 'rn-lpn';
+        if ($this->card_style === 'terra') {
+            return 'aprn';
+        }
+
+        if ($this->card_style === 'cna') {
+            return 'cna';
+        }
+
+        return 'rn-lpn';
     }
 
     public function getButtonClassAttribute(): string
     {
-        return $this->card_style === 'terra' ? 'terra' : 'teal';
+        if ($this->card_style === 'terra') {
+            return 'terra';
+        }
+
+        if ($this->card_style === 'cna') {
+            return 'cna';
+        }
+
+        return 'teal';
     }
 
     public function getResolvedButtonUrlAttribute(): string

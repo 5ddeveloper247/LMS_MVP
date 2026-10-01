@@ -48,7 +48,7 @@
                                                 <th scope="col">{{ trans('common.SL') }}</th>
                                                 <th scope="col">Name</th>
                                                 <th scope="col">Subtitle</th>
-                                                <th scope="col">Style</th>
+                                                <th scope="col">Licence Category</th>
                                                 <th scope="col">Sort</th>
                                                 <th scope="col">Featured</th>
                                                 <th scope="col">Status</th>
