@@ -118,6 +118,22 @@ if (! function_exists('ceAudienceGroupsFromAudience')) {
     }
 }
 
+if (! function_exists('ceLicenseCardStyleToAudienceKey')) {
+    /**
+     * Map ce_license_types.card_style → course/bundle audience key used by matchesLicenseType().
+     */
+    function ceLicenseCardStyleToAudienceKey(?string $cardStyle): ?string
+    {
+        $map = [
+            'teal' => 'rn_lpn',
+            'terra' => 'aprn',
+            'cna' => 'cna',
+        ];
+
+        return $map[$cardStyle] ?? null;
+    }
+}
+
 if (! function_exists('ceCourseDetailsLink')) {
     function ceCourseDetailsLink(int $lmsCourseId, array $query = [], ?string $tab = null): string
     {

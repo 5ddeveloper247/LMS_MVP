@@ -30,6 +30,24 @@ class CeLicenseService
             ->get();
     }
 
+    public function listActiveForForms()
+    {
+        return CeLicenseType::query()
+            ->forLms()
+            ->where('status', 1)
+            ->orderByRaw('COALESCE(seq_no, 999999) ASC')
+            ->orderBy('name')
+            ->get(['id', 'name', 'card_style', 'status']);
+    }
+
+    public function findActiveForLms(int $id): CeLicenseType
+    {
+        return CeLicenseType::query()
+            ->forLms()
+            ->where('status', 1)
+            ->findOrFail($id);
+    }
+
     public function findPublishedByCardStyle(string $cardStyle): ?CeLicenseType
     {
         return CeLicenseType::query()

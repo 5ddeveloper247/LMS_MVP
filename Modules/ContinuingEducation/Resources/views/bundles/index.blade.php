@@ -44,7 +44,7 @@
                                             <tr>
                                                 <th scope="col">{{ trans('common.SL') }}</th>
                                                 <th scope="col">Name</th>
-                                                <th scope="col">License Type</th>
+                                                <th scope="col">License</th>
                                                 <th scope="col">Hours</th>
                                                 <th scope="col">Price</th>
                                                 <th scope="col">Courses</th>
@@ -63,9 +63,9 @@
                                                             <br><small class="text-muted">{{ $bundle->subtitle }}</small>
                                                         @endif
                                                     </td>
-                                                    <td>{{ $licenseTypes[$bundle->license_type] ?? $bundle->license_type }}</td>
+                                                    <td>{{ $bundle->license_type_label }}</td>
                                                     <td>{{ $bundle->total_hours }}h</td>
-                                                    <td>${{ number_format($bundle->price, 2) }}</td>
+                                                    <td>${{ number_format((float) ($bundle->total_amount ?? $bundle->price), 2) }}</td>
                                                     <td>{{ $bundle->mandatory_courses_count ?? 0 }}</td>
                                                     <td>
                                                         @if ($bundle->is_best_seller)

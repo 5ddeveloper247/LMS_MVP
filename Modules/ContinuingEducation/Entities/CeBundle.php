@@ -21,7 +21,14 @@ class CeBundle extends Model
         'total_hours',
         'elective_hours_allowed',
         'price',
+        'tax_percent',
+        'discount_type',
+        'discount',
+        'total_amount',
+        'total_tax',
+        'total_discount',
         'compare_at_price',
+        'ce_license_type_id',
         'license_type',
         'card_style',
         'is_best_seller',
@@ -36,12 +43,22 @@ class CeBundle extends Model
         'total_hours' => 'decimal:1',
         'elective_hours_allowed' => 'decimal:1',
         'price' => 'decimal:2',
+        'tax_percent' => 'decimal:2',
+        'discount' => 'decimal:2',
+        'total_amount' => 'decimal:2',
+        'total_tax' => 'decimal:2',
+        'total_discount' => 'decimal:2',
         'compare_at_price' => 'decimal:2',
         'is_best_seller' => 'boolean',
         'status' => 'boolean',
         'publish' => 'boolean',
         'featured' => 'boolean',
     ];
+
+    public function licenseType()
+    {
+        return $this->belongsTo(CeLicenseType::class, 'ce_license_type_id');
+    }
 
     public function courses()
     {
@@ -54,6 +71,11 @@ class CeBundle extends Model
     public function mandatoryCourses()
     {
         return $this->courses()->wherePivot('course_role', 'mandatory');
+    }
+
+    public function electiveCourses()
+    {
+        return $this->courses()->wherePivot('course_role', 'elective');
     }
 
     public function scopePublished($query)
@@ -70,7 +92,62 @@ class CeBundle extends Model
 
     public function getLicenseTypeLabelAttribute(): string
     {
+        if ($this->relationLoaded('licenseType') && $this->licenseType) {
+            return $this->licenseType->name;
+        }
+
+        if ($this->ce_license_type_id) {
+            $name = optional($this->licenseType()->first())->name;
+            if ($name) {
+                return $name;
+            }
+        }
+
         return config('continuingeducation.bundle_license_types.' . $this->license_type, $this->license_type);
+    }
+
+    public function salePrice(): float
+    {
+        if ((float) ($this->price ?? 0) <= 0) {
+            return 0.0;
+        }
+
+        return (float) \Modules\Shop\Entities\ShopProduct::calculatePricing(
+            (float) $this->price,
+            $this->discount_type,
+            (float) ($this->discount ?? 0),
+            (float) ($this->tax_percent ?? 0)
+        )['total_amount'];
+    }
+
+    public function originalPriceWithTax(): float
+    {
+        if ((float) ($this->price ?? 0) <= 0) {
+            return 0.0;
+        }
+
+        return (float) \Modules\Shop\Entities\ShopProduct::calculatePricing(
+            (float) $this->price,
+            $this->discount_type,
+            (float) ($this->discount ?? 0),
+            (float) ($this->tax_percent ?? 0)
+        )['original_with_tax'];
+    }
+
+    public function hasBundleDiscount(): bool
+    {
+        return $this->salePrice() + 0.001 < $this->originalPriceWithTax();
+    }
+
+    public function getFormattedPriceAttribute(): string
+    {
+        $amount = $this->salePrice();
+
+        if ($amount <= 0) {
+            return 'Contact Us';
+        }
+
+        return '$' . number_format($amount, 2);
     }
 
     public function getCardStyleLabelAttribute(): string
@@ -103,15 +180,6 @@ class CeBundle extends Model
     public function getPathFeaturedClassAttribute(): string
     {
         return ($this->is_best_seller || $this->card_style === 'primary') ? 'featured' : '';
-    }
-
-    public function getFormattedPriceAttribute(): string
-    {
-        if ((float) $this->price <= 0) {
-            return 'Contact Us';
-        }
-
-        return '$' . number_format((float) $this->price, 2);
     }
 
     public function getLicensePreviewDetailAttribute(): string

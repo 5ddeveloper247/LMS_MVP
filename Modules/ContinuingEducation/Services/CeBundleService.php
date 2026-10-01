@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Modules\ContinuingEducation\Entities\CeBundle;
 use Modules\ContinuingEducation\Entities\CeCourse;
+use Modules\ContinuingEducation\Entities\CeLicenseType;
 
 class CeBundleService
 {
@@ -58,11 +59,11 @@ class CeBundleService
     public function listForAdmin()
     {
         return CeBundle::query()
+            ->with('licenseType:id,name,card_style')
             ->withCount(['courses as mandatory_courses_count' => function ($query) {
                 $query->where('ce_bundle_courses.course_role', 'mandatory');
             }])
             ->forLms()
-            ->orderBy('license_type')
             ->orderByRaw('COALESCE(seq_no, 999999) ASC')
             ->orderBy('name')
             ->get();
@@ -71,30 +72,87 @@ class CeBundleService
     public function findForLms(int $id): CeBundle
     {
         return CeBundle::query()
-            ->with(['courses' => fn ($q) => $q->wherePivot('course_role', 'mandatory')])
+            ->with([
+                'licenseType',
+                'mandatoryCourses',
+                'electiveCourses',
+            ])
             ->forLms()
             ->findOrFail($id);
     }
 
-    public function mandatoryCoursesForForm(?string $licenseType = null)
+    public function audienceKeyForLicenseId(?int $licenseId): ?string
     {
-        if (! $licenseType || ! in_array($licenseType, ['rn_lpn', 'aprn'], true)) {
+        if (! $licenseId) {
+            return null;
+        }
+
+        $license = CeLicenseType::query()->forLms()->find($licenseId);
+
+        return $license ? ceLicenseCardStyleToAudienceKey($license->card_style) : null;
+    }
+
+    public function coursesForForm(?string $licenseType = null, string $courseType = 'mandatory')
+    {
+        if (! $licenseType || ! in_array($licenseType, ['rn_lpn', 'aprn', 'cna'], true)) {
+            return collect();
+        }
+
+        if (! in_array($courseType, ['mandatory', 'elective'], true)) {
             return collect();
         }
 
         return CeCourse::query()
             ->forLms()
             ->published()
-            ->where('course_type', 'mandatory')
+            ->where('course_type', $courseType)
             ->orderBy('title')
             ->get()
             ->filter(fn (CeCourse $course) => $course->matchesLicenseType($licenseType))
             ->values();
     }
 
-    public function mandatoryCoursesPayloadForLicenseType(string $licenseType): array
+    public function mandatoryCoursesForForm(?string $licenseType = null)
     {
-        return $this->mandatoryCoursesForForm($licenseType)
+        return $this->coursesForForm($licenseType, 'mandatory');
+    }
+
+    public function electiveCoursesForForm(?string $licenseType = null)
+    {
+        return $this->coursesForForm($licenseType, 'elective');
+    }
+
+    public function mandatoryCoursesForLicenseId(?int $licenseId)
+    {
+        return $this->mandatoryCoursesForForm($this->audienceKeyForLicenseId($licenseId));
+    }
+
+    public function electiveCoursesForLicenseId(?int $licenseId)
+    {
+        return $this->electiveCoursesForForm($this->audienceKeyForLicenseId($licenseId));
+    }
+
+    public function mandatoryCoursesPayloadForLicenseId(int $licenseId): array
+    {
+        return $this->mapCoursesPayload($this->mandatoryCoursesForLicenseId($licenseId));
+    }
+
+    public function electiveCoursesPayloadForLicenseId(int $licenseId): array
+    {
+        return $this->mapCoursesPayload($this->electiveCoursesForLicenseId($licenseId));
+    }
+
+    public function coursesPayloadForLicenseId(int $licenseId): array
+    {
+        return [
+            'mandatory' => $this->mandatoryCoursesPayloadForLicenseId($licenseId),
+            'elective' => $this->electiveCoursesPayloadForLicenseId($licenseId),
+        ];
+    }
+
+    protected function mapCoursesPayload($courses): array
+    {
+        return $courses
             ->map(fn (CeCourse $course) => [
                 'id' => $course->id,
                 'title' => $course->title,
@@ -102,6 +160,11 @@ class CeBundleService
             ])
             ->values()
             ->all();
+    }
+
+    public function mandatoryCoursesPayloadForLicenseType(string $licenseType): array
+    {
+        return $this->mapCoursesPayload($this->mandatoryCoursesForForm($licenseType));
     }
 
     public function create(array $payload): CeBundle
@@ -112,8 +175,9 @@ class CeBundleService
         $this->assertBestSellerLimit($bundle);
         $bundle->save();
         $this->syncMandatoryCourses($bundle, $payload['mandatory_course_ids'] ?? []);
+        $this->syncElectiveCourses($bundle, $payload['elective_course_ids'] ?? []);
 
-        return $bundle->load('mandatoryCourses');
+        return $bundle->load(['mandatoryCourses', 'electiveCourses']);
     }
 
     public function update(CeBundle $bundle, array $payload): CeBundle
@@ -122,8 +186,9 @@ class CeBundleService
         $this->assertBestSellerLimit($bundle);
         $bundle->save();
         $this->syncMandatoryCourses($bundle, $payload['mandatory_course_ids'] ?? []);
+        $this->syncElectiveCourses($bundle, $payload['elective_course_ids'] ?? []);
 
-        return $bundle->load('mandatoryCourses');
+        return $bundle->load(['mandatoryCourses', 'electiveCourses']);
     }
 
     public function delete(CeBundle $bundle): void
@@ -160,7 +225,14 @@ class CeBundleService
             'total_hours' => $payload['total_hours'],
             'elective_hours_allowed' => $payload['elective_hours_allowed'],
             'price' => $payload['price'],
-            'compare_at_price' => $payload['compare_at_price'] ?? null,
+            'tax_percent' => $payload['tax_percent'] ?? 0,
+            'discount_type' => $payload['discount_type'] ?? null,
+            'discount' => $payload['discount'] ?? 0,
+            'total_amount' => $payload['total_amount'] ?? 0,
+            'total_tax' => $payload['total_tax'] ?? 0,
+            'total_discount' => $payload['total_discount'] ?? 0,
+            'compare_at_price' => null,
+            'ce_license_type_id' => $payload['ce_license_type_id'] ?? null,
             'license_type' => $payload['license_type'] ?? 'rn_lpn',
             'card_style' => $payload['card_style'] ?? 'primary',
             'is_best_seller' => (bool) ($payload['is_best_seller'] ?? false),
@@ -174,7 +246,10 @@ class CeBundleService
     protected function syncMandatoryCourses(CeBundle $bundle, array $courseIds): void
     {
         $courseIds = array_values(array_unique(array_map('intval', $courseIds)));
-        $this->assertMandatoryCoursesValid($bundle->license_type, $courseIds);
+        $audienceKey = $bundle->license_type
+            ?: $this->audienceKeyForLicenseId($bundle->ce_license_type_id);
+
+        $this->assertMandatoryCoursesValid((string) $audienceKey, $courseIds);
 
         $existingMandatoryIds = $bundle->courses()
             ->wherePivot('course_role', 'mandatory')
@@ -192,6 +267,30 @@ class CeBundleService
         }
     }
 
+    protected function syncElectiveCourses(CeBundle $bundle, array $courseIds): void
+    {
+        $courseIds = array_values(array_unique(array_map('intval', $courseIds)));
+        $audienceKey = $bundle->license_type
+            ?: $this->audienceKeyForLicenseId($bundle->ce_license_type_id);
+
+        $this->assertElectiveCoursesValid((string) $audienceKey, $courseIds);
+
+        $existingElectiveIds = $bundle->courses()
+            ->wherePivot('course_role', 'elective')
+            ->pluck('ce_courses.id');
+
+        if ($existingElectiveIds->isNotEmpty()) {
+            $bundle->courses()->detach($existingElectiveIds);
+        }
+
+        foreach ($courseIds as $index => $courseId) {
+            $bundle->courses()->attach($courseId, [
+                'course_role' => 'elective',
+                'sort_order' => $index + 1,
+            ]);
+        }
+    }
+
     protected function assertMandatoryCoursesValid(string $licenseType, array $courseIds): void
     {
         if ($courseIds === []) {
@@ -202,7 +301,22 @@ class CeBundleService
 
         foreach ($courseIds as $courseId) {
             if (! in_array($courseId, $allowedIds, true)) {
-                throw new InvalidArgumentException('One or more selected courses are not valid mandatory courses for this license type.');
+                throw new InvalidArgumentException('One or more selected courses are not valid mandatory courses for this license.');
+            }
+        }
+    }
+
+    protected function assertElectiveCoursesValid(string $licenseType, array $courseIds): void
+    {
+        if ($courseIds === []) {
+            return;
+        }
+
+        $allowedIds = $this->electiveCoursesForForm($licenseType)->pluck('id')->all();
+
+        foreach ($courseIds as $courseId) {
+            if (! in_array($courseId, $allowedIds, true)) {
+                throw new InvalidArgumentException('One or more selected courses are not valid elective courses for this license.');
             }
         }
     }

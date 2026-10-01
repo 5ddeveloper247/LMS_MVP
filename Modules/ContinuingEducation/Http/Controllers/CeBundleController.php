@@ -8,23 +8,23 @@ use InvalidArgumentException;
 use Modules\ContinuingEducation\Http\Requests\StoreCeBundleRequest;
 use Modules\ContinuingEducation\Http\Requests\UpdateCeBundleRequest;
 use Modules\ContinuingEducation\Services\CeBundleService;
+use Modules\ContinuingEducation\Services\CeLicenseService;
 
 class CeBundleController extends Controller
 {
     public function __construct(
-        protected CeBundleService $bundleService
+        protected CeBundleService $bundleService,
+        protected CeLicenseService $licenseService
     ) {}
 
     public function index()
     {
         try {
             $bundles = $this->bundleService->listForAdmin();
-            $licenseTypes = config('continuingeducation.bundle_license_types', []);
             $cardStyles = config('continuingeducation.bundle_card_styles', []);
 
             return view('continuingeducation::bundles.index', compact(
                 'bundles',
-                'licenseTypes',
                 'cardStyles'
             ));
         } catch (\Exception $e) {
@@ -37,36 +37,62 @@ class CeBundleController extends Controller
 
     public function create()
     {
-        $licenseTypes = config('continuingeducation.bundle_license_types', []);
+        $licenses = $this->licenseService->listActiveForForms();
         $cardStyles = config('continuingeducation.bundle_card_styles', []);
-        $selectedLicenseType = old('license_type', request('license_type'));
-        $mandatoryCourses = $selectedLicenseType
-            ? $this->bundleService->mandatoryCoursesForForm($selectedLicenseType)
+        $selectedLicenseId = old('ce_license_type_id', request('ce_license_type_id'));
+        $selectedLicenseId = $selectedLicenseId !== null && $selectedLicenseId !== ''
+            ? (int) $selectedLicenseId
+            : null;
+        $mandatoryCourses = $selectedLicenseId
+            ? $this->bundleService->mandatoryCoursesForLicenseId($selectedLicenseId)
+            : collect();
+        $electiveCourses = $selectedLicenseId
+            ? $this->bundleService->electiveCoursesForLicenseId($selectedLicenseId)
             : collect();
         $selectedCourseIds = array_map('intval', old('mandatory_course_ids', []));
+        $selectedElectiveCourseIds = array_map('intval', old('elective_course_ids', []));
 
         return view('continuingeducation::bundles.create', compact(
-            'licenseTypes',
+            'licenses',
             'cardStyles',
             'mandatoryCourses',
-            'selectedLicenseType',
-            'selectedCourseIds'
+            'electiveCourses',
+            'selectedLicenseId',
+            'selectedCourseIds',
+            'selectedElectiveCourseIds'
         ));
     }
 
     public function mandatoryCourses()
     {
-        $licenseType = request('license_type');
+        $licenseId = (int) request('ce_license_type_id');
 
-        if (! in_array($licenseType, ['rn_lpn', 'aprn'], true)) {
+        if ($licenseId <= 0) {
             return response()->json([
                 'courses' => [],
-                'message' => 'Select a valid license type.',
+                'mandatory' => [],
+                'elective' => [],
+                'message' => 'Select a valid license.',
             ], 422);
         }
 
+        try {
+            $this->licenseService->findActiveForLms($licenseId);
+        } catch (\Exception $e) {
+            return response()->json([
+                'courses' => [],
+                'mandatory' => [],
+                'elective' => [],
+                'message' => 'Select a valid active license.',
+            ], 422);
+        }
+
+        $payload = $this->bundleService->coursesPayloadForLicenseId($licenseId);
+
         return response()->json([
-            'courses' => $this->bundleService->mandatoryCoursesPayloadForLicenseType($licenseType),
+            'courses' => $payload['mandatory'],
+            'mandatory' => $payload['mandatory'],
+            'elective' => $payload['elective'],
         ]);
     }
 
@@ -95,22 +121,39 @@ class CeBundleController extends Controller
     public function edit($id)
     {
         $bundle = $this->bundleService->findForLms((int) $id);
-        $licenseTypes = config('continuingeducation.bundle_license_types', []);
+        $licenses = $this->licenseService->listActiveForForms();
         $cardStyles = config('continuingeducation.bundle_card_styles', []);
-        $selectedLicenseType = old('license_type', request('license_type', $bundle->license_type));
-        $mandatoryCourses = $this->bundleService->mandatoryCoursesForForm($selectedLicenseType);
+        $selectedLicenseId = old(
+            'ce_license_type_id',
+            request('ce_license_type_id', $bundle->ce_license_type_id)
+        );
+        $selectedLicenseId = $selectedLicenseId !== null && $selectedLicenseId !== ''
+            ? (int) $selectedLicenseId
+            : null;
+        $mandatoryCourses = $selectedLicenseId
+            ? $this->bundleService->mandatoryCoursesForLicenseId($selectedLicenseId)
+            : collect();
+        $electiveCourses = $selectedLicenseId
+            ? $this->bundleService->electiveCoursesForLicenseId($selectedLicenseId)
+            : collect();
         $selectedCourseIds = old(
             'mandatory_course_ids',
-            $bundle->courses->pluck('id')->map(fn ($id) => (int) $id)->all()
+            $bundle->mandatoryCourses->pluck('id')->map(fn ($id) => (int) $id)->all()
+        );
+        $selectedElectiveCourseIds = old(
+            'elective_course_ids',
+            $bundle->electiveCourses->pluck('id')->map(fn ($id) => (int) $id)->all()
         );
 
         return view('continuingeducation::bundles.edit', compact(
             'bundle',
-            'licenseTypes',
+            'licenses',
             'cardStyles',
             'mandatoryCourses',
-            'selectedLicenseType',
-            'selectedCourseIds'
+            'electiveCourses',
+            'selectedLicenseId',
+            'selectedCourseIds',
+            'selectedElectiveCourseIds'
         ));
     }
 
