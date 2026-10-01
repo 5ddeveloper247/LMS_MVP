@@ -207,6 +207,10 @@ class CeCatalogService
 
     public function bundleUrl(CeCourse $course): string
     {
+        if ($this->isCnaAudience($course)) {
+            return route('continuingEducationCna');
+        }
+
         return $this->isAprnAudience($course)
             ? route('continuingEducationAprn')
             : route('continuingEducationRnLpn');
@@ -214,6 +218,10 @@ class CeCatalogService
 
     public function bundleLabel(CeCourse $course): string
     {
+        if ($this->isCnaAudience($course)) {
+            return 'View CNA Packages';
+        }
+
         return $this->isAprnAudience($course)
             ? 'View APRN Packages'
             : 'View RN & LPN Packages';
@@ -223,7 +231,14 @@ class CeCatalogService
     {
         $groups = ceAudienceGroupsFromAudience($course->audience ?? []);
 
-        return in_array('aprn_np', $groups, true) && ! in_array('rn_lpn', $groups, true);
+        return in_array('aprn_np', $groups, true) && ! in_array('rn_lpn', $groups, true) && ! in_array('cna', $groups, true);
+    }
+
+    public function isCnaAudience(CeCourse $course): bool
+    {
+        $groups = ceAudienceGroupsFromAudience($course->audience ?? []);
+
+        return in_array('cna', $groups, true) && ! in_array('rn_lpn', $groups, true) && ! in_array('aprn_np', $groups, true);
     }
 
     public function isAprnSpecificCourse(CeCourse $course): bool

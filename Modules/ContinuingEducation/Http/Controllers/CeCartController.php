@@ -128,7 +128,7 @@ class CeCartController extends Controller
 
             $detailRoute = $this->bundleLandingUrl($bundle);
 
-            if ((float) $bundle->price <= 0) {
+            if ($this->bundlePrice($bundle) <= 0) {
                 Toastr::error('This bundle is not available for purchase.', trans('common.Failed'));
 
                 return redirect()->to($detailRoute);
@@ -153,7 +153,7 @@ class CeCartController extends Controller
 
             $this->storeCartLine($user->id, [
                 'ce_bundle_id' => $bundle->id,
-                'price' => (float) $bundle->price,
+                'price' => $this->bundlePrice($bundle),
             ]);
 
             Toastr::success('Bundle added to your cart.', trans('common.Success'));
@@ -227,10 +227,21 @@ class CeCartController extends Controller
         return $course->salePrice();
     }
 
+    protected function bundlePrice(CeBundle $bundle): float
+    {
+        return $bundle->salePrice();
+    }
+
     protected function bundleLandingUrl(CeBundle $bundle): string
     {
-        return $bundle->license_type === 'aprn'
-            ? route('continuingEducationAprn')
-            : route('continuingEducationRnLpn');
+        if ($bundle->license_type === 'aprn') {
+            return route('continuingEducationAprn');
+        }
+
+        if ($bundle->license_type === 'cna') {
+            return route('continuingEducationCna');
+        }
+
+        return route('continuingEducationRnLpn');
     }
 }

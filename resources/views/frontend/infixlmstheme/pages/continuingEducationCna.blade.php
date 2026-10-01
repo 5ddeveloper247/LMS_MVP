@@ -11,7 +11,6 @@
 @endsection
 
 @section('mainContent')
-    {{-- Temporary: reuse RN/LPN layout until a dedicated CNA design is provided. Courses are filtered to CNA. --}}
-    @include(theme('components.ce.continuing-education-rn-lpn-page-section'))
+    @include(theme('components.ce.continuing-education-cna-page-section'))
     @include(theme('partials._custom_footer'))
 @endsection
