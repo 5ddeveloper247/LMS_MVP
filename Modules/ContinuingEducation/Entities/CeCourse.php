@@ -120,15 +120,13 @@ class CeCourse extends Model
 
     public function getAudienceLabelsAttribute(): array
     {
-        $keys = $this->audience ?? [];
         $labels = [];
 
-        if (in_array('rn', $keys, true)) {
-            $labels[] = 'RN';
-        }
-
-        if (in_array('lpn', $keys, true) || in_array('aprn', $keys, true)) {
-            $labels[] = 'LPN/APRN';
+        foreach (ceAudienceGroupsFromAudience($this->audience ?? []) as $group) {
+            $label = config('continuingeducation.audience_groups.' . $group);
+            if ($label) {
+                $labels[] = $label;
+            }
         }
 
         return $labels;
@@ -153,12 +151,21 @@ class CeCourse extends Model
     public function matchesLicenseType(string $licenseType): bool
     {
         $audience = $this->audience ?? [];
+        $groups = ceAudienceGroupsFromAudience($audience);
 
         if ($licenseType === 'rn_lpn') {
-            return in_array('rn', $audience, true) || in_array('lpn', $audience, true);
+            return in_array('rn_lpn', $groups, true);
         }
 
-        return in_array('aprn', $audience, true) || in_array('lpn', $audience, true);
+        if ($licenseType === 'aprn' || $licenseType === 'aprn_np') {
+            return in_array('aprn_np', $groups, true);
+        }
+
+        if ($licenseType === 'cna') {
+            return in_array('cna', $groups, true);
+        }
+
+        return false;
     }
 
     public function taxPercentValue(): float

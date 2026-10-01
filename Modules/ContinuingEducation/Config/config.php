@@ -16,11 +16,14 @@ return [
         'rn' => 'RN',
         'lpn' => 'LPN',
         'aprn' => 'APRN',
+        'np' => 'NP',
+        'cna' => 'CNA',
     ],
 
     'audience_groups' => [
-        'rn' => 'RN',
-        'lpn_aprn' => 'LPN/APRN',
+        'rn_lpn' => 'RN & LPN',
+        'aprn_np' => 'APRN & NP',
+        'cna' => 'CNA',
     ],
 
     'enrollment_statuses' => [

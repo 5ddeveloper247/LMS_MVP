@@ -7,7 +7,7 @@
                         <th scope="col">{{ trans('common.SL') }}</th>
                         <th scope="col">Title</th>
                         <th scope="col">Contact Hours</th>
-                        <th scope="col">{{ __('quiz.Category') }}</th>
+                        <th scope="col">Licence Category</th>
                         <th scope="col">Status</th>
                         <th scope="col">{{ trans('common.Action') }}</th>
                     </tr>

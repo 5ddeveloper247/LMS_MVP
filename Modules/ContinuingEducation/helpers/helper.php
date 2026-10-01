@@ -61,8 +61,12 @@ if (! function_exists('ceAudienceGroupMap')) {
     function ceAudienceGroupMap(): array
     {
         return [
-            'rn' => ['rn'],
-            'lpn_aprn' => ['lpn', 'aprn'],
+            'rn_lpn' => ['rn', 'lpn'],
+            'aprn_np' => ['aprn', 'np'],
+            'cna' => ['cna'],
+            // Legacy keys (pre Licence Category rename) — kept for old form posts.
+            'rn' => ['rn', 'lpn'],
+            'lpn_aprn' => ['aprn', 'np'],
         ];
     }
 }
@@ -89,15 +93,28 @@ if (! function_exists('ceAudienceGroupsFromAudience')) {
         $audience = $audience ?? [];
         $groups = [];
 
-        if (in_array('rn', $audience, true)) {
-            $groups[] = 'rn';
+        $hasRn = in_array('rn', $audience, true);
+        $hasLpn = in_array('lpn', $audience, true);
+        $hasAprn = in_array('aprn', $audience, true);
+        $hasNp = in_array('np', $audience, true);
+        $hasCna = in_array('cna', $audience, true);
+
+        // RN & LPN: new rows store rn+lpn; legacy RN-only had rn.
+        // Legacy LPN/APRN was lpn+aprn without rn → do NOT map that to RN & LPN.
+        if ($hasRn || ($hasLpn && ! $hasAprn && ! $hasNp)) {
+            $groups[] = 'rn_lpn';
         }
 
-        if (in_array('lpn', $audience, true) || in_array('aprn', $audience, true)) {
-            $groups[] = 'lpn_aprn';
+        // APRN & NP: new rows store aprn+np; legacy LPN/APRN had aprn (+ lpn).
+        if ($hasAprn || $hasNp) {
+            $groups[] = 'aprn_np';
         }
 
-        return $groups;
+        if ($hasCna) {
+            $groups[] = 'cna';
+        }
+
+        return array_values(array_unique($groups));
     }
 }
 

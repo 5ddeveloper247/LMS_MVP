@@ -4,7 +4,7 @@
         $selectedAudienceGroups = ceAudienceGroupsFromAudience($ceCourse->audience ?? []);
     }
     if (! is_array($selectedAudienceGroups) || $selectedAudienceGroups === []) {
-        $selectedAudienceGroups = ['rn'];
+        $selectedAudienceGroups = ['rn_lpn'];
     }
     $courseTypes = config('continuingeducation.course_types', []);
     $audienceGroups = config('continuingeducation.audience_groups', []);
@@ -45,7 +45,7 @@
 
     <div class="col-xl-12">
         <div class="primary_input mb-25">
-            <label class="primary_input_label">{{ __('quiz.Category') }} <strong class="text-danger">*</strong></label>
+            <label class="primary_input_label">Licence Category <strong class="text-danger">*</strong></label>
             <div class="row">
                 @foreach ($audienceGroups as $value => $label)
                     <div class="col-md-4 col-sm-6 mb-25">

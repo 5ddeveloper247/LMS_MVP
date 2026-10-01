@@ -220,17 +220,14 @@ class CeCatalogService
 
     public function isAprnAudience(CeCourse $course): bool
     {
-        $audience = $course->audience ?? [];
+        $groups = ceAudienceGroupsFromAudience($course->audience ?? []);
 
-        return (in_array('lpn', $audience, true) || in_array('aprn', $audience, true))
-            && ! in_array('rn', $audience, true);
+        return in_array('aprn_np', $groups, true) && ! in_array('rn_lpn', $groups, true);
     }
 
     public function isAprnSpecificCourse(CeCourse $course): bool
     {
-        $audience = $course->audience ?? [];
-
-        return in_array('aprn', $audience, true) && ! in_array('rn', $audience, true);
+        return $this->isAprnAudience($course);
     }
 
     public function summary(CeCourse $course, int $limit = 120): string
