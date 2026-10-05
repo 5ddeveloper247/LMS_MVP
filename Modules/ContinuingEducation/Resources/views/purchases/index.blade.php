@@ -7,67 +7,90 @@
 @section('mainContent')
     {!! generateBreadcrumb() !!}
 
-    <section class="admin-visitor-area up_st_admin_visitor">
+    <section class="admin-visitor-area up_st_admin_visitor student-details">
         <div class="container-fluid p-0">
-            <div class="row justify-content-center">
+            <div class="row pt-0">
                 <div class="col-12">
-                    <div class="box_header common_table_header">
-                        <div class="main-title d-md-flex w-100 align-items-center">
-                            <h3 class="mr-30 mb_xs_15px mb_sm_20px mb-0">CE Purchases</h3>
+                    <ul class="nav nav-tabs no-bottom-border mt-sm-md-20 mb-10 ml-3" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#ce_purchase_courses" role="tab" data-toggle="tab">
+                                {{ __('Course') }}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#ce_purchase_bundles" role="tab" data-toggle="tab">
+                                {{ __('Bundle') }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tab-content mt-4">
+                <div role="tabpanel" class="tab-pane fade show active" id="ce_purchase_courses">
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <div class="box_header common_table_header">
+                                <div class="main-title d-md-flex">
+                                    <h3 class="mr-30 mb_xs_15px mb_sm_20px mb-0">Course Purchases</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="QA_section QA_section_heading_custom check_box_table">
+                                <div class="QA_table">
+                                    <table id="lms_table" class="Crm_table_active3 table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">{{ __('common.SL') }}</th>
+                                                <th scope="col">Tracking</th>
+                                                <th scope="col">Buyer</th>
+                                                <th scope="col">Course</th>
+                                                <th scope="col">Amount</th>
+                                                <th scope="col">Discount</th>
+                                                <th scope="col">Date</th>
+                                                <th scope="col">Payment</th>
+                                                <th scope="col">{{ __('common.Action') }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-lg-12 mb-3">
-                    <div class="white_box_30px">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <label class="primary_input_label" for="filter_item_type">Type</label>
-                                <select id="filter_item_type" class="primary_select">
-                                    <option value="">All</option>
-                                    <option value="course">Course</option>
-                                    <option value="bundle">Bundle</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="primary_input_label" for="filter_payment_status">Payment Status</label>
-                                <select id="filter_payment_status" class="primary_select">
-                                    <option value="">All</option>
-                                    <option value="paid" selected>Paid</option>
-                                    <option value="pending">Pending</option>
-                                    <option value="failed">Failed</option>
-                                    <option value="refunded">Refunded</option>
-                                    <option value="cancelled">Cancelled</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3 d-flex align-items-end">
-                                <button type="button" id="ce_purchase_filter_btn" class="primary-btn fix-gr-bg">
-                                    {{ __('common.Search') }}
-                                </button>
+                <div role="tabpanel" class="tab-pane fade" id="ce_purchase_bundles">
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <div class="box_header common_table_header">
+                                <div class="main-title d-md-flex">
+                                    <h3 class="mr-30 mb_xs_15px mb_sm_20px mb-0">Bundle Purchases</h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-12">
-                    <div class="QA_section QA_section_heading_custom check_box_table">
-                        <div class="QA_table">
-                            <table id="lms_table" class="Crm_table_active3 table table-responsive">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">{{ __('common.SL') }}</th>
-                                        <th scope="col">Tracking</th>
-                                        <th scope="col">Buyer</th>
-                                        <th scope="col">Type</th>
-                                        <th scope="col">Item</th>
-                                        <th scope="col">Amount</th>
-                                        <th scope="col">Date</th>
-                                        <th scope="col">Payment</th>
-                                        <th scope="col">{{ __('common.Action') }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
+                        <div class="col-lg-12">
+                            <div class="QA_section QA_section_heading_custom check_box_table">
+                                <div class="QA_table">
+                                    <table id="lms_table2" class="Crm_table_active3 table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">{{ __('common.SL') }}</th>
+                                                <th scope="col">Tracking</th>
+                                                <th scope="col">Buyer</th>
+                                                <th scope="col">Bundle</th>
+                                                <th scope="col">Amount</th>
+                                                <th scope="col">Discount</th>
+                                                <th scope="col">Date</th>
+                                                <th scope="col">Payment</th>
+                                                <th scope="col">{{ __('common.Action') }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -79,82 +102,94 @@
 @push('scripts')
     <script>
         (function () {
-            if (typeof $.fn.niceSelect !== 'undefined') {
-                $('#filter_item_type, #filter_payment_status').niceSelect();
+            function purchaseTableOptions(itemType) {
+                return {
+                    bLengthChange: true,
+                    lengthChange: true,
+                    lengthMenu: [
+                        [10, 25, 50, 100],
+                        [10, 25, 50, 100]
+                    ],
+                    bDestroy: true,
+                    processing: true,
+                    serverSide: true,
+                    order: [[0, 'desc']],
+                    ajax: {
+                        url: '{!! route('continuing-education.purchases.data') !!}',
+                        data: function (d) {
+                            d.item_type = itemType;
+                            d.payment_status = 'paid';
+                        }
+                    },
+                    columns: [
+                        { data: 'DT_RowIndex', name: 'id', orderable: true },
+                        { data: 'tracking', name: 'tracking' },
+                        { data: 'buyer', name: 'user.name', orderable: false },
+                        { data: 'item_name', name: 'item_name' },
+                        { data: 'purchase_amount', name: 'total_paid', orderable: false },
+                        { data: 'discount', name: 'discount_amount', orderable: false },
+                        { data: 'purchased_on', name: 'purchased_at' },
+                        { data: 'payment_status_badge', name: 'payment_status', orderable: false },
+                        { data: 'action', name: 'action', orderable: false, searchable: false }
+                    ],
+                    language: {
+                        emptyTable: "{{ __('common.No data available in the table') }}",
+                        search: "<i class='ti-search'></i>",
+                        searchPlaceholder: '{!! __("common.Quick Search") !!}',
+                        paginate: {
+                            next: "<i class='ti-arrow-right'></i>",
+                            previous: "<i class='ti-arrow-left'></i>"
+                        }
+                    },
+                    dom: 'Blfrtip',
+                    buttons: [{
+                        extend: 'copyHtml5',
+                        text: '<i class="far fa-copy"></i>',
+                        title: $("#logo_title").val(),
+                        exportOptions: { columns: ':not(:last-child)' }
+                    }, {
+                        extend: 'excelHtml5',
+                        text: '<i class="far fa-file-excel"></i>',
+                        title: $("#logo_title").val(),
+                        exportOptions: { columns: ':not(:last-child)' }
+                    }, {
+                        extend: 'csvHtml5',
+                        text: '<i class="far fa-file-alt"></i>',
+                        title: $("#logo_title").val(),
+                        exportOptions: { columns: ':not(:last-child)' }
+                    }, {
+                        extend: 'pdfHtml5',
+                        text: '<i class="far fa-file-pdf"></i>',
+                        title: $("#logo_title").val(),
+                        exportOptions: { columns: ':not(:last-child)' }
+                    }, {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i>',
+                        title: $("#logo_title").val(),
+                        exportOptions: { columns: ':not(:last-child)' }
+                    }, {
+                        extend: 'colvis',
+                        text: '<i class="fa fa-columns"></i>',
+                        postfixButtons: ['colvisRestore']
+                    }],
+                    responsive: true
+                };
             }
 
-            var table = $('#lms_table').DataTable({
-                bLengthChange: true,
-                lengthMenu: [
-                    [10, 25, 50, 100, -1],
-                    [10, 25, 50, 100, 'All']
-                ],
-                bDestroy: true,
-                processing: true,
-                serverSide: true,
-                order: [[0, 'desc']],
-                ajax: {
-                    url: '{!! route('continuing-education.purchases.data') !!}',
-                    data: function (d) {
-                        d.item_type = $('#filter_item_type').val();
-                        d.payment_status = $('#filter_payment_status').val();
-                    }
-                },
-                columns: [
-                    { data: 'DT_RowIndex', name: 'id', orderable: true },
-                    { data: 'tracking', name: 'tracking' },
-                    { data: 'buyer', name: 'user.name', orderable: false },
-                    { data: 'item_type_badge', name: 'item_type', orderable: false },
-                    { data: 'item_name', name: 'item_name' },
-                    { data: 'amount', name: 'total_paid', orderable: false },
-                    { data: 'purchased_on', name: 'purchased_at' },
-                    { data: 'payment_status_badge', name: 'payment_status', orderable: false },
-                    { data: 'action', name: 'action', orderable: false, searchable: false }
-                ],
-                language: {
-                    emptyTable: '{{ __('common.No data available in the table') }}',
-                    search: "<i class='ti-search'></i>",
-                    searchPlaceholder: '{{ __('common.Quick Search') }}',
-                    paginate: {
-                        next: "<i class='ti-arrow-right'></i>",
-                        previous: "<i class='ti-arrow-left'></i>"
-                    }
-                },
-                dom: 'Bfrtip',
-                buttons: [{
-                    extend: 'copyHtml5',
-                    text: '<i class="far fa-copy"></i>',
-                    title: $("#logo_title").val(),
-                    exportOptions: { columns: ':visible:not(:last-child)' }
-                }, {
-                    extend: 'excelHtml5',
-                    text: '<i class="far fa-file-excel"></i>',
-                    title: $("#logo_title").val(),
-                    exportOptions: { columns: ':visible:not(:last-child)' }
-                }, {
-                    extend: 'csvHtml5',
-                    text: '<i class="far fa-file-alt"></i>',
-                    title: $("#logo_title").val(),
-                    exportOptions: { columns: ':visible:not(:last-child)' }
-                }, {
-                    extend: 'pdfHtml5',
-                    text: '<i class="far fa-file-pdf"></i>',
-                    title: $("#logo_title").val(),
-                    exportOptions: { columns: ':visible:not(:last-child)' }
-                }, {
-                    extend: 'print',
-                    text: '<i class="fa fa-print"></i>',
-                    title: $("#logo_title").val(),
-                    exportOptions: { columns: ':visible:not(:last-child)' }
-                }, {
-                    extend: 'colvis',
-                    text: '<i class="fa fa-columns"></i>',
-                    postfixButtons: ['colvisRestore']
-                }]
-            });
+            var courseTable = $('#lms_table').DataTable(purchaseTableOptions('course'));
+            var bundleTable = null;
 
-            $('#ce_purchase_filter_btn').on('click', function () {
-                table.ajax.reload();
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                var target = $(e.target).attr('href');
+                if (target === '#ce_purchase_bundles') {
+                    if (!bundleTable) {
+                        bundleTable = $('#lms_table2').DataTable(purchaseTableOptions('bundle'));
+                    } else {
+                        bundleTable.columns.adjust().responsive.recalc();
+                    }
+                } else if (target === '#ce_purchase_courses') {
+                    courseTable.columns.adjust().responsive.recalc();
+                }
             });
         })();
     </script>

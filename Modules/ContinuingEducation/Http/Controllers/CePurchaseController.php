@@ -23,18 +23,22 @@ class CePurchaseController extends Controller
 
     public function data(Request $request)
     {
+        $itemType = $request->input('item_type', 'course');
+        if (! in_array($itemType, ['course', 'bundle'], true)) {
+            $itemType = 'course';
+        }
+
         $query = CePurchase::query()
             ->forLms()
-            ->with(['user:id,name,email,role_id'])
+            ->with(['user:id,name,email,role_id', 'items:id,ce_purchase_id'])
+            ->where('item_type', $itemType)
             ->orderByDesc('purchased_at')
             ->orderByDesc('id');
 
-        if ($request->filled('item_type') && in_array($request->item_type, ['course', 'bundle'], true)) {
-            $query->where('item_type', $request->item_type);
-        }
-
         if ($request->filled('payment_status')) {
             $query->where('payment_status', $request->payment_status);
+        } else {
+            $query->where('payment_status', 'paid');
         }
 
         return DataTables::of($query)
@@ -50,25 +54,21 @@ class CePurchaseController extends Controller
 
                 return '<div><strong>' . $name . '</strong><div class="text-muted small">' . $email . '</div></div>';
             })
-            ->addColumn('item_type_badge', function (CePurchase $purchase) {
-                if ($purchase->isBundlePurchase()) {
-                    return '<span class="badge badge-info">Bundle</span>';
-                }
-
-                return '<span class="badge badge-primary">Course</span>';
-            })
             ->addColumn('item_name', function (CePurchase $purchase) {
-                return e($purchase->item_name ?? 'N/A');
-            })
-            ->addColumn('amount', function (CePurchase $purchase) {
-                $paid = '$' . number_format((float) $purchase->total_paid, 2);
-                $discount = (float) $purchase->discount_amount;
+                $name = e($purchase->item_name ?? 'N/A');
 
-                if ($discount > 0) {
-                    $paid .= '<div class="text-muted small">Disc: $' . number_format($discount, 2) . '</div>';
+                if ($purchase->isBundlePurchase()) {
+                    $count = $purchase->items->count();
+                    $name .= ' <span class="badge badge-info">Bundle · ' . $count . ' courses</span>';
                 }
 
-                return $paid;
+                return $name;
+            })
+            ->addColumn('purchase_amount', function (CePurchase $purchase) {
+                return '$' . number_format((float) $purchase->total_paid, 2);
+            })
+            ->addColumn('discount', function (CePurchase $purchase) {
+                return '$' . number_format((float) $purchase->discount_amount, 2);
             })
             ->addColumn('purchased_on', function (CePurchase $purchase) {
                 $date = $purchase->purchased_at ?? $purchase->created_at;
@@ -90,7 +90,7 @@ class CePurchaseController extends Controller
             ->addColumn('action', function (CePurchase $purchase) {
                 return view('continuingeducation::purchases._td_action', compact('purchase'))->render();
             })
-            ->rawColumns(['buyer', 'item_type_badge', 'amount', 'payment_status_badge', 'action'])
+            ->rawColumns(['buyer', 'item_name', 'payment_status_badge', 'action'])
             ->make(true);
     }
 
@@ -101,10 +101,10 @@ class CePurchaseController extends Controller
                 ->forLms()
                 ->with([
                     'user:id,name,email,phone,image,role_id,status',
-                    'ceCourse:id,title,slug,course_type,contact_hours',
+                    'ceCourse:id,title,slug,course_type,contact_hours,thumbnail,image',
                     'ceBundle:id,name,slug,license_type,total_hours,elective_hours_allowed',
                     'items.enrollment',
-                    'items.ceCourse:id,title,slug',
+                    'items.ceCourse:id,title,slug,course_type,contact_hours,thumbnail,image',
                     'enrollments.ceCourse:id,title,slug,course_type,contact_hours',
                 ])
                 ->findOrFail($id);

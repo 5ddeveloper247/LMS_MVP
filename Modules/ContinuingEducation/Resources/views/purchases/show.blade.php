@@ -1,25 +1,7 @@
 @extends('backend.master')
 
 @push('styles')
-    <style>
-        .ce-purchase-view .section-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin: 24px 0 16px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .ce-purchase-view .summary-table td {
-            padding: 6px 10px;
-            vertical-align: top;
-        }
-
-        .ce-purchase-view .summary-table td:first-child {
-            font-weight: 600;
-            width: 180px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('public/backend/css/student_list.css') }}" />
 @endpush
 
 @section('mainContent')
@@ -27,219 +9,185 @@
         $formatHours = function ($hours) {
             return rtrim(rtrim(number_format((float) $hours, 1, '.', ''), '0'), '.');
         };
-        $status = strtolower((string) $purchase->payment_status);
-        $statusClass = match ($status) {
-            'paid' => 'badge-success',
-            'pending' => 'badge-warning',
-            'failed', 'cancelled' => 'badge-danger',
-            'refunded' => 'badge-secondary',
-            default => 'badge-light',
-        };
+        $status = strtoupper((string) ($purchase->payment_status ?: 'N/A'));
+        $paid = (float) $purchase->total_paid;
+        $discount = (float) $purchase->discount_amount;
+        $unit = (float) $purchase->unit_price;
+        $subtotal = $unit > 0 ? $unit : ($paid + $discount);
     @endphp
 
     {!! generateBreadcrumb() !!}
 
-    <section class="admin-visitor-area ce-purchase-view">
+    <section class="admin-visitor-area up_st_admin_visitor student-details">
         <div class="container-fluid p-0">
             <div class="row">
-                <div class="col-md-12">
-                    <div class="box_header common_table_header mb-3">
-                        <div class="main-title d-md-flex w-100 align-items-center">
-                            <h3 class="mb-0">CE Purchase Details</h3>
-                            <ul class="d-flex ml-auto mb-0">
-                                <li>
-                                    <a href="{{ route('continuing-education.purchases.index') }}" class="primary-btn fix-gr-bg mr-10">
-                                        <i class="ti-arrow-left"></i> Back to Purchases
-                                    </a>
-                                </li>
+                <div class="col-12">
+                    <div class="section__title3 mb_40">
+                        <h3 class="custom_small_heading mb-0">
+                            {{ $purchase->isBundlePurchase() ? 'Bundle Purchase Details' : 'Course Purchase Details' }}
+                        </h3>
+                    </div>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <div class="card">
+                        <div class="card-header d-flex align-items-center">
+                            <div class="col-6">
+                                <a href="{{ route('continuing-education.purchases.index') }}" style="color:#2ca6a4;">
+                                    <i class="fa fa-arrow-left"></i> Back to Purchases
+                                </a>
+                            </div>
+                            <div class="col-6 text-right">
                                 @if ($isCeBuyer && routeIsExist('continuing-education.students.show'))
-                                    <li>
-                                        <a href="{{ route('continuing-education.students.show', $purchase->user_id) }}"
-                                            class="primary-btn fix-gr-bg mr-10">
-                                            View CE Student
-                                        </a>
-                                    </li>
+                                    <a href="{{ route('continuing-education.students.show', $purchase->user_id) }}"
+                                        class="btn btn-rounded btn-info">
+                                        View CE Student
+                                    </a>
                                 @endif
                                 @if (! empty($purchase->checkout_id) && routeIsExist('invoice'))
-                                    <li>
-                                        <a href="{{ route('invoice', $purchase->checkout_id) }}" class="primary-btn fix-gr-bg">
-                                            View Invoice
-                                        </a>
-                                    </li>
+                                    <a href="{{ route('invoice', $purchase->checkout_id) }}"
+                                        class="btn btn-rounded btn-warning">
+                                        View Invoice
+                                    </a>
                                 @endif
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="white_box_30px mb-3">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <h5 class="section-title mt-0">Buyer</h5>
-                                <table class="summary-table">
-                                    <tr>
-                                        <td>Name</td>
-                                        <td>{{ $purchase->user->name ?? 'N/A' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Email</td>
-                                        <td>{{ $purchase->user->email ?? 'N/A' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Phone</td>
-                                        <td>{{ $purchase->user->phone ?? 'N/A' }}</td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div class="col-lg-6">
-                                <h5 class="section-title mt-0">Purchase Summary</h5>
-                                <table class="summary-table">
-                                    <tr>
-                                        <td>Tracking</td>
-                                        <td>{{ $purchase->tracking ?: ('ce#' . $purchase->id) }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Type</td>
-                                        <td>
-                                            @if ($purchase->isBundlePurchase())
-                                                <span class="badge badge-info">Bundle</span>
-                                            @else
-                                                <span class="badge badge-primary">Course</span>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Item</td>
-                                        <td>{{ $purchase->item_name }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>License</td>
-                                        <td>{{ strtoupper(str_replace('_', ' ', (string) ($purchase->license_type ?? 'N/A'))) }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Hours</td>
-                                        <td>
-                                            @if ($purchase->isBundlePurchase())
-                                                Total {{ $formatHours($purchase->total_hours) }}h
-                                                @if ((float) $purchase->elective_hours_allowed > 0)
-                                                    · Elective allowed {{ $formatHours($purchase->elective_hours_allowed) }}h
-                                                @endif
-                                            @else
-                                                {{ $formatHours($purchase->contact_hours) }}h
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Unit Price</td>
-                                        <td>${{ number_format((float) $purchase->unit_price, 2) }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Discount</td>
-                                        <td>${{ number_format((float) $purchase->discount_amount, 2) }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Total Paid</td>
-                                        <td><strong>${{ number_format((float) $purchase->total_paid, 2) }}</strong></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Payment Method</td>
-                                        <td>{{ strtoupper((string) ($purchase->payment_method ?: 'N/A')) }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Payment Status</td>
-                                        <td><span class="badge {{ $statusClass }}">{{ ucfirst($status ?: 'N/A') }}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Purchased At</td>
-                                        <td>
-                                            {{ $purchase->purchased_at ? showDate($purchase->purchased_at) : ( $purchase->created_at ? showDate($purchase->created_at) : '—' ) }}
-                                        </td>
-                                    </tr>
-                                    @if (! empty($purchase->gateway_transaction_id))
-                                        <tr>
-                                            <td>Gateway Txn</td>
-                                            <td>{{ $purchase->gateway_transaction_id }}</td>
-                                        </tr>
-                                    @endif
-                                    @if (! empty($purchase->coupon_code))
-                                        <tr>
-                                            <td>Coupon</td>
-                                            <td>{{ $purchase->coupon_code }}</td>
-                                        </tr>
-                                    @endif
-                                </table>
                             </div>
                         </div>
-                    </div>
 
-                    @if ($purchase->isBundlePurchase())
-                        <div class="white_box_30px">
-                            <h5 class="section-title mt-0">Courses in Bundle</h5>
-                            @if ($purchase->items->isNotEmpty())
-                                <div class="table-responsive">
-                                    <table class="table Crm_table_active3">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Course</th>
-                                                <th>Role</th>
-                                                <th>Hours</th>
-                                                <th>Enrollment Status</th>
-                                                <th>Progress</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($purchase->items as $index => $item)
+                        <div class="card-body">
+                            <div class="row mb-5">
+                                <div class="mt-4 col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <div>
+                                        <strong>{{ $purchase->user->name ?? 'N/A' }}</strong>
+                                    </div>
+                                    <div>{{ $purchase->user->email ?? 'N/A' }}</div>
+                                    <div>{{ $purchase->user->phone ?? 'N/A' }}</div>
+                                </div>
+
+                                <div class="mt-4 col-xl-6 col-lg-6 col-md-12 col-sm-12 d-flex justify-content-lg-end justify-content-md-center justify-content-xs-start">
+                                    <div class="align-items-center">
+                                        <table>
+                                            <tbody>
                                                 <tr>
-                                                    <td>{{ $index + 1 }}</td>
-                                                    <td>{{ $item->course_title }}</td>
-                                                    <td>
-                                                        <span class="badge {{ $item->course_role === 'mandatory' ? 'badge-dark' : 'badge-info' }}">
-                                                            {{ ucfirst($item->course_role) }}
-                                                        </span>
-                                                    </td>
-                                                    <td>{{ $formatHours($item->contact_hours) }}h</td>
-                                                    <td>{{ ucfirst(str_replace('_', ' ', (string) ($item->enrollment->status ?? 'N/A'))) }}</td>
-                                                    <td>{{ (int) ($item->enrollment->progress ?? 0) }}%</td>
+                                                    <td class="text-main text-bold"><strong>{{ $purchase->isBundlePurchase() ? 'Bundle' : 'Course' }}</strong></td>
+                                                    <td class="text-right text-info text-bold">{{ $purchase->item_name }}</td>
                                                 </tr>
-                                            @endforeach
+                                                <tr>
+                                                    <td class="text-main text-bold"><strong>Tracking</strong></td>
+                                                    <td class="text-right">{{ $purchase->tracking ?: ('ce#' . $purchase->id) }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-main text-bold"><strong>Purchase date</strong></td>
+                                                    <td class="text-right">
+                                                        {{ $purchase->purchased_at ? $purchase->purchased_at->format('d M Y') : ($purchase->created_at ? $purchase->created_at->format('d M Y') : 'N/A') }}
+                                                    </td>
+                                                </tr>
+                                                @if ($purchase->isBundlePurchase())
+                                                    <tr>
+                                                        <td class="text-main text-bold"><strong>Courses</strong></td>
+                                                        <td class="text-right">{{ $purchase->items->count() }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-main text-bold"><strong>Hours</strong></td>
+                                                        <td class="text-right">
+                                                            {{ $formatHours($purchase->total_hours) }}h
+                                                            @if ((float) $purchase->elective_hours_allowed > 0)
+                                                                (elective {{ $formatHours($purchase->elective_hours_allowed) }}h)
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                @else
+                                                    <tr>
+                                                        <td class="text-main text-bold"><strong>Hours</strong></td>
+                                                        <td class="text-right">{{ $formatHours($purchase->contact_hours) }}h</td>
+                                                    </tr>
+                                                @endif
+                                                <tr>
+                                                    <td class="text-main text-bold"><strong>Total amount</strong></td>
+                                                    <td class="text-right">${{ number_format($paid, 2) }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-main text-bold"><strong>Payment method</strong></td>
+                                                    <td class="text-right">{{ strtoupper((string) ($purchase->payment_method ?: 'N/A')) }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-main text-bold"><strong>Payment status</strong></td>
+                                                    <td class="text-right">{{ $status }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th class="center">#</th>
+                                            <th>Course Name</th>
+                                            <th>Role</th>
+                                            <th>Hours</th>
+                                            <th>Enrollment</th>
+                                            <th>Progress</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if ($purchase->isBundlePurchase())
+                                            @forelse ($purchase->items as $index => $item)
+                                                <tr>
+                                                    <td class="center">{{ $index + 1 }}</td>
+                                                    <td class="left strong">{{ $item->course_title }}</td>
+                                                    <td class="left">{{ ucfirst($item->course_role) }}</td>
+                                                    <td class="left">{{ $formatHours($item->contact_hours) }}h</td>
+                                                    <td class="left">{{ ucfirst(str_replace('_', ' ', (string) ($item->enrollment->status ?? 'N/A'))) }}</td>
+                                                    <td class="left">{{ (int) ($item->enrollment->progress ?? 0) }}%</td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="6" class="text-center text-muted">No courses found for this bundle purchase.</td>
+                                                </tr>
+                                            @endforelse
+                                        @else
+                                            @php
+                                                $course = $purchase->ceCourse;
+                                                $enrollment = $purchase->enrollments->first();
+                                            @endphp
+                                            <tr>
+                                                <td class="center">1</td>
+                                                <td class="left strong">{{ $course->title ?? $purchase->item_name }}</td>
+                                                <td class="left">{{ ucfirst((string) ($course->course_type ?? 'course')) }}</td>
+                                                <td class="left">{{ $formatHours($course->contact_hours ?? $purchase->contact_hours) }}h</td>
+                                                <td class="left">{{ ucfirst(str_replace('_', ' ', (string) ($enrollment->status ?? 'N/A'))) }}</td>
+                                                <td class="left">{{ (int) ($enrollment->progress ?? 0) }}%</td>
+                                            </tr>
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-4 col-sm-5"></div>
+                                <div class="col-lg-4 col-sm-5 ml-auto">
+                                    <table class="table table-clear">
+                                        <tbody>
+                                            <tr>
+                                                <td class="text-left"><strong>Subtotal</strong></td>
+                                                <td class="text-right">${{ number_format($subtotal, 2) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-left"><strong>Discount:</strong></td>
+                                                <td class="text-right">${{ number_format($discount, 2) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-left"><strong>Total</strong></td>
+                                                <td class="text-right"><strong>${{ number_format($paid, 2) }}</strong></td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
-                            @else
-                                <p class="text-muted mb-0">No course line items found for this bundle purchase.</p>
-                            @endif
+                            </div>
                         </div>
-                    @else
-                        <div class="white_box_30px">
-                            <h5 class="section-title mt-0">Course Details</h5>
-                            @php
-                                $course = $purchase->ceCourse;
-                                $enrollment = $purchase->enrollments->first();
-                            @endphp
-                            <table class="summary-table">
-                                <tr>
-                                    <td>Course</td>
-                                    <td>{{ $course->title ?? $purchase->item_name }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Type</td>
-                                    <td>{{ ucfirst((string) ($course->course_type ?? 'course')) }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Hours</td>
-                                    <td>{{ $formatHours($course->contact_hours ?? $purchase->contact_hours) }}h</td>
-                                </tr>
-                                <tr>
-                                    <td>Enrollment Status</td>
-                                    <td>{{ ucfirst(str_replace('_', ' ', (string) ($enrollment->status ?? 'N/A'))) }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Progress</td>
-                                    <td>{{ (int) ($enrollment->progress ?? 0) }}%</td>
-                                </tr>
-                            </table>
-                        </div>
-                    @endif
+                    </div>
                 </div>
             </div>
         </div>
