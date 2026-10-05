@@ -120,4 +120,16 @@ Route::group([
     Route::get('/bundles/status/{id}', 'CeBundleController@status')
         ->name('continuing-education.bundles.status')
         ->middleware('RoutePermissionCheck:continuing-education.bundles.index');
+
+    Route::get('/purchases', 'CePurchaseController@index')
+        ->name('continuing-education.purchases.index')
+        ->middleware('RoutePermissionCheck:continuing-education.purchases.index');
+
+    Route::get('/purchases/data', 'CePurchaseController@data')
+        ->name('continuing-education.purchases.data')
+        ->middleware('RoutePermissionCheck:continuing-education.purchases.index');
+
+    Route::get('/purchases/{id}', 'CePurchaseController@show')
+        ->name('continuing-education.purchases.show')
+        ->middleware('RoutePermissionCheck:continuing-education.purchases.index');
 });
