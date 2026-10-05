@@ -147,10 +147,10 @@ Route::group(['namespace' => 'Frontend'], function () {
     Route::post('tutor-withdraw-create', 'WebsiteController@tutorRevenueWithdraw')->name('tutorRevenueWithdraw');
 
     Route::get('prep-courses', 'QuizController@quizzes')->name('quizzes')->middleware('HeaderMenuPermissions');
-    Route::get('continuing-education', 'CeFrontendController@index')->name('continuingEducation')->middleware('HeaderMenuPermissions');
-    Route::get('continuing-education/rn-lpn', 'CeFrontendController@rnLpn')->name('continuingEducationRnLpn')->middleware('HeaderMenuPermissions');
-    Route::get('continuing-education/aprn', 'CeFrontendController@aprn')->name('continuingEducationAprn')->middleware('HeaderMenuPermissions');
-    Route::get('continuing-education/cna', 'CeFrontendController@cna')->name('continuingEducationCna')->middleware('HeaderMenuPermissions');
+    Route::get('continuing-education', 'CeFrontendController@index')->name('continuingEducation');
+    Route::get('continuing-education/rn-lpn', 'CeFrontendController@rnLpn')->name('continuingEducationRnLpn');
+    Route::get('continuing-education/aprn', 'CeFrontendController@aprn')->name('continuingEducationAprn');
+    Route::get('continuing-education/cna', 'CeFrontendController@cna')->name('continuingEducationCna');
     Route::get('ce-courses/{slug}', 'CeFrontendController@showCourse')->name('continuingEducationCourse');
     Route::get('ce-bundles/{slug}', 'CeFrontendController@showBundle')->name('continuingEducationBundle');
     Route::get('quiz-details/{slug}', 'QuizController@quizDetails')->name('quizDetailsView');
