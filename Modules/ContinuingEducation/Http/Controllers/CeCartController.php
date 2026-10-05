@@ -107,17 +107,10 @@ class CeCartController extends Controller
     protected function addBundleToCart(Request $request, int $id, bool $buyNow)
     {
         try {
-            $attemptPath = $this->bundleCartPath($id, $buyNow);
-
-            if ($redirect = $this->guardCeBuyer($attemptPath)) {
-                return $redirect;
-            }
-
-            $user = Auth::user();
             $bundle = CeBundle::query()
                 ->published()
                 ->forLms()
-                ->with('courses')
+                ->with(['mandatoryCourses', 'electiveCourses'])
                 ->find($id);
 
             if (! $bundle) {
@@ -126,7 +119,29 @@ class CeCartController extends Controller
                 return redirect()->route('continuingEducation');
             }
 
-            $detailRoute = $this->bundleLandingUrl($bundle);
+            $detailRoute = $this->catalogService->bundleDetailUrl($bundle);
+
+            // GET without elective payload → send shopper to detail page to choose courses.
+            if ($request->isMethod('get') && ! $request->has('elective_course_ids')) {
+                return redirect()->to($detailRoute);
+            }
+
+            $attemptPath = $this->bundleCartAttemptPath($request, $id, $buyNow);
+
+            if ($redirect = $this->guardCeBuyer($attemptPath)) {
+                return $redirect;
+            }
+
+            $user = Auth::user();
+
+            if ($this->catalogService->findOwnedBundlePurchase($user, $bundle)) {
+                Toastr::error(
+                    'You have already purchased this bundle. Manage it from My Bundles in your CE portal.',
+                    trans('common.Failed')
+                );
+
+                return redirect()->route('cePortal.courses', ['view' => 'bundles']);
+            }
 
             if ($this->bundlePrice($bundle) <= 0) {
                 Toastr::error('This bundle is not available for purchase.', trans('common.Failed'));
@@ -134,10 +149,19 @@ class CeCartController extends Controller
                 return redirect()->to($detailRoute);
             }
 
-            if ($bundle->courses->isEmpty()) {
-                Toastr::error('This bundle has no courses.', trans('common.Failed'));
+            if ($bundle->mandatoryCourses->isEmpty()) {
+                Toastr::error('This bundle has no mandatory courses.', trans('common.Failed'));
 
                 return redirect()->to($detailRoute);
+            }
+
+            $electiveIds = $this->normalizeElectiveIds($request);
+            $electiveError = $this->validateBundleElectiveSelection($bundle, $electiveIds);
+
+            if ($electiveError) {
+                Toastr::error($electiveError, trans('common.Failed'));
+
+                return redirect()->to($detailRoute)->withInput();
             }
 
             $exists = Cart::query()
@@ -154,6 +178,7 @@ class CeCartController extends Controller
             $this->storeCartLine($user->id, [
                 'ce_bundle_id' => $bundle->id,
                 'price' => $this->bundlePrice($bundle),
+                'ce_elective_course_ids' => $electiveIds,
             ]);
 
             Toastr::success('Bundle added to your cart.', trans('common.Success'));
@@ -167,6 +192,35 @@ class CeCartController extends Controller
         }
     }
 
+    protected function normalizeElectiveIds(Request $request): array
+    {
+        $ids = $request->input('elective_course_ids', []);
+
+        if (! is_array($ids)) {
+            $ids = [$ids];
+        }
+
+        return array_values(array_unique(array_filter(array_map('intval', $ids))));
+    }
+
+    protected function validateBundleElectiveSelection(CeBundle $bundle, array $electiveIds): ?string
+    {
+        $optionalIds = $this->catalogService->optionalElectivesForBundle($bundle)
+            ->pluck('id')
+            ->map(function ($id) {
+                return (int) $id;
+            })
+            ->all();
+
+        foreach ($electiveIds as $id) {
+            if (! in_array((int) $id, $optionalIds, true)) {
+                return 'One or more selected elective courses are not available for this bundle.';
+            }
+        }
+
+        return null;
+    }
+
     protected function courseCartPath(int $id, bool $buyNow): string
     {
         return $buyNow
@@ -174,11 +228,22 @@ class CeCartController extends Controller
             : '/ce/cart/course/' . $id;
     }
 
-    protected function bundleCartPath(int $id, bool $buyNow): string
+    /**
+     * Resume URL after login/register (must match /ce/cart/ so CE auth honors redirectTo).
+     */
+    protected function bundleCartAttemptPath(Request $request, int $id, bool $buyNow): string
     {
-        return $buyNow
+        $path = $buyNow
             ? '/ce/cart/bundle/' . $id . '/buy'
             : '/ce/cart/bundle/' . $id;
+
+        $electiveIds = $this->normalizeElectiveIds($request);
+
+        if ($electiveIds === []) {
+            return $path;
+        }
+
+        return $path . '?' . http_build_query(['elective_course_ids' => $electiveIds]);
     }
 
     protected function guardCeBuyer(string $attemptPath): ?RedirectResponse
@@ -217,6 +282,13 @@ class CeCartController extends Controller
             $cart->ce_bundle_id = (int) $attributes['ce_bundle_id'];
         }
 
+        if (array_key_exists('ce_elective_course_ids', $attributes)) {
+            $ids = $attributes['ce_elective_course_ids'];
+            $cart->ce_elective_course_ids = is_array($ids)
+                ? json_encode(array_values(array_map('intval', $ids)))
+                : $ids;
+        }
+
         $cart->save();
 
         return $cart;
@@ -230,18 +302,5 @@ class CeCartController extends Controller
     protected function bundlePrice(CeBundle $bundle): float
     {
         return $bundle->salePrice();
-    }
-
-    protected function bundleLandingUrl(CeBundle $bundle): string
-    {
-        if ($bundle->license_type === 'aprn') {
-            return route('continuingEducationAprn');
-        }
-
-        if ($bundle->license_type === 'cna') {
-            return route('continuingEducationCna');
-        }
-
-        return route('continuingEducationRnLpn');
     }
 }

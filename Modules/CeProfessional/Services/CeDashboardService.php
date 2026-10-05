@@ -70,7 +70,110 @@ class CeDashboardService
             'profile' => $dashboard['profile'],
             'courses' => $this->ceEnrollmentService->userEnrollmentCards($user),
             'license_short' => $dashboard['license_short'],
+            'purchasedBundles' => $this->purchasedBundleSummaries($user),
         ];
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    public function purchasedBundleSummaries(User $user): array
+    {
+        if (! class_exists(\Modules\ContinuingEducation\Entities\CePurchase::class)) {
+            return [];
+        }
+
+        $purchases = \Modules\ContinuingEducation\Entities\CePurchase::query()
+            ->with(['ceBundle', 'items'])
+            ->paid()
+            ->where('user_id', $user->id)
+            ->where('item_type', 'bundle')
+            ->orderByDesc('purchased_at')
+            ->get();
+
+        $summaries = [];
+
+        foreach ($purchases as $purchase) {
+            $allowed = (float) ($purchase->elective_hours_allowed ?? optional($purchase->ceBundle)->elective_hours_allowed ?? 0);
+            $enrolledElectiveHours = (float) $purchase->items
+                ->where('course_role', 'elective')
+                ->sum('contact_hours');
+            $remaining = max(0, $allowed - $enrolledElectiveHours);
+            $mandatoryCount = $purchase->items->where('course_role', 'mandatory')->count();
+
+            $summaries[] = [
+                'id' => $purchase->id,
+                'name' => $purchase->item_name,
+                'mandatory_count' => $mandatoryCount,
+                'allowed_hours' => rtrim(rtrim(number_format($allowed, 1, '.', ''), '0'), '.'),
+                'enrolled_elective_hours' => rtrim(rtrim(number_format($enrolledElectiveHours, 1, '.', ''), '0'), '.'),
+                'remaining_hours' => rtrim(rtrim(number_format($remaining, 1, '.', ''), '0'), '.'),
+                'needs_electives' => $remaining > 0.001,
+                'url' => $this->ownedBundleDetailUrl($purchase),
+                'purchased_label' => $purchase->purchased_at
+                    ? $purchase->purchased_at->format('M j, Y')
+                    : null,
+            ];
+        }
+
+        return $summaries;
+    }
+
+    protected function ownedBundleDetailUrl($purchase): string
+    {
+        $bundle = $purchase->ceBundle;
+
+        if ($bundle && $bundle->slug && routeIsExist('continuingEducationBundle')) {
+            return route('continuingEducationBundle', ['slug' => $bundle->slug]);
+        }
+
+        return route('cePortal.bundles.setup', $purchase->id);
+    }
+
+    /**
+     * Bundle purchases that still have elective hours to choose.
+     */
+    public function pendingBundleElectivePurchases(User $user): array
+    {
+        if (! class_exists(\Modules\ContinuingEducation\Entities\CePurchase::class)) {
+            return [];
+        }
+
+        $purchases = \Modules\ContinuingEducation\Entities\CePurchase::query()
+            ->with(['ceBundle', 'items'])
+            ->paid()
+            ->where('user_id', $user->id)
+            ->where('item_type', 'bundle')
+            ->orderByDesc('purchased_at')
+            ->get();
+
+        $pending = [];
+
+        foreach ($purchases as $purchase) {
+            $allowed = (float) ($purchase->elective_hours_allowed ?? 0);
+            if ($allowed <= 0) {
+                continue;
+            }
+
+            $enrolledElectiveHours = (float) $purchase->items
+                ->where('course_role', 'elective')
+                ->sum('contact_hours');
+
+            $remaining = max(0, $allowed - $enrolledElectiveHours);
+            if ($remaining <= 0.001) {
+                continue;
+            }
+
+            $pending[] = [
+                'id' => $purchase->id,
+                'name' => $purchase->item_name,
+                'remaining_hours' => rtrim(rtrim(number_format($remaining, 1, '.', ''), '0'), '.'),
+                'allowed_hours' => rtrim(rtrim(number_format($allowed, 1, '.', ''), '0'), '.'),
+                'url' => $this->ownedBundleDetailUrl($purchase),
+            ];
+        }
+
+        return $pending;
     }
 
     /**

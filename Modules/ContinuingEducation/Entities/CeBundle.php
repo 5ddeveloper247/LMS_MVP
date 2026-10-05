@@ -237,13 +237,22 @@ class CeBundle extends Model
         return 'Save over $' . number_format($save, 0) . ' vs. buying individually';
     }
 
+    public function getDetailUrlAttribute(): string
+    {
+        if (! $this->slug) {
+            return route('continuingEducation');
+        }
+
+        return route('continuingEducationBundle', ['slug' => $this->slug]);
+    }
+
     public function getBuyUrlAttribute(): string
     {
         if ((float) $this->price <= 0) {
             return route('contact');
         }
 
-        return route('ce.cart.buyNowBundle', ['id' => $this->id]);
+        return $this->detail_url;
     }
 
     public function getBuyButtonLabelAttribute(): string
@@ -252,7 +261,7 @@ class CeBundle extends Model
             return 'Schedule a Consult &rarr;';
         }
 
-        return 'Buy ' . $this->name . ' &rarr;';
+        return 'View Bundle &amp; Choose Courses &rarr;';
     }
 
     public function getPathButtonClassAttribute(): string

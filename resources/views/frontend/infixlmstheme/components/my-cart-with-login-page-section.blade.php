@@ -122,13 +122,27 @@
             $thumbnail = $firstCourse
                 ? ($firstCourse->thumbnail ?: ($firstCourse->image ?? $thumbnail))
                 : $thumbnail;
-            $link = ($ceBundle->license_type ?? '') === 'aprn' && routeIsExist('continuingEducationAprn')
-                ? route('continuingEducationAprn')
-                : (routeIsExist('continuingEducationRnLpn') ? route('continuingEducationRnLpn') : $ceCatalogUrl);
+            $link = $ceBundle->slug && routeIsExist('continuingEducationBundle')
+                ? route('continuingEducationBundle', ['slug' => $ceBundle->slug])
+                : (($ceBundle->license_type ?? '') === 'aprn' && routeIsExist('continuingEducationAprn')
+                    ? route('continuingEducationAprn')
+                    : (routeIsExist('continuingEducationRnLpn') ? route('continuingEducationRnLpn') : $ceCatalogUrl));
             if ($resolvedPrice <= 0) {
-                $resolvedPrice = (float) ($ceBundle->price ?? 0);
+                $resolvedPrice = method_exists($ceBundle, 'salePrice')
+                    ? (float) $ceBundle->salePrice()
+                    : (float) ($ceBundle->price ?? 0);
             }
-            $meta = __('CE Bundle');
+            $electiveIds = [];
+            if (!empty($cart->ce_elective_course_ids)) {
+                $decoded = is_array($cart->ce_elective_course_ids)
+                    ? $cart->ce_elective_course_ids
+                    : json_decode((string) $cart->ce_elective_course_ids, true);
+                $electiveIds = is_array($decoded) ? $decoded : [];
+            }
+            $hours = rtrim(rtrim(number_format((float) ($ceBundle->total_hours ?? 0), 1, '.', ''), '0'), '.');
+            $meta = __('CE Bundle')
+                . ($hours !== '' ? ' · ' . $hours . ' ' . __('hours') : '')
+                . (count($electiveIds) > 0 ? ' · ' . count($electiveIds) . ' ' . __('electives selected') : '');
             $isCeShopper = true;
         } else {
             continue;

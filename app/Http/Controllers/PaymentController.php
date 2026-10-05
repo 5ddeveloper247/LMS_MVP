@@ -1787,9 +1787,18 @@ class PaymentController extends Controller
 
     protected function fulfillCeBundlePurchase($checkout_info, $user, $discount, $cart, $carts, $gateWayName, $response): void
     {
-        $ceBundle = CeBundle::query()->with('courses')->find($cart->ce_bundle_id);
+        $ceBundle = CeBundle::query()->with(['courses', 'mandatoryCourses', 'electiveCourses'])->find($cart->ce_bundle_id);
 
-        if (! $ceBundle || $ceBundle->courses->isEmpty()) {
+        if (! $ceBundle || $ceBundle->mandatoryCourses->isEmpty()) {
+            return;
+        }
+
+        if (CePurchase::query()
+            ->paid()
+            ->where('user_id', $user->id)
+            ->where('item_type', 'bundle')
+            ->where('ce_bundle_id', $ceBundle->id)
+            ->exists()) {
             return;
         }
 
@@ -1806,7 +1815,23 @@ class PaymentController extends Controller
         $lmsId = isModuleActive('LmsSaas') ? (int) app('institute')->id : 1;
         $licenseType = $this->resolveCeLicenseType($user->id);
         if (! $licenseType && ! empty($ceBundle->license_type)) {
-            $licenseType = $ceBundle->license_type === 'aprn' ? 'aprn' : 'rn_lpn';
+            if ($ceBundle->license_type === 'aprn') {
+                $licenseType = 'aprn';
+            } elseif ($ceBundle->license_type === 'cna') {
+                $licenseType = 'cna';
+            } else {
+                $licenseType = 'rn_lpn';
+            }
+        }
+
+        $selectedElectiveIds = [];
+        if (! empty($cart->ce_elective_course_ids)) {
+            $decoded = is_array($cart->ce_elective_course_ids)
+                ? $cart->ce_elective_course_ids
+                : json_decode((string) $cart->ce_elective_course_ids, true);
+            $selectedElectiveIds = is_array($decoded)
+                ? array_values(array_unique(array_map('intval', $decoded)))
+                : [];
         }
 
         DB::transaction(function () use (
@@ -1819,7 +1844,8 @@ class PaymentController extends Controller
             $gateWayName,
             $gatewayTxnId,
             $lmsId,
-            $licenseType
+            $licenseType,
+            $selectedElectiveIds
         ) {
             $purchase = CePurchase::create([
                 'tracking' => $checkout_info->tracking,
@@ -1841,8 +1867,53 @@ class PaymentController extends Controller
                 'purchased_at' => now(),
             ]);
 
+            $coursesToEnroll = [];
+
             foreach ($ceBundle->courses as $index => $course) {
                 $courseRole = $course->pivot->course_role ?? 'mandatory';
+                if ($courseRole !== 'mandatory') {
+                    continue;
+                }
+
+                $coursesToEnroll[] = [
+                    'course' => $course,
+                    'course_role' => 'mandatory',
+                    'sort_order' => (int) ($course->pivot->sort_order ?? $index),
+                ];
+            }
+
+            $adminElectiveIds = $ceBundle->electiveCourses
+                ->pluck('id')
+                ->map(function ($id) {
+                    return (int) $id;
+                })
+                ->all();
+
+            $electiveIdsToEnroll = array_values(array_unique(array_merge($adminElectiveIds, $selectedElectiveIds)));
+
+            if ($electiveIdsToEnroll !== []) {
+                $electiveCourses = CeCourse::query()
+                    ->whereIn('id', $electiveIdsToEnroll)
+                    ->get()
+                    ->keyBy('id');
+
+                foreach ($electiveIdsToEnroll as $sortIndex => $electiveId) {
+                    $course = $electiveCourses->get($electiveId);
+                    if (! $course) {
+                        continue;
+                    }
+
+                    $coursesToEnroll[] = [
+                        'course' => $course,
+                        'course_role' => 'elective',
+                        'sort_order' => 1000 + $sortIndex,
+                    ];
+                }
+            }
+
+            foreach ($coursesToEnroll as $row) {
+                $course = $row['course'];
+                $courseRole = $row['course_role'];
 
                 $enrollment = CeCourseEnrollment::create([
                     'user_id' => $user->id,
@@ -1860,7 +1931,7 @@ class PaymentController extends Controller
                     'course_title' => $course->title,
                     'contact_hours' => $course->contact_hours ?? 0,
                     'course_role' => $courseRole,
-                    'sort_order' => (int) ($course->pivot->sort_order ?? $index),
+                    'sort_order' => (int) $row['sort_order'],
                     'ce_course_enrollment_id' => $enrollment->id,
                 ]);
 

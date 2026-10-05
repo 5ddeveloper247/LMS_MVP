@@ -9,7 +9,7 @@
     </div>
 
     <div class="ce-tab-panels">
-        <div class="ce-tab-panel active" data-ce-panel="renewal" role="tabpanel">
+        <div class="ce-tab-panel active" id="renewal" data-ce-panel="renewal" role="tabpanel">
             <div class="ce-renewal-card">
                 <span class="ce-renewal-label">Next Florida Renewal</span>
                 <h3>{{ $ce_broker['renewal_date'] }}</h3>
@@ -18,7 +18,7 @@
             </div>
         </div>
 
-        <div class="ce-tab-panel" data-ce-panel="sync" role="tabpanel">
+        <div class="ce-tab-panel" id="sync" data-ce-panel="sync" role="tabpanel">
             <div class="ce-sync-card">
                 <div class="ce-sync-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>

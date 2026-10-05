@@ -61,6 +61,22 @@ class CeFrontendController extends Controller
         ));
     }
 
+    public function showBundle(string $slug)
+    {
+        $bundle = $this->catalogService->findPublishedBundleBySlug($slug);
+        $data = $this->catalogService->bundleDetailPageData($bundle);
+
+        $user = Auth::user();
+        if ($user && function_exists('userIsCeProfessional') && userIsCeProfessional($user)) {
+            $purchase = $this->catalogService->findOwnedBundlePurchase($user, $bundle);
+            if ($purchase) {
+                $data = $this->catalogService->ownedBundleDetailPageData($bundle, $purchase);
+            }
+        }
+
+        return view(theme('pages.ceBundleDetails'), $data);
+    }
+
     public function showCourse(string $slug, Request $request)
     {
         $ceCourse = $this->catalogService->findPublishedBySlug($slug);

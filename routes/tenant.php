@@ -152,6 +152,7 @@ Route::group(['namespace' => 'Frontend'], function () {
     Route::get('continuing-education/aprn', 'CeFrontendController@aprn')->name('continuingEducationAprn')->middleware('HeaderMenuPermissions');
     Route::get('continuing-education/cna', 'CeFrontendController@cna')->name('continuingEducationCna')->middleware('HeaderMenuPermissions');
     Route::get('ce-courses/{slug}', 'CeFrontendController@showCourse')->name('continuingEducationCourse');
+    Route::get('ce-bundles/{slug}', 'CeFrontendController@showBundle')->name('continuingEducationBundle');
     Route::get('quiz-details/{slug}', 'QuizController@quizDetails')->name('quizDetailsView');
     Route::get('quizStart/{id}/{quiz_id}/{slug}', 'QuizController@quizStart')->name('quizStart');
     Route::post('quizSubmit', 'QuizController@quizSubmit')->name('quizSubmit');

@@ -20,6 +20,13 @@ class CeRegistrationController extends Controller
      */
     public function register(CeRegistrationRequest $request)
     {
+        if ($request->filled('redirect_to')) {
+            $path = normalizeInternalRedirectPath((string) $request->input('redirect_to'));
+            if (isCeCartRedirectUrl($path)) {
+                rememberCeCartRedirectUrl($path);
+            }
+        }
+
         $this->ceRegistrationService->register($request->validated());
 
         if ($redirectTo = pullPendingCeCartRedirectUrl()) {

@@ -2,10 +2,12 @@
 
 namespace Modules\ContinuingEducation\Services;
 
+use App\User;
 use Illuminate\Support\Str;
 use Modules\ContinuingEducation\Entities\CeBundle;
 use Modules\ContinuingEducation\Entities\CeCourse;
 use Modules\ContinuingEducation\Entities\CeLicenseType;
+use Modules\ContinuingEducation\Entities\CePurchase;
 
 class CeCatalogService
 {
@@ -22,6 +24,170 @@ class CeCatalogService
     public function listPublishedBundles(string $licenseType)
     {
         return $this->bundleService->listPublishedForLicenseType($licenseType);
+    }
+
+    public function findPublishedBundleBySlug(string $slug): CeBundle
+    {
+        return CeBundle::query()
+            ->published()
+            ->forLms()
+            ->with([
+                'mandatoryCourses',
+                'electiveCourses',
+                'licenseType:id,name,card_style',
+            ])
+            ->where('slug', $slug)
+            ->firstOrFail();
+    }
+
+    public function bundleDetailUrl(CeBundle $bundle): string
+    {
+        if (! $bundle->slug) {
+            return $this->bundleLandingUrlForType($bundle->license_type);
+        }
+
+        return route('continuingEducationBundle', ['slug' => $bundle->slug]);
+    }
+
+    public function bundleLandingUrlForType(?string $licenseType): string
+    {
+        if ($licenseType === 'aprn') {
+            return route('continuingEducationAprn');
+        }
+
+        if ($licenseType === 'cna') {
+            return route('continuingEducationCna');
+        }
+
+        return route('continuingEducationRnLpn');
+    }
+
+    /**
+     * Admin-attached electives (locked for the buyer).
+     */
+    public function lockedElectivesForBundle(CeBundle $bundle)
+    {
+        $bundle->loadMissing('electiveCourses');
+
+        return $bundle->electiveCourses->values();
+    }
+
+    /**
+     * Buyer-choosable electives (license pool minus admin-locked electives).
+     */
+    public function optionalElectivesForBundle(CeBundle $bundle)
+    {
+        $lockedIds = $this->lockedElectivesForBundle($bundle)
+            ->pluck('id')
+            ->map(function ($id) {
+                return (int) $id;
+            })
+            ->all();
+
+        return $this->listPublishedCoursesForLicenseType((string) $bundle->license_type, 'elective')
+            ->reject(function (CeCourse $course) use ($lockedIds) {
+                return in_array((int) $course->id, $lockedIds, true);
+            })
+            ->values();
+    }
+
+    /**
+     * Full elective universe for a bundle (locked + optional).
+     */
+    public function electivePoolForBundle(CeBundle $bundle)
+    {
+        return $this->lockedElectivesForBundle($bundle)
+            ->concat($this->optionalElectivesForBundle($bundle))
+            ->unique('id')
+            ->values();
+    }
+
+    public function bundleDetailPageData(CeBundle $bundle): array
+    {
+        $bundle->loadMissing(['mandatoryCourses', 'electiveCourses', 'licenseType']);
+
+        $mandatoryCourses = $bundle->mandatoryCourses;
+        $lockedElectiveCourses = $this->lockedElectivesForBundle($bundle);
+        $optionalElectiveCourses = $this->optionalElectivesForBundle($bundle);
+
+        return [
+            'bundle' => $bundle,
+            'mandatoryCourses' => $mandatoryCourses,
+            'lockedElectiveCourses' => $lockedElectiveCourses,
+            'optionalElectiveCourses' => $optionalElectiveCourses,
+            'electiveCourses' => $optionalElectiveCourses,
+            'mandatoryCourseStats' => $this->mandatoryCourseStats($mandatoryCourses),
+            'hourSummary' => $this->hourSummaryForBundle($bundle),
+            'electiveHoursAllowed' => (float) ($bundle->elective_hours_allowed ?? 0),
+            'lockedElectiveHours' => (float) $lockedElectiveCourses->sum('contact_hours'),
+            'backUrl' => $this->bundleLandingUrlForType($bundle->license_type),
+            'portalMode' => false,
+            'ceCatalog' => $this,
+        ];
+    }
+
+    public function findOwnedBundlePurchase(User $user, CeBundle $bundle): ?CePurchase
+    {
+        return CePurchase::query()
+            ->with(['items', 'enrollments', 'ceBundle.electiveCourses', 'ceBundle.mandatoryCourses'])
+            ->paid()
+            ->where('user_id', $user->id)
+            ->where('item_type', 'bundle')
+            ->where('ce_bundle_id', $bundle->id)
+            ->orderByDesc('purchased_at')
+            ->orderByDesc('id')
+            ->first();
+    }
+
+    /**
+     * Public bundle detail page data when the signed-in CE user already owns this bundle.
+     */
+    public function ownedBundleDetailPageData(CeBundle $bundle, CePurchase $purchase): array
+    {
+        $base = $this->bundleDetailPageData($bundle);
+        $enrolledIds = $purchase->enrollments->pluck('ce_course_id')->map(function ($id) {
+            return (int) $id;
+        })->all();
+
+        $lockedElectives = $this->lockedElectivesForBundle($bundle);
+        $optionalElectives = $this->optionalElectivesForBundle($bundle)
+            ->reject(function (CeCourse $course) use ($enrolledIds) {
+                return in_array((int) $course->id, $enrolledIds, true);
+            })
+            ->values();
+
+        $enrolledElectiveItems = $purchase->items->where('course_role', 'elective')->values();
+        $lockedIds = $lockedElectives->pluck('id')->map(function ($id) {
+            return (int) $id;
+        })->all();
+
+        $enrolledUserElectives = $enrolledElectiveItems
+            ->reject(function ($item) use ($lockedIds) {
+                return in_array((int) $item->ce_course_id, $lockedIds, true);
+            })
+            ->values();
+
+        $enrolledElectiveHours = (float) $enrolledElectiveItems->sum('contact_hours');
+        $allowed = (float) ($purchase->elective_hours_allowed ?? $bundle->elective_hours_allowed ?? 0);
+        $remaining = max(0, $allowed - $enrolledElectiveHours);
+
+        return array_merge($base, [
+            'purchase' => $purchase,
+            'portalMode' => true,
+            'portalPurchase' => $purchase,
+            'lockedElectiveCourses' => $lockedElectives,
+            'optionalElectiveCourses' => $optionalElectives,
+            'electiveCourses' => $optionalElectives,
+            'enrolledElectiveItems' => $enrolledElectiveItems,
+            'enrolledUserElectiveItems' => $enrolledUserElectives,
+            'electiveHoursAllowed' => $allowed,
+            'lockedElectiveHours' => (float) $lockedElectives->sum('contact_hours'),
+            'portalEnrolledElectiveHours' => $enrolledElectiveHours,
+            'portalRemainingElectiveHours' => $remaining,
+            'enrolledElectiveHours' => $enrolledElectiveHours,
+            'remainingElectiveHours' => $remaining,
+            'backUrl' => route('cePortal.courses', ['view' => 'bundles']),
+        ]);
     }
 
     public function listPublishedBundlePreviews(string $licenseType, int $limit = 2)

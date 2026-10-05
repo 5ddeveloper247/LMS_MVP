@@ -123,7 +123,7 @@ class CeEnrollmentService
     public function userEnrollments(User $user)
     {
         return CeCourseEnrollment::query()
-            ->with(['ceCourse.linkedCourse'])
+            ->with(['ceCourse.linkedCourse', 'purchaseItem'])
             ->where('user_id', $user->id)
             ->latest('id')
             ->get();
@@ -157,11 +157,14 @@ class CeEnrollmentService
         $contactHours = (float) ($ceCourse->contact_hours ?? 0);
         $hoursLabel = rtrim(rtrim(number_format($contactHours, 1, '.', ''), '0'), '.');
 
-        $typeLabel = ucfirst((string) ($ceCourse->course_type ?? 'course'));
-        if ($typeLabel === 'Mandatory') {
-            $typeLabel = 'Mandatory';
-        } elseif ($typeLabel === 'Elective') {
-            $typeLabel = 'Elective';
+        $purchaseRole = strtolower((string) ($enrollment->purchaseItem?->course_role ?? ''));
+        if (in_array($purchaseRole, ['mandatory', 'elective'], true)) {
+            $typeLabel = ucfirst($purchaseRole);
+        } else {
+            $courseType = strtolower((string) ($ceCourse->course_type ?? 'course'));
+            $typeLabel = $courseType === 'mandatory' || $courseType === 'elective'
+                ? ucfirst($courseType)
+                : ucfirst((string) ($ceCourse->course_type ?? 'course'));
         }
 
         $remainingMinutes = $percent > 0 && $percent < 100 && $contactHours > 0
@@ -214,11 +217,23 @@ class CeEnrollmentService
     {
         $cards = $this->userEnrollmentCards($user);
 
+        $hoursRequired = (float) ($fallback['hours_required'] ?? 26);
+        $hoursCompletedFallback = (float) ($fallback['hours_completed'] ?? 0);
+        $hoursPercentFallback = (int) ($fallback['hours_percent'] ?? $fallback['percent'] ?? 0);
+
         if ($cards === []) {
-            return $fallback;
+            return [
+                'hours_completed' => (int) round($hoursCompletedFallback),
+                'hours_required' => (int) $hoursRequired,
+                'hours_percent' => $hoursPercentFallback,
+                'courses_in_progress' => (int) ($fallback['courses_in_progress'] ?? 0),
+                'courses_in_progress_note' => (string) ($fallback['courses_in_progress_note'] ?? 'Browse the CE catalog'),
+                'certificates_earned' => (int) ($fallback['certificates_earned'] ?? 0),
+                'renewal_date_label' => (string) ($fallback['renewal_date_label'] ?? ''),
+                'days_until_renewal' => (int) ($fallback['days_until_renewal'] ?? 0),
+            ];
         }
 
-        $hoursRequired = (float) ($fallback['hours_required'] ?? 26);
         $hoursCompleted = collect($cards)
             ->where('status', 'completed')
             ->sum('contact_hours');
@@ -254,6 +269,7 @@ class CeEnrollmentService
                 : ($inProgressActive ? 'Active enrollments' : 'Browse the CE catalog'),
             'certificates_earned' => $certificates,
             'renewal_date_label' => $fallback['renewal_date_label'] ?? '',
+            'days_until_renewal' => (int) ($fallback['days_until_renewal'] ?? 0),
         ];
     }
 
@@ -278,12 +294,17 @@ class CeEnrollmentService
             })
             ->all();
 
-        $stats = $this->dashboardStats($user, $fallback);
+        $stats = $this->dashboardStats($user, [
+            'hours_completed' => $fallback['hours_completed'] ?? 0,
+            'hours_required' => $fallback['hours_required'] ?? 26,
+            'hours_percent' => $fallback['percent'] ?? $fallback['hours_percent'] ?? 0,
+            'renewal_date_label' => $fallback['renewal_date_label'] ?? '',
+        ]);
 
         return [
-            'percent' => $stats['hours_percent'],
-            'hours_completed' => $stats['hours_completed'],
-            'hours_required' => $stats['hours_required'],
+            'percent' => (int) ($stats['hours_percent'] ?? 0),
+            'hours_completed' => (int) ($stats['hours_completed'] ?? 0),
+            'hours_required' => (int) ($stats['hours_required'] ?? 26),
             'requirements' => $requirements,
         ];
     }
