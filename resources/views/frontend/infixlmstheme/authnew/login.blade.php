@@ -274,7 +274,12 @@
 
     <!-- RIGHT: FORM PANEL -->
     @php
-      $defaultPortal = old('signup_source') === 'ce_register' ? 'ce' : 'student';
+      $defaultPortal = in_array($loginPortal ?? null, ['student', 'ce', 'instructor'], true)
+          ? $loginPortal
+          : 'student';
+      if (old('signup_source') === 'ce_register') {
+          $defaultPortal = 'ce';
+      }
       if (! empty($pendingRedirect) && stripos($pendingRedirect, '/ce/cart/') !== false) {
           $defaultPortal = 'ce';
       }
@@ -798,8 +803,8 @@ function checkConsents() {
 // Initialize consent state on load
 document.addEventListener('DOMContentLoaded', function () {
   const restorePortal = @json($defaultPortal);
-  if (restorePortal === 'ce') {
-    switchPortal('ce');
+  if (restorePortal === 'ce' || restorePortal === 'instructor') {
+    switchPortal(restorePortal);
   } else {
     syncFormAction();
     syncStudentFieldRequirements();

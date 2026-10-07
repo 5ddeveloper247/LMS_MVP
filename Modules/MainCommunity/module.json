@@ -1,0 +1,10 @@
+{
+    "name": "MainCommunity",
+    "alias": "maincommunity",
+    "description": "",
+    "keywords": [],
+    "order": 0,
+    "providers": [
+        "Modules\\MainCommunity\\Providers\\MainCommunityServiceProvider"
+    ]
+}

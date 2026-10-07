@@ -1,0 +1,21 @@
+{
+    "name": "nwidart/maincommunity",
+    "description": "",
+    "authors": [
+        {
+            "name": "Suleman Sikandar",
+            "email": "suleman@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {}
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\MainCommunity\\": ""
+        }
+    }
+}

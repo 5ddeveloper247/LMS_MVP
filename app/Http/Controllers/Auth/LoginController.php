@@ -335,7 +335,7 @@ class LoginController extends Controller
                 }
             }
         }
-        $redirect = request('redirect');
+        $redirect = request('redirect') ?: request('redirect_to');
         if ($redirect && $this->isValidRedirectUrl($redirect)) {
             session(['redirectTo' => normalizeInternalRedirectPath($redirect)]);
             session()->save();
@@ -354,7 +354,12 @@ class LoginController extends Controller
 
         $page = LoginPage::getData();
 
-        return view(theme('authnew.login'), compact('page', 'pendingRedirect'));
+        $loginPortal = request()->query('portal');
+        if (! in_array($loginPortal, ['student', 'ce', 'instructor'], true)) {
+            $loginPortal = null;
+        }
+
+        return view(theme('authnew.login'), compact('page', 'pendingRedirect', 'loginPortal'));
     }
 
     /**

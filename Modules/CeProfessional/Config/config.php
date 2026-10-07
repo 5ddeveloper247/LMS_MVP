@@ -31,9 +31,10 @@ return [
             'coming_soon' => true,
         ],
         [
+            'route' => 'main-community.index',
             'label' => 'Community',
             'icon' => 'community',
-            'coming_soon' => true,
+            'active' => ['main-community.index', 'main-community.category', 'main-community.topic'],
         ],
         [
             'route' => 'continuingEducation',

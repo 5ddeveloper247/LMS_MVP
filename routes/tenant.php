@@ -163,6 +163,10 @@ Route::group(['namespace' => 'Frontend'], function () {
     Route::get('quizResultPreviewApi/{quiz_id}', 'QuizController@quizResultPreviewApi')->name('quizResultPreviewApi')->middleware('auth');
 
 
+    //Routes for main community page
+    Route::get('main-community', 'MainCommunityController@index')->name('mainCommunity');
+
+    
     Route::get('search', 'WebsiteController@search')->name('search');
     Route::get('category/{id}/{name}', 'WebsiteController@categoryCourse')->name('categoryCourse');
     Route::get('sub_category/{id}/{slug}', 'WebsiteController@subCategoryCourse')->name('subCategory.course');
