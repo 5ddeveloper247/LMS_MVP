@@ -332,14 +332,14 @@
 
                         <div class="online-bar">
                             <span class="online-dot"></span>
-                            <strong>23</strong> members online now · <strong>1,247</strong> total posts
+                            <!-- <strong>23</strong> members online now · <strong>1,247</strong> total posts -->
                         </div>
 
                         <div class="pinned-banner">
                             <span class="pinned-icon">📌</span>
                             <div class="pinned-text">
                                 <h4>Welcome to the MXP Community!</h4>
-                                <p>New here? Start by <a href="#">introducing yourself</a> and reading the <a href="#">community guidelines</a>.</p>
+                                <p>New here? Start by <a href="{{route('main-community.topics.create')}}">introducing yourself</a> and reading the <a href="{{url('main-community')}}">community guidelines</a>.</p>
                             </div>
                         </div>
 
