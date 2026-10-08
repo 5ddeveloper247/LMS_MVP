@@ -797,9 +797,15 @@
     </section>
     @endif
 
+    @php
+        $programsPageUrl = function_exists('routeIsExist') && routeIsExist('programs')
+            ? route('programs') . '#programs'
+            : url('/programs#programs');
+    @endphp
+
     <section class="final-cta">
         <h2>Need more than tips? <em>Get the full program.</em></h2>
-        <p>Our coaching programs deliver the structure, accountability, and live support that blog posts can&#8217;t.</p><a href="{{ url('/') }}#programs" class="btn-on-teal">Explore Programs &#8594;</a>
+        <p>Our coaching programs deliver the structure, accountability, and live support that blog posts can&#8217;t.</p><a href="{{ $programsPageUrl }}" class="btn-on-teal">Explore Programs &#8594;</a>
     </section>
 
 </div>

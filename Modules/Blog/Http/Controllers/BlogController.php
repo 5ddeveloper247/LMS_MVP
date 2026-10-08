@@ -86,7 +86,7 @@ class BlogController extends Controller
             'slug' => ['required', Rule::unique('blogs', 'slug')->when(isModuleActive('LmsSaas'), function ($q) {
                 return $q->where('lms_id', app('institute')->id);
             })],
-            'image' => 'dimensions:width=1170,height=600'
+            'hidden_file' => 'nullable|string',
         ];
 
         $this->validate($request, $rules, validationMessage($rules));
@@ -117,11 +117,12 @@ class BlogController extends Controller
             $blog->authored_date = !empty($request->publish_date) ? getPhpDateFormat($request->publish_date) : date('m/d/y');
             $blog->authored_time = !empty($request->publish_time) ? $request->publish_time : date('H:i:s');
 
-            if ($request->image) {
-                $savedImage = $this->saveImage($request->image);
-                $blog->image = $savedImage;
-                $blog->thumbnail = $savedImage;
-                //   $blog->thumbnail = $this->saveCroppedImage($request->hidden_file);
+            if ($request->filled('hidden_file')) {
+                $savedImage = $this->saveCroppedImage($request->hidden_file);
+                if ($savedImage) {
+                    $blog->image = $savedImage;
+                    $blog->thumbnail = $savedImage;
+                }
             }
             $blog->save();
 
@@ -175,7 +176,7 @@ class BlogController extends Controller
             'slug' => ['required', Rule::unique('blogs', 'slug')->ignore($request->slug, 'slug')->when(isModuleActive('LmsSaas'), function ($q, $request) {
                 return $q->where('lms_id', app('institute')->id)->where('id', '!=', $request->id);
             })],
-            'image' => 'dimensions:width=1170,height=600'
+            'hidden_file' => 'nullable|string',
         ];
 
         $this->validate($request, $rules, validationMessage($rules));
@@ -205,12 +206,12 @@ class BlogController extends Controller
 
             $blog->tags = $request->tags;
             $blog->category_id = $request->category;
-            if ($request->image) {
-                $savedImage = $this->saveImage($request->image);
-                $blog->image = $savedImage;
-                $blog->thumbnail = $savedImage;
-                // $blog->image = $this->saveImage($request->image);
-                // $blog->thumbnail = $this->saveCroppedImage($request->hidden_file);
+            if ($request->filled('hidden_file')) {
+                $savedImage = $this->saveCroppedImage($request->hidden_file);
+                if ($savedImage) {
+                    $blog->image = $savedImage;
+                    $blog->thumbnail = $savedImage;
+                }
             }
             $blog->save();
             if (isModuleActive('Org')) {

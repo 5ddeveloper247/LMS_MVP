@@ -929,18 +929,39 @@
         @endif
     </section>
 
+    @php
+        $showBlogNewsletter = false;
+        if (function_exists('hasTable') && hasTable('subscriptions')) {
+            if (isModuleActive('Newsletter') && class_exists(\Modules\Newsletter\Entities\NewsletterSetting::class)) {
+                $blogNewsletterSetting = \Modules\Newsletter\Entities\NewsletterSetting::getData();
+                $showBlogNewsletter = $blogNewsletterSetting && (int) ($blogNewsletterSetting->home_status ?? 0) === 1;
+            } else {
+                $showBlogNewsletter = true;
+            }
+        }
+        $programsPageUrl = function_exists('routeIsExist') && routeIsExist('programs')
+            ? route('programs') . '#programs'
+            : url('/programs#programs');
+    @endphp
+
+    @if($showBlogNewsletter)
     <!-- Newsletter -->
     <section class="newsletter-section">
         <div class="newsletter-inner">
             <h2>Get weekly study notes.</h2>
             <p>One email per week — a study tip, a question breakdown, or a comeback story. No fluff, no daily bombardment.</p>
-            <div class="newsletter-form"><input type="email" placeholder="Email address" aria-label="Email"><button>Subscribe →</button></div>
+            <form action="{{ route('subscribe') }}" method="POST" class="newsletter-form">
+                @csrf
+                <input type="email" name="email" placeholder="Email address" aria-label="Email" required value="{{ old('email') }}">
+                <button type="submit">Subscribe →</button>
+            </form>
         </div>
     </section>
+    @endif
 
     <section class="final-cta">
         <h2>Need more than tips? <em>Get the full program.</em></h2>
-        <p>The blog is free. But if you need structure, coaching, and accountability, our programs deliver all of that.</p><a href="{{ url('/') }}#programs" class="btn-on-teal">Explore Programs →</a>
+        <p>The blog is free. But if you need structure, coaching, and accountability, our programs deliver all of that.</p><a href="{{ $programsPageUrl }}" class="btn-on-teal">Explore Programs →</a>
     </section>
 
     @if(isset($categories) && $categories->count())
