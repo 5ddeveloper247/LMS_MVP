@@ -22,9 +22,9 @@
                             <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">{{__('frontend.FAQ List')}}</h3>
 
                             <ul class="d-flex custom_list_style p-0">
-                                <li><a class="primary-btn radius_30px mr-10 fix-gr-bg" data-toggle="modal"
+                                <!-- <li><a class="primary-btn radius_30px mr-10 fix-gr-bg" data-toggle="modal"
                                        data-target="#add_faq_category" href="#"><i
-                                            class="ti-plus"></i>{{ __('frontend.Add') }} {{ __('subscription.FAQ') }} {{ __('common.Category') }}</a></li>
+                                            class="ti-plus"></i>{{ __('frontend.Add') }} {{ __('subscription.FAQ') }} {{ __('common.Category') }}</a></li> -->
                                 <li><a class="primary-btn radius_30px mr-10 fix-gr-bg" data-toggle="modal"
                                        id="add_faq_btn"
                                        data-target="#add_faq" href="#"><i
