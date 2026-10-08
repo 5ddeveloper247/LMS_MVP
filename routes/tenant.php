@@ -533,9 +533,7 @@ Route::get('/accessibility', function () {
     return view('frontend.infixlmstheme.pages.accessibility');
 })->name('accessibility');
 
-Route::get('/faq', function () {
-    return view('frontend.infixlmstheme.pages.faq');
-})->name('faq');
+Route::get('/faq', 'Frontend\FaqController@index')->name('faq');
 
 Route::get('/cookies', function () {
     return view('frontend.infixlmstheme.pages.cookies');

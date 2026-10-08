@@ -116,7 +116,7 @@
                                                 @foreach ($faqs as $faq)
                                                     <option value="{{ $faq->id }}"
                                                         {{ in_array((string) $faq->id, $oldfaqs) ? 'selected' : '' }}>
-                                                        {{ $faq->question }}</option>
+                                                        {{ $faq->question }}@if($faq->category) ({{ $faq->category->name }})@endif</option>
                                                 @endforeach
                                             </select>
                                         </div>

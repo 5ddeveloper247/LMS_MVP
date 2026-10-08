@@ -227,7 +227,7 @@ class StudentSettingController extends Controller
 
     {
         $courses = Course::where('status', 1)->where('type', 1)->get();
-        $faqs = HomePageFaq::orderBy('order', 'desc')->where('status', 1)->get();
+        $faqs = HomePageFaq::with('category')->orderBy('order', 'desc')->where('status', 1)->get();
         $reviews = CourseReveiw::all();
         return view('studentsetting::All_program', compact('courses', 'faqs', 'reviews'));
     }
@@ -298,7 +298,7 @@ class StudentSettingController extends Controller
 
         $progaram = Program::where('id', $id)->first();
         $courses = Course::where('status', 1)->where('type', 1)->get();
-        $faqs = HomePageFaq::orderBy('order', 'desc')->where('status', 1)->get();
+        $faqs = HomePageFaq::with('category')->orderBy('order', 'desc')->where('status', 1)->get();
         $reviews = CourseReveiw::get();
 
         return view('studentsetting::edit_program', compact('progaram', 'courses', 'faqs', 'reviews'));

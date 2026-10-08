@@ -133,6 +133,9 @@ Route::group(['prefix' => 'frontend', 'as' => 'frontend.', 'middleware' => ['aut
 
 
     Route::get('/faq', 'HomePageFaqController@index')->name('faq.index')->middleware('RoutePermissionCheck:frontend.faq.index');
+    Route::post('/faq-category-store', 'FaqCategoryController@store')->name('faq.category.store')->middleware('RoutePermissionCheck:frontend.faq.store');
+    Route::post('/faq-category-update', 'FaqCategoryController@update')->name('faq.category.update')->middleware('RoutePermissionCheck:frontend.faq.update');
+    Route::post('/faq-category-delete', 'FaqCategoryController@destroy')->name('faq.category.destroy')->middleware('RoutePermissionCheck:frontend.faq.destroy');
     Route::post('/faq-store', 'HomePageFaqController@store')->name('faq.store')->middleware('RoutePermissionCheck:frontend.faq.store');
     Route::post('/faq-update', 'HomePageFaqController@update')->name('faq.update')->middleware('RoutePermissionCheck:frontend.faq.update');
     Route::post('/faq-delete', 'HomePageFaqController@destroy')->name('faq.destroy')->middleware('RoutePermissionCheck:frontend.faq.destroy');

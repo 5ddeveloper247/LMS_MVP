@@ -387,253 +387,47 @@
         </div>
     </header>
 
-    <div class="jump-section">
-        <div class="jump-inner"><a href="#programs" class="jump-link">Programs</a><a href="#nclex" class="jump-link">NCLEX
-                Prep</a><a href="#remediation" class="jump-link">Remediation</a><a href="#pricing" class="jump-link">Pricing
-                &amp; Enrollment</a><a href="#tutoring" class="jump-link">Tutoring</a><a href="#general"
-                class="jump-link">General</a></div>
-    </div>
+    @php
+        $faqCategories = $categories ?? collect();
+    @endphp
 
-    <!-- Programs -->
-    <section class="faq-category" id="programs">
-        <div class="faq-cat-header">
-            <p class="faq-cat-eyebrow">Programs</p>
-            <h2 class="faq-cat-title">About Our Programs</h2>
+    @if($faqCategories->isNotEmpty())
+        <div class="jump-section">
+            <div class="jump-inner">
+                @foreach($faqCategories as $category)
+                    <a href="#{{ $category->slug }}" class="jump-link">{{ $category->name }}</a>
+                @endforeach
+            </div>
         </div>
-        <div class="faq-list">
-            <details class="faq-item">
-                <summary>Which program is right for me?</summary>
-                <div class="faq-body">It depends on where you are. If you're preparing for the NCLEX (first-time or retake),
-                    the
-                    <a href="nclex-coaching.html">NCLEX Success Coaching</a> program is the best fit. If the FL Board of
-                    Nursing
-                    has required you to complete remediation, you need the <a href="remediation.html">FL BON Remediation</a>
-                    program. Currently in nursing school and struggling? Check out <a href="nursing-school.html">Nursing
-                        School
-                        Success</a>. Dismissed or considering re-entry? The <a href="nursing-comeback.html">Nursing
-                        Comeback</a>
-                    program is designed for you. Not sure? <a href="contact.html">Schedule a free consultation</a> and we'll
-                    help
-                    you decide.
-                </div>
-            </details>
-            <details class="faq-item">
-                <summary>What is the NCLEX PASS Method™?</summary>
-                <div class="faq-body">It's our proprietary three-pillar framework: Content Mastery + Process &amp; Strategy
-                    +
-                    Confidence &amp; Mindset. Every program and course is built on this system. <a
-                        href="nclex-pass-method.html">Read the full methodology deep-dive →</a></div>
-            </details>
-            <details class="faq-item">
-                <summary>How long are the programs?</summary>
-                <div class="faq-body">NCLEX Success Coaching runs 6–8 weeks. FL BON Remediation length varies by the Board's
-                    requirements for your specific case. Nursing School Success and Nursing Comeback are flexible — built
-                    around
-                    your academic calendar. Tutoring is on-demand.</div>
-            </details>
-            <details class="faq-item">
-                <summary>Are programs online or in-person?</summary>
-                <div class="faq-body">All programs are available live online via video — accessible from anywhere. If you're
-                    local to Lakeland, FL, in-person options are available at our location on S. Florida Avenue. Contact us
-                    to
-                    discuss your preference.</div>
-            </details>
-        </div>
-    </section>
 
-    <!-- NCLEX -->
-    <section class="faq-category" id="nclex">
-        <div class="faq-cat-header">
-            <p class="faq-cat-eyebrow">NCLEX Prep</p>
-            <h2 class="faq-cat-title">NCLEX Questions</h2>
-        </div>
-        <div class="faq-list">
-            <details class="faq-item">
-                <summary>I failed the NCLEX. Can you help me pass?</summary>
-                <div class="faq-body">Yes — that's our specialty. The majority of our students are repeat test-takers. Our
-                    95%
-                    pass rate includes students who failed 2, 3, even 4+ times before finding the right system. The key is
-                    addressing all three dimensions: content gaps, test-taking process, and test-day confidence.</div>
-            </details>
-            <details class="faq-item">
-                <summary>Is your curriculum updated for the Next-Generation NCLEX (NGN)?</summary>
-                <div class="faq-body">Yes. All programs and prep-courses are updated for the NGN clinical judgment
-                    measurement
-                    model — including extended drag-and-drop, matrix, highlight, and case study item types launched in 2023.
+        @foreach($faqCategories as $category)
+            <section class="faq-category" id="{{ $category->slug }}">
+                <div class="faq-cat-header">
+                    @if($category->eyebrow)
+                        <p class="faq-cat-eyebrow">{{ $category->eyebrow }}</p>
+                    @endif
+                    <h2 class="faq-cat-title">{{ $category->section_title ?: $category->name }}</h2>
                 </div>
-            </details>
-            <details class="faq-item">
-                <summary>How is Merkaii different from other NCLEX prep programs?</summary>
-                <div class="faq-body">Most prep programs focus only on content review — more material, more questions, more
-                    flashcards. Our NCLEX PASS Method™ adds two pillars that most programs ignore: Process Training (how to
-                    think
-                    through questions under pressure) and Confidence Building (managing test anxiety and rebuilding
-                    self-efficacy). The combination is what drives our 95% pass rate.</div>
-            </details>
-            <details class="faq-item">
-                <summary>What if I've already tried other prep programs?</summary>
-                <div class="faq-body">Many of our students come to us after trying 1–3 other prep programs. The fact that
-                    those
-                    programs didn't work doesn't mean you can't pass — it means you need a different approach. We start with
-                    a
-                    diagnostic to identify your specific gaps and build a personalized plan from there.</div>
-            </details>
-        </div>
-    </section>
-
-    <!-- Remediation -->
-    <section class="faq-category" id="remediation">
-        <div class="faq-cat-header">
-            <p class="faq-cat-eyebrow">FL BON Remediation</p>
-            <h2 class="faq-cat-title">Remediation Questions</h2>
-        </div>
-        <div class="faq-list">
-            <details class="faq-item">
-                <summary>Are you approved by the Florida Board of Nursing?</summary>
-                <div class="faq-body">Yes. Merkaii Xcellence Prep operates as Merakii College of Health — a Florida Board of
-                    Nursing-approved remedial course provider. You can verify our approval directly on the <a
-                        href="https://floridasnursing.gov/florida-board-of-nursing-approved-remedial-courses/"
-                        target="_blank">FL
-                        BON website</a>. <a href="credentials.html">See our full credentials page →</a></div>
-            </details>
-            <details class="faq-item">
-                <summary>What triggers FL BON remediation?</summary>
-                <div class="faq-body">Remediation is typically required by the Board as a condition of licensure or license
-                    reinstatement. Common triggers include multiple NCLEX failures, disciplinary actions, license lapse, or
-                    practice deficiency findings. Your Board order will specify the required coursework.</div>
-            </details>
-            <details class="faq-item">
-                <summary>Will my completion be accepted by the Board?</summary>
-                <div class="faq-body">Yes. We produce all documentation required by the FL BON, including official
-                    completion
-                    certificates. Our documentation has been accepted by the Board for hundreds of nurses.</div>
-            </details>
-            <details class="faq-item">
-                <summary>How long does remediation take?</summary>
-                <div class="faq-body">It depends on the Board's requirements for your specific case. Some students complete
-                    remediation in 4–6 weeks; others need longer depending on the number and type of courses required. We'll
-                    review your Board order and give you a realistic timeline during your consultation.</div>
-            </details>
-        </div>
-    </section>
-
-    <!-- Pricing -->
-    <section class="faq-category" id="pricing">
-        <div class="faq-cat-header">
-            <p class="faq-cat-eyebrow">Pricing &amp; Enrollment</p>
-            <h2 class="faq-cat-title">Cost &amp; Enrollment</h2>
-        </div>
-        <div class="faq-list">
-            <details class="faq-item">
-                <summary>How much do programs cost?</summary>
-                <div class="faq-body">Pricing varies by program and tier. NCLEX Success Coaching and FL BON Remediation
-                    pricing
-                    is discussed during your free consultation because the scope depends on your specific situation.
-                    Tutoring
-                    starts at $75/session with package discounts available. <a href="tutoring.html#pricing">See tutoring
-                        pricing
-                        →</a></div>
-            </details>
-            <details class="faq-item">
-                <summary>Do you offer payment plans?</summary>
-                <div class="faq-body">Yes. We offer flexible payment plans for all coaching programs. Details are discussed
-                    during your consultation. We never want cost to be the reason a student can't get the help they need.
+                <div class="faq-list">
+                    @foreach($category->faqs as $faq)
+                        <details class="faq-item">
+                            <summary>{{ $faq->question }}</summary>
+                            <div class="faq-body">{!! $faq->answer !!}</div>
+                        </details>
+                    @endforeach
                 </div>
-            </details>
-            <details class="faq-item">
-                <summary>Is there a free option to try before I enroll?</summary>
-                <div class="faq-body">Yes — two options. First, download the <a href="starter-kit.html">free NCLEX Comeback
-                        Starter Kit</a> for an immediate taste of our approach. Second, <a href="contact.html">schedule a
-                        free
-                        consultation</a> to discuss your situation and get a personalized recommendation at no cost.</div>
-            </details>
-            <details class="faq-item">
-                <summary>Can I apply tutoring costs toward a program?</summary>
-                <div class="faq-body">Yes. If you enroll in a coaching program within 30 days of a tutoring session, we'll
-                    credit the session cost toward your program enrollment. It's a risk-free way to experience our teaching
-                    style.
-                </div>
-            </details>
-        </div>
-    </section>
-
-    <!-- Tutoring -->
-    <section class="faq-category" id="tutoring">
-        <div class="faq-cat-header">
-            <p class="faq-cat-eyebrow">Tutoring</p>
-            <h2 class="faq-cat-title">Tutoring Questions</h2>
-        </div>
-        <div class="faq-list">
-            <details class="faq-item">
-                <summary>What's the difference between tutoring and a program?</summary>
-                <div class="faq-body">Tutoring is on-demand, subject-specific support for a particular concept or exam.
-                    Programs
-                    are structured multi-week experiences with a curriculum, study plan, community access, and coaching.
-                    Many
-                    students use both — tutoring for targeted help and a program for the full system.</div>
-            </details>
-            <details class="faq-item">
-                <summary>Can I choose my instructor?</summary>
-                <div class="faq-body">Yes. Browse instructors by specialty on our <a href="tutoring.html">Tutoring
-                        page</a> and
-                    select the one that matches your needs. If your preferred instructor isn't available at your preferred
-                    time,
-                    we'll help find an alternative.</div>
-            </details>
-            <details class="faq-item">
-                <summary>What subjects do you cover?</summary>
-                <div class="faq-body">All pre-licensure nursing subjects — Fundamentals, Med-Surg, Pharmacology, Mental
-                    Health,
-                    OB/Maternal, Pediatrics, Community Health, Physical Assessment, Gerontological Nursing, Nursing
-                    Management,
-                    NCLEX Test Strategy, and FL BON Remedial subjects. <a href="tutoring.html">See the full subject list
-                        →</a>
-                </div>
-            </details>
-        </div>
-    </section>
-
-    <!-- General -->
-    <section class="faq-category" id="general">
-        <div class="faq-cat-header">
-            <p class="faq-cat-eyebrow">General</p>
-            <h2 class="faq-cat-title">General Questions</h2>
-        </div>
-        <div class="faq-list">
-            <details class="faq-item">
-                <summary>Where are you located?</summary>
-                <div class="faq-body">501 S. Florida Avenue, Lakeland, FL 33801. We're open Monday–Thursday 8:30am–7:00pm
-                    and
-                    Saturday 10:00am–3:00pm. All programs are also available online via live video.</div>
-            </details>
-            <details class="faq-item">
-                <summary>Who is behind Merkaii Xcellence Prep?</summary>
-                <div class="faq-body">Merkaii was founded in 2019 by Paula Martin, LPN — a nurse and health educator with
-                    13+
-                    years of experience in nursing education. The organization operates under Merakii International Societe,
-                    Inc.
-                    <a href="about.html">Learn more about our story →</a>
-                </div>
-            </details>
-            <details class="faq-item">
-                <summary>What does "Merkaii" mean?</summary>
-                <div class="faq-body">It's a variant of "meraki" — a Greek word meaning to do something with soul,
-                    creativity,
-                    and love; to put a piece of yourself into your work. It reflects our approach to nursing education:
-                    every
-                    student gets our full attention and care, not a generic program.</div>
-            </details>
-            <details class="faq-item">
-                <summary>How do I get started?</summary>
-                <div class="faq-body">Three options: (1) <a href="contact.html">Schedule a free consultation</a> to
-                    discuss your
-                    situation and get a personalized recommendation. (2) <a href="starter-kit.html">Download the free
-                        Starter
-                        Kit</a> to try our approach immediately. (3) <a href="tutoring.html">Book a tutoring session</a> to
-                    experience our teaching style risk-free.</div>
-            </details>
-        </div>
-    </section>
+            </section>
+        @endforeach
+    @else
+        <section class="faq-category">
+            <div class="faq-cat-header">
+                <h2 class="faq-cat-title">FAQ</h2>
+            </div>
+            <div class="faq-list">
+                <p class="faq-body" style="text-align:center;padding:24px;">No FAQs are published yet. Please check back soon.</p>
+            </div>
+        </section>
+    @endif
 
     <!-- Still have questions -->
     <section class="contact-section">
@@ -641,7 +435,7 @@
             <h2>Still have questions?</h2>
             <p>We're happy to help. Schedule a free consultation or send us a message — no pressure, no sales pitch, just
                 honest answers.</p>
-            <a href="contact.html" class="btn-primary">Schedule a Free Consultation →</a>
+            <a href="{{ route('contact-us') }}" class="btn-primary">Schedule a Free Consultation →</a>
             <p class="contact-alt">Or email us at <a
                     href="mailto:contact@merkaiixcelprep.com">contact@merkaiixcelprep.com</a>
             </p>
@@ -650,7 +444,7 @@
 
     <section class="final-cta">
         <h2>Ready to get started? <em>We're here.</em></h2>
-        <p>Every student's path is different. Let us help you find yours.</p><a href="contact.html"
+        <p>Every student's path is different. Let us help you find yours.</p><a href="{{ route('contact-us') }}"
             class="btn-on-teal">Book
             a Free Consultation →</a>
     </section>

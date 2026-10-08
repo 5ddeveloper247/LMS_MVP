@@ -6,6 +6,10 @@
             $('.preloader').show();
             var errors = [];
 
+            if (isEmpty(form_add.find('#addFaqCategory').val())) {
+                errors.push('Category is required!');
+            }
+
             if (isEmpty(form_add.find('input[name="question[en]"]').val())) {
                 errors.push('Question is required!');
             }
@@ -33,6 +37,10 @@
 
             $('.preloader').show();
             var errors = [];
+
+            if (isEmpty(form_update.find('#editFaqCategory').val())) {
+                errors.push('Category is required!');
+            }
 
             if (isEmpty(form_update.find('input[name="question[en]"]').val())) {
                 errors.push('Question is required!');
@@ -179,6 +187,7 @@
         $(document).on('click', '.editfaq', function() {
             let faq = $(this).data('item');
             $('#faqId').val(faq.id);
+            $('#editFaqCategory').val(faq.faq_category_id);
             @foreach ($LanguageList as $key => $language)
                 $('#editQuestion{{ $language->code }}').val(faq.question.{{ $language->code }});
                 $('#editAnswer{{ $language->code }}').summernote("code", faq.answer
@@ -188,6 +197,21 @@
 
             $("#editfaq").modal('show');
 
+        });
+
+        $(document).on('click', '.edit-faq-category', function() {
+            let category = $(this).data('item');
+            $('#faqCategoryId').val(category.id);
+            $('#edit_categoryName').val(category.name);
+            $('#edit_categorySlug').val(category.slug);
+            $('#edit_categoryEyebrow').val(category.eyebrow);
+            $('#edit_categorySectionTitle').val(category.section_title);
+            $('#edit_faq_category').modal('show');
+        });
+
+        $(document).on('click', '.delete-faq-category', function() {
+            $('#faqCategoryDeleteId').val($(this).data('id'));
+            $('#delete_faq_category').modal('show');
         });
 
 

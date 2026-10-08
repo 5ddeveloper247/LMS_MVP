@@ -5,6 +5,7 @@ namespace Modules\FrontendManage\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
+use Modules\FrontendManage\Entities\FaqCategory;
 use Modules\FrontendManage\Entities\HomePageFaq;
 
 class HomePageFaqController extends Controller
@@ -12,8 +13,9 @@ class HomePageFaqController extends Controller
     public function index()
     {
         try {
-            $faqs = HomePageFaq::orderBy('order', 'desc')->get();
-            return view('frontendmanage::faq.index', compact('faqs'));
+            $faqs = HomePageFaq::with('category')->orderBy('order', 'desc')->get();
+            $categories = FaqCategory::orderBy('order', 'desc')->get();
+            return view('frontendmanage::faq.index', compact('faqs', 'categories'));
 
         } catch (\Exception $e) {
             Toastr::error(trans('common.Operation failed'), trans('common.Failed'));
@@ -33,6 +35,7 @@ class HomePageFaqController extends Controller
         $rules = [
             'question.' . $code => 'required|max:255',
             'answer.' . $code => 'required',
+            'faq_category_id' => 'required|exists:faq_categories,id',
         ];
 
         $this->validate($request, $rules, validationMessage($rules));
@@ -41,6 +44,7 @@ class HomePageFaqController extends Controller
         try {
             $total = HomePageFaq::latest()->count();
             $faq = new HomePageFaq;
+            $faq->faq_category_id = $request->faq_category_id;
             foreach ($request->question as $key => $question) {
                 $faq->setTranslation('question', $key, $question);
             }
@@ -74,6 +78,7 @@ class HomePageFaqController extends Controller
         $rules = [
             'question.' . $code => 'required|max:255',
             'answer.' . $code => 'required',
+            'faq_category_id' => 'required|exists:faq_categories,id',
         ];
 
 
@@ -82,6 +87,7 @@ class HomePageFaqController extends Controller
         $faq = HomePageFaq::findOrFail($request->id);
 
         try {
+            $faq->faq_category_id = $request->faq_category_id;
             foreach ($request->question as $key => $question) {
                 $faq->setTranslation('question', $key, $question);
             }

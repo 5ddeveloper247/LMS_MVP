@@ -12,5 +12,10 @@ class HomePageFaq extends Model
     use HasTranslations;
 
     public $translatable = ['question','answer'];
-    protected $fillable = [];
+    protected $fillable = ['faq_category_id', 'status', 'order'];
+
+    public function category()
+    {
+        return $this->belongsTo(FaqCategory::class, 'faq_category_id');
+    }
 }
