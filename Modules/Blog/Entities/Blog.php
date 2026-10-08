@@ -94,4 +94,12 @@ class Blog extends Model
     {
         return $this->hasOne(UserBlog::class, 'blog_id')->where('user_id', Auth::id());
     }
+
+    public static function otherFeatured($exceptId = null)
+    {
+        return static::where('featured', 1)
+            ->when($exceptId, fn($q) => $q->where('id', '!=', $exceptId))
+            ->when(isModuleActive('LmsSaas'), fn($q) => $q->where('lms_id', app('institute')->id))
+            ->first();
+    }
 }

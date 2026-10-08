@@ -56,6 +56,22 @@
 
 
 
+    {{-- Off-canvas cart: keep out of document flow when closed (blog/marketing pages were showing this block). --}}
+    <style>
+        .shoping_wrapper .shoping_cart:not(.active),
+        .shoping_wrapper .dark_overlay:not(.active) {
+            display: none !important;
+        }
+
+        .shoping_wrapper .shoping_cart.active {
+            display: block !important;
+        }
+
+        .shoping_wrapper .dark_overlay.active {
+            display: block !important;
+        }
+    </style>
+
     <div class="shoping_wrapper">
         <div class="dark_overlay"></div>
         <div class="shoping_cart">

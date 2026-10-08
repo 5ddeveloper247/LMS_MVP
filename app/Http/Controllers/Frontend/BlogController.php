@@ -8,9 +8,10 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Modules\Blog\Entities\Blog;
 use Modules\Blog\Entities\BlogComment;
 use Modules\FrontendManage\Entities\FrontPage;
+use Modules\Blog\Entities\BlogCategory;
+use Modules\Blog\Entities\Blog;
 use Modules\Org\Entities\OrgBlogBranch;
 use Modules\Org\Entities\OrgBlogPosition;
 use Modules\Org\Entities\OrgBranch;
@@ -26,14 +27,35 @@ class BlogController extends Controller
     public function allBlog()
     {
         try {
-            // if (hasDynamicPage()) {
+            $publishedBlogQuery = fn ($query) => $query
+                ->where('status', 1)
+                ->where(function ($q) {
+                    $q->whereNull('authored_date_time')
+                        ->orWhere('authored_date_time', '<=', Carbon::now());
+                })
+                ->with(['user', 'category'])
+                ->orderByDesc('authored_date_time')
+                ->orderByDesc('id');
 
-            //     $row = FrontPage::where('slug', '/blog')->first();
-            //     $details = dynamicContentAppend($row->details);
-            //     return view('aorapagebuilder::pages.show', compact('row', 'details'));
-            // } else {
-                return view(theme('pages.blogs'));
-            // }
+            $categories = BlogCategory::with(['blogs' => $publishedBlogQuery])
+                ->where('status', 1)
+                ->orderBy('position_order')
+                ->get()
+                ->filter(fn ($category) => $category->blogs->isNotEmpty())
+                ->values();
+
+            $featuredPost = Blog::query()
+                ->where('status', 1)
+                ->where('featured', 1)
+                ->where(function ($q) {
+                    $q->whereNull('authored_date_time')
+                        ->orWhere('authored_date_time', '<=', Carbon::now());
+                })
+                ->with(['category', 'user'])
+                ->orderByDesc('authored_date_time')
+                ->first();
+
+            return view(theme('pages.blogs'), compact('categories', 'featuredPost'));
         } catch (\Exception $e) {
             GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
         }
@@ -42,30 +64,34 @@ class BlogController extends Controller
 
     public function blogDetails(Request $request, $slug)
     {
-        $blog = Blog::where('slug', $slug)->with('user', 'comments')->firstOrFail();
+        $blog = Blog::where('slug', $slug)->with(['user', 'category', 'comments'])->firstOrFail();
 
         try {
-
             if ($blog->status == 0) {
-                if ($request->preview != 1 || !Auth::check() || Auth::user()->role_id == 3) {
+                if ($request->preview != 1 || ! Auth::check() || Auth::user()->role_id == 3) {
                     Toastr::error(trans('blog.Blog status is not active'), trans('common.Failed'));
+
                     return Redirect::to('/');
                 }
             }
 
             $current_date = Carbon::now();
 
-            if (Carbon::parse($blog->authored_date_time)->gt($current_date)) {
-                Toastr::error(trans('blog.Blog is not published yet'), trans('common.Failed'));
-                return Redirect::to('/');
+            if ($blog->authored_date_time && Carbon::parse($blog->authored_date_time)->gt($current_date)) {
+                if ($request->preview != 1 || ! Auth::check() || Auth::user()->role_id == 3) {
+                    Toastr::error(trans('blog.Blog is not published yet'), trans('common.Failed'));
+
+                    return Redirect::to('/');
+                }
             }
+
             if (isModuleActive('Org')) {
                 if ($blog->audience == 2) {
                     $checkBranch = false;
 
                     if (Auth::check()) {
                         if (Auth::user()->role_id == 3) {
-                            if (!empty(Auth::user()->org_chart_code)) {
+                            if (! empty(Auth::user()->org_chart_code)) {
                                 $check = OrgBranch::where('code', Auth::user()->org_chart_code)->first();
                                 if ($check) {
                                     $branch_blog = OrgBlogBranch::where('blog_id', $blog->id)->where('branch_id', $check->id)->first();
@@ -73,15 +99,15 @@ class BlogController extends Controller
                                         $checkBranch = true;
                                     }
                                 }
-
                             }
                         } else {
                             $checkBranch = true;
                         }
                     }
-                    if (!$checkBranch) {
+                    if (! $checkBranch) {
                         Toastr::error(trans('common.Access Denied'), trans('common.Failed'));
-                        return \redirect()->back();
+
+                        return redirect()->back();
                     }
                 }
 
@@ -90,7 +116,7 @@ class BlogController extends Controller
 
                     if (Auth::check()) {
                         if (Auth::user()->role_id == 3) {
-                            if (!empty(Auth::user()->org_position_code)) {
+                            if (! empty(Auth::user()->org_position_code)) {
                                 $check = OrgPosition::where('code', Auth::user()->org_position_code)->first();
                                 if ($check) {
                                     $position_blog = OrgBlogPosition::where('blog_id', $blog->id)->where('position_id', $check->id)->first();
@@ -98,26 +124,41 @@ class BlogController extends Controller
                                         $checkPosition = true;
                                     }
                                 }
-
                             }
                         } else {
                             $checkPosition = true;
                         }
                     }
-                    if (!$checkPosition) {
+                    if (! $checkPosition) {
                         Toastr::error(trans('common.Access Denied'), trans('common.Failed'));
-                        return \redirect()->back();
+
+                        return redirect()->back();
                     }
                 }
             }
+
             if (empty($request->preview)) {
                 $blog->viewed = $blog->viewed + 1;
                 $blog->save();
-                MarkAsBlogRead($blog->id);
+                if (function_exists('MarkAsBlogRead')) {
+                    MarkAsBlogRead($blog->id);
+                }
             }
-            $next = Blog::where('id','>',$blog->id)->orderBy('id','ASC')->first();
-            $previous = Blog::where('id','<',$blog->id)->orderBy('id','DESC')->first();
-            return view(theme('pages.blogDetails'), compact('blog','next','previous'));
+
+            $relatedPosts = Blog::query()
+                ->where('status', 1)
+                ->where('id', '!=', $blog->id)
+                ->where(function ($q) {
+                    $q->whereNull('authored_date_time')
+                        ->orWhere('authored_date_time', '<=', Carbon::now());
+                })
+                ->when($blog->category_id, fn ($q) => $q->where('category_id', $blog->category_id))
+                ->with(['user', 'category'])
+                ->orderByDesc('authored_date_time')
+                ->limit(3)
+                ->get();
+
+            return view(theme('pages._new_blog_detail'), compact('blog', 'relatedPosts'));
         } catch (\Exception $e) {
             GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
         }

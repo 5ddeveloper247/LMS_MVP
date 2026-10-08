@@ -91,17 +91,21 @@ class BlogController extends Controller
 
         $this->validate($request, $rules, validationMessage($rules));
 
+        if ($response = $this->featuredConflict($request)) {
+            return $response;
+        }
+
         try {
             $blog = new Blog;
             // foreach ($request->title as $key => $name) {
-             //   $blog->setTranslation('title', $key, $name);
+            //   $blog->setTranslation('title', $key, $name);
             // }
             // foreach ($request->description as $key => $description) {
-                // $blog->setTranslation('description', $key, $description);
-                // if($key == 'en'){
-                    $blog->title = $request->title;
-                    $blog->description = $request->description;
-                // }
+            // $blog->setTranslation('description', $key, $description);
+            // if($key == 'en'){
+            $blog->title = $request->title;
+            $blog->description = $request->description;
+            // }
             // }
             $blog->slug = $request->slug;
             $blog->category_id = $request->category;
@@ -117,7 +121,7 @@ class BlogController extends Controller
                 $savedImage = $this->saveImage($request->image);
                 $blog->image = $savedImage;
                 $blog->thumbnail = $savedImage;
-             //   $blog->thumbnail = $this->saveCroppedImage($request->hidden_file);
+                //   $blog->thumbnail = $this->saveCroppedImage($request->hidden_file);
             }
             $blog->save();
 
@@ -175,6 +179,10 @@ class BlogController extends Controller
         ];
 
         $this->validate($request, $rules, validationMessage($rules));
+
+        if ($response = $this->featuredConflict($request, $request->id)) {
+            return $response;
+        }
 
         try {
 
@@ -279,5 +287,20 @@ class BlogController extends Controller
         } catch (\Exception $e) {
             GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
         }
+    }
+
+
+    protected function featuredConflict(Request $request, $exceptId = null)
+    {
+        if ((int) $request->featured !== 1 || ! Blog::otherFeatured($exceptId)) {
+            return null; // koi masla nahi
+        }
+
+        $message = 'Another blog is already featured. Remove its featured status first.';
+        Toastr::error($message, trans('common.Failed'));
+
+        return redirect()->back()
+            ->withInput()
+            ->withErrors(['featured' => $message]);
     }
 }
