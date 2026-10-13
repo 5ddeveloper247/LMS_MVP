@@ -21,8 +21,7 @@ class CourseReveiw extends Model
 
     public function course()
     {
-
-        $this->belongsTo(Course::class, 'course_id')->withDefault();
+        return $this->belongsTo(Course::class, 'course_id')->withDefault();
     }
 
 

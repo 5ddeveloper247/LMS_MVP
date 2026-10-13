@@ -37,7 +37,10 @@
                     </div>
                 </div>
             </div>
-            <form action="{{ route('addprogram') }}" method="POST" enctype="multipart/form-data" id="program_add_form">
+            <form action="{{ route('addprogram') }}" method="POST" enctype="multipart/form-data" id="program_add_form"
+                  data-program-id=""
+                  data-other-fl-bon-id="{{ $otherFlBonRemediationProgram->id ?? '' }}"
+                  data-other-fl-bon-title="{{ $otherFlBonRemediationProgram->programtitle ?? '' }}">
                 @csrf
                 <div class="row">
                     <div class="col-lg-12">
@@ -66,8 +69,7 @@
                                     <div class="col-xl-6">
                                         <div class="primary_input mb-25">
                                             <label class="primary_input_label" for="">Program subtitle/greetings
-                                                <small>(Max size
-                                                    250 Characters)</small> *</label>
+                                                <small>(Max size 250 Characters; also large heading on FL BON spotlight card)</small> *</label>
                                             <input class="primary_input_field @if($errors->first('subtitle')) border-danger @endif" name="subtitle" placeholder="-"
                                                 id="subtitle" maxlength="250" type="text"
                                                 {{ $errors->has('title') ? 'autofocus' : '' }}
@@ -76,11 +78,37 @@
                                     </div>
                                 </div>
 
+                                @php $programListing = null; @endphp
+                                @include('studentsetting::partials.program_admin_section_label')
+
+                                <div class="row mb-10">
+                                    <div class="col-xl-12">
+                                        <label>Is FL BON Remediation Program <small class="text-muted">(shows spotlight on /programs; only one at a time)</small></label>
+                                        @error('is_fl_bon_remediation')
+                                            <p class="text-danger mb-0" style="font-size: 13px;">{{ $message }}</p>
+                                        @enderror
+                                        <div class="d-flex py-3">
+                                            <label class="primary_checkbox d-flex nowrap mr-5" for="flBonRemediationYes">
+                                            <input type="radio" id="flBonRemediationYes"
+                                                name="is_fl_bon_remediation"
+                                                value="1" {{ old('is_fl_bon_remediation') === '1' ? 'checked' : '' }}>
+                                            <span class="checkmark mr-2"></span>
+                                            {{ __('Yes') }}</label>
+                                            <label class="primary_checkbox d-flex nowrap mr-5" for="flBonRemediationNo">
+                                            <input type="radio" id="flBonRemediationNo"
+                                                name="is_fl_bon_remediation"
+                                                value="0" {{ old('is_fl_bon_remediation', '0') !== '1' ? 'checked' : '' }}>
+                                            <span class="checkmark mr-2"></span>
+                                            {{ __('No') }}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                @include('studentsetting::partials.program_featured_dependent_fields')
 
                                 <div class="row mt-30 mb-40">
                                     <div class="col-xl-5">
                                         <label class="primary_input_label">
-                                            Program Thumbnail (Max Image Size 1MB, Recommended Dimensions: 1170X600)
+                                            Program Thumbnail (Max 2MB, Recommended 1170×600 — crop to fit)
 
                                         </label>
                                     </div>
@@ -121,23 +149,6 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-xl-6">
-                                        <label>Featured</label>
-                                        <div class="d-flex py-3">
-                                            <label class="primary_checkbox d-flex nowrap mr-5" for="featuredYes">
-                                            <input type="radio" id="featuredYes"
-                                                name="featured"
-                                                value="1">
-                                            <span class="checkmark mr-2"></span>
-                                            {{ __('Yes') }}</label>
-                                            <label class="primary_checkbox d-flex nowrap mr-5" for="featuredNo">
-                                            <input type="radio" id="featuredNo"
-                                                name="featured"
-                                                value="0">
-                                            <span class="checkmark mr-2"></span>
-                                            {{ __('No') }}</label>
-                                        </div>
-                                     </div>
                                 </div>
 
                                 <div class="row mt-30 mb-40">
@@ -174,11 +185,14 @@
                                     <div class="col-xl-12">
 
                                         <div class="primary_input mb-25">
-                                            <label class="primary_input_label" for="">Program description * <i class="fa fa-retweet clear_area" data-field-id="description" title="Clear Text Area..."></i></label>
+                                            <label class="primary_input_label" for="">Program description * <small class="text-muted">(program detail page; also main paragraph on FL BON spotlight if enabled)</small> <i class="fa fa-retweet clear_area" data-field-id="description" title="Clear Text Area..."></i></label>
                                             <textarea class="custom_summernote" name="description" id="description" cols="30" rows="10" required>{{old('description')}}</textarea>
                                         </div>
                                     </div>
                                 </div>
+
+                                @include('studentsetting::partials.program_listing_content_fields')
+
                                 <div class="row mt-30 mb-40">
                                     <div class="col-xl-12">
                                         <div class="primary_input mb-25">
@@ -317,6 +331,7 @@
 
     @push('scripts')
         <script  src="{{ asset('/') }}/Modules/CourseSetting/Resources/assets/js/course.js"></script>
+        @include('studentsetting::partials.program_admin_featured_toggle_script')
     @endpush
     <script>
         
@@ -382,8 +397,8 @@
                     if (isEmpty($('#subtitle').val())) {
                         errors.push('Program subtitle is required');
                     }
-                    if (isEmpty($('#document_file_thumb-1').val())) {
-                        errors.push("Prep-Course Image is required");
+                    if (isEmpty($('#document_file_thumb-1').val()) && isEmpty($('#cropper_img').val())) {
+                        errors.push("Program thumbnail is required");
                     }
 
                     if (isEmpty($('#faqs').val())) {
@@ -576,25 +591,37 @@
             });
             
 
-            // 1st Cropper
+            // 1st Cropper — any image up to 2MB; crop to 1170×600 (same as courses)
             var _URL1 = window.URL || window.webkitURL;
+            var maxProgramThumbBytes = 2 * 1024 * 1024;
             $("#document_file_thumb-1").change(function(e) {
                 var file, img;
                 if ((file = this.files[0])) {
+                    if (!file.type.startsWith('image/')) {
+                        setTimeout(function() {
+                            $('#input-1, #document_file_thumb-1').val('');
+                            $("#image_preview-1").attr("src",
+                                "{{ asset('public/assets/course/no_image.png') }}");
+                        }, 500);
+                        toastr.error('Please select a valid image file!', 'Error');
+                        return;
+                    }
+                    if (file.size > maxProgramThumbBytes) {
+                        $('#input-1, #document_file_thumb-1').val('');
+                        $("#image_preview-1").attr("src",
+                            "{{ asset('public/assets/course/no_image.png') }}");
+                        toastr.error('Image size must be 2MB or less.', 'Error');
+                        return;
+                    }
                     img = new Image();
                     img.onload = function() {
-                        var image_width = this.width;
-                        var image_height = this.height;
-                        if (image_width == 1170 && image_height == 600) {
-                            jQuery('#image-editor-modal-1').modal('show', {
-                                backdrop: 'static'
-                            });
-                        } else {
-                            $('#input-1, #document_file_thumb-1').val('');
-                            toastr.error(
-                                'Wrong Image Dimensions, Please Select Image of 1170 X 600 !',
-                                'Error')
-                        }
+                        jQuery('#image-editor-modal-1').modal('show', {
+                            backdrop: 'static'
+                        });
+                    };
+                    img.onerror = function() {
+                        $('#input-1, #document_file_thumb-1').val('');
+                        toastr.error('Please select a valid image file!', 'Error');
                     };
                     img.src = _URL1.createObjectURL(file);
                 }
@@ -603,6 +630,7 @@
                 if ($('#image_preview-1').attr('src') != '' || $('#image_preview-1').attr('src') != null) {
                     $('#image_file-1').children().val('');
                 }
+                $('#input-1, #document_file_thumb-1').val('');
                 $('#image-editor-modal-1').trigger("reset");
                 $('#image-editor-modal-1').modal('hide');
             });

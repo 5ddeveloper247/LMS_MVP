@@ -1942,7 +1942,15 @@
         font-weight: 700;
         font-size: 32px;
         color: var(--deep-teal);
-        margin-bottom: 24px;
+        margin-bottom: 12px;
+    }
+
+    .pricing-program-subtitle {
+        font-size: 17px;
+        line-height: 1.5;
+        color: var(--charcoal-soft);
+        max-width: 640px;
+        margin: 0 auto 20px;
     }
 
     .pricing-amount {
@@ -2466,12 +2474,42 @@
     </section>
 
     <!-- ============ PRICING ============ -->
+    @php
+        $flBonPlan = isset($flBonRemediationProgram) && $flBonRemediationProgram
+            ? $flBonRemediationProgram->effectiveProgramPlan->first()
+            : null;
+        $flBonCategoryLabel = $flBonRemediationProgram
+            ? trim($flBonRemediationProgram->programs_page_eyebrow ?? $flBonRemediationProgram->featured_eyebrow ?? '')
+            : '';
+        $flBonDurationLine = '';
+        if ($flBonPlan && !empty($flBonPlan->sdate) && !empty($flBonPlan->edate)) {
+            $flBonDurationLine = date('M j, Y', strtotime($flBonPlan->sdate))
+                . ' – '
+                . date('M j, Y', strtotime($flBonPlan->edate));
+        }
+    @endphp
     <section class="section pricing-section" id="program-pricing">
         <div class="pricing-card">
-            <p class="pricing-eyebrow">Program Tuition</p>
-            <h3>FL BON-Approved Remediation</h3>
-            <div class="pricing-amount">$2,450</div>
-            <p class="pricing-amount-detail">Total program tuition · 2-month or 3-month tracks based on your pathway</p>
+            <p class="pricing-eyebrow">{{ $flBonCategoryLabel ?: 'Program Tuition' }}</p>
+            <h3>{{ $flBonRemediationProgram->programtitle ?? 'FL BON-Approved Remediation' }}</h3>
+            @if(!empty($flBonRemediationProgram?->subtitle))
+                <p class="pricing-program-subtitle">{{ $flBonRemediationProgram->subtitle }}</p>
+            @endif
+            <div class="pricing-amount">
+                @if($flBonPlan)
+                    {{ showPrice($flBonPlan->amount) }}
+                @else
+                    $2,450
+                @endif
+            </div>
+            <p class="pricing-amount-detail">
+                Total program tuition
+                @if($flBonDurationLine)
+                    · {{ $flBonDurationLine }}
+                @else
+                    · 2-month or 3-month tracks based on your pathway
+                @endif
+            </p>
 
             <div class="pricing-features">
                 <div class="pricing-feature">
@@ -2505,7 +2543,11 @@
                 Spread tuition across 2 or 3 monthly installments. We'll find a path that works on your free advisor call.
             </div>
 
-            <a href="{{ url('/contact') }}" class="btn btn-primary btn-large">Schedule a Free Confidential Call</a>
+            @if(!empty($flBonRemediationProgram))
+                <a href="{{ route('programs.detail', $flBonRemediationProgram->id) }}" class="btn btn-primary btn-large">View Detail</a>
+            @else
+                <a href="{{ route('programs') }}" class="btn btn-primary btn-large">View Detail</a>
+            @endif
         </div>
     </section>
 

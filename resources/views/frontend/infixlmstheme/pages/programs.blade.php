@@ -695,12 +695,14 @@
         font-weight: 600;
     }
 
-    .program-block ul {
+    .program-block ul,
+    .program-block-rich ul {
         list-style: none;
         padding: 0;
     }
 
-    .program-block ul li {
+    .program-block ul li,
+    .program-block-rich ul li {
         padding: 9px 0 9px 28px;
         position: relative;
         font-size: 15px;
@@ -708,11 +710,13 @@
         border-bottom: 1px solid var(--cream);
     }
 
-    .program-block ul li:last-child {
+    .program-block ul li:last-child,
+    .program-block-rich ul li:last-child {
         border-bottom: none;
     }
 
-    .program-block ul li::before {
+    .program-block ul li::before,
+    .program-block-rich ul li::before {
         content: '✓';
         position: absolute;
         left: 0;
@@ -722,7 +726,8 @@
         font-size: 16px;
     }
 
-    .program-block ul.frameworks li::before {
+    .program-block ul.frameworks li::before,
+    .program-block-rich.frameworks ul li::before {
         content: '◆';
         color: var(--terracotta);
         font-size: 12px;
@@ -1385,275 +1390,56 @@
 
 
 
-        <!-- FEATURED REMEDIATION -->
-        <section class="featured-section">
-            <div class="container">
-                <div class="featured-card">
-                    <div class="featured-image">
-                        <span class="featured-badge">★ Signature Program</span>
-                        <h3>FL BON Remediation Program</h3>
-                        <p>State-mandated remediation for Florida nurses required to complete a Board-approved program. Our
-                            specialty since 2019.</p>
-                    </div>
-                    <div class="featured-content">
-                        <h4>For Florida-Licensed Nurses</h4>
-                        <h2>The remediation program built for compliance — and your comeback.</h2>
-                        <p>If the Florida Board of Nursing has ordered you to complete remediation, you need a program that
-                            satisfies the Board's requirements while actually rebuilding your clinical foundation. That's
-                            what Merkaii Xcellence Prep has done for hundreds of nurses since 2019.</p>
-                        <div class="featured-meta">
-                            <div class="featured-meta-item">
-                                <span class="featured-meta-label">Specialty</span>
-                                <span class="featured-meta-value">FL BON Compliance</span>
-                            </div>
-                            <div class="featured-meta-item">
-                                <span class="featured-meta-label">Format</span>
-                                <span class="featured-meta-value">Structured + Personal</span>
-                            </div>
-                            <div class="featured-meta-item">
-                                <span class="featured-meta-label">Since</span>
-                                <span class="featured-meta-value">2019</span>
-                            </div>
+        @if(isset($featuredProgram) && $featuredProgram)
+            @php
+                $featuredBody = trim(strip_tags($featuredProgram->discription ?? ''));
+                $featuredMeta = array_filter([
+                    ['label' => 'Specialty', 'value' => $featuredProgram->featured_meta_specialty],
+                    ['label' => 'Format', 'value' => $featuredProgram->featured_meta_format],
+                    ['label' => 'Since', 'value' => $featuredProgram->featured_meta_since],
+                ], fn ($item) => filled($item['value']));
+            @endphp
+            <section class="featured-section">
+                <div class="container">
+                    <div class="featured-card">
+                        <div class="featured-image"@if($featuredProgram->image) style="background-image: linear-gradient(135deg, rgba(198, 93, 58, 0.92) 0%, rgba(168, 75, 45, 0.95) 100%), url('{{ getCourseImage($featuredProgram->image) }}'); background-size: cover; background-position: center;"@endif>
+                            <span class="featured-badge">★ Signature Program</span>
+                            <h3>{{ $featuredProgram->programtitle }}</h3>
+                            <p>{{ $featuredProgram->short_description ?: $featuredProgram->subtitle }}</p>
                         </div>
-                        <div class="program-cta-row">
-                            <a href="{{ url('/florida-remedial-program') }}" class="btn-primary">View Remediation Program →</a>
-                            <a href="{{ url('/contact') }}" class="btn-secondary">Speak With Our Team</a>
+                        <div class="featured-content">
+                            @if($featuredProgram->featured_eyebrow)
+                                <h4>{{ $featuredProgram->featured_eyebrow }}</h4>
+                            @elseif($featuredProgram->programs_page_eyebrow)
+                                <h4>{{ $featuredProgram->programs_page_eyebrow }}</h4>
+                            @endif
+                            <h2>{{ $featuredProgram->subtitle ?: $featuredProgram->programtitle }}</h2>
+                            @if($featuredBody)
+                                <p>{!! nl2br(e($featuredBody)) !!}</p>
+                            @endif
+                            @if(count($featuredMeta) > 0)
+                                <div class="featured-meta">
+                                    @foreach($featuredMeta as $meta)
+                                        <div class="featured-meta-item">
+                                            <span class="featured-meta-label">{{ $meta['label'] }}</span>
+                                            <span class="featured-meta-value">{{ $meta['value'] }}</span>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
+                            <div class="program-cta-row">
+                                <a href="{{ route('floridaPrograms') }}" class="btn-primary">View Remediation Program →</a>
+                                <a href="{{ route('contact-us') }}" class="btn-secondary">Speak With Our Team</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        @endif
 
-        <!-- PROGRAM 1: NCLEX SUCCESS COACHING -->
-        <section id="nclex-coaching">
-            <div class="container">
-                <div class="program">
-                    <div class="program-bg-mark">01</div>
-                    <div class="program-header">
-                        <div>
-                            <div class="program-eyebrow">For NCLEX Test-Takers</div>
-                            <h2>Merkaii NCLEX Success Coaching Program™</h2>
-                            <p class="program-tagline">Powered by the NCLEX PASS Method™</p>
-                        </div>
-                        <div class="program-pricing">
-                            <div class="pricing-label">Investment</div>
-                            <div class="pricing-amount">Starting at $797</div>
-                            <div class="pricing-duration">6–8 Weeks</div>
-                        </div>
-                    </div>
-
-                    <div class="program-callout warning">
-                        <p><strong>Important Notice</strong>This program does not fulfill state-mandated remediation
-                            requirements. If the FL BON has ordered remediation, please <a href="{{ url('/florida-remedial-program') }}"
-                                style="color:var(--terracotta-deep);font-weight:600;">view our Remediation Program</a>.</p>
-                    </div>
-
-                    <div class="program-grid">
-                        <div class="program-block">
-                            <h4>Who It's For</h4>
-                            <ul>
-                                <li>First-time test-takers who want to pass confidently</li>
-                                <li>Repeat test-takers who need a strategy reset</li>
-                                <li>Nurses ready to think strategically, not just study harder</li>
-                            </ul>
-                        </div>
-                        <div class="program-block">
-                            <h4>What Makes It Different</h4>
-                            <ul>
-                                <li>Clinical judgment over content cramming</li>
-                                <li>Strategic thinking, not memorization</li>
-                                <li>Priority-based decision making for Next Gen NCLEX</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="program-grid">
-                        <div class="program-block">
-                            <h4>What You'll Learn</h4>
-                            <ul class="frameworks">
-                                <li>The NCLEX PASS Method™</li>
-                                <li>PRIORITY-X Framework</li>
-                                <li>NCLEX Safety Pyramid</li>
-                                <li>Red Flag Recognition</li>
-                                <li>Question Analysis System</li>
-                            </ul>
-                        </div>
-                        <div class="program-block">
-                            <h4>Signature Features</h4>
-                            <ul>
-                                <li>Weekly Decision Lab Sessions</li>
-                                <li>Personalized Weak Area Plan</li>
-                                <li>Structured Question Practice</li>
-                                <li>Confidence & Test Strategy Coaching</li>
-                                <li>72-Hour Exam Preparation System</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="program-meta">
-                        <div class="program-meta-item">
-                            <span class="program-meta-label">Format</span>
-                            <span class="program-meta-value">Cohort-Based Live Coaching</span>
-                        </div>
-                        <div class="program-meta-item">
-                            <span class="program-meta-label">Access</span>
-                            <span class="program-meta-value">On-Demand Available</span>
-                        </div>
-                        <div class="program-meta-item">
-                            <span class="program-meta-label">Duration</span>
-                            <span class="program-meta-value">6–8 Weeks</span>
-                        </div>
-                    </div>
-
-                    <div class="program-callout">
-                        <p>"This is not just a review course — it is a structured coaching program powered by the NCLEX PASS
-                            Method™, designed to help you think, prioritize, and pass."</p>
-                    </div>
-
-                    <div class="addons">
-                        <h4>Optional Add-Ons</h4>
-                        <div class="addons-grid">
-                            <div class="addon-item">
-                                <span class="addon-item-name">1:1 Coaching Upgrade</span>
-                                <span class="addon-item-price">From $297</span>
-                            </div>
-                            <div class="addon-item">
-                                <span class="addon-item-name">Continued Support Membership</span>
-                                <span class="addon-item-price">From $49/mo</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="program-cta-row" style="margin-top:30px;">
-                        <a href="{{ url('/contact') }}" class="btn-primary">Apply for the Next Cohort →</a>
-                        <a href="{{ url('/contact') }}" class="btn-secondary">Schedule a Free Consult</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PROGRAM 2: NURSING SCHOOL SUCCESS -->
-        <section id="nursing-school" style="background: var(--cream-warm); padding-top: 80px;">
-            <div class="container">
-                <div class="program" style="background: var(--white);">
-                    <div class="program-bg-mark">02</div>
-                    <div class="program-header">
-                        <div>
-                            <div class="program-eyebrow">For Current & Returning Nursing Students</div>
-                            <h2>Nursing School Success & Academic Recovery Program</h2>
-                            <p class="program-tagline">For students who want to PASS — not just survive nursing school.</p>
-                        </div>
-                        <div class="program-pricing">
-                            <div class="pricing-label">Investment</div>
-                            <div class="pricing-amount">Starting at $97</div>
-                            <div class="pricing-duration">3 tiers · 4–12 weeks</div>
-                        </div>
-                    </div>
-
-                    <div class="program-grid">
-                        <div class="program-block">
-                            <h4>Who This Serves</h4>
-                            <ul>
-                                <li>Students currently in nursing school who are struggling</li>
-                                <li>Average students who want to improve</li>
-                                <li>Anxious test-takers</li>
-                                <li>Students aiming for higher grades</li>
-                                <li>Recently dismissed students preparing to re-enter</li>
-                            </ul>
-                        </div>
-                        <div class="program-block">
-                            <h4>What's Included</h4>
-                            <ul>
-                                <li>Academic strategy + study skills training</li>
-                                <li>Decision Lab training & exam strategy</li>
-                                <li>Practice questions with full rationales</li>
-                                <li>Private student community for peer support</li>
-                                <li>Optional 1-on-1 coaching at the Elite tier</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="tiers-section">
-                        <h4>Choose Your Level of Support</h4>
-                        <div class="tier-grid">
-                            <div class="tier-card">
-                                <div class="tier-name">Foundations</div>
-                                <div class="tier-subtitle">Tier 1 · Self-Paced</div>
-                                <div class="tier-price">$97 <small>– $297</small></div>
-                                <p class="tier-good-for">For students who need light, self-directed support.</p>
-                                <ul class="tier-features">
-                                    <li>Content videos</li>
-                                    <li>Study guides</li>
-                                    <li>Basic test-taking strategies</li>
-                                    <li>Limited question practice</li>
-                                </ul>
-                            </div>
-                            <div class="tier-card popular">
-                                <div class="tier-popular-badge">Most Popular</div>
-                                <div class="tier-name">Success Program</div>
-                                <div class="tier-subtitle">Tier 2 · Live + Community</div>
-                                <div class="tier-price">$397 <small>– $897</small></div>
-                                <p class="tier-good-for">Our main offer — for students serious about transformation.</p>
-                                <ul class="tier-features">
-                                    <li>Weekly live sessions</li>
-                                    <li>Decision Lab training</li>
-                                    <li>Practice questions + rationales</li>
-                                    <li>Study skills training</li>
-                                    <li>Private student community access</li>
-                                </ul>
-                            </div>
-                            <div class="tier-card">
-                                <div class="tier-name">Elite Coaching</div>
-                                <div class="tier-subtitle">Tier 3 · High-Touch 1:1</div>
-                                <div class="tier-price">$997 <small>– $1,997+</small></div>
-                                <p class="tier-good-for">For students needing high-touch, deep transformation.</p>
-                                <ul class="tier-features">
-                                    <li>1-on-1 coaching</li>
-                                    <li>Personalized Weak Area Plan</li>
-                                    <li>Weekly check-ins</li>
-                                    <li>Academic recovery strategy</li>
-                                    <li>High-touch, high-transformation</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="program-meta">
-                        <div class="program-meta-item">
-                            <span class="program-meta-label">Intensive</span>
-                            <span class="program-meta-value">4–6 Weeks</span>
-                        </div>
-                        <div class="program-meta-item">
-                            <span class="program-meta-label">Full Program (Best)</span>
-                            <span class="program-meta-value">8–12 Weeks</span>
-                        </div>
-                        <div class="program-meta-item">
-                            <span class="program-meta-label">Ongoing Membership</span>
-                            <span class="program-meta-value">$49–$99/month</span>
-                        </div>
-                    </div>
-
-                    <div class="subtrack" id="comeback">
-                        <span class="subtrack-eyebrow">Specialized Track</span>
-                        <h3>The Nursing Comeback Program</h3>
-                        <p>For recently dismissed nursing students who feel lost but are highly motivated to come back
-                            stronger. We meet you where you are — and rebuild your foundation, your strategy, and your
-                            confidence.</p>
-                        <ul class="subtrack-features">
-                            <li>Academic recovery strategy</li>
-                            <li>Remediation support</li>
-                            <li>Re-entry preparation</li>
-                            <li>Confidence rebuilding</li>
-                        </ul>
-                    </div>
-
-                    <div class="program-cta-row" style="margin-top:36px;">
-                        <a href="{{ url('/contact') }}" class="btn-primary">Find Your Tier →</a>
-                        <a href="{{ url('/contact') }}" class="btn-secondary">Schedule a Free Consult</a>
-                    </div>
-                </div>
-            </div>
-        </section>
+        @foreach($listingPrograms ?? collect() as $program)
+            @include(theme('partials.program-listing-block'), ['program' => $program, 'alternateBackground' => $loop->odd])
+        @endforeach
 
         <!-- COMPARISON TABLE -->
         <section class="compare-section">

@@ -33,7 +33,10 @@
 
 
             <form action="{{ route('updateprogram') }}" method="POST" enctype="multipart/form-data"
-                  id="program_update_form">
+                  id="program_update_form"
+                  data-program-id="{{ $progaram->id }}"
+                  data-other-fl-bon-id="{{ $otherFlBonRemediationProgram->id ?? '' }}"
+                  data-other-fl-bon-title="{{ $otherFlBonRemediationProgram->programtitle ?? '' }}">
                 @csrf
                 <div class="row">
                     <div class="col-lg-12">
@@ -71,8 +74,7 @@
 
                                         <div class="primary_input mb-25">
                                             <label class="primary_input_label" for="">Program
-                                                subtitle/greetings <small>(Max size
-                                                    250 Characters)</small> *</label>
+                                                subtitle/greetings <small>(Max size 250 Characters; also large heading on FL BON spotlight card)</small> *</label>
                                             <input class="primary_input_field" name="subtitle" placeholder="-"
                                                    id="subtitle" maxlength="250" type="text"
 
@@ -81,10 +83,40 @@
                                     </div>
                                 </div>
 
+                                @php $programListing = $progaram; @endphp
+                                @include('studentsetting::partials.program_admin_section_label')
+
+                                <div class="row mb-10">
+                                    <div class="col-xl-12">
+                                        <label>Is FL BON Remediation Program <small class="text-muted">(shows spotlight on /programs; only one at a time)</small></label>
+                                        @error('is_fl_bon_remediation')
+                                            <p class="text-danger mb-0" style="font-size: 13px;">{{ $message }}</p>
+                                        @enderror
+                                        @php
+                                            $isFlBon = (int) old('is_fl_bon_remediation', $progaram->is_fl_bon_remediation ?? ($progaram->featured ?? 0));
+                                        @endphp
+                                        <div class="d-flex py-3">
+                                            <label class="primary_checkbox d-flex nowrap mr-5" for="flBonRemediationYes">
+                                            <input type="radio" id="flBonRemediationYes"
+                                                name="is_fl_bon_remediation" @if($isFlBon === 1) checked @endif
+                                                value="1">
+                                            <span class="checkmark mr-2"></span>
+                                            {{ __('Yes') }}</label>
+                                            <label class="primary_checkbox d-flex nowrap mr-5" for="flBonRemediationNo">
+                                            <input type="radio" id="flBonRemediationNo"
+                                                name="is_fl_bon_remediation" @if($isFlBon !== 1) checked @endif
+                                                value="0">
+                                            <span class="checkmark mr-2"></span>
+                                            {{ __('No') }}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                @include('studentsetting::partials.program_featured_dependent_fields')
+
                                 <div class="row mt-30 mb-40">
                                     <div class="col-xl-5">
                                         <label class="primary_input_label">
-                                            Program Thumbnail (Max Image Size 1MB, Recommended Dimensions: 1170X600)
+                                            Program Thumbnail (Max 2MB, Recommended 1170×600 — crop to fit)
                                         </label>
                                     </div>
                                     <div class="col-xl-4">
@@ -111,9 +143,12 @@
                                              class="preview image-editor-preview-img-1" id="image_preview-1"/>
                                     </div>
 
-                                    <?php
-                                    $allfaqs = ($progaram->faqs == "null" || $progaram->faqs == null) ? [] : json_decode($progaram->faqs);
-                                    ?>
+                                    @php
+                                        $allfaqs = ($progaram->faqs === 'null' || $progaram->faqs === null || $progaram->faqs === '')
+                                            ? []
+                                            : json_decode($progaram->faqs, true);
+                                        $allfaqs = is_array($allfaqs) ? array_map('intval', $allfaqs) : [];
+                                    @endphp
 
                                     <div class="col-xl-6">
                                         <div class="primary_input mb-25">
@@ -124,29 +159,12 @@
 
                                                 @foreach ($faqs as $faq)
                                                     <option value="{{ $faq->id }}"
-                                                        {{ in_array($faq->id, $allfaqs) == $faq->id ? 'selected' : '' }}>
+                                                        {{ in_array((int) $faq->id, $allfaqs, true) ? 'selected' : '' }}>
                                                         {{ $faq->question }}@if($faq->category) ({{ $faq->category->name }})@endif</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-xl-6">
-                                        <label>Featured</label>
-                                        <div class="d-flex py-3">
-                                            <label class="primary_checkbox d-flex nowrap mr-5" for="featuredYes">
-                                            <input type="radio" id="featuredYes"
-                                                name="featured" @if($progaram->featured == 1) checked @endif
-                                                value="1">
-                                            <span class="checkmark mr-2"></span>
-                                            {{ __('Yes') }}</label>
-                                            <label class="primary_checkbox d-flex nowrap mr-5" for="featuredNo">
-                                            <input type="radio" id="featuredNo"
-                                                name="featured" @if($progaram->featured == 0) checked @endif
-                                                value="0">
-                                            <span class="checkmark mr-2"></span>
-                                            {{ __('No') }}</label>
-                                        </div>
-                                     </div>
                                 </div>
 
                                 {{--                                <div class="row mt-30 d-none mb-40">--}}
@@ -180,12 +198,15 @@
                                     <div class="col-xl-12">
 
                                         <div class="primary_input mb-25">
-                                            <label class="primary_input_label" for="">Program description <i class="fa fa-retweet clear_area" data-field-id="description" title="Clear Text Area..."></i></label>
+                                            <label class="primary_input_label" for="">Program description <small class="text-muted">(program detail page; also main paragraph on FL BON spotlight if enabled)</small> <i class="fa fa-retweet clear_area" data-field-id="description" title="Clear Text Area..."></i></label>
                                             <textarea class="custom_summernote" name="description" id="description" cols="30" rows="10">{!! $progaram->discription !!}</textarea>
                                         </div>
                                     </div>
 
                                 </div>
+
+                                @include('studentsetting::partials.program_listing_content_fields')
+
                                 <div class="row mt-30 mb-40">
 
 
@@ -275,7 +296,7 @@
                                     <div class="col-xl-12">
 
                                         <div class="primary_input mb-25">
-                                            <label class="primary_input_label" for="">Program Costing Details * <i class="fa fa-retweet clear_area" data-field-id="payment_plan" title="Clear Text Area..."></i></label>
+                                            <label class="primary_input_label" for="">Program Costing Details * <i class="fa fa-retweet clear_area" data-field-id="Payment_plan" title="Clear Text Area..."></i></label>
                                             <textarea class="custom_summernote" name="Payment_plan" id="Payment_plan" cols="30" rows="10">{!! $progaram->payment_plan !!}</textarea>
                                         </div>
                                     </div>
@@ -350,19 +371,39 @@
 
     </section>
     <script>
-        
+        var editorInstance = {};
+
+        function syncProgramEditorFields() {
+            if (!editorInstance) {
+                return;
+            }
+            Object.keys(editorInstance).forEach(function (key) {
+                if (editorInstance[key] && typeof editorInstance[key].getData === 'function') {
+                    $('#' + key).val(editorInstance[key].getData());
+                }
+            });
+        }
+
+        function isEmptyEditor(id) {
+            var elId = (id || '').replace('#', '');
+            if (editorInstance[elId] && typeof editorInstance[elId].getData === 'function') {
+                var data = editorInstance[elId].getData().trim();
+                return data === '' || data === '<p></p>' || data === '<p><br></p>' || data === '<p><br><p/>';
+            }
+            var val = ($(id).val() || '').trim();
+            return val === '' || val === '<p><br><p/>';
+        }
+
         function program_update_form() {
-            // $('.preloader').show();
             var errors = [];
             isUnique(
                 {
                     columns: [
-                        ['courses', 'title', $('#addTitle').val()]
+                        ['programs', 'programtitle', $('#addTitle').val(), $('input[name=id]').val()]
                     ]
                 }
                 , function (res) {
-                    errors = [...res.errors]
-                    var type = $(".addType[name='type']:checked").val(); // 1 for course, 7 for timetable, 2 for big quiz
+                    errors = [...res.errors];
 
                     if (isEmpty($('#addTitle').val())) {
                         errors.push('Program Title is required');
@@ -374,6 +415,8 @@
                     if (isEmpty($('#faqs').val())) {
                         errors.push("FAQS is required");
                     }
+
+                    syncProgramEditorFields();
 
                     if (isEmptyEditor('#description')) {
                         errors.push("Description is required");
@@ -394,9 +437,6 @@
                     }
 
                     if (errors.length) {
-                        console.log(errors);
-                        $('.preloader').hide();
-                        $('input[type="submit"]').attr('disabled', false);
                         $.each(errors.reverse(), function (index, item) {
                             toastr.error(item, 'Error', 1000);
                         });
@@ -408,40 +448,35 @@
 
         }
 
-        function isEmptyEditor(id) {
-            if (
-                $(id).val() == '' ||
-                $(id).val() == '<p><br><p/>' ||
-                // $(id).summernote('isEmpty') ||
-                // $(id).summernote('code') == '<p><br><p/>' ||
-                $(id).next('.note-editor').find('.note-editing-area').find('.note-editable').children().first().html() == '<br>'
-            ) {
-                return true;
-            }
-            return false;
-        }
-
         // Image Cropper Start
         $(document).ready(function () {
-            // 1st Cropper
+            // 1st Cropper — any image up to 2MB; crop to 1170×600 (same as courses)
             var _URL1 = window.URL || window.webkitURL;
+            var maxProgramThumbBytes = 2 * 1024 * 1024;
             $("#document_file_thumb-1").change(function (e) {
                 var file, img;
                 if ((file = this.files[0])) {
+                    if (!file.type.startsWith('image/')) {
+                        setTimeout(function () {
+                            $('#input-1, #document_file_thumb-1').val('');
+                        }, 500);
+                        toastr.error('Please select a valid image file!', 'Error');
+                        return;
+                    }
+                    if (file.size > maxProgramThumbBytes) {
+                        $('#input-1, #document_file_thumb-1').val('');
+                        toastr.error('Image size must be 2MB or less.', 'Error');
+                        return;
+                    }
                     img = new Image();
                     img.onload = function () {
-                        var image_width = this.width;
-                        var image_height = this.height;
-                        if (image_width == 1170 && image_height == 600) {
-                            jQuery('#image-editor-modal-1').modal('show', {
-                                backdrop: 'static'
-                            });
-                        } else {
-                            $('#input-1, #document_file_thumb-1').val('');
-                            toastr.error(
-                                'Wrong Image Dimensions, Please Select Image of 1170 X 600 !',
-                                'Error')
-                        }
+                        jQuery('#image-editor-modal-1').modal('show', {
+                            backdrop: 'static'
+                        });
+                    };
+                    img.onerror = function () {
+                        $('#input-1, #document_file_thumb-1').val('');
+                        toastr.error('Please select a valid image file!', 'Error');
                     };
                     img.src = _URL1.createObjectURL(file);
                 }
@@ -450,15 +485,16 @@
                 if ($('#image_preview-1').attr('src') != '' || $('#image_preview-1').attr('src') != null) {
                     $('#image_file-1').children().val('');
                 }
+                $('#input-1, #document_file_thumb-1').val('');
                 $('#image-editor-modal-1').trigger("reset");
                 $('#image-editor-modal-1').modal('hide');
             });
 
-            var editorInstance = {};
             var customFontFam = ['Arial','Helvetica','Cavolini','Jost','Impact','Tahoma','Verdana','Garamond','Georgia','monospace','fantasy','Papyrus','Poppins'];
             
             $('.custom_summernote').each(function (){
                 var elId = $(this).attr('id');
+                var initialContent = $(this).val();
                 ClassicEditor
                 .create( document.getElementById(elId),{
                     ckfinder: {
@@ -573,41 +609,29 @@
                         }
                 } )
                 .then(editor => {
-                    // Save the editor instance to use it later
                     window.editor = editor;
-
                     editorInstance[elId] = editor;
-                    // Listen to the change:data event
+                    if (initialContent && !editor.getData().trim()) {
+                        editor.setData(initialContent);
+                    }
                     editor.model.document.on('change:data', () => {
-                        // Get the editor content
-                        const editorData = editor.getData();
-                        // Update the textarea with the editor content
-                        // document.querySelector('#editor').value = editorData;
-                        $(this).val(editorData);
+                        $('#' + elId).val(editor.getData());
                     });
                 })
                 .catch( error => {
                     console.error( error );
                 });
+            });
 
-                $(document).on('click','.clear_area',function(){
-                    var field_id = $(this).attr('data-field-id');
-                    if(field_id != '' && field_id != undefined){
-                        
-                        if(field_id == 'description'){
-                            editorInstance.description.setData('');
-                        }
-                        if(field_id == 'outcome'){
-                            editorInstance.outcome.setData('');
-                        }
-                        if(field_id == 'requirements'){
-                            editorInstance.requirements.setData('');
-                        }
-                        if(field_id == 'payment_plan'){
-                            editorInstance.Payment_plan.setData('');
-                        }
-                    }
-                });
+            $(document).on('click', '.clear_area', function () {
+                var field_id = $(this).attr('data-field-id');
+                if (!field_id) {
+                    return;
+                }
+                if (editorInstance[field_id]) {
+                    editorInstance[field_id].setData('');
+                    $('#' + field_id).val('');
+                }
             });
             
             
@@ -632,4 +656,5 @@
 
         
     </script>
+    @include('studentsetting::partials.program_admin_featured_toggle_script')
 @endsection

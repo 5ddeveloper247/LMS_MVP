@@ -25,7 +25,10 @@ function setCropper1() {
     });
 }
 function destroyCropper1() {
-    cropper_1.destroy();
+    if (cropper_1) {
+        cropper_1.destroy();
+        cropper_1 = null;
+    }
 }
 function saveCropImage1() {
     $(".upload-editor-hidden-file-1").val(current_base64_1),

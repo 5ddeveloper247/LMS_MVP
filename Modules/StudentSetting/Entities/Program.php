@@ -17,7 +17,14 @@ class Program extends Model
 {
 
     protected $table = 'programs';
-    protected $fillable = ['programtitle', 'subtitle', 'totalcost', 'discount_price', 'duration', 'requirement', 'discription', 'outcome', 'numberofcourses', 'allcourses', 'faqs', 'payment_plan', 'total_enrolled', 'user_id', 'image', 'icon', 'status', 'review_id', 'lms_id'];
+    protected $fillable = [
+        'programtitle', 'subtitle', 'short_description', 'featured_eyebrow', 'featured_headline',
+        'featured_meta_specialty', 'featured_meta_format', 'featured_meta_since',
+        'what_its_for', 'what_makes_different', 'what_you_will_learn', 'signature_features', 'programs_page_eyebrow',
+        'featured', 'is_fl_bon_remediation', 'totalcost', 'discount_price', 'duration', 'requirement', 'discription', 'outcome',
+        'numberofcourses', 'allcourses', 'faqs', 'payment_plan', 'total_enrolled', 'user_id', 'image', 'icon',
+        'status', 'review_id', 'lms_id', 'seq_no',
+    ];
     protected $appends = ['user'];
 
     public function user()

@@ -57,9 +57,35 @@ class ProgramController extends Controller
         $how_programs_work = HowProgramsWork::where('status',1)->limit(4)->orderBy('seq_no')->get();
         $programs = $programs->has('effectiveProgramPlan')->with(['effectiveProgramPlan'])->paginate(8);
 
+        $featuredProgram = Program::query()
+            ->where('status', 1)
+            ->where('is_fl_bon_remediation', 1)
+            ->has('effectiveProgramPlan')
+            ->with('effectiveProgramPlan')
+            ->orderByDesc('updated_at')
+            ->first();
+
+        $listingPrograms = Program::query()
+            ->where('status', 1)
+            ->where(function ($query) {
+                $query->where('is_fl_bon_remediation', 0)->orWhereNull('is_fl_bon_remediation');
+            })
+            ->has('effectiveProgramPlan')
+            ->with('effectiveProgramPlan')
+            ->orderBy('seq_no')
+            ->get();
+
         return view(theme('pages.programs'), get_defined_vars());
     }
     public function floridaPrograms(){
+        $flBonRemediationProgram = Program::query()
+            ->where('status', 1)
+            ->where('is_fl_bon_remediation', 1)
+            ->has('effectiveProgramPlan')
+            ->with('effectiveProgramPlan')
+            ->orderByDesc('updated_at')
+            ->first();
+
         $recent_program = Program::where('status', 1)->has('effectiveProgramPlan')->with('effectiveProgramPlan')
         ->inRandomOrder()->take(4)
         ->get()->toArray();
@@ -72,11 +98,23 @@ class ProgramController extends Controller
     public function programsDetail(Request $request, $id)
     {
 
-        $program_detail = Program::where('id', $id)->with(['programPlans.programPalnDetail', 'currentPlan', 'nextPlans', 'effectiveProgramPlan' => function ($q) {
-            $q->with(['initialProgramPalnDetail', 'programPalnDetail']);
-        }])->first();
-        
-        if(!$program_detail){
+        $programQuery = Program::where('id', $id);
+        if (!Auth::check() || !isAdmin()) {
+            $programQuery->where('status', 1);
+        }
+
+        $program_detail = $programQuery->with([
+            'programPlans.programPalnDetail',
+            'currentPlan',
+            'nextPlans',
+            'review.user',
+            'review.course',
+            'effectiveProgramPlan' => function ($q) {
+                $q->with(['initialProgramPalnDetail', 'programPalnDetail']);
+            },
+        ])->first();
+
+        if (!$program_detail) {
             abort(404);
         }
 
@@ -112,13 +150,55 @@ class ProgramController extends Controller
         // }
         $socials = SocialLink::where('status',1)->orderBy('order','desc')->get();
 
-        //        program faqs
-        $faqs = HomePageFaq::whereIn('id', json_decode($program_detail->faqs) ?? [])->orderBy('order', 'desc')->where('status', 1)->get();
+        $faqIds = json_decode($program_detail->faqs ?? '[]', true);
+        if (!is_array($faqIds)) {
+            $faqIds = [];
+        }
+        $faqs = HomePageFaq::whereIn('id', $faqIds)
+            ->orderBy('order', 'desc')
+            ->where('status', 1)
+            ->get();
 
-        //        program course
-        $courses = Course::whereIn('id', json_decode($program_detail->allcourses) ?? [])->with('enrollUsers', 'user', 'user.courses', 'user.courses.enrollUsers', 'user.courses.lessons', 'chapters.lessons', 'enrolls', 'lessons', 'reviews', 'chapters', 'activeReviews')->orderBy('created_at', 'DESC')->get();
-        //      resent progrm
-        $recent_program = Program::where('status', 1)->has('effectiveProgramPlan')->with('effectiveProgramPlan')->inRandomOrder()->take(3)->get();
+        $courseIds = json_decode($program_detail->allcourses ?? '[]', true);
+        if (!is_array($courseIds)) {
+            $courseIds = [];
+        }
+        $courses = Course::whereIn('id', $courseIds)
+            ->with('enrollUsers', 'user', 'user.courses', 'user.courses.enrollUsers', 'user.courses.lessons', 'chapters.lessons', 'enrolls', 'lessons', 'reviews', 'chapters', 'activeReviews')
+            ->orderBy('created_at', 'DESC')
+            ->get();
+
+        $recent_program = Program::where('status', 1)
+            ->where('id', '!=', $program_detail->id)
+            ->has('effectiveProgramPlan')
+            ->with('effectiveProgramPlan')
+            ->orderBy('seq_no')
+            ->take(4)
+            ->get();
+
+        $currentPlan = $program_detail->effectiveProgramPlan->first();
+        if (!$currentPlan) {
+            $currentPlan = $program_detail->programPlans->first(function ($plan) {
+                $start = \Carbon\Carbon::parse($plan->sdate);
+                $end = \Carbon\Carbon::parse($plan->edate);
+
+                return $start->lte(now()) && $end->gte(now());
+            });
+        }
+        $upcomingPlans = $program_detail->programPlans
+            ->filter(function ($plan) use ($currentPlan) {
+                if ($currentPlan && $plan->id === $currentPlan->id) {
+                    return false;
+                }
+
+                return \Carbon\Carbon::parse($plan->sdate)->isFuture()
+                    || \Carbon\Carbon::parse($plan->cdate)->isFuture();
+            })
+            ->sortBy('sdate')
+            ->values();
+        $programReview = ($program_detail->review_id && (int) $program_detail->review_id !== 0)
+            ? $program_detail->review
+            : null;
         // dd(get_defined_vars());
         return view(theme('pages.programs-detail'), get_defined_vars());
     }

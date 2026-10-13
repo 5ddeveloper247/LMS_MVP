@@ -19,6 +19,7 @@ use Brian2694\Toastr\Facades\Toastr;
 use DrewM\MailChimp\MailChimp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -229,7 +230,9 @@ class StudentSettingController extends Controller
         $courses = Course::where('status', 1)->where('type', 1)->get();
         $faqs = HomePageFaq::with('category')->orderBy('order', 'desc')->where('status', 1)->get();
         $reviews = CourseReveiw::all();
-        return view('studentsetting::All_program', compact('courses', 'faqs', 'reviews'));
+        $otherFlBonRemediationProgram = Program::where('is_fl_bon_remediation', 1)->first(['id', 'programtitle']);
+
+        return view('studentsetting::All_program', compact('courses', 'faqs', 'reviews', 'otherFlBonRemediationProgram'));
     }
 
 
@@ -262,7 +265,9 @@ class StudentSettingController extends Controller
             $program->programtitle = $request->ProgramTitle;
             $program->subtitle = $request->subtitle;
             $program->review_id = $request->review;
-            $program->featured = $request->featured ?? 0;
+            $program->featured = 0;
+            $program->is_fl_bon_remediation = (int) ($request->is_fl_bon_remediation ?? 0);
+            $this->fillProgramListingFields($program, $request);
 //            $program->totalcost = $request->totalcost;
 //            $program->duration = $request->duration;
             $program->requirement = str_replace("'", "`", $request->requirements);
@@ -279,12 +284,15 @@ class StudentSettingController extends Controller
                 $program->image = $this->saveImage($file, 920, 526);
                 $program->icon = $this->saveCroppedImage($request->hidden_file);
             }
+            $this->assertSingleFlBonRemediationProgram(0, (int) $program->is_fl_bon_remediation);
             $program->save();
-
 
             DB::commit();
             Toastr::success('Operation successful', 'Success');
             return redirect()->route('regular_student_import');
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            throw $e;
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -297,11 +305,15 @@ class StudentSettingController extends Controller
     {
 
         $progaram = Program::where('id', $id)->first();
+        if (!$progaram) {
+            abort(404);
+        }
         $courses = Course::where('status', 1)->where('type', 1)->get();
         $faqs = HomePageFaq::with('category')->orderBy('order', 'desc')->where('status', 1)->get();
         $reviews = CourseReveiw::get();
+        $otherFlBonRemediationProgram = Program::where('is_fl_bon_remediation', 1)->where('id', '!=', $id)->first(['id', 'programtitle']);
 
-        return view('studentsetting::edit_program', compact('progaram', 'courses', 'faqs', 'reviews'));
+        return view('studentsetting::edit_program', compact('progaram', 'courses', 'faqs', 'reviews', 'otherFlBonRemediationProgram'));
     }
 
 
@@ -333,7 +345,9 @@ class StudentSettingController extends Controller
             $program->programtitle = $request->ProgramTitle;
             $program->subtitle = $request->subtitle;
             $program->review_id = $request->review;
-            $program->featured = $request->featured ?? 0;
+            $program->featured = 0;
+            $program->is_fl_bon_remediation = (int) ($request->is_fl_bon_remediation ?? 0);
+            $this->fillProgramListingFields($program, $request);
 //            $program->totalcost = $request->totalcost;
 //            $program->duration = $request->duration;
             $program->requirement = str_replace("'", "`", $request->requirements);
@@ -351,16 +365,20 @@ class StudentSettingController extends Controller
                 $program->icon = $this->saveCroppedImage($request->hidden_file);
             }
 
+            $this->assertSingleFlBonRemediationProgram((int) $program->id, (int) $program->is_fl_bon_remediation);
             $program->save();
 
             DB::commit();
             Toastr::success('Operation successful', 'Success');
             return redirect()->route('regular_student_import');
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            throw $e;
         } catch (\Exception $e) {
             DB::rollBack();
 
             Toastr::error('Operation Failed', 'Failed');
-            return redirect()->back();
+            return redirect()->back()->withInput();
         }
     }
 
@@ -1376,6 +1394,43 @@ class StudentSettingController extends Controller
             return view('skillandpathway::group.student-group', compact('group'));
         }
         return null;
+    }
+
+    private function fillProgramListingFields(Program $program, Request $request): void
+    {
+        $sectionLabel = $request->input('programs_page_eyebrow');
+        $program->programs_page_eyebrow = $sectionLabel;
+        $program->featured_eyebrow = $sectionLabel;
+
+        $program->short_description = $request->input('short_description');
+        // Large heading on Signature card uses program subtitle (featured_headline no longer in admin form).
+        $program->featured_meta_specialty = $request->input('featured_meta_specialty');
+        $program->featured_meta_format = $request->input('featured_meta_format');
+        $program->featured_meta_since = $request->input('featured_meta_since');
+        $program->what_its_for = str_replace("'", "`", $request->input('what_its_for', ''));
+        $program->what_makes_different = str_replace("'", "`", $request->input('what_makes_different', ''));
+        $program->what_you_will_learn = str_replace("'", "`", $request->input('what_you_will_learn', ''));
+        $program->signature_features = str_replace("'", "`", $request->input('signature_features', ''));
+    }
+
+    /** Only one program may be the FL BON remediation spotlight on /programs. */
+    private function assertSingleFlBonRemediationProgram(int $programId, int $isFlBonRemediation): void
+    {
+        if ($isFlBonRemediation !== 1) {
+            return;
+        }
+
+        $query = Program::where('is_fl_bon_remediation', 1);
+        if ($programId > 0) {
+            $query->where('id', '!=', $programId);
+        }
+
+        $existing = $query->first(['id', 'programtitle']);
+        if ($existing) {
+            throw ValidationException::withMessages([
+                'is_fl_bon_remediation' => 'An FL BON Remediation Program is already set (“' . $existing->programtitle . '”). Turn it off on that program first, then try again.',
+            ]);
+        }
     }
 
     public function changeProgramSequence()
