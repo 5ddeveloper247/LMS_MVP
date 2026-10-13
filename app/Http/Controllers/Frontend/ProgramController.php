@@ -70,8 +70,13 @@ class ProgramController extends Controller
             ->where(function ($query) {
                 $query->where('is_fl_bon_remediation', 0)->orWhereNull('is_fl_bon_remediation');
             })
-            ->has('effectiveProgramPlan')
-            ->with('effectiveProgramPlan')
+            ->has('programPlans')
+            ->with([
+                'effectiveProgramPlan',
+                'programPlans' => function ($q) {
+                    $q->orderBy('sdate', 'asc');
+                },
+            ])
             ->orderBy('seq_no')
             ->get();
 

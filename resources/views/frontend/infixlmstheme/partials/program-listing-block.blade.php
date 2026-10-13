@@ -1,5 +1,7 @@
 @php
-    $plan = $program->effectiveProgramPlan[0] ?? null;
+    $plan = $program->effectiveProgramPlan[0]
+        ?? $program->programPlans->first()
+        ?? null;
     $weeks = $plan
         ? round((strtotime($plan->edate) - strtotime($plan->sdate)) / 604800, 1)
         : null;

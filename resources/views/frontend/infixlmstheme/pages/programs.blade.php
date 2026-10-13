@@ -1437,9 +1437,11 @@
             </section>
         @endif
 
-        @foreach($listingPrograms ?? collect() as $program)
-            @include(theme('partials.program-listing-block'), ['program' => $program, 'alternateBackground' => $loop->odd])
-        @endforeach
+        @if(($listingPrograms ?? collect())->isNotEmpty())
+            @foreach($listingPrograms as $program)
+                @include(theme('partials.program-listing-block'), ['program' => $program, 'alternateBackground' => $loop->odd])
+            @endforeach
+        @endif
 
         <!-- COMPARISON TABLE -->
         <section class="compare-section">
