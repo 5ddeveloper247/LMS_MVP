@@ -1750,7 +1750,11 @@
                                                                             <strong>Invoice #:</strong>
                                                                         </div>
                                                                         <div class="col-md-6 text">
-                                                                            INV-{{ str_pad($invoice->id,5,"0",STR_PAD_LEFT) }}
+                                                                            @if(!empty($invoice))
+                                                                                INV-{{ str_pad($invoice->id, 5, '0', STR_PAD_LEFT) }}
+                                                                            @else
+                                                                                —
+                                                                            @endif
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1808,7 +1812,7 @@
                                                                             <strong>Payment Method:</strong>
                                                                         </div>
                                                                         <div class="col-md-6 text">
-                                                                            {{ $invoice->payment_method ?? '' }}
+                                                                            {{ optional($invoice)->payment_method ?? '' }}
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1835,11 +1839,13 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="page w-100 text-center"> 
-                                                                <a 
-                                                                    class="primary-btn fix-gr-bg" 
-                                                                    href="{{ route('invoice',['id' => $invoice->id]) }}">View Invoice</a> 
-                                                            </div> 
+                                                            @if(!empty($invoice))
+                                                                <div class="page w-100 text-center">
+                                                                    <a
+                                                                        class="primary-btn fix-gr-bg"
+                                                                        href="{{ route('invoice', ['id' => $invoice->id]) }}">View Invoice</a>
+                                                                </div>
+                                                            @endif
                                                         </div>
 
 
