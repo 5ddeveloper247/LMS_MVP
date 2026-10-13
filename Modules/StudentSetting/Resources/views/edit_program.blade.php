@@ -283,7 +283,7 @@
                                                     @endif
                                                     <option value="{{ $review->id }}"
                                                         {{ $review->id == $progaram->review_id ? 'selected' : '' }}>
-                                                        {{ !empty($review->course()) ? $review->course()->title : '' }} {{ \Illuminate\Support\Str::limit($review->comment,15) }} </option>
+                                                        {{ optional($review->course)->title }} {{ \Illuminate\Support\Str::limit($review->comment,15) }} </option>
                                                 @endforeach
                                             </select>
                                         </div>
