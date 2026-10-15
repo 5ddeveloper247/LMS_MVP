@@ -1426,7 +1426,7 @@
 
         @if(isset($featuredProgram) && $featuredProgram)
             @php
-                $featuredBody = trim(strip_tags($featuredProgram->discription ?? ''));
+                $featuredBody = trim(strip_tags($featuredProgram->short_description ?? ''));
                 $featuredMeta = array_filter([
                     ['label' => 'Specialty', 'value' => $featuredProgram->featured_meta_specialty],
                     ['label' => 'Format', 'value' => $featuredProgram->featured_meta_format],
