@@ -1439,7 +1439,7 @@
                         <div class="featured-image"@if($featuredProgram->image) style="background-image: linear-gradient(135deg, rgba(198, 93, 58, 0.92) 0%, rgba(168, 75, 45, 0.95) 100%), url('{{ getCourseImage($featuredProgram->image) }}'); background-size: cover; background-position: center;"@endif>
                             <span class="featured-badge">★ Signature Program</span>
                             <h3>{{ $featuredProgram->programtitle }}</h3>
-                            <p>{{ $featuredProgram->short_description ?: $featuredProgram->subtitle }}</p>
+                            <p>State-mandated remediation for Florida nurses required to complete a Board-approved program. Our specialty since {{$featuredProgram->featured_meta_since ?? ''}}</p>
                         </div>
                         <div class="featured-content">
                             @if($featuredProgram->featured_eyebrow)
