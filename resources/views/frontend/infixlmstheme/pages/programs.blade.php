@@ -695,14 +695,16 @@
         font-weight: 600;
     }
 
-    .program-block ul,
-    .program-block-rich ul {
-        list-style: none;
-        padding: 0;
+    /* Override global .ck-content { list-style: revert !important } — one marker only (custom ::before) */
+    #programs .program-block-rich.ck-content ul,
+    #programs .program-block-rich.ck-content ol {
+        list-style: none !important;
+        padding: 0 !important;
+        margin: 0;
     }
 
-    .program-block ul li,
-    .program-block-rich ul li {
+    #programs .program-block-rich.ck-content li {
+        list-style: none !important;
         padding: 9px 0 9px 28px;
         position: relative;
         font-size: 15px;
@@ -710,13 +712,17 @@
         border-bottom: 1px solid var(--cream);
     }
 
-    .program-block ul li:last-child,
-    .program-block-rich ul li:last-child {
+    #programs .program-block-rich.ck-content li::marker {
+        content: none !important;
+        font-size: 0 !important;
+    }
+
+    #programs .program-block-rich.ck-content li:last-child {
         border-bottom: none;
     }
 
-    .program-block ul li::before,
-    .program-block-rich ul li::before {
+    #programs .program-block-rich.ck-content ul > li::before,
+    #programs .program-block-rich.ck-content ol > li::before {
         content: '✓';
         position: absolute;
         left: 0;
@@ -726,12 +732,26 @@
         font-size: 16px;
     }
 
-    .program-block ul.frameworks li::before,
-    .program-block-rich.frameworks ul li::before {
+    #programs .program-block-rich.frameworks.ck-content ul > li::before,
+    #programs .program-block-rich.frameworks.ck-content ol > li::before {
         content: '◆';
         color: var(--terracotta);
         font-size: 12px;
         top: 11px;
+    }
+
+    #programs .program-block-rich.ck-content ul ul,
+    #programs .program-block-rich.ck-content ol ol {
+        margin-top: 6px;
+        padding-left: 12px !important;
+    }
+
+    #programs .program-block-rich.ck-content ul ul > li::before,
+    #programs .program-block-rich.ck-content ol ol > li::before {
+        content: '–';
+        color: var(--charcoal-soft);
+        font-size: 14px;
+        font-weight: 600;
     }
 
     .program-meta {
