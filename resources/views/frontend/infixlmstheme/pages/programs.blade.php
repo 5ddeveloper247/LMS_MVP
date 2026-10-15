@@ -705,11 +705,23 @@
 
     #programs .program-block-rich.ck-content li {
         list-style: none !important;
-        padding: 9px 0 9px 28px;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 9px 0 !important;
+        margin: 0 !important;
         position: relative;
         font-size: 15px;
         color: var(--charcoal);
         border-bottom: 1px solid var(--cream);
+    }
+
+    #programs .program-block-rich.ck-content li > p,
+    #programs .program-block-rich.ck-content li > div {
+        margin: 0 !important;
+        padding: 0 !important;
+        flex: 1;
+        min-width: 0;
     }
 
     #programs .program-block-rich.ck-content li::marker {
@@ -724,9 +736,10 @@
     #programs .program-block-rich.ck-content ul > li::before,
     #programs .program-block-rich.ck-content ol > li::before {
         content: '✓';
-        position: absolute;
-        left: 0;
-        top: 9px;
+        flex-shrink: 0;
+        width: 18px;
+        line-height: 1.45;
+        position: static;
         color: var(--teal-mid);
         font-weight: 700;
         font-size: 16px;
@@ -736,8 +749,9 @@
     #programs .program-block-rich.frameworks.ck-content ol > li::before {
         content: '◆';
         color: var(--terracotta);
-        font-size: 12px;
-        top: 11px;
+        font-size: 11px;
+        width: 18px;
+        line-height: 1.6;
     }
 
     #programs .program-block-rich.ck-content ul ul,
