@@ -301,6 +301,9 @@ Route::group(['namespace' => 'Frontend', 'middleware' => ['student']], function 
     Route::get('my-skill', 'StudentSkillController@mySkill')->name('mySkill');
 
     Route::get('my-orders', 'ShopController@myOrders')->name('myOrders');
+    Route::get('my-orders/{id}/book-preview', 'ShopController@previewShopOrderBook')->name('myOrder.bookPreview');
+    Route::get('my-orders/{id}/book-pdf', 'ShopController@streamShopOrderBook')->name('myOrder.bookPdfStream');
+    Route::get('my-orders/{id}/book-download', 'ShopController@downloadShopOrderBook')->name('myOrder.bookDownload');
     Route::get('my-orders/detail/{id}', 'ShopController@myOrderDetail')->name('myOrder.detail');
     Route::get('my-orders/bundle/{tracking}/{bundleId}', 'ShopController@myBundleOrderDetail')->name('myOrder.bundleDetail');
     Route::post('my-orders/bundle/{tracking}/{bundleId}/cancel', 'ShopController@cancelBundleOrder')->name('myOrder.bundleCancel');

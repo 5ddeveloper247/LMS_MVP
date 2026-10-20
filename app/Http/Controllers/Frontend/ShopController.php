@@ -19,8 +19,10 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
 
 
 class ShopController extends Controller
@@ -469,6 +471,108 @@ class ShopController extends Controller
         } catch (\Exception $e) {
             GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
         }
+    }
+
+    public function previewShopOrderBook($id)
+    {
+        try {
+            $order = $this->findShopOrderSoftBook($id);
+
+            return view(theme('pages.shop-order-book-preview'), [
+                'order' => $order,
+                'product' => $order->product,
+                'pdfStreamUrl' => route('myOrder.bookPdfStream', $order->id),
+            ]);
+        } catch (\Exception $e) {
+            GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
+        }
+    }
+
+    public function streamShopOrderBook($id)
+    {
+        try {
+            $order = $this->findShopOrderSoftBook($id);
+            $absolutePath = $this->resolveShopBookPdfPath($order->product->book_pdf);
+
+            if (!$absolutePath) {
+                abort(404);
+            }
+
+            $filename = Str::slug($order->product->title ?: 'book') . '.pdf';
+
+            return response()->file($absolutePath, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="' . $filename . '"',
+            ]);
+        } catch (\Exception $e) {
+            GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
+        }
+    }
+
+    public function downloadShopOrderBook($id)
+    {
+        try {
+            $order = $this->findShopOrderSoftBook($id);
+            $absolutePath = $this->resolveShopBookPdfPath($order->product->book_pdf);
+
+            if (!$absolutePath) {
+                abort(404);
+            }
+
+            $filename = Str::slug($order->product->title ?: 'book') . '.pdf';
+
+            return response()->download($absolutePath, $filename);
+        } catch (\Exception $e) {
+            GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
+        }
+    }
+
+    private function findShopOrderSoftBook($id): ShopOrder
+    {
+        $order = ShopOrder::where('user_id', Auth::id())
+            ->where('id', $id)
+            ->with('product')
+            ->first();
+
+        if (!$order || !$order->product) {
+            abort(404);
+        }
+
+        if (!in_array((int) $order->payment_status, [1, 3], true)) {
+            abort(403);
+        }
+
+        if (!$order->product->isSoftBook()) {
+            abort(404);
+        }
+
+        return $order;
+    }
+
+    private function resolveShopBookPdfPath(?string $path): ?string
+    {
+        if (!$path) {
+            return null;
+        }
+
+        $trimmed = ltrim($path, '/');
+        $relative = str_starts_with($trimmed, 'public/')
+            ? substr($trimmed, strlen('public/'))
+            : $trimmed;
+
+        $candidates = [
+            base_path($trimmed),
+            base_path('public/' . $relative),
+            public_path($relative),
+        ];
+
+        foreach ($candidates as $candidate) {
+            if (File::isFile($candidate)) {
+                return $candidate;
+            }
+        }
+
+        return null;
     }
 
     public function myOrderDetail($id)

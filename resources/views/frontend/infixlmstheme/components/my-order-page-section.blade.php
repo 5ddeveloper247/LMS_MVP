@@ -135,8 +135,15 @@
                                                                     <span class="badge rounded-pill bg-success" style="padding:10px 20px; color:white;">Paid</span>
                                                                 </td>
                                                                 <td class="text-center">
-                                                                    @if (!empty($order->product->book_pdf))
-                                                                        <a href="{{ $order->product->book_pdf }}" download class="link_value theme_btn small_btn4">{{ __('Download') }}</a>
+                                                                    @php
+                                                                        $bookProduct = $order->product;
+                                                                        $canSoftBookPdf = $bookProduct
+                                                                            && $bookProduct->isSoftBook()
+                                                                            && in_array((int) $order->payment_status, [1, 3], true);
+                                                                    @endphp
+                                                                    @if ($canSoftBookPdf)
+                                                                        <a href="{{ route('myOrder.bookPreview', $order->id) }}" class="link_value theme_btn small_btn4 mr-2">{{ __('frontend.Preview') }}</a>
+                                                                        <a href="{{ route('myOrder.bookDownload', $order->id) }}" class="link_value theme_btn small_btn4">{{ __('common.Download') }}</a>
                                                                     @else
                                                                         <a href="{{ route('myOrder.detail', $order->id) }}" class="link_value theme_btn small_btn4">{{ __('common.View') }}</a>
                                                                     @endif

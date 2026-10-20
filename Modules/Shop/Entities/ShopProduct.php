@@ -24,7 +24,11 @@ class ShopProduct extends Model
 
     public function isSoftBook(): bool
     {
-        return (int) $this->type === 2 && $this->book_format === 'soft';
+        if ((int) $this->type !== 2 || $this->book_format === 'hard') {
+            return false;
+        }
+
+        return !empty($this->book_pdf);
     }
 
     public function isHardBook(): bool
