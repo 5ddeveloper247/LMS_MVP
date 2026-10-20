@@ -87,14 +87,17 @@ class ProductController extends Controller
         // Book-only meta fields
         if ($type === 2) {
             $rules = array_merge($rules, [
+                'book_format'      => 'required|in:soft,hard',
                 'author'           => 'required|string|max:255',
                 'publisher'        => 'required|string|max:255',
                 'publication_date' => 'required|date',
             ]);
         }
 
-        // PDF required for Book / Study Guide / Study Tool
-        if (in_array($type, [2, 3, 4])) {
+        // PDF required for soft books / Study Guide / Study Tool
+        if (in_array($type, [3, 4])) {
+            $rules['book_pdf'] = 'required|mimes:pdf|max:20480'; // 20MB max
+        } elseif ($type === 2 && $request->input('book_format') === 'soft') {
             $rules['book_pdf'] = 'required|mimes:pdf|max:20480'; // 20MB max
         }
 
@@ -145,6 +148,8 @@ class ProductController extends Controller
             'publisher.required'    => 'The Publisher field is required for books.',
             'publication_date.required' => 'The Publication Date is required for books.',
             'publication_date.date' => 'The Publication Date must be a valid date.',
+            'book_format.required'  => 'Please select Soft format or Hard format for this book.',
+            'book_format.in'        => 'Invalid book format selected.',
             'book_pdf.required'     => 'Please upload the Book PDF.',
             'book_pdf.mimes'        => 'Only PDF files are allowed.',
             'book_pdf.max'          => 'The Book PDF may not be greater than 20MB.',
@@ -183,16 +188,17 @@ class ProductController extends Controller
         $product->publisher         = $request->publisher;
         $product->publication_date  = $this->toMysqlDate($request->publication_date);
         $product->is_flagship       = ((string) $request->input('is_flagship', '0') === '1');
+        $product->book_format       = $type === 2 ? $request->book_format : null;
 
         $product->total_amount      = $totals['total_amount'];
         $product->total_tax         = $totals['total_tax'];
         $product->total_discount    = $totals['total_discount'];
 
-        // Upload Book PDF (if provided)
-        if ($request->hasFile('book_pdf')) {
+        if ($type === 2 && $request->book_format === 'hard') {
+            $product->book_pdf = null;
+        } elseif ($request->hasFile('book_pdf')) {
             $file = $this->saveFile($request->file('book_pdf'));
-            // $data['book_pdf'] = $file;
-            $product->book_pdf  = $file;
+            $product->book_pdf = $file;
         }
 
         $product->save();
@@ -302,14 +308,17 @@ class ProductController extends Controller
         // Book-only meta fields
         if ($type === 2) {
             $rules = array_merge($rules, [
+                'book_format'      => 'required|in:soft,hard',
                 'author'           => 'required|string|max:255',
                 'publisher'        => 'required|string|max:255',
                 'publication_date' => 'required|date',
             ]);
         }
 
-        // PDF optional on update for Book / Study Guide / Study Tool
-        if (in_array($type, [2, 3, 4])) {
+        // PDF optional on update for Study Guide / Study Tool; soft books only
+        if (in_array($type, [3, 4])) {
+            $rules['book_pdf'] = 'nullable|mimes:pdf|max:20480'; // 20MB max
+        } elseif ($type === 2 && $request->input('book_format') === 'soft') {
             $rules['book_pdf'] = 'nullable|mimes:pdf|max:20480'; // 20MB max
         }
         
@@ -359,6 +368,8 @@ class ProductController extends Controller
             'publisher.required'    => 'The Publisher field is required for books.',
             'publication_date.required' => 'The Publication Date is required for books.',
             'publication_date.date' => 'The Publication Date must be a valid date.',
+            'book_format.required'  => 'Please select Soft format or Hard format for this book.',
+            'book_format.in'        => 'Invalid book format selected.',
             'book_pdf.mimes'        => 'Only PDF files are allowed.',
             'book_pdf.max'          => 'The Book PDF may not be greater than 20MB.',
         ];
@@ -395,21 +406,24 @@ class ProductController extends Controller
         $product->publisher         = $request->publisher;
         $product->publication_date  = $this->toMysqlDate($request->publication_date);
         $product->is_flagship       = ((string) $request->input('is_flagship', '0') === '1');
+        $product->book_format       = $type === 2 ? $request->book_format : null;
 
         $product->total_amount      = $totals['total_amount'];
         $product->total_tax         = $totals['total_tax'];
         $product->total_discount    = $totals['total_discount'];
 
-        // Upload Book PDF (if provided)
-        if ($request->hasFile('book_pdf')) {
-
-            if($product->book_pdf != null){
+        if ($type === 2 && $request->book_format === 'hard') {
+            if ($product->book_pdf != null) {
+                $this->deleteImage($product->book_pdf);
+            }
+            $product->book_pdf = null;
+        } elseif ($request->hasFile('book_pdf')) {
+            if ($product->book_pdf != null) {
                 $this->deleteImage($product->book_pdf);
             }
 
             $file = $this->saveFile($request->file('book_pdf'));
-            // $data['book_pdf'] = $file;
-            $product->book_pdf  = $file;
+            $product->book_pdf = $file;
         }
 
         $product->save();

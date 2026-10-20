@@ -22,6 +22,16 @@ class ShopProduct extends Model
         return $labels[$this->type] ?? 'Unknown';
     }
 
+    public function isSoftBook(): bool
+    {
+        return (int) $this->type === 2 && $this->book_format === 'soft';
+    }
+
+    public function isHardBook(): bool
+    {
+        return (int) $this->type === 2 && $this->book_format === 'hard';
+    }
+
     protected $casts = [
         'is_flagship' => 'boolean',
         'price' => 'float',

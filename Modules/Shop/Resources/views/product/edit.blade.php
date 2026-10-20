@@ -101,6 +101,31 @@
                                                             placeholder="-" type="text" value="{{ @$product->sub_title }}">
                                                     </div>
                                                 </div>
+                                                @php
+                                                    $editBookFormat = old('book_format', $product->book_format ?? (!empty($product->book_pdf) ? 'soft' : 'hard'));
+                                                @endphp
+                                                <div class="col-xl-12 mb-2" id="book_format_fields" style="{{ (int)@$product->type === 2 ? '' : 'display:none;' }}">
+                                                    <div class="d-flex flex-column">
+                                                        <label class="primary_input_label">
+                                                            {{ __('Book format') }}
+                                                            <strong class="text-danger">*</strong>
+                                                        </label>
+                                                        <div class="d-flex flex-wrap">
+                                                            <div class="mr-5">
+                                                                <label for="book_format_soft" class="d-flex align-items-center">
+                                                                    <input type="radio" id="book_format_soft" name="book_format" value="soft" {{ $editBookFormat === 'soft' ? 'checked' : '' }}>
+                                                                    <span class="checkmark mr-2"></span> {{ __('Soft format') }} (PDF)
+                                                                </label>
+                                                            </div>
+                                                            <div class="mr-4">
+                                                                <label for="book_format_hard" class="d-flex align-items-center">
+                                                                    <input type="radio" id="book_format_hard" name="book_format" value="hard" {{ $editBookFormat === 'hard' ? 'checked' : '' }}>
+                                                                    <span class="checkmark mr-2"></span> {{ __('Hard format') }} (physical)
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <div class="col-xl-12">
                                                     <div class="primary_input mb-35">
                                                         <label class="primary_input_label" for="">
@@ -185,7 +210,11 @@
                                             $digitalPdfPlaceholder = @$product->book_pdf ?: __('Upload Study Tool');
                                         }
                                     @endphp
-                                    <div class="row" id="digital_pdf_field" style="{{ in_array((int)@$product->type, [2, 3, 4]) ? '' : 'display:none;' }}">
+                                    @php
+                                        $showDigitalPdfOnEdit = in_array((int)@$product->type, [3, 4], true)
+                                            || ((int)@$product->type === 2 && $editBookFormat === 'soft');
+                                    @endphp
+                                    <div class="row" id="digital_pdf_field" style="{{ $showDigitalPdfOnEdit ? '' : 'display:none;' }}">
                                         <div class="col-xl-6">
                                             <div class="primary_input mb-35">
                                                 <label class="primary_input_label" id="digital_pdf_label" for="">
@@ -530,21 +559,29 @@
         });
         
 
+        function shouldShowBookPdf() {
+            if ($("#type_study_guide").is(":checked") || $("#type_study_tool").is(":checked")) {
+                return true;
+            }
+            return $("#type_book").is(":checked") && $("#book_format_soft").is(":checked");
+        }
+
         function toggleTypeFields() {
             let isBook = $("#type_book").is(":checked");
             let isStudyGuide = $("#type_study_guide").is(":checked");
             let isStudyTool = $("#type_study_tool").is(":checked");
-            let isDigital = isBook || isStudyGuide || isStudyTool;
 
             if (isBook) {
+                $("#book_format_fields").show();
                 $("#book_meta_fields").show();
                 $("#author, #publisher, #publication_date").prop("required", true);
             } else {
+                $("#book_format_fields").hide();
                 $("#book_meta_fields").hide();
                 $("#author, #publisher, #publication_date").prop("required", false);
             }
 
-            if (isDigital) {
+            if (shouldShowBookPdf()) {
                 $("#digital_pdf_field").show();
                 if (isStudyGuide) {
                     $("#digital_pdf_label").html('{{ __("Study Guide") }} <strong class="text-danger">*</strong>');
@@ -555,6 +592,7 @@
                 }
             } else {
                 $("#digital_pdf_field").hide();
+                $("#document_file_thumb_1").val('');
             }
 
             if (isStudyGuide || isStudyTool) {
@@ -566,11 +604,13 @@
             }
         }
 
-        // Run on page load
         toggleTypeFields();
 
-        // Run on change
         $("input[name='type']").on("change", function () {
+            toggleTypeFields();
+        });
+
+        $("input[name='book_format']").on("change", function () {
             toggleTypeFields();
         });
         
