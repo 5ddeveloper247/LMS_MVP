@@ -30,7 +30,7 @@
                             @endif
                         </div>
                         <div class="d-flex flex-wrap gap-2">
-                            <a href="{{ route('myOrders') }}" class="link_value theme_btn small_btn4 mr-2">{{ __('common.Back') }}</a>
+                            <a href="{{ route('myOrders') }}" class="link_value theme_btn small_btn4 mr-2">{{ __('Back') }}</a>
                             <a href="{{ route('myOrder.bookDownload', $order->id) }}" class="link_value theme_btn small_btn4">{{ __('common.Download') }}</a>
                         </div>
                     </div>
