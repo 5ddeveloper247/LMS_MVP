@@ -172,8 +172,8 @@
                         <li>{{ $feature }}</li>
                     @endforeach
                 </ul>
-            @else
-                <div class="ck-content">{!! $product->description !!}</div>
+            @elseif (!empty($product->short_description))
+                <div class="purchase-short-desc">{!! nl2br(e($product->short_description)) !!}</div>
             @endif
 
             <div class="quantity-row">
@@ -433,8 +433,8 @@
                             <li class="mb-3">{{ $feature }}</li>
                         @endforeach
                     </ul>
-                @else
-                    <div class="ck-content">{!! $product->description !!}</div>
+                @elseif (!empty($product->short_description))
+                    <div class="purchase-short-desc">{!! nl2br(e($product->short_description)) !!}</div>
                 @endif
 
                 <!-- Variation Images and Videos -->
