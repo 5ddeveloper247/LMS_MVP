@@ -146,6 +146,11 @@ class ShopController extends Controller
         return $product->requiresPhysicalInventory();
     }
 
+    private function shopCartUrl(): string
+    {
+        return route('myCart');
+    }
+
     public function addToCartShop(Request $request, $id)
     {
         try {
@@ -187,7 +192,7 @@ class ShopController extends Controller
                 }elseif (isset($exist)) {
                     
                     Toastr::error(trans('Product already added in your cart'), trans('common.Failed'));
-                    return redirect()->to(route($detailUrl, $id));
+                    return redirect()->to($this->shopCartUrl());
 
                 } elseif (Auth::check() && ($user->role_id == 1)) {
                     
@@ -225,7 +230,7 @@ class ShopController extends Controller
                     }
                    
                     Toastr::success(trans('Product Added to your cart'), trans('common.Success'));
-                    return redirect()->to(route($detailUrl, $id));
+                    return redirect()->to($this->shopCartUrl());
                 }
             }
         
@@ -370,7 +375,7 @@ class ShopController extends Controller
             $exist = Cart::where('user_id', $user->id)->where('shop_bundle_id', $bundle->id)->first();
             if ($exist) {
                 Toastr::error('Bundle already added in your cart', 'Failed');
-                return redirect()->to($detailRoute);
+                return redirect()->to($this->shopCartUrl());
             }
 
             $oldCart = Cart::where('user_id', $user->id)->first();
@@ -382,7 +387,7 @@ class ShopController extends Controller
             $cart->save();
 
             Toastr::success('Bundle added to your cart', 'Success');
-            return redirect()->to($detailRoute);
+            return redirect()->to($this->shopCartUrl());
         } catch (\Exception $e) {
             GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
         }
