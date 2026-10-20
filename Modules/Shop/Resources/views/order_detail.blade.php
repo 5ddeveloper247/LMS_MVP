@@ -145,7 +145,18 @@
                                         @endphp
                                         <tr>
                                             <td class="center">1</td>
-                                            <td class="left strong">{{ $orderDetail->product->title ?? 'N/A' }}</td>
+                                            <td class="left strong">
+                                                {{ $orderDetail->product->title ?? 'N/A' }}
+                                                @if ($orderDetail->product && (int) $orderDetail->product->type === 2)
+                                                    <br><small class="text-muted">
+                                                        @if ($orderDetail->product->isHardBook())
+                                                            Hard format (physical)
+                                                        @elseif ($orderDetail->product->isSoftBook())
+                                                            Soft format (PDF)
+                                                        @endif
+                                                    </small>
+                                                @endif
+                                            </td>
                                             <td class="">
                                                 <img class="round-product-img" style="height:50px; width:50px;"
                                                     src="{{isset($orderDetail->product->files[0]->file_path) ? url($orderDetail->product->files[0]->file_path) : url('public/assets/product-Placeholder.png')}}">

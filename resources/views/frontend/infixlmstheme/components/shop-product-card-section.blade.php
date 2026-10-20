@@ -230,7 +230,7 @@
 
                             <div class="product-card{{ $bookIndex > 3 ? ' shop-card-hidden' : '' }}">
                                 <div class="product-image books">
-                                    @if ($product->total_inventory <= 0)
+                                    @if (!$product->isAvailableForPurchase())
                                         <span class="product-badge soon">Out of Stock</span>
                                     @endif
                                     <a href="{{ $detailUrl }}">
@@ -248,7 +248,7 @@
                                     <div class="product-footer">
                                         @include(theme('partials.shop-product-price'), ['product' => $product])
 
-                                        @if ($product->total_inventory > 0)
+                                        @if ($product->isAvailableForPurchase())
                                             <a href="{{ $detailUrl }}" class="product-action">Buy Now &rarr;</a>
                                         @else
                                             <a href="#" class="product-action">Notify Me &rarr;</a>

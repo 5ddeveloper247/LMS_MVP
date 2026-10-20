@@ -1962,8 +1962,7 @@ class PaymentController extends Controller
     }
 
     /**
-     * Product (1) and Book (2) use physical inventory.
-     * Study Guide (3) and Study Tool (4) are digital — no stock gate / decrement.
+     * Physical merchandise and hard-format books use inventory; soft books and digital items do not.
      */
     private function shopProductRequiresInventory(?ShopProduct $product): bool
     {
@@ -1971,6 +1970,6 @@ class PaymentController extends Controller
             return true;
         }
 
-        return !in_array((int) $product->type, [3, 4], true);
+        return $product->requiresPhysicalInventory();
     }
 }

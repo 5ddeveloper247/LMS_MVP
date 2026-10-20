@@ -36,6 +36,29 @@ class ShopProduct extends Model
         return (int) $this->type === 2 && $this->book_format === 'hard';
     }
 
+    /** Merchandise and hard-copy books use stock; soft books and digital guides/tools do not. */
+    public function requiresPhysicalInventory(): bool
+    {
+        if ((int) $this->type === 1) {
+            return true;
+        }
+
+        if ((int) $this->type === 2) {
+            return $this->isHardBook();
+        }
+
+        return false;
+    }
+
+    public function isAvailableForPurchase(): bool
+    {
+        if (!$this->requiresPhysicalInventory()) {
+            return (int) ($this->status ?? 0) === 1;
+        }
+
+        return (int) ($this->status ?? 0) === 1 && (int) $this->total_inventory > 0;
+    }
+
     protected $casts = [
         'is_flagship' => 'boolean',
         'price' => 'float',

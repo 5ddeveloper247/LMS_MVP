@@ -396,7 +396,7 @@
 
                                     <small class="d-block mt-2">
                                         <i class="ti-shopping-cart"></i>
-                                        {{ $product->total_inventory > 0 ? 'In-Stock' : 'Out of Stock' }}
+                                        {{ $product->isAvailableForPurchase() ? ($product->isHardBook() ? 'In-Stock' : 'Available') : 'Out of Stock' }}
                                     </small>
                                 </div>
                             </div>

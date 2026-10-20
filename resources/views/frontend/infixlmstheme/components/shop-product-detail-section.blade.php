@@ -88,9 +88,8 @@
                 </video>
 
                 @php
-                    // Study Guide / Study Tool are digital — inventory is not required
-                    $isDigitalShopItem = in_array((int) $product->type, [3, 4], true);
-                    $shopItemInStock = $isDigitalShopItem || (int) $product->total_inventory > 0;
+                    $shopTracksInventory = $product->requiresPhysicalInventory();
+                    $shopItemInStock = !$shopTracksInventory || (int) $product->total_inventory > 0;
                 @endphp
                 @if (!$shopItemInStock)
                     <span class="product-main-badge">Out of Stock</span>

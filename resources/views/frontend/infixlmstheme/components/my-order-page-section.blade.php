@@ -132,7 +132,7 @@
                                                                 <td class="text-center">{{ number_format($order->display_discount ?? 0, 2) }}</td>
                                                                 <td class="text-center">{{ $order->status_label ?? 'N/A' }}</td>
                                                                 <td class="text-center">
-                                                                    <span class="badge rounded-pill bg-success" style="padding:10px 20px; color:white;">Paid</span>
+                                                                    @include(theme('partials.shop-order-payment-status-badge'), ['order' => $order])
                                                                 </td>
                                                                 <td class="text-center">
                                                                     @php

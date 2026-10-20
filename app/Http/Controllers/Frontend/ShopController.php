@@ -143,7 +143,7 @@ class ShopController extends Controller
     /** Study Guide (3) and Study Tool (4) are digital — no physical stock check. */
     private function shopItemRequiresInventory(ShopProduct $product): bool
     {
-        return !in_array((int) $product->type, [3, 4], true);
+        return $product->requiresPhysicalInventory();
     }
 
     public function addToCartShop(Request $request, $id)
@@ -579,7 +579,7 @@ class ShopController extends Controller
     {
         try {
             
-            $orderDetail = ShopOrder::where('user_id', Auth::id())->where('id', $id)->with('product')->first();
+            $orderDetail = ShopOrder::where('user_id', Auth::id())->where('id', $id)->with(['product.files', 'checkout.billing.countryDetails', 'user'])->first();
             
             if($orderDetail){
                 return view(theme('pages.myOrderDetails'), compact('orderDetail'));

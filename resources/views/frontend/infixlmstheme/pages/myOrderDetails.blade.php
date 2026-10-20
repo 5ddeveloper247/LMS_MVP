@@ -25,6 +25,16 @@
                                     
                                 </div>
                                 <div class="col-6 text-right">
+                                    @php
+                                        $detailProduct = $orderDetail->product;
+                                        $detailSoftBookPdf = $detailProduct
+                                            && $detailProduct->isSoftBook()
+                                            && in_array((int) $orderDetail->payment_status, [1, 3], true);
+                                    @endphp
+                                    @if ($detailSoftBookPdf)
+                                        <a href="{{ route('myOrder.bookPreview', $orderDetail->id) }}" class="btn btn-rounded btn-info admin-view-add mr-2">{{ __('frontend.Preview') }}</a>
+                                        <a href="{{ route('myOrder.bookDownload', $orderDetail->id) }}" class="btn btn-rounded btn-primary admin-view-add mr-2">{{ __('common.Download') }}</a>
+                                    @endif
                                     @if (empty($orderDetail->shop_bundle_id))
                                         @if ($orderDetail->status != 5)
                                             <a type="button" class="btn btn-rounded btn-warning admin-view-add" 
@@ -114,7 +124,18 @@
                                         <tbody>
                                             <tr>
                                                 <td class="center">1</td>
-                                                <td class="left strong">{{ $orderDetail->product->title ?? 'N/A' }}</td>
+                                                <td class="left strong">
+                                                    {{ $orderDetail->product->title ?? 'N/A' }}
+                                                    @if ($detailProduct && (int) $detailProduct->type === 2)
+                                                        <br><small class="text-muted">
+                                                            @if ($detailProduct->isHardBook())
+                                                                {{ __('Hard format') }} (physical)
+                                                            @elseif ($detailProduct->isSoftBook())
+                                                                {{ __('Soft format') }} (PDF)
+                                                            @endif
+                                                        </small>
+                                                    @endif
+                                                </td>
                                                 <td class="">
                                                     <img class="round-product-img" style="height:50px; width:50px;"
                                                         src="{{isset($orderDetail->product->files[0]->file_path) ? url($orderDetail->product->files[0]->file_path) : url('public/assets/product-Placeholder.png')}}">
