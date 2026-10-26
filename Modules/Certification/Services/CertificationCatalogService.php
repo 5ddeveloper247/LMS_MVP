@@ -8,9 +8,14 @@ use Illuminate\Support\Str;
 use Modules\Certification\Entities\CertificationCategory;
 use Modules\Certification\Entities\CertificationGroup;
 use Modules\Certification\Entities\CertificationOffering;
+use Modules\Certification\Entities\CertificationOfferingOption;
 
 class CertificationCatalogService
 {
+    private ?bool $offeringsHasOutcomesColumn = null;
+
+    private ?bool $offeringsHasRequirementsColumn = null;
+
     /** @var array<string, array<string, mixed>> */
     private array $groupPresentation = [
         'life-support' => [
@@ -163,11 +168,19 @@ class CertificationCatalogService
     public function detailPage(CertificationOffering $current): array
     {
         $offerings = $this->publishedOfferings();
+        $currentKey = $this->routeSlug($current);
         $coursesJson = [];
 
         foreach ($offerings as $offering) {
             $key = $this->routeSlug($offering);
-            $coursesJson[$key] = $this->offeringToDetailCourse($offering, $offerings);
+            if (isset($coursesJson[$key])) {
+                continue;
+            }
+            $coursesJson[$key] = $this->offeringToDetailCourse(
+                $offering,
+                $offerings,
+                $key === $currentKey
+            );
         }
 
         $switcherItems = $this->hubJumpItems($offerings)->map(fn (array $item) => [
@@ -186,8 +199,11 @@ class CertificationCatalogService
     /**
      * @return array<string, mixed>
      */
-    public function offeringToDetailCourse(CertificationOffering $offering, Collection $allOfferings): array
-    {
+    public function offeringToDetailCourse(
+        CertificationOffering $offering,
+        Collection $allOfferings,
+        bool $includeFullBody = true
+    ): array {
         $options = $offering->relationLoaded('options') ? $offering->options : $offering->options()->get();
 
         $tuition = $options->map(fn ($option) => [
@@ -259,15 +275,33 @@ class CertificationCatalogService
             'expect' => '',
             'learn' => [],
             'outline' => [],
-            'outcomesHtml' => Schema::hasColumn('certification_offerings', 'outcomes')
+            'outcomesHtml' => $includeFullBody && $this->offeringsHasOutcomesColumn()
                 ? ($offering->outcomes ?? '')
                 : '',
-            'requirementsHtml' => Schema::hasColumn('certification_offerings', 'requirements')
+            'requirementsHtml' => $includeFullBody && $this->offeringsHasRequirementsColumn()
                 ? ($offering->requirements ?? '')
                 : '',
-            'contentHtml' => $offering->content ?? '',
+            'contentHtml' => $includeFullBody ? ($offering->content ?? '') : '',
             'related' => $related,
         ];
+    }
+
+    private function offeringsHasOutcomesColumn(): bool
+    {
+        if ($this->offeringsHasOutcomesColumn === null) {
+            $this->offeringsHasOutcomesColumn = Schema::hasColumn('certification_offerings', 'outcomes');
+        }
+
+        return $this->offeringsHasOutcomesColumn;
+    }
+
+    private function offeringsHasRequirementsColumn(): bool
+    {
+        if ($this->offeringsHasRequirementsColumn === null) {
+            $this->offeringsHasRequirementsColumn = Schema::hasColumn('certification_offerings', 'requirements');
+        }
+
+        return $this->offeringsHasRequirementsColumn;
     }
 
     /**

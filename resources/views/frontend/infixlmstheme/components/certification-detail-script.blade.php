@@ -53,12 +53,16 @@ function render(slug, push) {
       ? c.codes.slice(1).map(x => x[0] + ': ' + x[1]).join(' · ')
       : ((c.codes && c.codes[0]) ? c.codes[0][0] : ''));
     setText('sideNote', tuition.length > 1 ? 'Choose your option when you enroll.' : 'One all-inclusive tuition.');
-    $('tuitionList').innerHTML = tuition.map(t =>
-      `<div class="tuition-row"><span><span class="t-lbl">${esc(t[0])}</span><span class="t-code">${esc(t[2] || '')}</span></span><span class="t-amt">${money(t[1])}</span></div>`).join('');
+    const tuitionList = $('tuitionList');
+    if (tuitionList) {
+      tuitionList.innerHTML = tuition.map(t =>
+        `<div class="tuition-row"><span><span class="t-lbl">${esc(t[0])}</span><span class="t-code">${esc(t[2] || '')}</span></span><span class="t-amt">${money(t[1])}</span></div>`).join('');
+    }
   } else {
     setText('tuitionShort', '—');
     setText('tuitionNote', '');
-    $('tuitionList').innerHTML = '';
+    const tuitionList = $('tuitionList');
+    if (tuitionList) tuitionList.innerHTML = '';
   }
 
   const learnBlock = $('learn');
@@ -114,6 +118,9 @@ function render(slug, push) {
     : (related.length ? 'Courses that pair well with ' + c.mark + '.' : ''));
 
   const relatedGrid = $('relatedGrid');
+  if (!relatedGrid) {
+    return;
+  }
   relatedGrid.innerHTML = related.filter(k => COURSES[k]).map(k => {
     const r = COURSES[k];
     const rTuition = r.tuition || [];
@@ -129,14 +136,15 @@ function render(slug, push) {
     </a>`;
   }).join('');
 
-  relatedGrid.querySelectorAll('a').forEach(a => a.addEventListener('click', e => {
-    e.preventDefault();
-    render(a.dataset.cert, true);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  relatedGrid.querySelectorAll('a[data-cert]').forEach(a => a.addEventListener('click', e => {
+    const targetSlug = a.dataset.cert;
+    if (COURSES[targetSlug] && COURSES[targetSlug].contentHtml) {
+      e.preventDefault();
+      render(targetSlug, true);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }));
 }
-
-document.querySelectorAll('.switch-btn').forEach(b => b.addEventListener('click', () => render(b.dataset.cert, true)));
 
 const qsCert = new URLSearchParams(location.search).get('cert');
 render(qsCert || defaultSlug(), false);
