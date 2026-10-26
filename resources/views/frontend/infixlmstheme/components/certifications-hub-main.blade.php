@@ -177,7 +177,7 @@
       <div>
         <h2 id="group-title">Certifying a whole team? <em>We can schedule that.</em></h2>
         <p>Facilities, clinics, and nursing programs can book group sessions for any certification on this page. Tell us the course, how many people, and your timeline, and our team will put together a plan and a quote.</p>
-        <a href="contact.html" class="btn-primary">Request a Group Quote</a>
+        <a href="{{ route('contact-us') }}" class="btn-primary">Request a Group Quote</a>
       </div>
       <ul class="group-list">
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>BLS and ACLS for nursing staff and critical care teams</li>
@@ -214,11 +214,11 @@
       </details>
       <details>
         <summary>Can my employer pay, or can I enroll a group?</summary>
-        <p>Yes. Add your employer on the enrollment form, or <a href="contact.html">request a group quote</a>, and our team will follow up with options.</p>
+        <p>Yes. Add your employer on the enrollment form, or <a href="{{ route('contact-us') }}">request a group quote</a>, and our team will follow up with options.</p>
       </details>
       <details>
         <summary>Do these courses count toward NCLEX coaching or FL BON remediation?</summary>
-        <p>No. Certification courses are standalone trainings. For NCLEX preparation, see <a href="nclex-coaching.html">NCLEX Success Coaching</a>. For state-mandated remediation, see our <a href="remediation.html">FL BON Remediation Program</a>.</p>
+        <p>No. Certification courses are standalone trainings. For NCLEX preparation, see <a href="{{ route('programs') }}">NCLEX Success Coaching</a>. For state-mandated remediation, see our <a href="{{ route('floridaPrograms') }}">FL BON Remediation Program</a>.</p>
       </details>
     </div>
   </div>
@@ -228,7 +228,7 @@
   <div class="container">
     <div class="notice-card">
       <h4>Important Notice</h4>
-      <p>Certification courses are standalone training programs. They are not part of our NCLEX coaching programs and do not fulfill Florida Board of Nursing remediation requirements. For NCLEX preparation, see our <a href="nclex-coaching.html">NCLEX Success Coaching Program</a>. For FL BON remediation, see our <a href="remediation.html">FL BON Remediation Program</a>. Session availability may depend on minimum enrollment.</p>
+      <p>Certification courses are standalone training programs. They are not part of our NCLEX coaching programs and do not fulfill Florida Board of Nursing remediation requirements. For NCLEX preparation, see our <a href="{{ route('programs') }}">NCLEX Success Coaching Program</a>. For FL BON remediation, see our <a href="{{ route('floridaPrograms') }}">FL BON Remediation Program</a>. Session availability may depend on minimum enrollment.</p>
     </div>
   </div>
 </section>
@@ -239,7 +239,7 @@
     <p>Pick your course and reserve a seat, or speak with our team about which certification your role or employer requires.</p>
     <div class="final-cta-actions">
       <a href="#{{ $firstSectionId }}" class="btn-primary">Browse Certifications</a>
-      <a href="contact.html" class="btn-ghost-light">Speak With Our Team</a>
+      <a href="{{ route('contact-us') }}" class="btn-ghost-light">Speak With Our Team</a>
     </div>
   </div>
 </section>

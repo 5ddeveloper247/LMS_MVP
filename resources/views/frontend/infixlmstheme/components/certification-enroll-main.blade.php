@@ -179,7 +179,7 @@
           </div>
 
           <div class="check-row"><input type="checkbox" name="agree_pay" id="agreePay" value="1" required><label for="agreePay">I understand my enrollment is confirmed once payment is complete.</label></div>
-          <div class="check-row"><input type="checkbox" name="agree_terms" id="agreeTerms" value="1" required><label for="agreeTerms">I agree to the <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a>.</label></div>
+          <div class="check-row"><input type="checkbox" name="agree_terms" id="agreeTerms" value="1" required><label for="agreeTerms">I agree to the <a href="{{ route('terms') }}">Terms of Service</a> and <a href="{{ route('customer-help') }}#v-pills-profile-tab-1">Privacy Policy</a>.</label></div>
           <div class="check-row"><input type="checkbox" name="opt_in" id="optIn" value="1"><label for="optIn">Email me session reminders and renewal notices.</label></div>
         </div>
 
@@ -197,7 +197,7 @@
         <p id="confirmText"></p>
         <div class="confirm-actions">
           <!-- DEVELOPER: point this to the live checkout with the order payload. -->
-          <a href="checkout.html" class="btn-primary">Go to Secure Checkout</a>
+          <a href="{{ route('CheckOut') }}" class="btn-primary">Go to Secure Checkout</a>
           <button type="button" class="btn-secondary" id="editBtn">Edit Enrollment</button>
         </div>
       </div>
@@ -230,7 +230,7 @@
       </div>
       <div class="help-card">
         <h3>Enrolling a team?</h3>
-        <p>We schedule group sessions for facilities, clinics, and nursing programs. <a href="contact.html">Request a group quote</a></p>
+        <p>We schedule group sessions for facilities, clinics, and nursing programs. <a href="{{ route('contact-us') }}">Request a group quote</a></p>
       </div>
     </aside>
 
@@ -254,7 +254,7 @@
   <div class="container">
     <div class="notice-card">
       <h4>Important Notice</h4>
-      <p>Certification courses are standalone training programs. They are not part of our NCLEX coaching programs and do not fulfill Florida Board of Nursing remediation requirements. For NCLEX preparation, see our <a href="nclex-coaching.html">NCLEX Success Coaching Program</a>. For FL BON remediation, see our <a href="remediation.html">FL BON Remediation Program</a>. Session availability may depend on minimum enrollment.</p>
+      <p>Certification courses are standalone training programs. They are not part of our NCLEX coaching programs and do not fulfill Florida Board of Nursing remediation requirements. For NCLEX preparation, see our <a href="{{ route('programs') }}">NCLEX Success Coaching Program</a>. For FL BON remediation, see our <a href="{{ route('floridaPrograms') }}">FL BON Remediation Program</a>. Session availability may depend on minimum enrollment.</p>
     </div>
   </div>
 </section>

@@ -98,7 +98,7 @@
         <div class="tuition" id="tuitionList"></div>
         <div class="side-actions">
           <a class="btn-primary" data-enroll href="certification-enroll.html">Enroll Now</a>
-          <a class="btn-secondary" href="contact.html">Speak With Our Team</a>
+          <a class="btn-secondary" href="{{ route('contact-us') }}">Speak With Our Team</a>
         </div>
         <dl class="side-facts">
           <div><dt>Duration</dt><dd data-f="durationShort"></dd></div>
@@ -113,7 +113,7 @@
       </div>
       <div class="help-card">
         <h3>Training a team?</h3>
-        <p>We schedule group sessions for facilities, clinics, and nursing programs. <a href="contact.html">Request a group quote</a></p>
+        <p>We schedule group sessions for facilities, clinics, and nursing programs. <a href="{{ route('contact-us') }}">Request a group quote</a></p>
       </div>
     </aside>
 
@@ -138,7 +138,7 @@
   <div class="container">
     <div class="notice-card">
       <h4>Important Notice</h4>
-      <p>Certification courses are standalone training programs. They are not part of our NCLEX coaching programs and do not fulfill Florida Board of Nursing remediation requirements. For NCLEX preparation, see our <a href="nclex-coaching.html">NCLEX Success Coaching Program</a>. For FL BON remediation, see our <a href="remediation.html">FL BON Remediation Program</a>. Session availability may depend on minimum enrollment.</p>
+      <p>Certification courses are standalone training programs. They are not part of our NCLEX coaching programs and do not fulfill Florida Board of Nursing remediation requirements. For NCLEX preparation, see our <a href="{{ route('programs') }}">NCLEX Success Coaching Program</a>. For FL BON remediation, see our <a href="{{ route('floridaPrograms') }}">FL BON Remediation Program</a>. Session availability may depend on minimum enrollment.</p>
     </div>
   </div>
 </section>
