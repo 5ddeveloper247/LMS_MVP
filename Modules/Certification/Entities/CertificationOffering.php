@@ -17,6 +17,8 @@ class CertificationOffering extends Model
         'certification_group_id',
         'certification_category_id',
         'short_description',
+        'outcomes',
+        'requirements',
         'format_label',
         'ce_hours',
         'ce_note',

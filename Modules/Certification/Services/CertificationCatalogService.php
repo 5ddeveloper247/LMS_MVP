@@ -259,6 +259,12 @@ class CertificationCatalogService
             'expect' => '',
             'learn' => [],
             'outline' => [],
+            'outcomesHtml' => Schema::hasColumn('certification_offerings', 'outcomes')
+                ? ($offering->outcomes ?? '')
+                : '',
+            'requirementsHtml' => Schema::hasColumn('certification_offerings', 'requirements')
+                ? ($offering->requirements ?? '')
+                : '',
             'contentHtml' => $offering->content ?? '',
             'related' => $related,
         ];

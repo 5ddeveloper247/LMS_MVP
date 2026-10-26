@@ -414,6 +414,28 @@ html, body { overflow-x: clip; }
 }
 .mxp-certification-detail .learn-list svg { width: 18px; height: 18px; color: var(--teal-mid); flex-shrink: 0; margin-top: 3px; }
 .mxp-certification-detail .learn-list.one { grid-template-columns: 1fr; }
+.mxp-certification-detail .learn-list.cert-detail-outcomes { grid-template-columns: 1fr; }
+.mxp-certification-detail .learn-list.cert-detail-outcomes > li.content-full {
+  display: block; background: transparent; border: none; padding: 0;
+}
+.mxp-certification-detail .cert-detail-html { font-size: 15px; line-height: 1.75; color: var(--charcoal-soft); }
+.mxp-certification-detail .cert-detail-html p:last-child { margin-bottom: 0; }
+.mxp-certification-detail .cert-detail-html ul {
+  list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 0; padding: 0;
+}
+.mxp-certification-detail .cert-detail-html ul li {
+  display: flex; gap: 12px; align-items: flex-start;
+  background: var(--cream); border: 1px solid var(--gray-line); border-radius: 12px; padding: 16px 18px;
+  font-size: 14.5px; line-height: 1.6; color: var(--charcoal);
+}
+.mxp-certification-detail .cert-detail-html ul li::before {
+  content: ''; width: 18px; height: 18px; flex-shrink: 0; margin-top: 3px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231A8A6F' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+.mxp-certification-detail .expect .cert-detail-html { color: var(--charcoal); font-size: 15.5px; }
+.mxp-certification-detail .expect .cert-detail-html ul { display: block; list-style: disc; padding-left: 1.25rem; }
+.mxp-certification-detail .expect .cert-detail-html ul li { background: none; border: none; padding: 0 0 8px; display: list-item; }
+.mxp-certification-detail .expect .cert-detail-html ul li::before { content: none; }
 
 /* Outline — a real sequence, so it is numbered by its own labels */
 .mxp-certification-detail .outline { list-style: none; position: relative; }

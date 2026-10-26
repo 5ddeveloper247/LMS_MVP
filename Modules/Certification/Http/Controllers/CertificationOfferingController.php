@@ -178,6 +178,8 @@ class CertificationOfferingController extends Controller
                 ? 'nullable|exists:certification_categories,id'
                 : 'nullable',
             'short_description' => 'nullable|string|max:5000',
+            'outcomes' => 'nullable|string',
+            'requirements' => 'nullable|string',
             'format_label' => 'nullable|string|max:255',
             'ce_hours' => 'nullable|numeric|min:0|max:999.99',
             'ce_note' => 'nullable|string|max:255',
@@ -254,7 +256,7 @@ class CertificationOfferingController extends Controller
 
     private function offeringAttributes(array $data): array
     {
-        return [
+        $attrs = [
             'name' => $data['name'],
             'slug' => $data['slug'],
             'certification_group_id' => $this->nullableForeignId($data['certification_group_id'] ?? null),
@@ -269,6 +271,15 @@ class CertificationOfferingController extends Controller
             'status' => (int) ($data['status'] ?? 1),
             'sort_order' => (int) ($data['sort_order'] ?? 0),
         ];
+
+        if (Schema::hasColumn('certification_offerings', 'outcomes')) {
+            $attrs['outcomes'] = $data['outcomes'] ?? null;
+        }
+        if (Schema::hasColumn('certification_offerings', 'requirements')) {
+            $attrs['requirements'] = $data['requirements'] ?? null;
+        }
+
+        return $attrs;
     }
 
     private function syncOptions(CertificationOffering $offering, Request $request): void

@@ -63,8 +63,14 @@ function render(slug, push) {
 
   const learnBlock = $('learn');
   const learn = c.learn || [];
+  const outcomesHtml = (c.outcomesHtml || '').trim();
   if (learnBlock) {
-    if (learn.length) {
+    if (outcomesHtml) {
+      learnBlock.hidden = false;
+      const ll = $('learnList');
+      ll.className = 'learn-list cert-detail-outcomes';
+      ll.innerHTML = `<li class="content-full"><div class="cert-detail-html">${outcomesHtml}</div></li>`;
+    } else if (learn.length) {
       learnBlock.hidden = false;
       const ll = $('learnList');
       ll.className = 'learn-list' + (learn.length === 1 ? ' one' : '');
@@ -75,8 +81,19 @@ function render(slug, push) {
   }
 
   const expectBlock = $('expect');
-  if (expectBlock) {
-    expectBlock.hidden = !c.expect;
+  const expectWrap = expectBlock ? expectBlock.querySelector('.expect') : null;
+  const requirementsHtml = (c.requirementsHtml || '').trim();
+  if (expectBlock && expectWrap) {
+    if (requirementsHtml) {
+      expectBlock.hidden = false;
+      expectWrap.innerHTML = `<div class="cert-detail-html">${requirementsHtml}</div>`;
+    } else if (c.expect) {
+      expectBlock.hidden = false;
+      expectWrap.innerHTML = `<p>${esc(c.expect)}</p>`;
+    } else {
+      expectBlock.hidden = true;
+      expectWrap.innerHTML = '<p data-f="expect"></p>';
+    }
   }
 
   const outlineList = $('outlineList');

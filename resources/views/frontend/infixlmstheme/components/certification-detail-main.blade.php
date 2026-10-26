@@ -77,7 +77,7 @@
       <div class="block" id="expect">
         <span class="eyebrow">Enrollee Expectations</span>
         <h2>Who this course <em>is for</em></h2>
-        <div class="expect">
+        <div class="expect" data-expect-body>
           <p data-f="expect"></p>
         </div>
       </div>

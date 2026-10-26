@@ -113,6 +113,21 @@
             </div>
         </div>
 
+        <div class="col-xl-12">
+            <div class="primary_input mb-25">
+                <label class="primary_input_label">{{ __('Learning Objectives') }}</label>
+                <small class="text-muted d-block mb-2">{{ __('Same as course detail — use a bullet list in the editor.') }}</small>
+                <textarea class="custom_summernote" name="outcomes" id="cert_outcomes" rows="6">{{ old('outcomes', $offering->outcomes ?? '') }}</textarea>
+            </div>
+        </div>
+
+        <div class="col-xl-12">
+            <div class="primary_input mb-25">
+                <label class="primary_input_label">{{ __('Who this course is for') }}</label>
+                <textarea class="custom_summernote" name="requirements" id="cert_requirements" rows="5">{{ old('requirements', $offering->requirements ?? '') }}</textarea>
+            </div>
+        </div>
+
         <div class="col-xl-6">
             <div class="primary_input mb-25">
                 <label class="primary_input_label">{{ __('Format label') }}</label>
@@ -263,7 +278,8 @@
 
         <div class="col-xl-12">
             <div class="primary_input mb-25">
-                <label class="primary_input_label">{{ __('Content') }} (HTML) <span class="text-danger">*</span></label>
+                <label class="primary_input_label">{{ __('Course outline') }} (HTML) <span class="text-danger">*</span></label>
+                <small class="text-muted d-block mb-2">{{ __('Shown in the Course Outline section on the public detail page.') }}</small>
                 <textarea class="custom_summernote" name="content" id="cert_content" rows="8">{{ old('content', $offering->content ?? '') }}</textarea>
             </div>
         </div>
@@ -351,11 +367,10 @@
                 'Garamond', 'Georgia', 'monospace', 'fantasy', 'Papyrus', 'Poppins'
             ];
 
-            var certContentEditor = null;
-            var $contentField = $('#cert_content');
+            var certEditors = {};
 
-            if ($contentField.length && typeof ClassicEditor !== 'undefined') {
-                ClassicEditor.create(document.getElementById('cert_content'), {
+            function certEditorConfig() {
+                return {
                     ckfinder: {
                         uploadUrl: "{{ route('ckeditor.upload', ['_token' => csrf_token()]) }}",
                     },
@@ -387,20 +402,32 @@
                     table: {
                         contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
                     }
-                }).then(function (editor) {
-                    certContentEditor = editor;
+                };
+            }
+
+            ['cert_content', 'cert_outcomes', 'cert_requirements'].forEach(function (fieldId) {
+                var el = document.getElementById(fieldId);
+                var $field = $('#' + fieldId);
+                if (!el || !$field.length || typeof ClassicEditor === 'undefined') {
+                    return;
+                }
+                ClassicEditor.create(el, certEditorConfig()).then(function (editor) {
+                    certEditors[fieldId] = editor;
                     editor.model.document.on('change:data', function () {
-                        $contentField.val(editor.getData());
+                        $field.val(editor.getData());
                     });
                 }).catch(function (error) {
                     console.error(error);
                 });
-            }
+            });
 
-            $contentField.closest('form').on('submit', function () {
-                if (certContentEditor) {
-                    $contentField.val(certContentEditor.getData());
-                }
+            $('#cert_content').closest('form').on('submit', function () {
+                Object.keys(certEditors).forEach(function (fieldId) {
+                    var editor = certEditors[fieldId];
+                    if (editor) {
+                        $('#' + fieldId).val(editor.getData());
+                    }
+                });
             });
         });
     </script>
