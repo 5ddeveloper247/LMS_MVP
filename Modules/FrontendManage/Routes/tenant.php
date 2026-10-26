@@ -41,7 +41,6 @@ Route::group(['prefix' => 'frontend', 'as' => 'frontend.', 'middleware' => ['aut
     Route::get('/resource_center/destroy/{id}', 'ResourceController@destroy')->name('resource_center.destroy');
     Route::post('/resource_center/changeTabSequence', 'ResourceController@changeTabSequence')->name('resource_center.changeTabSeq');
 
-
     Route::resource('/why', 'WhyController')->except('show', 'update', 'destroy');
     Route::post('/why/update', 'WhyController@update')->name('why.update');
     Route::get('/why/destroy/{id}', 'WhyController@destroy')->name('why.destroy');

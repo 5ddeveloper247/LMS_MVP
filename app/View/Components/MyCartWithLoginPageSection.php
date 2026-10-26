@@ -21,6 +21,8 @@ class MyCartWithLoginPageSection extends Component
             'shopBundle.products.files',
             'ceCourse',
             'ceBundle.courses',
+            'certificationOffering.category',
+            'certificationOfferingOption',
         ])->get();
         return view(theme('components.my-cart-with-login-page-section'), compact('carts'));
     }

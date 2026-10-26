@@ -75,6 +75,8 @@ class CheckoutPageSection extends Component
             'shopBundle.products.files',
             'ceCourse',
             'ceBundle.courses',
+            'certificationOffering.category',
+            'certificationOfferingOption',
         ])->get();
 
         return view(theme('components.checkout-page-section'), compact('checkout', 'carts', 'methods', 'current', 'bills', 'countries', 'cities', 'profile', 'states'));

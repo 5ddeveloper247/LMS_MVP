@@ -526,6 +526,25 @@ $clover = DB::table('clover_details')->first();
                                             </span>
                                             <a href="#" class="text-danger bg-light px-1 removeFromCart" data-id="{{$cart->id}}">X</a>
                                         </div>
+                                    @elseif (!empty($cart->certification_offering_id) && $cart->certificationOffering)
+                                        @php
+                                            $title = $cart->certificationOffering->name;
+                                            $optionTitle = optional($cart->certificationOfferingOption)->title;
+                                            $price = $cart->price;
+                                            $totalSum = $totalSum + $price;
+                                        @endphp
+                                        <div class="single_ordered_product">
+                                            <div class="product_name d-flex align-items-center">
+                                                <div class="thumb">
+                                                    <img src="{{ getCourseImage('public/assets/product-Placeholder.png') }}" class="h-100" alt="">
+                                                </div>
+                                                <span>{{ $title }} <small class="text-muted">(Certification{{ $optionTitle ? ' · '.$optionTitle : '' }})</small></span>
+                                            </div>
+                                            <span class="order_prise f_w_500 font_16 text-nowrap">
+                                                {{ getPriceFormat($price) }}
+                                            </span>
+                                            <a href="#" class="text-danger bg-light px-1 removeFromCart" data-id="{{$cart->id}}">X</a>
+                                        </div>
                                     @elseif (!empty($cart->ce_course_id) && $cart->ceCourse)
                                         @php
                                             $title = $cart->ceCourse->title;

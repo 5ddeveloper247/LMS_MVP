@@ -101,6 +101,14 @@
 
             // Bundle has its own tax_percent / total_tax (not sum of included products)
             $lineTax = (float) $shopBundle->taxAmount();
+        } elseif (!empty($cart->certification_offering_id) && $cart->certificationOffering) {
+            $offering = $cart->certificationOffering;
+            $optionTitle = optional($cart->certificationOfferingOption)->title ?? '';
+            $title = $offering->name;
+            $link = routeIsExist('certifications.show') && $offering->category
+                ? route('certifications.show', ['slug' => $offering->category->slug])
+                : (routeIsExist('certifications.index') ? route('certifications.index') : url('/certifications'));
+            $meta = __('Certification') . ($optionTitle !== '' ? ' · ' . $optionTitle : '');
         } elseif (!empty($cart->ce_course_id) && $cart->ceCourse) {
             $ceCourse = $cart->ceCourse;
             $title = $ceCourse->title;

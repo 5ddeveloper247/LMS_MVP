@@ -45,6 +45,9 @@ use Modules\ContinuingEducation\Entities\CeCourseEnrollment;
 use Modules\ContinuingEducation\Entities\CePurchase;
 use Modules\ContinuingEducation\Entities\CePurchaseItem;
 use Modules\ContinuingEducation\Services\CeEnrollmentService;
+use Modules\Certification\Entities\CertificationEnrollment;
+use Modules\Certification\Entities\CertificationOffering;
+use Modules\Certification\Entities\CertificationOfferingOption;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
@@ -467,6 +470,16 @@ class PaymentController extends Controller
                     'price' => (float) $cart->price,
                     'thumb_label' => 'CE',
                     'image' => $firstCourse ? ($firstCourse->thumbnail ?? ($firstCourse->image ?? '')) : '',
+                ];
+            } elseif (! empty($cart->certification_offering_id) && $cart->certificationOffering) {
+                $offering = $cart->certificationOffering;
+                $optionTitle = optional($cart->certificationOfferingOption)->title ?? 'Certification';
+                $items[] = [
+                    'title' => $offering->name,
+                    'meta' => 'Certification · '.$optionTitle,
+                    'price' => (float) $cart->price,
+                    'thumb_label' => 'Cert',
+                    'image' => '',
                 ];
             } elseif (!empty($cart->course_id) && $cart->course) {
                 $course = $cart->course;
@@ -1571,6 +1584,8 @@ class PaymentController extends Controller
             $this->fulfillCeCoursePurchase($checkout_info, $user, $discount, $cart, $carts, $gateWayName, $response);
         } elseif (! empty($cart->ce_bundle_id)) {
             $this->fulfillCeBundlePurchase($checkout_info, $user, $discount, $cart, $carts, $gateWayName, $response);
+        } elseif (! empty($cart->certification_offering_id)) {
+            $this->fulfillCertificationEnrollment($checkout_info, $user, $discount, $cart, $carts, $gateWayName, $response);
         } elseif (
             ! empty($cart->bundle_course_id)
             && class_exists(\Modules\BundleSubscription\Entities\BundleCoursePlan::class)
@@ -1945,6 +1960,53 @@ class PaymentController extends Controller
                 $course->increment('total_enrolled');
             }
         });
+    }
+
+    protected function fulfillCertificationEnrollment($checkout_info, $user, $discount, $cart, $carts, $gateWayName, $response): void
+    {
+        if (! Schema::hasTable('certification_enrollments')) {
+            return;
+        }
+
+        $offering = CertificationOffering::query()->find($cart->certification_offering_id);
+        $option = CertificationOfferingOption::query()->find($cart->certification_offering_option_id);
+
+        if (! $offering || ! $option) {
+            return;
+        }
+
+        if ($discount != 0 || ! empty($discount)) {
+            $itemPrice = $cart->price - ($discount / count($carts));
+            $discountAmount = $cart->price - $itemPrice;
+        } else {
+            $itemPrice = $cart->price;
+            $discountAmount = 0.00;
+        }
+
+        $responseObj = is_string($response) ? json_decode($response) : $response;
+        $gatewayTxnId = is_object($responseObj) ? ($responseObj->id ?? null) : null;
+
+        $enrollmentData = $cart->certification_enrollment_data;
+        if (is_string($enrollmentData)) {
+            $enrollmentData = json_decode($enrollmentData, true) ?: [];
+        }
+
+        CertificationEnrollment::create([
+            'tracking' => $checkout_info->tracking,
+            'checkout_id' => $checkout_info->id,
+            'user_id' => $user->id,
+            'certification_offering_id' => $offering->id,
+            'certification_offering_option_id' => $option->id,
+            'option_title' => $option->title,
+            'unit_price' => $cart->price,
+            'discount_amount' => $discountAmount,
+            'total_paid' => $itemPrice,
+            'payment_status' => 'paid',
+            'payment_method' => $gateWayName,
+            'gateway_transaction_id' => $gatewayTxnId,
+            'enrollment_data' => $enrollmentData,
+            'status' => 1,
+        ]);
     }
 
     protected function resolveCeLicenseType(int $userId): ?string

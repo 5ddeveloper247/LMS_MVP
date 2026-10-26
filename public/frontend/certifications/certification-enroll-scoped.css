@@ -1,0 +1,609 @@
+.mxp-certification-enroll { font-family: var(--sans); color: var(--charcoal); background: var(--cream); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+.mxp-certification-enroll * { box-sizing: border-box; margin: 0; padding: 0; }
+.mxp-certification-enroll h1, .mxp-certification-enroll h2, .mxp-certification-enroll h3, .mxp-certification-enroll h4 { font-family: var(--serif); font-weight: 700; line-height: 1.2; color: var(--teal-darkest); }
+﻿/* ================================================================
+   CERTIFICATION ENROLL TEMPLATE — Merkaii Xcellence Prep · One page for all 7 courses via ?cert=
+   Universal 3-tier header + Footer v2 (organizational voice)
+   ================================================================ */
+.mxp-certification-enroll {
+  --teal-mid: #1A8A6F;
+  --teal-deep: #0F6E56;
+  --teal-darkest: #0A4D3C;
+  --terracotta: #C65D3A;
+  --terracotta-deep: #A84B2D;
+  --cream: #F5EDE0;
+  --cream-warm: #EFE3D0;
+  --charcoal: #2B2B2B;
+  --charcoal-soft: #4A4A4A;
+  --white: #FFFFFF;
+  --gray-line: #E8DFD0;
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'Montserrat', system-ui, sans-serif;
+  --shadow-sm: 0 2px 8px rgba(10, 77, 60, 0.06);
+  --shadow-md: 0 8px 24px rgba(10, 77, 60, 0.10);
+  --shadow-lg: 0 20px 50px rgba(10, 77, 60, 0.15);
+  --shadow-nav: 0 1px 12px rgba(15, 110, 86, 0.04);
+  --shadow-dropdown: 0 12px 40px rgba(15, 110, 86, 0.18);
+}
+
+
+
+/* ================================================================
+   TIER 1: UTILITY BAR
+   ================================================================ */
+.mxp-certification-enroll .utility-bar {
+  background: var(--teal-darkest);
+  color: var(--cream);
+  padding: 8px 0;
+  border-top: 4px solid var(--terracotta);
+  font-size: 12.5px;
+}
+.mxp-certification-enroll .utility-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.mxp-certification-enroll .utility-tagline {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 13.5px;
+  color: var(--cream);
+  letter-spacing: 0.5px;
+}
+.mxp-certification-enroll .utility-links {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.mxp-certification-enroll .utility-link {
+  color: var(--cream);
+  text-decoration: none;
+  padding: 4px 16px;
+  font-weight: 500;
+  font-size: 12.5px;
+  transition: color 0.2s;
+  border-right: 1px solid rgba(245, 237, 224, 0.25);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.mxp-certification-enroll .utility-link:last-child { border-right: none; padding-right: 0; }
+.mxp-certification-enroll .utility-link:first-child { padding-left: 0; }
+.mxp-certification-enroll .utility-link:hover { color: var(--terracotta); }
+.mxp-certification-enroll .utility-link svg { width: 14px; height: 14px; flex-shrink: 0; }
+.mxp-certification-enroll .login-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--terracotta); display: inline-block;
+}
+
+
+/* ================================================================
+   TIER 2: MAIN NAV
+   ================================================================ */
+.mxp-certification-enroll .main-nav {
+  background: var(--white);
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-nav);
+}
+.mxp-certification-enroll .nav-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.mxp-certification-enroll .logo-mark {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  color: var(--teal-deep);
+  flex-shrink: 0;
+}
+.mxp-certification-enroll .logo-seal-wrap { width: 48px; height: 48px; position: relative; flex-shrink: 0; }
+.mxp-certification-enroll .logo-seal-svg { width: 100%; height: 100%; display: block; }
+.mxp-certification-enroll .logo-text { display: flex; flex-direction: column; line-height: 1.05; }
+.mxp-certification-enroll .logo-text .name { font-family: var(--serif); font-weight: 700; font-size: 19px; color: var(--teal-deep); letter-spacing: 0.2px; }
+.mxp-certification-enroll .logo-text .tag { font-family: var(--sans); font-size: 9.5px; letter-spacing: 1.8px; text-transform: uppercase; color: var(--terracotta); font-weight: 600; margin-top: 2px; }
+
+.mxp-certification-enroll .nav-center { display: flex; align-items: center; gap: 2px; }
+.mxp-certification-enroll .nav-item { position: relative; }
+.mxp-certification-enroll .nav-link {
+  display: flex; align-items: center; gap: 5px;
+  color: var(--charcoal); text-decoration: none; font-size: 14px; font-weight: 500;
+  padding: 10px 14px; border-radius: 4px; transition: all 0.2s; cursor: pointer; white-space: nowrap;
+}
+.mxp-certification-enroll .nav-link:hover { color: var(--teal-mid); background: rgba(26, 138, 111, 0.05); }
+.mxp-certification-enroll .nav-link.active { color: var(--teal-mid); }
+.mxp-certification-enroll .nav-chevron { width: 10px; height: 10px; transition: transform 0.2s; }
+.mxp-certification-enroll .nav-item:hover .nav-chevron { transform: rotate(180deg); }
+
+.mxp-certification-enroll .nav-dropdown {
+  position: absolute; top: calc(100% + 8px); left: 0;
+  background: var(--white); border-radius: 8px; box-shadow: var(--shadow-dropdown);
+  padding: 10px; min-width: 320px;
+  opacity: 0; visibility: hidden; transform: translateY(-4px);
+  transition: all 0.2s ease; border-top: 3px solid var(--terracotta); z-index: 200;
+}
+.mxp-certification-enroll .nav-item:hover .nav-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+.mxp-certification-enroll .nav-dropdown-link {
+  display: block; padding: 12px 14px; border-radius: 6px;
+  text-decoration: none; transition: background 0.15s;
+}
+.mxp-certification-enroll .nav-dropdown-link:hover { background: rgba(26, 138, 111, 0.06); }
+.mxp-certification-enroll .dropdown-title { font-size: 14px; font-weight: 600; color: var(--teal-darkest); margin-bottom: 2px; }
+.mxp-certification-enroll .dropdown-sub { font-size: 12px; color: var(--charcoal-soft); }
+.mxp-certification-enroll .dropdown-divider { border-top: 1px solid var(--gray-line); margin-top: 6px; padding-top: 12px; }
+
+.mxp-certification-enroll .nav-cta-wrap { flex-shrink: 0; }
+.mxp-certification-enroll .btn-nav-cta {
+  display: inline-block; background: var(--terracotta); color: var(--white);
+  padding: 10px 22px; border-radius: 6px; font-size: 13.5px; font-weight: 600;
+  text-decoration: none; transition: all 0.2s; letter-spacing: 0.3px;
+}
+.mxp-certification-enroll .btn-nav-cta:hover { background: var(--terracotta-deep); transform: translateY(-1px); }
+
+/* Hamburger */
+.mxp-certification-enroll .nav-hamburger {
+  display: none; background: none; border: none; cursor: pointer;
+  width: 28px; height: 20px; position: relative; flex-shrink: 0;
+}
+.mxp-certification-enroll .nav-hamburger span {
+  display: block; width: 100%; height: 2px; background: var(--charcoal);
+  position: absolute; left: 0; transition: all 0.3s;
+}
+.mxp-certification-enroll .nav-hamburger span:nth-child(1) { top: 0; }
+.mxp-certification-enroll .nav-hamburger span:nth-child(2) { top: 9px; }
+.mxp-certification-enroll .nav-hamburger span:nth-child(3) { top: 18px; }
+.mxp-certification-enroll .nav-hamburger.open span:nth-child(1) { top: 9px; transform: rotate(45deg); }
+.mxp-certification-enroll .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.mxp-certification-enroll .nav-hamburger.open span:nth-child(3) { top: 9px; transform: rotate(-45deg); }
+
+/* Mobile Overlay + Menu */
+.mxp-certification-enroll .mobile-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  z-index: 150; opacity: 0; transition: opacity 0.3s;
+}
+.mxp-certification-enroll .mobile-overlay.open { display: block; opacity: 1; }
+.mxp-certification-enroll .mobile-menu {
+  position: fixed; top: 0; right: -320px; width: 300px; height: 100%;
+  background: var(--white); z-index: 200; overflow-y: auto;
+  padding: 24px; transition: right 0.3s; box-shadow: var(--shadow-lg);
+}
+.mxp-certification-enroll .mobile-menu.open { right: 0; }
+.mxp-certification-enroll .mobile-menu-close { text-align: right; margin-bottom: 20px; }
+.mxp-certification-enroll .mobile-menu-close button {
+  background: none; border: none; font-size: 28px;
+  color: var(--charcoal); cursor: pointer; padding: 4px 8px;
+}
+.mxp-certification-enroll .mobile-nav-group { margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--gray-line); }
+.mxp-certification-enroll .mobile-nav-label { font-family: var(--serif); font-weight: 700; font-size: 13px; color: var(--terracotta); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+.mxp-certification-enroll .mobile-nav-link { display: block; padding: 8px 0; font-size: 14px; color: var(--charcoal); text-decoration: none; font-weight: 500; }
+.mxp-certification-enroll .mobile-nav-link:hover { color: var(--teal-mid); }
+.mxp-certification-enroll .mobile-cta {
+  display: block; background: var(--terracotta); color: var(--white);
+  padding: 14px 0; text-align: center; border-radius: 6px;
+  font-size: 14px; font-weight: 600; text-decoration: none; margin: 16px 0;
+}
+.mxp-certification-enroll .mobile-utility-links { display: flex; gap: 16px; margin-top: 16px; }
+.mxp-certification-enroll .mobile-utility-link { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--charcoal-soft); text-decoration: none; }
+.mxp-certification-enroll .mobile-utility-link svg { width: 16px; height: 16px; }
+
+
+/* ================================================================
+   TIER 3: BREADCRUMB
+   ================================================================ */
+.mxp-certification-enroll .breadcrumb { background: var(--cream-warm); padding: 14px 32px; border-bottom: 1px solid var(--gray-line); }
+.mxp-certification-enroll .breadcrumb-inner { max-width: 1240px; margin: 0 auto; font-size: 13px; color: var(--charcoal-soft); }
+.mxp-certification-enroll .breadcrumb-inner a { color: var(--teal-mid); text-decoration: none; font-weight: 500; }
+.mxp-certification-enroll .breadcrumb-inner a:hover { color: var(--terracotta); }
+.mxp-certification-enroll .breadcrumb-sep { margin: 0 8px; opacity: 0.5; }
+
+
+.mxp-certification-enroll .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.mxp-certification-enroll .skip-link { position: absolute; left: 16px; top: -60px; z-index: 500; background: var(--terracotta); color: var(--white); padding: 10px 16px; border-radius: 6px; font-weight: 600; text-decoration: none; }
+.mxp-certification-enroll .skip-link:focus { top: 12px; }
+
+/* ================================================================
+   SHARED COMPONENTS — Certifications + Enroll
+   ================================================================ */
+.mxp-certification-enroll :focus-visible { outline: 3px solid var(--terracotta); outline-offset: 2px; border-radius: 4px; }
+.mxp-certification-enroll .container { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+
+.mxp-certification-enroll .eyebrow {
+  display: inline-block;
+  font-size: 12px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--terracotta); margin-bottom: 14px;
+}
+.mxp-certification-enroll .hero-eyebrow {
+  display: inline-block;
+  font-size: 12px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--terracotta); margin-bottom: 24px;
+  padding: 6px 16px; border: 1px solid var(--terracotta); border-radius: 30px;
+  background: rgba(10, 77, 60, 0.35);
+}
+
+/* Buttons */
+.mxp-certification-enroll .btn-primary, .mxp-certification-enroll .btn-enroll {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--terracotta); color: var(--white);
+  font-family: var(--sans); font-weight: 600; font-size: 14px; letter-spacing: 0.3px;
+  padding: 13px 26px; border-radius: 8px; border: 2px solid var(--terracotta);
+  text-decoration: none; cursor: pointer; transition: all 0.2s;
+}
+.mxp-certification-enroll .btn-primary:hover, .mxp-certification-enroll .btn-enroll:hover { background: var(--terracotta-deep); border-color: var(--terracotta-deep); transform: translateY(-1px); }
+.mxp-certification-enroll .btn-secondary {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: transparent; color: var(--teal-darkest);
+  font-family: var(--sans); font-weight: 600; font-size: 14px;
+  padding: 13px 26px; border-radius: 8px; border: 2px solid var(--teal-darkest);
+  text-decoration: none; transition: all 0.2s; cursor: pointer;
+}
+.mxp-certification-enroll .btn-secondary:hover { background: var(--teal-darkest); color: var(--white); transform: translateY(-1px); }
+.mxp-certification-enroll .btn-ghost-light {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: transparent; color: var(--cream);
+  font-family: var(--sans); font-weight: 600; font-size: 14px;
+  padding: 13px 26px; border-radius: 8px; border: 2px solid rgba(245, 237, 224, 0.55);
+  text-decoration: none; transition: all 0.2s;
+}
+.mxp-certification-enroll .btn-ghost-light:hover { border-color: var(--cream); background: rgba(245, 237, 224, 0.08); transform: translateY(-1px); }
+
+/* ----------------------------------------------------------------
+   CREDENTIAL CARD — the signature motif of the certification pages.
+   Styled like a wallet credential: seal, course mark, detail strip.
+   Variants stay inside the brand palette.
+   ---------------------------------------------------------------- */
+.mxp-certification-enroll .cred {
+  position: relative; overflow: hidden;
+  border-radius: 14px;
+  padding: 18px 22px 16px 28px;
+  color: var(--white);
+  background: linear-gradient(135deg, var(--teal-darkest) 0%, var(--teal-deep) 100%);
+  aspect-ratio: auto;
+}
+.mxp-certification-enroll .cred::before { /* terracotta edge stripe */
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px;
+  background: var(--terracotta);
+}
+.mxp-certification-enroll .cred::after { /* fine security-print texture */
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(circle at 92% 12%, rgba(245, 237, 224, 0.10) 0, transparent 38%),
+    repeating-linear-gradient(-35deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 9px);
+}
+.mxp-certification-enroll .cred > * { position: relative; z-index: 1; }
+.mxp-certification-enroll .cred-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.mxp-certification-enroll .cred-issuer { display: flex; align-items: center; gap: 8px; font-size: 10.5px; font-weight: 600; letter-spacing: 1.6px; text-transform: uppercase; color: var(--cream); }
+.mxp-certification-enroll .cred-issuer svg { width: 26px; height: 26px; flex-shrink: 0; }
+.mxp-certification-enroll .cred-cat { font-size: 10.5px; font-weight: 600; letter-spacing: 1.6px; text-transform: uppercase; color: var(--cream-warm); opacity: 0.85; }
+.mxp-certification-enroll .cred-mark {
+  font-family: var(--serif); font-weight: 800;
+  font-size: clamp(34px, 4vw, 46px); line-height: 1; letter-spacing: -0.5px;
+  margin-top: 22px; color: inherit;
+}
+.mxp-certification-enroll .cred-name { font-size: 13px; line-height: 1.45; margin-top: 8px; color: var(--cream-warm); max-width: 34ch; }
+.mxp-certification-enroll .cred-strip {
+  display: flex; flex-wrap: wrap; gap: 6px 18px;
+  margin-top: 18px; padding-top: 12px;
+  border-top: 1px solid rgba(245, 237, 224, 0.22);
+  font-size: 12px; font-weight: 600; color: var(--cream);
+}
+.mxp-certification-enroll .cred-strip span { display: inline-flex; align-items: center; gap: 6px; }
+.mxp-certification-enroll .cred-strip svg { width: 14px; height: 14px; }
+
+.mxp-certification-enroll .cred--mid { background: linear-gradient(135deg, var(--teal-deep) 0%, var(--teal-mid) 100%); }
+.mxp-certification-enroll .cred--warm { background: linear-gradient(135deg, var(--cream-warm) 0%, var(--cream) 100%); color: var(--teal-darkest); border: 1px solid var(--gray-line); }
+.mxp-certification-enroll .cred--warm .cred-issuer, .mxp-certification-enroll .cred--warm .cred-strip { color: var(--teal-darkest); }
+.mxp-certification-enroll .cred--warm .cred-cat { color: var(--terracotta-deep); opacity: 1; }
+.mxp-certification-enroll .cred--warm .cred-name { color: var(--charcoal-soft); }
+.mxp-certification-enroll .cred--warm .cred-strip { border-top-color: rgba(10, 77, 60, 0.15); }
+.mxp-certification-enroll .cred--warm::after { background: repeating-linear-gradient(-35deg, rgba(10, 77, 60, 0.04) 0 1px, transparent 1px 9px); }
+.mxp-certification-enroll .cred--light { background: var(--white); color: var(--teal-darkest); border: 1px solid var(--gray-line); }
+.mxp-certification-enroll .cred--light .cred-issuer, .mxp-certification-enroll .cred--light .cred-strip { color: var(--teal-darkest); }
+.mxp-certification-enroll .cred--light .cred-cat { color: var(--terracotta-deep); opacity: 1; }
+.mxp-certification-enroll .cred--light .cred-name { color: var(--charcoal-soft); }
+.mxp-certification-enroll .cred--light .cred-strip { border-top-color: var(--gray-line); }
+.mxp-certification-enroll .cred--light::after { background: repeating-linear-gradient(-35deg, rgba(10, 77, 60, 0.03) 0 1px, transparent 1px 9px); }
+
+/* Callout / notice */
+.mxp-certification-enroll .notice-section { padding: 0 0 70px; }
+.mxp-certification-enroll .notice-card {
+  background: linear-gradient(135deg, var(--cream) 0%, var(--cream-warm) 100%);
+  border-left: 4px solid var(--terracotta);
+  border-radius: 0 10px 10px 0;
+  padding: 24px 28px;
+  max-width: 980px; margin: 0 auto;
+}
+.mxp-certification-enroll .notice-card h4 { font-size: 17px; margin-bottom: 8px; }
+.mxp-certification-enroll .notice-card p { font-size: 14.5px; color: var(--charcoal-soft); line-height: 1.7; }
+.mxp-certification-enroll .notice-card a { color: var(--teal-mid); font-weight: 600; text-decoration: none; }
+.mxp-certification-enroll .notice-card a:hover { color: var(--terracotta); }
+
+/* Final CTA */
+.mxp-certification-enroll .final-cta {
+  background: linear-gradient(135deg, var(--teal-darkest) 0%, var(--teal-deep) 100%);
+  padding: 80px 24px; text-align: center; position: relative; overflow: hidden;
+}
+.mxp-certification-enroll .final-cta::before {
+  content: ''; position: absolute; top: -120px; right: -80px; width: 380px; height: 380px;
+  background: radial-gradient(circle, rgba(198, 93, 58, 0.18) 0%, transparent 70%); border-radius: 50%;
+}
+.mxp-certification-enroll .final-cta-inner { max-width: 700px; margin: 0 auto; position: relative; z-index: 1; }
+.mxp-certification-enroll .final-cta h2 { color: var(--white); font-size: clamp(30px, 4vw, 42px); margin-bottom: 16px; }
+.mxp-certification-enroll .final-cta h2 em { font-style: italic; font-weight: 400; color: var(--cream); }
+.mxp-certification-enroll .final-cta p { font-size: 16px; color: var(--cream-warm); line-height: 1.65; margin-bottom: 28px; }
+.mxp-certification-enroll .final-cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+/* Off-canvas menu: keep it out of tab order and page width until opened */
+.mxp-certification-enroll .mobile-menu { visibility: hidden; transition: right 0.3s, visibility 0s 0.3s; }
+.mxp-certification-enroll .mobile-menu.open { visibility: visible; transition: right 0.3s, visibility 0s; }
+html, body { overflow-x: clip; }
+
+
+/* ================================================================
+   COURSE SWITCHER
+   ================================================================ */
+.mxp-certification-enroll .switcher { background: var(--cream-warm); border-bottom: 1px solid var(--gray-line); padding: 14px 24px; }
+.mxp-certification-enroll .switcher-inner { max-width: 1240px; margin: 0 auto; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.mxp-certification-enroll .switcher-label { font-size: 13px; font-weight: 600; color: var(--charcoal-soft); margin-right: 6px; }
+.mxp-certification-enroll .switch-btn {
+  font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--teal-darkest);
+  padding: 7px 14px; border-radius: 30px; background: var(--white); border: 1px solid var(--gray-line);
+  cursor: pointer; transition: all 0.2s;
+}
+.mxp-certification-enroll .switch-btn:hover { border-color: var(--teal-mid); color: var(--teal-mid); }
+.mxp-certification-enroll .switch-btn[aria-pressed="true"] { background: var(--teal-darkest); border-color: var(--teal-darkest); color: var(--white); }
+
+/* ================================================================
+   COURSE HERO
+   ================================================================ */
+.mxp-certification-enroll .course-hero {
+  background: linear-gradient(135deg, var(--teal-darkest) 0%, var(--teal-deep) 100%);
+  color: var(--white); padding: 64px 24px 72px; position: relative; overflow: hidden;
+}
+.mxp-certification-enroll .course-hero::before {
+  content: ''; position: absolute; top: -100px; right: -100px; width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(198, 93, 58, 0.18) 0%, transparent 70%); border-radius: 50%;
+}
+.mxp-certification-enroll .course-hero-grid { max-width: 1240px; margin: 0 auto; position: relative; z-index: 1; display: grid; grid-template-columns: 1.25fr 0.75fr; gap: 56px; align-items: center; }
+.mxp-certification-enroll .course-hero h1 { font-size: clamp(36px, 4.6vw, 54px); color: var(--white); letter-spacing: -0.8px; line-height: 1.08; margin-bottom: 18px; }
+.mxp-certification-enroll .course-hero h1 em { display: block; font-style: italic; font-weight: 400; color: var(--cream); font-size: 0.56em; letter-spacing: 0; margin-top: 8px; }
+.mxp-certification-enroll .course-desc { font-size: 16.5px; line-height: 1.75; color: var(--cream-warm); max-width: 640px; }
+.mxp-certification-enroll .details-link { display: inline-block; margin-top: 18px; margin-right: 16px; color: var(--cream); font-weight: 600; font-size: 14px; text-decoration: none; border-bottom: 1.5px solid rgba(245,237,224,0.45); }
+.mxp-certification-enroll .details-link:hover { color: var(--white); border-color: var(--terracotta); }
+.mxp-certification-enroll .course-badge {
+  display: inline-flex; align-items: center; gap: 6px; margin-top: 20px;
+  font-size: 12.5px; font-weight: 600; color: var(--cream);
+  background: rgba(245, 237, 224, 0.08); border: 1px solid rgba(245, 237, 224, 0.3);
+  padding: 6px 14px; border-radius: 30px;
+}
+.mxp-certification-enroll .course-badge svg { width: 14px; height: 14px; color: var(--terracotta); }
+.mxp-certification-enroll .course-badge[hidden] { display: none; }
+.mxp-certification-enroll .hero-cred-wrap .cred { box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28); transform: rotate(-3deg); }
+.mxp-certification-enroll .hero-cred-price { margin-top: 26px; text-align: center; color: var(--cream-warm); font-size: 14px; }
+.mxp-certification-enroll .hero-cred-price strong { display: block; font-family: var(--serif); font-size: 34px; color: var(--white); line-height: 1.1; }
+
+/* ================================================================
+   ENROLL LAYOUT
+   ================================================================ */
+.mxp-certification-enroll .enroll { padding: 64px 0 80px; }
+.mxp-certification-enroll .enroll-grid { max-width: 1240px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: 1fr 380px; gap: 40px; align-items: start; }
+
+.mxp-certification-enroll .form-card { background: var(--white); border: 1px solid var(--gray-line); border-radius: 18px; box-shadow: var(--shadow-sm); padding: 8px 36px 36px; }
+.mxp-certification-enroll .form-step { padding: 30px 0; border-bottom: 1px solid var(--gray-line); }
+.mxp-certification-enroll .form-step:last-of-type { border-bottom: none; }
+.mxp-certification-enroll .form-step[hidden] { display: none; }
+.mxp-certification-enroll .step-head { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 20px; }
+.mxp-certification-enroll .step-num {
+  flex-shrink: 0; width: 38px; height: 38px; border-radius: 50%;
+  border: 2px solid var(--terracotta); color: var(--terracotta);
+  font-family: var(--serif); font-weight: 700; font-size: 17px;
+  display: flex; align-items: center; justify-content: center;
+}
+.mxp-certification-enroll .step-head h2 { font-size: 21px; margin-bottom: 2px; }
+.mxp-certification-enroll .step-note { font-size: 13.5px; color: var(--charcoal-soft); }
+
+/* Radio cards */
+.mxp-certification-enroll .choice-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.mxp-certification-enroll .choice-grid.one { grid-template-columns: 1fr; }
+.mxp-certification-enroll .choice input { position: absolute; opacity: 0; pointer-events: none; }
+.mxp-certification-enroll .choice label {
+  display: flex; justify-content: space-between; align-items: center; gap: 14px;
+  padding: 18px 20px; border: 1.5px solid var(--gray-line); border-radius: 12px;
+  background: var(--cream); cursor: pointer; transition: border-color 0.2s, background 0.2s;
+  height: 100%;
+}
+.mxp-certification-enroll .choice label:hover { border-color: var(--teal-mid); }
+.mxp-certification-enroll .choice input:checked + label { border-color: var(--teal-deep); background: var(--white); box-shadow: inset 0 0 0 1px var(--teal-deep); }
+.mxp-certification-enroll .choice input:focus-visible + label { outline: 3px solid var(--terracotta); outline-offset: 2px; }
+.mxp-certification-enroll .choice-main { display: flex; flex-direction: column; }
+.mxp-certification-enroll .choice-title { font-weight: 600; font-size: 15px; color: var(--teal-darkest); }
+.mxp-certification-enroll .choice-sub { font-size: 12.5px; color: var(--charcoal-soft); margin-top: 2px; line-height: 1.45; }
+.mxp-certification-enroll .choice-price { font-family: var(--serif); font-weight: 700; font-size: 24px; color: var(--teal-darkest); white-space: nowrap; }
+.mxp-certification-enroll .choice-dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--gray-line); flex-shrink: 0; position: relative; background: var(--white); }
+.mxp-certification-enroll .choice input:checked + label .choice-dot { border-color: var(--teal-deep); }
+.mxp-certification-enroll .choice input:checked + label .choice-dot::after { content: ''; position: absolute; inset: 3px; border-radius: 50%; background: var(--teal-deep); }
+.mxp-certification-enroll .choice-left { display: flex; align-items: center; gap: 14px; }
+
+.mxp-certification-enroll .session-list { display: grid; gap: 10px; }
+.mxp-certification-enroll .session-list .choice label { padding: 14px 18px; }
+.mxp-certification-enroll .sample-note { font-size: 12.5px; color: var(--charcoal-soft); margin-top: 14px; font-style: italic; }
+.mxp-certification-enroll .selfstudy-msg { background: var(--cream); border: 1px dashed var(--gray-line); border-radius: 12px; padding: 18px 20px; font-size: 14.5px; color: var(--charcoal-soft); line-height: 1.6; }
+
+/* Fields */
+.mxp-certification-enroll .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.mxp-certification-enroll .field { display: flex; flex-direction: column; margin-bottom: 16px; }
+.mxp-certification-enroll .field[hidden] { display: none; }
+.mxp-certification-enroll .field label { font-size: 13.5px; font-weight: 600; color: var(--teal-darkest); margin-bottom: 6px; }
+.mxp-certification-enroll .field .req { color: var(--terracotta); }
+.mxp-certification-enroll .field .opt { font-weight: 400; color: var(--charcoal-soft); }
+.mxp-certification-enroll .field input, .mxp-certification-enroll .field select, .mxp-certification-enroll .field textarea {
+  font-family: var(--sans); font-size: 15px; color: var(--charcoal);
+  padding: 12px 14px; border: 1.5px solid var(--gray-line); border-radius: 8px; background: var(--white);
+  transition: border-color 0.2s;
+}
+.mxp-certification-enroll .field textarea { min-height: 96px; resize: vertical; }
+.mxp-certification-enroll .field input:focus, .mxp-certification-enroll .field select:focus, .mxp-certification-enroll .field textarea:focus { border-color: var(--teal-mid); outline: none; box-shadow: 0 0 0 3px rgba(26, 138, 111, 0.15); }
+.mxp-certification-enroll .field input[aria-invalid="true"], .mxp-certification-enroll .field select[aria-invalid="true"] { border-color: var(--terracotta); }
+.mxp-certification-enroll .field-hint { font-size: 12.5px; color: var(--charcoal-soft); margin-top: 6px; line-height: 1.5; }
+.mxp-certification-enroll .field-error { font-size: 12.5px; color: var(--terracotta-deep); font-weight: 600; margin-top: 6px; }
+.mxp-certification-enroll .prereq-box { background: linear-gradient(135deg, var(--cream) 0%, var(--cream-warm) 100%); border-left: 4px solid var(--terracotta); border-radius: 0 10px 10px 0; padding: 18px 20px; margin-bottom: 20px; }
+.mxp-certification-enroll .prereq-box h3 { font-size: 16px; margin-bottom: 4px; }
+.mxp-certification-enroll .prereq-box p { font-size: 14px; color: var(--charcoal-soft); line-height: 1.6; }
+.mxp-certification-enroll .prereq-box[hidden] { display: none; }
+
+.mxp-certification-enroll .check-row { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; font-size: 14px; color: var(--charcoal-soft); line-height: 1.55; }
+.mxp-certification-enroll .check-row input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--teal-deep); flex-shrink: 0; }
+.mxp-certification-enroll .check-row a { color: var(--teal-mid); font-weight: 600; }
+
+.mxp-certification-enroll .submit-wrap { padding-top: 24px; }
+.mxp-certification-enroll .btn-submit { width: 100%; font-size: 15px; padding: 16px 26px; }
+.mxp-certification-enroll .submit-note { font-size: 13px; color: var(--charcoal-soft); text-align: center; margin-top: 12px; }
+.mxp-certification-enroll .submit-note a { color: var(--teal-mid); font-weight: 600; text-decoration: none; }
+.mxp-certification-enroll .form-alert { background: #FBEDE7; border: 1px solid rgba(198, 93, 58, 0.35); color: var(--terracotta-deep); border-radius: 10px; padding: 12px 16px; font-size: 14px; font-weight: 600; margin-top: 16px; }
+.mxp-certification-enroll .form-alert[hidden] { display: none; }
+
+/* Confirmation */
+.mxp-certification-enroll .confirm { text-align: center; padding: 48px 12px 28px; }
+.mxp-certification-enroll .confirm[hidden] { display: none; }
+.mxp-certification-enroll .confirm-icon { width: 64px; height: 64px; border-radius: 50%; background: rgba(26, 138, 111, 0.1); color: var(--teal-deep); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+.mxp-certification-enroll .confirm-icon svg { width: 30px; height: 30px; }
+.mxp-certification-enroll .confirm h2 { font-size: 30px; margin-bottom: 10px; }
+.mxp-certification-enroll .confirm p { font-size: 15.5px; color: var(--charcoal-soft); line-height: 1.7; max-width: 520px; margin: 0 auto 24px; }
+.mxp-certification-enroll .confirm-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+/* ================================================================
+   SUMMARY
+   ================================================================ */
+.mxp-certification-enroll .summary { position: sticky; top: 104px; display: grid; gap: 18px; }
+.mxp-certification-enroll .summary-card { background: var(--white); border: 1px solid var(--gray-line); border-radius: 18px; box-shadow: var(--shadow-md); overflow: hidden; }
+.mxp-certification-enroll .summary-cred { padding: 16px 16px 0; }
+.mxp-certification-enroll .summary-cred .cred-mark { font-size: 34px; margin-top: 16px; }
+.mxp-certification-enroll .summary-body { padding: 18px 24px 8px; }
+.mxp-certification-enroll .sum-line { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--gray-line); font-size: 14px; }
+.mxp-certification-enroll .sum-line .lbl { color: var(--charcoal-soft); }
+.mxp-certification-enroll .sum-line .val { font-weight: 600; color: var(--teal-darkest); text-align: right; }
+.mxp-certification-enroll .sum-line .val.empty { color: #8a8a8a; font-weight: 500; }
+.mxp-certification-enroll .sum-total { display: flex; justify-content: space-between; align-items: baseline; padding: 16px 0 12px; }
+.mxp-certification-enroll .sum-total .lbl { font-weight: 700; color: var(--teal-darkest); }
+.mxp-certification-enroll .sum-total .val { font-family: var(--serif); font-weight: 700; font-size: 32px; color: var(--teal-darkest); }
+.mxp-certification-enroll .sum-includes { background: var(--cream); padding: 20px 24px 22px; border-top: 1px solid var(--gray-line); }
+.mxp-certification-enroll .sum-includes h3 { font-size: 15px; margin-bottom: 12px; }
+.mxp-certification-enroll .sum-includes ul { list-style: none; display: grid; gap: 9px; }
+.mxp-certification-enroll .sum-includes li { display: flex; gap: 10px; font-size: 13.5px; color: var(--charcoal-soft); line-height: 1.5; }
+.mxp-certification-enroll .sum-includes svg { width: 16px; height: 16px; color: var(--teal-mid); flex-shrink: 0; margin-top: 2px; }
+.mxp-certification-enroll .help-card { background: var(--white); border: 1px solid var(--gray-line); border-radius: 14px; padding: 20px 22px; }
+.mxp-certification-enroll .help-card h3 { font-size: 16px; margin-bottom: 6px; }
+.mxp-certification-enroll .help-card p { font-size: 13.5px; color: var(--charcoal-soft); line-height: 1.6; }
+.mxp-certification-enroll .help-card a { color: var(--teal-mid); font-weight: 600; text-decoration: none; }
+.mxp-certification-enroll .help-card a:hover { color: var(--terracotta); }
+
+/* ================================================================
+   OTHER CERTIFICATIONS
+   ================================================================ */
+.mxp-certification-enroll .others { padding: 0 0 70px; }
+.mxp-certification-enroll .others h2 { font-size: 26px; margin-bottom: 20px; }
+.mxp-certification-enroll .others-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; }
+.mxp-certification-enroll .other-link {
+  display: block; text-decoration: none; background: var(--white); border: 1px solid var(--gray-line);
+  border-radius: 12px; padding: 16px; transition: transform 0.2s, box-shadow 0.2s;
+}
+.mxp-certification-enroll .other-link:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.mxp-certification-enroll .other-link strong { display: block; font-family: var(--serif); font-size: 18px; color: var(--teal-darkest); }
+.mxp-certification-enroll .other-link span { font-size: 12.5px; color: var(--charcoal-soft); }
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+@media (prefers-reduced-motion: reduce) {
+.mxp-certification-enroll .btn-primary:hover, .mxp-certification-enroll .btn-nav-cta:hover, .mxp-certification-enroll .other-link:hover { transform: none; }
+}
+@media (max-width: 1100px) {
+.mxp-certification-enroll .enroll-grid { grid-template-columns: 1fr; }
+.mxp-certification-enroll .summary { position: static; grid-template-columns: 1fr 1fr; align-items: start; }
+.mxp-certification-enroll .others-row { grid-template-columns: repeat(3, 1fr); }
+.mxp-certification-enroll .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; }
+.mxp-certification-enroll .footer-brand-col { grid-column: 1 / -1; padding-right: 0; }
+}
+@media (max-width: 960px) {
+.mxp-certification-enroll .nav-center, .mxp-certification-enroll .nav-cta-wrap { display: none; }
+.mxp-certification-enroll .nav-hamburger { display: flex; }
+.mxp-certification-enroll .utility-links { display: none; }
+.mxp-certification-enroll .course-hero-grid { grid-template-columns: 1fr; gap: 32px; }
+.mxp-certification-enroll .hero-cred-wrap { max-width: 380px; }
+}
+@media (max-width: 768px) {
+.mxp-certification-enroll .course-hero { padding: 48px 20px 56px; }
+.mxp-certification-enroll .form-card { padding: 4px 20px 24px; }
+.mxp-certification-enroll .choice-grid, .mxp-certification-enroll .field-row { grid-template-columns: 1fr; }
+.mxp-certification-enroll .field-row { gap: 0; }
+.mxp-certification-enroll .summary { grid-template-columns: 1fr; }
+.mxp-certification-enroll .others-row { grid-template-columns: repeat(2, 1fr); }
+.mxp-certification-enroll .footer-grid { grid-template-columns: 1fr; gap: 32px; padding: 0 24px 40px; }
+.mxp-certification-enroll .footer-contact-inner { flex-direction: column; align-items: flex-start; }
+.mxp-certification-enroll .footer-legal-top { flex-direction: column; align-items: flex-start; gap: 12px; }
+}
+@media (max-width: 480px) {
+.mxp-certification-enroll .enroll-grid { padding: 0 14px; }
+.mxp-certification-enroll .footer-main { padding: 50px 0 0; }
+.mxp-certification-enroll .footer-grid, .mxp-certification-enroll .footer-contact-inner, .mxp-certification-enroll .footer-legal-inner { padding-left: 16px; padding-right: 16px; }
+}
+
+
+.mxp-certification-enroll .final-cta p { font-size: 16px; color: var(--cream-warm); line-height: 1.65; margin-bottom: 28px; }
+
+
+/* ================================================================
+   FOOTER (v2 — 5-column)
+   ================================================================ */
+.mxp-certification-enroll .footer-main { background: var(--teal-darkest); color: rgba(255,255,255,0.85); padding: 70px 0 0; }
+.mxp-certification-enroll .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 40px; max-width: 1240px; margin: 0 auto; padding: 0 24px 50px; }
+.mxp-certification-enroll .footer-brand-col { padding-right: 20px; }
+.mxp-certification-enroll .footer-logo-mark { display: flex; align-items: center; gap: 14px; text-decoration: none; margin-bottom: 20px; }
+.mxp-certification-enroll .footer-seal-wrap { width: 56px; height: 56px; flex-shrink: 0; }
+.mxp-certification-enroll .footer-seal-wrap svg { width: 100%; height: 100%; display: block; }
+.mxp-certification-enroll .footer-logo-text { display: flex; flex-direction: column; line-height: 1.05; }
+.mxp-certification-enroll .footer-logo-text .name { font-family: var(--serif); font-weight: 700; font-size: 20px; color: var(--white); letter-spacing: 0.2px; }
+.mxp-certification-enroll .footer-logo-text .tag { font-family: var(--sans); font-size: 9.5px; letter-spacing: 1.8px; text-transform: uppercase; color: var(--terracotta); font-weight: 600; margin-top: 3px; }
+.mxp-certification-enroll .footer-desc { font-size: 13.5px; line-height: 1.7; color: rgba(255,255,255,0.72); margin-bottom: 22px; max-width: 340px; }
+.mxp-certification-enroll .footer-tagline-motto { font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--terracotta); margin-bottom: 10px; }
+.mxp-certification-enroll .footer-tagline-quote { font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--cream); opacity: 0.75; padding-top: 14px; margin-top: 14px; border-top: 1px solid rgba(255,255,255,0.12); }
+.mxp-certification-enroll .footer-col-title { font-family: var(--serif); font-weight: 700; font-size: 16px; color: var(--cream); margin-bottom: 18px; letter-spacing: 0.3px; }
+.mxp-certification-enroll .footer-col ul { list-style: none; }
+.mxp-certification-enroll .footer-col li { margin-bottom: 11px; }
+.mxp-certification-enroll .footer-col a { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 13.5px; transition: color 0.2s; }
+.mxp-certification-enroll .footer-col a:hover { color: var(--terracotta); }
+
+.mxp-certification-enroll .footer-contact { background: rgba(0,0,0,0.18); padding: 30px 0; }
+.mxp-certification-enroll .footer-contact-inner { max-width: 1240px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; }
+.mxp-certification-enroll .footer-contact-info { font-size: 13.5px; line-height: 1.85; color: rgba(255,255,255,0.82); }
+.mxp-certification-enroll .footer-contact-info strong { color: var(--cream); font-size: 14.5px; }
+.mxp-certification-enroll .footer-contact-info a { color: rgba(255,255,255,0.82); text-decoration: none; transition: color 0.2s; }
+.mxp-certification-enroll .footer-contact-info a:hover { color: var(--terracotta); }
+.mxp-certification-enroll .footer-socials { display: flex; gap: 12px; }
+.mxp-certification-enroll .social-icon {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--cream); text-decoration: none; transition: all 0.2s;
+}
+.mxp-certification-enroll .social-icon:hover { background: var(--terracotta); border-color: var(--terracotta); color: var(--white); }
+.mxp-certification-enroll .social-icon svg { width: 16px; height: 16px; }
+
+.mxp-certification-enroll .footer-legal { background: #052821; padding: 24px 0; font-size: 11.5px; color: rgba(255,255,255,0.5); line-height: 1.7; }
+.mxp-certification-enroll .footer-legal-inner { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+.mxp-certification-enroll .footer-legal-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.mxp-certification-enroll .footer-legal-links { display: flex; gap: 20px; flex-wrap: wrap; }
+.mxp-certification-enroll .footer-legal a { color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
+.mxp-certification-enroll .footer-legal a:hover { color: var(--terracotta); }
+.mxp-certification-enroll .footer-disclaimer { font-size: 11px; color: rgba(255,255,255,0.38); line-height: 1.65; max-width: 1100px; }
