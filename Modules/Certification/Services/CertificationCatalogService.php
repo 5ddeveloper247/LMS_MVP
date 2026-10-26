@@ -183,6 +183,10 @@ class CertificationCatalogService
             );
         }
 
+        if (! isset($coursesJson[$currentKey])) {
+            $coursesJson[$currentKey] = $this->offeringToDetailCourse($current, $offerings, true);
+        }
+
         $switcherItems = $this->hubJumpItems($offerings)->map(fn (array $item) => [
             'slug' => ltrim($item['anchor'], '#'),
             'label' => $item['label'],
@@ -495,12 +499,10 @@ class CertificationCatalogService
     public function enrollPage(CertificationOffering $current): array
     {
         $offerings = $this->publishedOfferings();
-        $certsJson = [];
-
-        foreach ($offerings as $offering) {
-            $key = $this->routeSlug($offering);
-            $certsJson[$key] = $this->offeringToEnrollCert($offering);
-        }
+        $currentKey = $this->routeSlug($current);
+        $certsJson = [
+            $currentKey => $this->offeringToEnrollCert($current),
+        ];
 
         $switcherItems = $this->hubJumpItems($offerings)->map(fn (array $item) => [
             'slug' => ltrim($item['anchor'], '#'),
@@ -522,7 +524,7 @@ class CertificationCatalogService
      */
     public function offeringToEnrollCert(CertificationOffering $offering): array
     {
-        $categorySlug = $offering->category->slug ?? '';
+        $categorySlug = $offering->category?->slug ?? '';
         $options = $offering->relationLoaded('options') ? $offering->options : $offering->options()->get();
 
         $optionRows = $options->map(function ($option) {
@@ -604,7 +606,7 @@ class CertificationCatalogService
 
     private function enrollScheduleKey(CertificationOffering $offering): string
     {
-        return match ($offering->category->slug ?? '') {
+        return match ($offering->category?->slug ?? '') {
             'bls' => 'short',
             'iv-therapy' => 'iv',
             'hedis' => 'hedis',

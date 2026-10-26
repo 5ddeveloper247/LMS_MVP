@@ -26,3 +26,4 @@
     window.CERTIFICATIONS_INDEX_URL = @json(route('certifications.index'));
 </script>
 @include(theme('components.certification-detail-script'))
+@include(theme('components.certification-page-preloader'))

@@ -16,7 +16,13 @@
   <div class="switcher-inner">
     <span class="switcher-label">Enrolling in:</span>
     @foreach ($switcherItems ?? [] as $item)
-      <button type="button" class="switch-btn" data-cert="{{ $item['slug'] }}" aria-pressed="false">{{ $item['label'] }}</button>
+      @php
+        $itemSlug = $item['slug'] ?? '';
+        $isActive = ($slug ?? '') === $itemSlug;
+      @endphp
+      <a href="{{ route('certifications.enroll', ['slug' => $itemSlug]) }}"
+         class="switch-btn{{ $isActive ? ' is-active' : '' }}"
+         @if($isActive) aria-current="page" @endif>{{ $item['label'] }}</a>
     @endforeach
   </div>
 </nav>

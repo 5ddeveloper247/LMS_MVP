@@ -101,15 +101,17 @@ function render(slug, push) {
   }
 
   const outlineList = $('outlineList');
-  if (c.contentHtml && String(c.contentHtml).trim()) {
-    outlineList.innerHTML = `<li class="content-full"><div class="course-content-html">${c.contentHtml}</div></li>`;
-  } else if (c.outline && c.outline.length) {
-    outlineList.innerHTML = c.outline.map(o => {
-      const sub = o[3] ? `<ul class="ol-sub">${o[3].map(s => `<li>${s[0] === 'Topic' ? '' : '<strong>' + esc(s[0]) + '</strong>'}${esc(s[1])}</li>`).join('')}</ul>` : '';
-      return `<li class="${o[2] || ''}"><span class="ol-label">${esc(o[0])}</span><p class="ol-title">${esc(o[1])}</p>${sub}</li>`;
-    }).join('');
-  } else {
-    outlineList.innerHTML = '';
+  if (outlineList) {
+    if (c.contentHtml && String(c.contentHtml).trim()) {
+      outlineList.innerHTML = `<li class="content-full"><div class="course-content-html">${c.contentHtml}</div></li>`;
+    } else if (c.outline && c.outline.length) {
+      outlineList.innerHTML = c.outline.map(o => {
+        const sub = o[3] ? `<ul class="ol-sub">${o[3].map(s => `<li>${s[0] === 'Topic' ? '' : '<strong>' + esc(s[0]) + '</strong>'}${esc(s[1])}</li>`).join('')}</ul>` : '';
+        return `<li class="${o[2] || ''}"><span class="ol-label">${esc(o[0])}</span><p class="ol-title">${esc(o[1])}</p>${sub}</li>`;
+      }).join('');
+    } else {
+      outlineList.innerHTML = '';
+    }
   }
 
   const related = c.related || [];
@@ -118,9 +120,7 @@ function render(slug, push) {
     : (related.length ? 'Courses that pair well with ' + c.mark + '.' : ''));
 
   const relatedGrid = $('relatedGrid');
-  if (!relatedGrid) {
-    return;
-  }
+  if (relatedGrid) {
   relatedGrid.innerHTML = related.filter(k => COURSES[k]).map(k => {
     const r = COURSES[k];
     const rTuition = r.tuition || [];
@@ -144,8 +144,19 @@ function render(slug, push) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }));
+  }
 }
 
-const qsCert = new URLSearchParams(location.search).get('cert');
-render(qsCert || defaultSlug(), false);
+(function bootCertDetail() {
+  try {
+    const qsCert = new URLSearchParams(location.search).get('cert');
+    render(qsCert || defaultSlug(), false);
+  } catch (err) {
+    console.error('Certification detail render failed', err);
+  } finally {
+    if (typeof window.hideCertPreloader === 'function') {
+      window.hideCertPreloader();
+    }
+  }
+})();
 </script>

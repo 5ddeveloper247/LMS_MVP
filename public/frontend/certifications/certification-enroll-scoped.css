@@ -362,7 +362,10 @@ html, body { overflow-x: clip; }
   cursor: pointer; transition: all 0.2s;
 }
 .mxp-certification-enroll .switch-btn:hover { border-color: var(--teal-mid); color: var(--teal-mid); }
-.mxp-certification-enroll .switch-btn[aria-pressed="true"] { background: var(--teal-darkest); border-color: var(--teal-darkest); color: var(--white); }
+.mxp-certification-enroll .switch-btn[aria-pressed="true"],
+.mxp-certification-enroll .switch-btn.is-active,
+.mxp-certification-enroll a.switch-btn[aria-current="page"] { background: var(--teal-darkest); border-color: var(--teal-darkest); color: var(--white); text-decoration: none; }
+.mxp-certification-enroll a.switch-btn { text-decoration: none; display: inline-flex; align-items: center; }
 
 /* ================================================================
    COURSE HERO

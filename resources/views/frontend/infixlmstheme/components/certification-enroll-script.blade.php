@@ -36,7 +36,8 @@ function render(newSlug, push) {
   if (push && window.CERTIFICATIONS_ENROLL_BASE) {
     history.replaceState(null, '', window.CERTIFICATIONS_ENROLL_BASE + '/' + slug);
   }
-  $('certField').value = slug;
+  const certField = $('certField');
+  if (certField) certField.value = slug;
 
   document.querySelectorAll('.switch-btn').forEach(b => b.setAttribute('aria-pressed', b.dataset.cert === slug ? 'true' : 'false'));
 
@@ -61,6 +62,9 @@ function render(newSlug, push) {
   setText('sessionLabel', c.sessionLabel || 'Session');
 
   const og = $('optionGroup');
+  if (!og) {
+    return;
+  }
   og.className = 'choice-grid' + (c.options.length === 1 ? ' one' : '');
   og.innerHTML = (c.options || []).map(o => `
     <div class="choice">
@@ -80,9 +84,13 @@ function render(newSlug, push) {
     updateSummary();
   }));
 
-  $('skillsCourseField').hidden = !c.needsOnline;
+  const skillsCourseField = $('skillsCourseField');
+  if (skillsCourseField) skillsCourseField.hidden = !c.needsOnline;
 
   const sg = $('sessionGroup');
+  if (!sg) {
+    return;
+  }
   const list = SCHEDULES[c.schedule] || [];
   sg.innerHTML = list.map((s, i) => `
     <div class="choice">
@@ -121,19 +129,25 @@ function render(newSlug, push) {
     updateSummary();
   }));
 
-  $('sumIncludes').innerHTML = (c.includes || []).map(t => `<li>${CHECK}<span>${esc(t)}</span></li>`).join('');
+  const sumIncludes = $('sumIncludes');
+  if (sumIncludes) {
+    sumIncludes.innerHTML = (c.includes || []).map(t => `<li>${CHECK}<span>${esc(t)}</span></li>`).join('');
+  }
 
-  $('othersRow').innerHTML = keys.filter(k => k !== slug).map(k => {
-    const o = CERTS[k];
-    const p = (o.options || []).map(x => x.price);
-    const from = p.length ? Math.min(...p) : 0;
-    return `<a class="other-link" href="${window.CERTIFICATIONS_ENROLL_BASE ? window.CERTIFICATIONS_ENROLL_BASE + '/' + k : '?cert=' + k}" data-cert="${k}"><strong>${esc(o.mark)}</strong><span>${(o.options.length > 1 ? 'From ' : '') + money(from)}</span></a>`;
-  }).join('');
-  $('othersRow').querySelectorAll('a').forEach(a => a.addEventListener('click', e => { e.preventDefault(); render(a.dataset.cert, true); window.scrollTo({ top: 0, behavior: 'smooth' }); }));
+  const othersRow = $('othersRow');
+  if (othersRow) {
+    othersRow.innerHTML = keys.filter(k => k !== slug).map(k => {
+      const href = window.CERTIFICATIONS_ENROLL_BASE ? window.CERTIFICATIONS_ENROLL_BASE + '/' + k : '?cert=' + k;
+      return `<a class="other-link" href="${href}"><strong>${esc(k)}</strong><span>View enroll</span></a>`;
+    }).join('');
+  }
 
-  $('confirm').hidden = true;
-  $('enrollForm').hidden = false;
-  $('formAlert').hidden = true;
+  const confirmEl = $('confirm');
+  if (confirmEl) confirmEl.hidden = true;
+  const enrollFormEl = $('enrollForm');
+  if (enrollFormEl) enrollFormEl.hidden = false;
+  const formAlertEl = $('formAlert');
+  if (formAlertEl) formAlertEl.hidden = true;
 
   updateSession();
   updateConditional();
@@ -212,20 +226,33 @@ function validate() {
   return missing;
 }
 
-$('enrollForm').addEventListener('submit', (e) => {
-  const missing = validate();
-  const alert = $('formAlert');
-  if (missing.length) {
-    e.preventDefault();
-    alert.textContent = 'To continue, add ' + missing.join(', ') + '.';
-    alert.hidden = false;
-    return;
+const enrollFormNode = $('enrollForm');
+if (enrollFormNode) {
+  enrollFormNode.addEventListener('submit', (e) => {
+    const missing = validate();
+    const alert = $('formAlert');
+    if (missing.length) {
+      e.preventDefault();
+      if (alert) {
+        alert.textContent = 'To continue, add ' + missing.join(', ') + '.';
+        alert.hidden = false;
+      }
+      return;
+    }
+    if (alert) alert.hidden = true;
+  });
+}
+
+(function bootCertEnroll() {
+  try {
+    const qsCert = new URLSearchParams(location.search).get('cert');
+    render(qsCert || defaultSlug(), false);
+  } catch (err) {
+    console.error('Certification enroll render failed', err);
+  } finally {
+    if (typeof window.hideCertPreloader === 'function') {
+      window.hideCertPreloader();
+    }
   }
-  alert.hidden = true;
-});
-
-document.querySelectorAll('.switch-btn').forEach(b => b.addEventListener('click', () => render(b.dataset.cert, true)));
-
-const qsCert = new URLSearchParams(location.search).get('cert');
-render(qsCert || defaultSlug(), false);
+})();
 </script>
