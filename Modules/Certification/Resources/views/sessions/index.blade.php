@@ -9,19 +9,23 @@
                     <div class="box_header common_table_header">
                         <div class="main-title d-md-flex align-items-center flex-wrap">
                             <h3 class="mr-30 mb_xs_15px mb-sm_20px mb-0">
-                                {{ __('Training sessions') }} — {{ $offering->name }}
+                                {{ __('Training schedule') }} — {{ $offering->name }}
                             </h3>
                             <ul class="d-flex custom_list_style p-0 mb-0">
                                 <li>
                                     <a class="primary-btn radius_30px fix-gr-bg mr-10"
                                         href="{{ route('certificationOfferingSessions.create', $offering->id) }}">
-                                        <i class="ti-plus"></i> {{ __('Add session') }}
+                                        <i class="ti-plus"></i> {{ __('Add class date') }}
                                     </a>
                                 </li>
                                 <li>
+                                    <a class="primary-btn radius_30px tr-bg mr-10"
+                                        href="{{ route('certificationTrainingSchedules.index') }}">
+                                        {{ __('All schedules') }}
+                                    </a>
                                     <a class="primary-btn radius_30px tr-bg"
                                         href="{{ route('certificationOfferings.index') }}">
-                                        {{ __('Back to certifications') }}
+                                        {{ __('Certifications') }}
                                     </a>
                                 </li>
                             </ul>
@@ -94,7 +98,7 @@
                                         @empty
                                             <tr>
                                                 <td colspan="8" class="text-center">
-                                                    {{ __('No sessions yet. Add dates students can pick on the enroll page.') }}
+                                                    {{ __('No class dates yet. Add dates students can choose when enrolling.') }}
                                                 </td>
                                             </tr>
                                         @endforelse

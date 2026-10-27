@@ -8,7 +8,7 @@
                 <div class="col-12">
                     <div class="box_header common_table_header">
                         <div class="main-title d-md-flex">
-                            <h3 class="mb-0">{{ __('Add training session') }} — {{ $offering->name }}</h3>
+                            <h3 class="mb-0">{{ __('Add class date') }} — {{ $offering->name }}</h3>
                         </div>
                     </div>
                 </div>

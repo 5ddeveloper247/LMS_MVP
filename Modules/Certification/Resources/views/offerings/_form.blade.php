@@ -310,7 +310,7 @@
             <a href="{{ route('certificationOfferings.index') }}" class="primary-btn tr-bg ml-2">{{ __('common.Cancel') }}</a>
             @if ($offering)
                 <a href="{{ route('certificationOfferingSessions.index', $offering->id) }}" class="primary-btn tr-bg ml-2">
-                    {{ __('Training sessions') }}
+                    {{ __('Training schedule') }}
                 </a>
             @endif
         </div>

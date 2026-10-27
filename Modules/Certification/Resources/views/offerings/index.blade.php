@@ -78,7 +78,7 @@
                                                             </a>
                                                             <a class="dropdown-item"
                                                                 href="{{ route('certificationOfferingSessions.index', $offering->id) }}">
-                                                                {{ __('Training sessions') }}
+                                                                {{ __('Training schedule') }}
                                                             </a>
                                                             <a class="dropdown-item"
                                                                 href="{{ route('certificationOfferings.destroy', $offering->id) }}"

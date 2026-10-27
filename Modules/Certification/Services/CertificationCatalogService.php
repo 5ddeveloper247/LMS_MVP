@@ -605,14 +605,14 @@ class CertificationCatalogService
             'iv' => 'Pick your 2-day in-person lab',
             'hedis' => 'Pick a cohort start date',
             'skills' => 'Pick an appointment',
-            default => 'Pick a session',
+            default => 'Choose your training date',
         };
 
         $sessionLabel = match ($scheduleKey) {
             'iv' => 'In-person lab',
             'hedis' => 'Start date',
             'skills' => 'Appointment',
-            default => 'Session',
+            default => 'Class date',
         };
 
         $prereq = null;

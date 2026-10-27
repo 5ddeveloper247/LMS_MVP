@@ -50,31 +50,35 @@ Route::group([
         ->name('certificationOfferings.status')
         ->middleware('RoutePermissionCheck:certificationOfferings.index');
 
+    Route::get('/training-schedule', 'CertificationTrainingScheduleController@index')
+        ->name('certificationTrainingSchedules.index')
+        ->middleware('RoutePermissionCheck:certificationTrainingSchedules.index');
+
     Route::get('/offerings/{offeringId}/sessions', 'CertificationOfferingSessionController@index')
         ->name('certificationOfferingSessions.index')
-        ->middleware('RoutePermissionCheck:certificationOfferings.index');
+        ->middleware('RoutePermissionCheck:certificationTrainingSchedules.index');
 
     Route::get('/offerings/{offeringId}/sessions/create', 'CertificationOfferingSessionController@create')
         ->name('certificationOfferingSessions.create')
-        ->middleware('RoutePermissionCheck:certificationOfferings.index');
+        ->middleware('RoutePermissionCheck:certificationTrainingSchedules.index');
 
     Route::post('/offerings/{offeringId}/sessions/store', 'CertificationOfferingSessionController@store')
         ->name('certificationOfferingSessions.store')
-        ->middleware('RoutePermissionCheck:certificationOfferings.index');
+        ->middleware('RoutePermissionCheck:certificationTrainingSchedules.index');
 
     Route::get('/offerings/{offeringId}/sessions/edit/{sessionId}', 'CertificationOfferingSessionController@edit')
         ->name('certificationOfferingSessions.edit')
-        ->middleware('RoutePermissionCheck:certificationOfferings.index');
+        ->middleware('RoutePermissionCheck:certificationTrainingSchedules.index');
 
     Route::post('/offerings/{offeringId}/sessions/update/{sessionId}', 'CertificationOfferingSessionController@update')
         ->name('certificationOfferingSessions.update')
-        ->middleware('RoutePermissionCheck:certificationOfferings.index');
+        ->middleware('RoutePermissionCheck:certificationTrainingSchedules.index');
 
     Route::get('/offerings/{offeringId}/sessions/delete/{sessionId}', 'CertificationOfferingSessionController@destroy')
         ->name('certificationOfferingSessions.destroy')
-        ->middleware('RoutePermissionCheck:certificationOfferings.index');
+        ->middleware('RoutePermissionCheck:certificationTrainingSchedules.index');
 
     Route::get('/offerings/{offeringId}/sessions/status/{sessionId}', 'CertificationOfferingSessionController@status')
         ->name('certificationOfferingSessions.status')
-        ->middleware('RoutePermissionCheck:certificationOfferings.index');
+        ->middleware('RoutePermissionCheck:certificationTrainingSchedules.index');
 });
