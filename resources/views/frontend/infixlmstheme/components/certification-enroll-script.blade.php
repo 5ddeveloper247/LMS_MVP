@@ -23,6 +23,87 @@ function findOption(c, id) {
   return (c.options || []).find(o => String(o.id) === String(id));
 }
 
+function sessionRowsForCert(c, selectedOption) {
+  let list = Array.isArray(c.sessions) ? c.sessions.slice() : [];
+  const usingSamples = !list.length && c.schedule && SCHEDULES[c.schedule];
+  if (usingSamples) {
+    list = (SCHEDULES[c.schedule] || []).map(s => ({
+      id: null,
+      key: s[0],
+      title: s[1],
+      sub: s[2],
+      optionId: null,
+      location: null
+    }));
+  }
+  if (selectedOption && selectedOption.id) {
+    list = list.filter(s => !s.optionId || Number(s.optionId) === Number(selectedOption.id));
+  }
+  return { list, usingSamples };
+}
+
+function defaultSessionLocation(c, list) {
+  const fromRow = (list.find(s => s.location) || {}).location;
+  return fromRow || '501 S. Florida Avenue, Lakeland, FL 33801';
+}
+
+function paintSessionChoices(c) {
+  const sg = $('sessionGroup');
+  if (!sg) return;
+  const { list, usingSamples } = sessionRowsForCert(c, option);
+  const sampleNote = $('sampleNote');
+  if (sampleNote) {
+    if (usingSamples) {
+      sampleNote.hidden = false;
+      sampleNote.textContent = 'Dates shown are samples for this preview. Live dates will load from the training calendar.';
+    } else if (!list.length && !(option && option.noSession)) {
+      sampleNote.hidden = false;
+      sampleNote.textContent = 'No upcoming sessions are listed yet. Choose “Contact me with more dates” or check back soon.';
+    } else {
+      sampleNote.hidden = true;
+    }
+  }
+  setText('sessionLocation', 'Sessions are held at ' + defaultSessionLocation(c, list) + '.');
+  sg.innerHTML = list.map((s, i) => `
+    <div class="choice">
+      <input type="radio" name="session_pick" id="ses-${i}" value="${esc(s.key)}" data-session-id="${s.id ? esc(String(s.id)) : ''}">
+      <label for="ses-${i}">
+        <span class="choice-left"><span class="choice-dot" aria-hidden="true"></span>
+          <span class="choice-main"><span class="choice-title">${esc(s.title)}</span><span class="choice-sub">${esc(s.sub || '')}</span></span>
+        </span>
+      </label>
+    </div>`).join('') + `
+    <div class="choice">
+      <input type="radio" name="session_pick" id="ses-more" value="contact" data-session-id="">
+      <label for="ses-more">
+        <span class="choice-left"><span class="choice-dot" aria-hidden="true"></span>
+          <span class="choice-main"><span class="choice-title">Contact me with more dates</span><span class="choice-sub">Our team will reach out with other options.</span></span>
+        </span>
+      </label>
+    </div>`;
+  sg.querySelectorAll('input').forEach(i => i.addEventListener('change', () => {
+    const titleEl = i.nextElementSibling.querySelector('.choice-title');
+    const subEl = i.nextElementSibling.querySelector('.choice-sub');
+    const lbl = titleEl ? titleEl.textContent : '';
+    const sub = subEl ? subEl.textContent : '';
+    if (i.value === 'contact') {
+      session = 'Contact me with more dates';
+      $('sessionId').value = '';
+      $('sessionKey').value = 'contact';
+      $('sessionLabel').value = lbl;
+      $('sessionSub').value = sub;
+    } else {
+      session = lbl.replace(/, \d{4}$/, '') + ' · ' + (sub.split(' · ')[0] || sub);
+      $('sessionId').value = i.dataset.sessionId || '';
+      $('sessionKey').value = i.value;
+      $('sessionLabel').value = lbl;
+      $('sessionSub').value = sub;
+    }
+    $('sessionError').hidden = true;
+    updateSummary();
+  }));
+}
+
 function render(newSlug, push) {
   const keys = Object.keys(CERTS);
   slug = CERTS[newSlug] ? newSlug : defaultSlug();
@@ -78,8 +159,14 @@ function render(newSlug, push) {
     </div>`).join('');
   og.querySelectorAll('input').forEach(i => i.addEventListener('change', () => {
     option = findOption(c, i.value);
+    session = null;
+    $('sessionId').value = '';
+    $('sessionKey').value = '';
+    $('sessionLabel').value = '';
+    $('sessionSub').value = '';
     $('optionError').hidden = true;
     updateSession();
+    paintSessionChoices(c);
     updateConditional();
     updateSummary();
   }));
@@ -87,47 +174,7 @@ function render(newSlug, push) {
   const skillsCourseField = $('skillsCourseField');
   if (skillsCourseField) skillsCourseField.hidden = !c.needsOnline;
 
-  const sg = $('sessionGroup');
-  if (!sg) {
-    return;
-  }
-  const list = SCHEDULES[c.schedule] || [];
-  sg.innerHTML = list.map((s, i) => `
-    <div class="choice">
-      <input type="radio" name="session_pick" id="ses-${i}" value="${esc(s[0])}">
-      <label for="ses-${i}">
-        <span class="choice-left"><span class="choice-dot" aria-hidden="true"></span>
-          <span class="choice-main"><span class="choice-title">${esc(s[1])}</span><span class="choice-sub">${esc(s[2])}</span></span>
-        </span>
-      </label>
-    </div>`).join('') + `
-    <div class="choice">
-      <input type="radio" name="session_pick" id="ses-more" value="contact">
-      <label for="ses-more">
-        <span class="choice-left"><span class="choice-dot" aria-hidden="true"></span>
-          <span class="choice-main"><span class="choice-title">Contact me with more dates</span><span class="choice-sub">Our team will reach out with other options.</span></span>
-        </span>
-      </label>
-    </div>`;
-  sg.querySelectorAll('input').forEach(i => i.addEventListener('change', () => {
-    const titleEl = i.nextElementSibling.querySelector('.choice-title');
-    const subEl = i.nextElementSibling.querySelector('.choice-sub');
-    const lbl = titleEl ? titleEl.textContent : '';
-    const sub = subEl ? subEl.textContent : '';
-    if (i.value === 'contact') {
-      session = 'Contact me with more dates';
-      $('sessionKey').value = 'contact';
-      $('sessionLabel').value = lbl;
-      $('sessionSub').value = sub;
-    } else {
-      session = lbl.replace(/, \d{4}$/, '') + ' · ' + (sub.split(' · ')[0] || sub);
-      $('sessionKey').value = i.value;
-      $('sessionLabel').value = lbl;
-      $('sessionSub').value = sub;
-    }
-    $('sessionError').hidden = true;
-    updateSummary();
-  }));
+  paintSessionChoices(c);
 
   const sumIncludes = $('sumIncludes');
   if (sumIncludes) {
@@ -161,11 +208,13 @@ function updateSession() {
   $('sampleNote').hidden = !!self;
   if (self) {
     session = 'Not needed for Self-Study';
+    $('sessionId').value = '';
     $('sessionKey').value = 'self-study';
     $('sessionLabel').value = session;
     $('sessionSub').value = '';
   } else if (session === 'Not needed for Self-Study') {
     session = null;
+    $('sessionId').value = '';
     $('sessionKey').value = '';
     $('sessionLabel').value = '';
     $('sessionSub').value = '';

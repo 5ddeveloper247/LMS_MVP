@@ -9,6 +9,7 @@ use Modules\Certification\Entities\CertificationCategory;
 use Modules\Certification\Entities\CertificationGroup;
 use Modules\Certification\Entities\CertificationOffering;
 use Modules\Certification\Entities\CertificationOfferingOption;
+use Modules\Certification\Entities\CertificationOfferingSession;
 
 class CertificationCatalogService
 {
@@ -494,6 +495,62 @@ class CertificationCatalogService
     }
 
     /**
+     * @return array<int, array{id: int, key: string, title: string, sub: string, optionId: int|null, location: string|null}>
+     */
+    public function enrollSessionsPayload(CertificationOffering $offering): array
+    {
+        if (! Schema::hasTable('certification_offering_sessions')) {
+            return [];
+        }
+
+        return CertificationOfferingSession::query()
+            ->where('certification_offering_id', $offering->id)
+            ->bookable()
+            ->get()
+            ->map(function (CertificationOfferingSession $session) {
+                return [
+                    'id' => (int) $session->id,
+                    'key' => (string) $session->id,
+                    'title' => $session->title,
+                    'sub' => $session->subtitle ?? '',
+                    'optionId' => $session->certification_offering_option_id
+                        ? (int) $session->certification_offering_option_id
+                        : null,
+                    'location' => $session->location,
+                ];
+            })
+            ->values()
+            ->all();
+    }
+
+    public function resolveBookableSession(
+        CertificationOffering $offering,
+        CertificationOfferingOption $option,
+        int $sessionId
+    ): ?CertificationOfferingSession {
+        if (! Schema::hasTable('certification_offering_sessions')) {
+            return null;
+        }
+
+        $session = CertificationOfferingSession::query()
+            ->where('certification_offering_id', $offering->id)
+            ->where('id', $sessionId)
+            ->bookable()
+            ->first();
+
+        if (! $session) {
+            return null;
+        }
+
+        if ($session->certification_offering_option_id
+            && (int) $session->certification_offering_option_id !== (int) $option->id) {
+            return null;
+        }
+
+        return $session;
+    }
+
+    /**
      * @return array{slug: string, switcherItems: Collection, certsJson: array, schedulesJson: array, checkoutUrl: string, pageTitle: string}
      */
     public function enrollPage(CertificationOffering $current): array
@@ -588,6 +645,7 @@ class CertificationCatalogService
             'needsOnline' => $categorySlug === 'skills-check',
             'prereq' => $prereq,
             'includes' => $includes,
+            'sessions' => $this->enrollSessionsPayload($offering),
         ];
     }
 

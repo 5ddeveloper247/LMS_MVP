@@ -64,6 +64,14 @@ class CertificationOffering extends Model
             ->orderBy('id');
     }
 
+    public function sessions(): HasMany
+    {
+        return $this->hasMany(CertificationOfferingSession::class, 'certification_offering_id')
+            ->orderBy('starts_at')
+            ->orderBy('sort_order')
+            ->orderBy('id');
+    }
+
     public function onlinePart()
     {
         return $this->deliveryParts()->where('part_type', 'online')->first();

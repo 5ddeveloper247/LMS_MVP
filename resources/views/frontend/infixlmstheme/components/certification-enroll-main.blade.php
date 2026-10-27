@@ -63,6 +63,7 @@
       <form id="enrollForm" method="post" action="{{ $checkoutUrl ?? route('certifications.enroll.checkout') }}" novalidate>
         @csrf
         <input type="hidden" name="certification_slug" id="certField">
+        <input type="hidden" name="session_id" id="sessionId">
         <input type="hidden" name="session_key" id="sessionKey">
         <input type="hidden" name="session_label" id="sessionLabel">
         <input type="hidden" name="session_sub" id="sessionSub">
@@ -95,12 +96,12 @@
             <span class="step-num" aria-hidden="true">2</span>
             <div>
               <h2 data-f="sessionTitle">Pick a session</h2>
-              <span class="step-note">Sessions are held at 501 S. Florida Avenue, Lakeland, FL 33801.</span>
+              <span class="step-note" data-f="sessionLocation">Sessions are held at 501 S. Florida Avenue, Lakeland, FL 33801.</span>
             </div>
           </div>
           <div class="session-list" id="sessionGroup"></div>
           <div class="selfstudy-msg" id="selfStudyMsg" hidden>Self-Study does not need a session date. After you enroll, our team will email you everything you need to get started.</div>
-          <p class="sample-note" id="sampleNote">Dates shown are samples for this preview. Live dates will load from the training calendar.</p>
+          <p class="sample-note" id="sampleNote" hidden>No upcoming sessions are listed yet. Choose “Contact me with more dates” or check back soon.</p>
           <p class="field-error" id="sessionError" hidden>Pick a session, or choose “Contact me with more dates.”</p>
         </div>
 

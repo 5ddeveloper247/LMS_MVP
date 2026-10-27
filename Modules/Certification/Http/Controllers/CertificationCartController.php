@@ -28,6 +28,7 @@ class CertificationCartController extends Controller
         $validated = $request->validate([
             'certification_slug' => 'required|string|max:191',
             'option_id' => 'required|integer',
+            'session_id' => 'nullable|integer',
             'session_key' => 'nullable|string|max:191',
             'session_label' => 'nullable|string|max:255',
             'session_sub' => 'nullable|string|max:255',
@@ -66,10 +67,25 @@ class CertificationCartController extends Controller
         }
 
         $sessionRequired = ! $this->catalog->optionSkipsSession($option);
-        if ($sessionRequired && empty($validated['session_key'])) {
-            Toastr::error('Please pick a session or ask us for more dates.', trans('common.Failed'));
+        $sessionKey = $validated['session_key'] ?? null;
+        $sessionId = isset($validated['session_id']) ? (int) $validated['session_id'] : 0;
+        $bookableSession = null;
 
-            return redirect()->route('certifications.enroll', $this->catalog->routeSlug($offering))->withInput();
+        if ($sessionRequired) {
+            if ($sessionKey === 'contact') {
+                // allowed without session_id
+            } elseif ($sessionId > 0) {
+                $bookableSession = $this->catalog->resolveBookableSession($offering, $option, $sessionId);
+                if (! $bookableSession) {
+                    Toastr::error('That session is no longer available. Please pick another date.', trans('common.Failed'));
+
+                    return redirect()->route('certifications.enroll', $this->catalog->routeSlug($offering))->withInput();
+                }
+            } elseif (empty($sessionKey) || $sessionKey === 'self-study') {
+                Toastr::error('Please pick a session or ask us for more dates.', trans('common.Failed'));
+
+                return redirect()->route('certifications.enroll', $this->catalog->routeSlug($offering))->withInput();
+            }
         }
 
         if ($this->catalog->optionRequiresRenewalDate($option) && empty($validated['card_exp'])) {
@@ -105,9 +121,11 @@ class CertificationCartController extends Controller
             'skills_course' => $validated['skills_course'] ?? null,
             'notes' => $validated['notes'] ?? null,
             'opt_in' => (bool) ($validated['opt_in'] ?? false),
+            'certification_offering_session_id' => $bookableSession?->id,
             'session_key' => $validated['session_key'] ?? null,
-            'session_label' => $validated['session_label'] ?? null,
-            'session_sub' => $validated['session_sub'] ?? null,
+            'session_label' => $bookableSession?->title ?? ($validated['session_label'] ?? null),
+            'session_sub' => $bookableSession?->subtitle ?? ($validated['session_sub'] ?? null),
+            'session_location' => $bookableSession?->location,
         ];
 
         $exists = Cart::query()

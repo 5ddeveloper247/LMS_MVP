@@ -308,6 +308,11 @@
                 <i class="ti-check"></i> {{ $offering ? __('common.Update') : __('common.Save') }}
             </button>
             <a href="{{ route('certificationOfferings.index') }}" class="primary-btn tr-bg ml-2">{{ __('common.Cancel') }}</a>
+            @if ($offering)
+                <a href="{{ route('certificationOfferingSessions.index', $offering->id) }}" class="primary-btn tr-bg ml-2">
+                    {{ __('Training sessions') }}
+                </a>
+            @endif
         </div>
     </div>
 </form>

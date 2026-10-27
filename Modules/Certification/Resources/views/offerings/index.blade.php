@@ -77,6 +77,10 @@
                                                                 {{ __('common.Edit') }}
                                                             </a>
                                                             <a class="dropdown-item"
+                                                                href="{{ route('certificationOfferingSessions.index', $offering->id) }}">
+                                                                {{ __('Training sessions') }}
+                                                            </a>
+                                                            <a class="dropdown-item"
                                                                 href="{{ route('certificationOfferings.destroy', $offering->id) }}"
                                                                 onclick="return confirm('{{ __('Are you sure to delete ?') }}')">
                                                                 {{ __('common.Delete') }}
