@@ -2,6 +2,7 @@
 
 namespace Modules\Certification\Services;
 
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
@@ -495,6 +496,35 @@ class CertificationCatalogService
     }
 
     /**
+     * Public enroll UI: date on line 1, start–end time on line 2 (matches certification-enroll design).
+     *
+     * @return array{title: string, sub: string}
+     */
+    public function sessionEnrollDisplay(CertificationOfferingSession $session): array
+    {
+        $start = $session->starts_at instanceof Carbon
+            ? $session->starts_at
+            : Carbon::parse($session->starts_at);
+
+        $end = $session->ends_at
+            ? ($session->ends_at instanceof Carbon ? $session->ends_at : Carbon::parse($session->ends_at))
+            : null;
+
+        if ($end && ! $start->isSameDay($end)) {
+            $title = $start->format('D').'–'.$end->format('D').', '
+                .$start->format('F j').'–'.$end->format('j, Y');
+            $sub = $start->format('g:i A').' – '.$end->format('g:i A').' both days';
+        } else {
+            $title = $start->format('l, F j, Y');
+            $sub = $end
+                ? $start->format('g:i A').' – '.$end->format('g:i A')
+                : $start->format('g:i A');
+        }
+
+        return ['title' => $title, 'sub' => $sub];
+    }
+
+    /**
      * @return array<int, array{id: int, key: string, title: string, sub: string, optionId: int|null, location: string|null}>
      */
     public function enrollSessionsPayload(CertificationOffering $offering): array
@@ -508,11 +538,13 @@ class CertificationCatalogService
             ->bookable()
             ->get()
             ->map(function (CertificationOfferingSession $session) {
+                $display = $this->sessionEnrollDisplay($session);
+
                 return [
                     'id' => (int) $session->id,
                     'key' => (string) $session->id,
-                    'title' => $session->title,
-                    'sub' => $session->subtitle ?? '',
+                    'title' => $display['title'],
+                    'sub' => $display['sub'],
                     'optionId' => $session->certification_offering_option_id
                         ? (int) $session->certification_offering_option_id
                         : null,

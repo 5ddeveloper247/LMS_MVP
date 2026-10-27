@@ -72,6 +72,11 @@ class CertificationOffering extends Model
             ->orderBy('id');
     }
 
+    public function enrollments(): HasMany
+    {
+        return $this->hasMany(CertificationEnrollment::class, 'certification_offering_id');
+    }
+
     public function onlinePart()
     {
         return $this->deliveryParts()->where('part_type', 'online')->first();

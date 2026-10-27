@@ -54,6 +54,22 @@ Route::group([
         ->name('certificationTrainingSchedules.index')
         ->middleware('RoutePermissionCheck:certificationTrainingSchedules.index');
 
+    Route::get('/enrolled-students', 'CertificationEnrollmentController@index')
+        ->name('certificationEnrollments.index')
+        ->middleware('RoutePermissionCheck:certificationEnrollments.index');
+
+    Route::get('/enrolled-students/offering/{offeringId}', 'CertificationEnrollmentController@offering')
+        ->name('certificationEnrollments.offering')
+        ->middleware('RoutePermissionCheck:certificationEnrollments.index');
+
+    Route::get('/enrolled-students/offering/{offeringId}/data', 'CertificationEnrollmentController@offeringData')
+        ->name('certificationEnrollments.offering.data')
+        ->middleware('RoutePermissionCheck:certificationEnrollments.index');
+
+    Route::get('/enrolled-students/record/{id}', 'CertificationEnrollmentController@show')
+        ->name('certificationEnrollments.show')
+        ->middleware('RoutePermissionCheck:certificationEnrollments.index');
+
     Route::get('/offerings/{offeringId}/sessions', 'CertificationOfferingSessionController@index')
         ->name('certificationOfferingSessions.index')
         ->middleware('RoutePermissionCheck:certificationTrainingSchedules.index');

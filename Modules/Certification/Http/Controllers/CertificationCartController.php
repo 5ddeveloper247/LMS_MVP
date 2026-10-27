@@ -123,8 +123,12 @@ class CertificationCartController extends Controller
             'opt_in' => (bool) ($validated['opt_in'] ?? false),
             'certification_offering_session_id' => $bookableSession?->id,
             'session_key' => $validated['session_key'] ?? null,
-            'session_label' => $bookableSession?->title ?? ($validated['session_label'] ?? null),
-            'session_sub' => $bookableSession?->subtitle ?? ($validated['session_sub'] ?? null),
+            'session_label' => $bookableSession
+                ? $this->catalog->sessionEnrollDisplay($bookableSession)['title']
+                : ($validated['session_label'] ?? null),
+            'session_sub' => $bookableSession
+                ? $this->catalog->sessionEnrollDisplay($bookableSession)['sub']
+                : ($validated['session_sub'] ?? null),
             'session_location' => $bookableSession?->location,
         ];
 

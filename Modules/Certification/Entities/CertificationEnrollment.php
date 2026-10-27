@@ -47,4 +47,40 @@ class CertificationEnrollment extends Model
     {
         return $this->belongsTo(CertificationOfferingOption::class, 'certification_offering_option_id');
     }
+
+    public function registrantName(): string
+    {
+        $data = is_array($this->enrollment_data) ? $this->enrollment_data : [];
+        $first = trim((string) ($data['first_name'] ?? ''));
+        $last = trim((string) ($data['last_name'] ?? ''));
+
+        if ($first !== '' || $last !== '') {
+            return trim($first.' '.$last);
+        }
+
+        return (string) ($this->user->name ?? '');
+    }
+
+    public function registrantEmail(): string
+    {
+        $data = is_array($this->enrollment_data) ? $this->enrollment_data : [];
+
+        return (string) ($data['email'] ?? $this->user->email ?? '');
+    }
+
+    public function classDateLabel(): string
+    {
+        $data = is_array($this->enrollment_data) ? $this->enrollment_data : [];
+        $label = trim((string) ($data['session_label'] ?? ''));
+        $sub = trim((string) ($data['session_sub'] ?? ''));
+
+        if ($label === 'Contact me with more dates') {
+            return $label;
+        }
+        if ($label !== '' && $sub !== '') {
+            return $label.' · '.$sub;
+        }
+
+        return $label !== '' ? $label : '—';
+    }
 }
