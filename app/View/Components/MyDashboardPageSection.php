@@ -139,6 +139,27 @@ class MyDashboardPageSection extends Component
                 }
             }
 
-        return view(theme('components.my-dashboard-page-section'), compact('badges', 'myCertificateNumber', 'quizzes', 'courses','totalClasses', 'classes', 'data', 'mycourse', 'wish_string', 'date', 'total_purchase', 'student_setup', 'total_spent'));
+        $certificationDashboard = ['show' => false];
+        if (isModuleActive('Certification') && class_exists(\Modules\Certification\Services\CertificationStudentDashboardService::class)) {
+            $certificationDashboard = app(\Modules\Certification\Services\CertificationStudentDashboardService::class)
+                ->forUser(Auth::user());
+        }
+
+        return view(theme('components.my-dashboard-page-section'), compact(
+            'badges',
+            'myCertificateNumber',
+            'quizzes',
+            'courses',
+            'totalClasses',
+            'classes',
+            'data',
+            'mycourse',
+            'wish_string',
+            'date',
+            'total_purchase',
+            'student_setup',
+            'total_spent',
+            'certificationDashboard'
+        ));
     }
 }

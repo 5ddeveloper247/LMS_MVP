@@ -65,6 +65,10 @@
 
     @include('ceprofessional::components.recommended-electives')
 
+    @if (!empty($certificationDashboard['show']))
+        @include(theme('components.certification-student-dashboard-section'), $certificationDashboard)
+    @endif
+
     @include('ceprofessional::components.nurse-network')
 
     @include('ceprofessional::components.broker-sync-tabs')

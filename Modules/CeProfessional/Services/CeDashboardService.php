@@ -46,6 +46,12 @@ class CeDashboardService
         $preview['ce_broker']['renewal_date'] = $renewalDate->format('F j, Y');
         $preview['ce_broker']['days_remaining'] = $daysUntilRenewal;
 
+        $certificationDashboard = ['show' => false];
+        if (isModuleActive('Certification') && class_exists(\Modules\Certification\Services\CertificationStudentDashboardService::class)) {
+            $certificationDashboard = app(\Modules\Certification\Services\CertificationStudentDashboardService::class)
+                ->forUser($user);
+        }
+
         return array_merge($preview, [
             'user' => $user,
             'profile' => $profile,
@@ -58,6 +64,7 @@ class CeDashboardService
             'renewal_date' => $renewalDate,
             'days_until_renewal' => $daysUntilRenewal > 0 ? $daysUntilRenewal : $preview['stats']['days_until_renewal'] ?? 0,
             'has_live_enrollments' => $enrollmentCards !== [],
+            'certificationDashboard' => $certificationDashboard,
         ]);
     }
 

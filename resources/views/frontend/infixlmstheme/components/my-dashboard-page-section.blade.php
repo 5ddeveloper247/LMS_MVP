@@ -347,6 +347,10 @@
                 </div>
 
             </div>
+
+            @if (!empty($certificationDashboard['show']))
+                @include(theme('components.certification-student-dashboard-section'), $certificationDashboard)
+            @endif
         </div>
     </div>
 </div>
