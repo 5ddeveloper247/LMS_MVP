@@ -47,9 +47,11 @@ class CeDashboardService
         $preview['ce_broker']['days_remaining'] = $daysUntilRenewal;
 
         $certificationDashboard = ['show' => false];
-        if (isModuleActive('Certification') && class_exists(\Modules\Certification\Services\CertificationStudentDashboardService::class)) {
-            $certificationDashboard = app(\Modules\Certification\Services\CertificationStudentDashboardService::class)
-                ->forUser($user);
+        if (class_exists(\Modules\Certification\Services\CertificationStudentDashboardService::class)) {
+            $certDashboardService = app(\Modules\Certification\Services\CertificationStudentDashboardService::class);
+            if ($certDashboardService->isAvailable()) {
+                $certificationDashboard = $certDashboardService->forUser($user);
+            }
         }
 
         return array_merge($preview, [

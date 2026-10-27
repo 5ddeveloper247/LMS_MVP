@@ -13,30 +13,47 @@ class CertificationStudentDashboardService
         protected CertificationCatalogService $catalog
     ) {}
 
+    public function isAvailable(): bool
+    {
+        try {
+            if (! function_exists('routeIsExist') || ! routeIsExist('certifications.index')) {
+                return false;
+            }
+
+            return Schema::hasTable('certification_offerings');
+        } catch (\Throwable $e) {
+            return false;
+        }
+    }
+
     /**
      * @return array{show: bool, is_ce_professional?: bool, enrollment_count?: int, items?: Collection, title?: string, intro?: string, browse_url?: string, browse_label?: string, empty_message?: string}
      */
     public function forUser(User $user): array
     {
-        if (! isModuleActive('Certification') || ! Schema::hasTable('certification_enrollments')) {
+        if (! $this->isAvailable()) {
             return ['show' => false];
         }
 
         $isCe = function_exists('userIsCeProfessional') && userIsCeProfessional($user);
 
-        $baseQuery = CertificationEnrollment::query()
-            ->where('user_id', $user->id)
-            ->where('payment_status', 'paid');
+        $count = 0;
+        $items = collect();
 
-        $count = (clone $baseQuery)->count();
+        if (Schema::hasTable('certification_enrollments')) {
+            $baseQuery = CertificationEnrollment::query()
+                ->where('user_id', $user->id)
+                ->where('payment_status', 'paid');
 
-        $recent = (clone $baseQuery)
-            ->with(['offering.category'])
-            ->orderByDesc('id')
-            ->limit(3)
-            ->get();
+            $count = (clone $baseQuery)->count();
 
-        $items = $recent->map(function (CertificationEnrollment $enrollment) {
+            $recent = (clone $baseQuery)
+                ->with(['offering.category'])
+                ->orderByDesc('id')
+                ->limit(3)
+                ->get();
+
+            $items = $recent->map(function (CertificationEnrollment $enrollment) {
             $offering = $enrollment->offering;
             $slug = $offering ? $this->catalog->routeSlug($offering) : null;
 
@@ -51,7 +68,8 @@ class CertificationStudentDashboardService
                     ? route('certifications.show', ['slug' => $slug])
                     : route('certifications.index'),
             ];
-        });
+            });
+        }
 
         return [
             'show' => true,

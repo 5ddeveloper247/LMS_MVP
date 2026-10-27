@@ -140,9 +140,11 @@ class MyDashboardPageSection extends Component
             }
 
         $certificationDashboard = ['show' => false];
-        if (isModuleActive('Certification') && class_exists(\Modules\Certification\Services\CertificationStudentDashboardService::class)) {
-            $certificationDashboard = app(\Modules\Certification\Services\CertificationStudentDashboardService::class)
-                ->forUser(Auth::user());
+        if (class_exists(\Modules\Certification\Services\CertificationStudentDashboardService::class)) {
+            $certDashboardService = app(\Modules\Certification\Services\CertificationStudentDashboardService::class);
+            if ($certDashboardService->isAvailable()) {
+                $certificationDashboard = $certDashboardService->forUser(Auth::user());
+            }
         }
 
         return view(theme('components.my-dashboard-page-section'), compact(

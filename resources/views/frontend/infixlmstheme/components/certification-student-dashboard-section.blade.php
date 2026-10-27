@@ -118,7 +118,7 @@
     }
 </style>
 
-<div class="row mt-30 mxp-dash-cert">
+<div class="row mt-30 mxp-dash-cert" id="student-life-support-certifications">
     <div class="col-12">
         <div class="dashboard_card">
             <div class="cert-dash-head">

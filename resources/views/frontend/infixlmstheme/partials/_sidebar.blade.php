@@ -67,6 +67,21 @@
                     </li>
                 @endif
 
+                @if (function_exists('routeIsExist') && routeIsExist('certifications.index') && (int) auth()->user()->role_id === 3)
+                    <li>
+                        <a href="{{ route('studentDashboard') }}#student-life-support-certifications"
+                            class="d-flex align-items-center {{ request()->routeIs('certifications.*') ? 'active' : '' }}">
+                            <div class="menu_icon">
+                                <svg class="{{ request()->routeIs('certifications.*') ? 'text-white' : '' }}" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 3l7 4v5c0 4.5-3 8.5-7 9-4-.5-7-4.5-7-9V7l7-4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                                    <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <span>{{ __('Certifications') }}</span>
+                        </a>
+                    </li>
+                @endif
+
                 <li>
                     <a href="{{ route('main-community.index') }}"
                         class="d-flex align-items-center {{ request()->routeIs('main-community.*') ? 'active' : '' }}">
