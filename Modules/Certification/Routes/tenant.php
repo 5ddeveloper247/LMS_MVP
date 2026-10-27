@@ -14,6 +14,10 @@ Route::get('/certifications/enroll/{slug}', 'CertificationFrontendController@enr
     ->where('slug', '[A-Za-z0-9\-]+')
     ->middleware(['auth', 'student']);
 
+Route::get('/my-life-support-certifications', 'CertificationFrontendController@studentPortal')
+    ->name('studentCertifications.index')
+    ->middleware(['auth', 'student']);
+
 Route::get('/certifications/{slug}', 'CertificationFrontendController@show')
     ->name('certifications.show')
     ->where('slug', '[A-Za-z0-9\-]+');

@@ -139,14 +139,6 @@ class MyDashboardPageSection extends Component
                 }
             }
 
-        $certificationDashboard = ['show' => false];
-        if (class_exists(\Modules\Certification\Services\CertificationStudentDashboardService::class)) {
-            $certDashboardService = app(\Modules\Certification\Services\CertificationStudentDashboardService::class);
-            if ($certDashboardService->isAvailable()) {
-                $certificationDashboard = $certDashboardService->forUser(Auth::user());
-            }
-        }
-
         return view(theme('components.my-dashboard-page-section'), compact(
             'badges',
             'myCertificateNumber',
@@ -160,8 +152,7 @@ class MyDashboardPageSection extends Component
             'date',
             'total_purchase',
             'student_setup',
-            'total_spent',
-            'certificationDashboard'
+            'total_spent'
         ));
     }
 }

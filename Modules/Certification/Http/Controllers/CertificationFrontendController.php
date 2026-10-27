@@ -3,7 +3,9 @@
 namespace Modules\Certification\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Modules\Certification\Services\CertificationCatalogService;
+use Modules\Certification\Services\CertificationStudentDashboardService;
 
 class CertificationFrontendController extends Controller
 {
@@ -45,5 +47,16 @@ class CertificationFrontendController extends Controller
         }
 
         return view(theme('pages.certificationEnroll'), $catalog->enrollPage($offering));
+    }
+
+    public function studentPortal(CertificationStudentDashboardService $dashboard)
+    {
+        if (! $dashboard->isAvailable()) {
+            return redirect()->route('studentDashboard');
+        }
+
+        $certificationDashboard = $dashboard->forUser(Auth::user());
+
+        return view(theme('pages.myLifeSupportCertifications'), compact('certificationDashboard'));
     }
 }

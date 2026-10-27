@@ -39,10 +39,6 @@
                 </div>
             </div>
 
-            @if (!empty($certificationDashboard['show']))
-                @include(theme('components.certification-student-dashboard-section'), $certificationDashboard)
-            @endif
-
             <div class="row">
                 <div class="col-xl-{{ $col }} col-12">
                     <div class="row">
