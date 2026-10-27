@@ -86,9 +86,8 @@
                                                                 href="{{ route('certificationOfferingSessions.edit', [$offering->id, $session->id]) }}">
                                                                 {{ __('common.Edit') }}
                                                             </a>
-                                                            <a class="dropdown-item"
-                                                                href="{{ route('certificationOfferingSessions.destroy', [$offering->id, $session->id]) }}"
-                                                                onclick="return confirm('{{ __('Are you sure to delete ?') }}')">
+                                                            <a onclick="confirm_modal('{{ route('certificationOfferingSessions.destroy', [$offering->id, $session->id]) }}');"
+                                                                class="dropdown-item" href="javascript:void(0)">
                                                                 {{ __('common.Delete') }}
                                                             </a>
                                                         </div>
@@ -111,4 +110,6 @@
             </div>
         </div>
     </section>
+
+    @include('backend.partials.delete_modal')
 @endsection
