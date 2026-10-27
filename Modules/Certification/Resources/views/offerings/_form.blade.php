@@ -40,6 +40,7 @@
         if ($offering && $offering->relationLoaded('options') && $offering->options->isNotEmpty()) {
             $optionRows = $offering->options->map(function ($opt) {
                 return [
+                    'id' => $opt->id,
                     'title' => $opt->title,
                     'subtitle' => $opt->subtitle,
                     'price' => $opt->price,
@@ -172,6 +173,9 @@
                                 <td>
                                     <input class="primary_input_field" name="options[{{ $idx }}][title]" type="text"
                                         value="{{ $row['title'] ?? '' }}" required>
+                                    @if (!empty($row['id']))
+                                        <input type="hidden" name="options[{{ $idx }}][id]" value="{{ $row['id'] }}">
+                                    @endif
                                     <input type="hidden" name="options[{{ $idx }}][sort_order]"
                                         value="{{ $row['sort_order'] ?? $idx }}" class="cert-option-sort">
                                 </td>

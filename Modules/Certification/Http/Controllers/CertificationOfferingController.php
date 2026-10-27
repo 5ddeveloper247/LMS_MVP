@@ -12,6 +12,7 @@ use Illuminate\Validation\Rule;
 use Modules\Certification\Entities\CertificationCategory;
 use Modules\Certification\Entities\CertificationGroup;
 use Modules\Certification\Entities\CertificationOffering;
+use Modules\Certification\Entities\CertificationOfferingOption;
 
 class CertificationOfferingController extends Controller
 {
@@ -79,7 +80,8 @@ class CertificationOfferingController extends Controller
 
             return redirect()->route('certificationOfferings.index');
         } catch (\Exception $e) {
-            GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
+            GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent(), true);
+            Toastr::error($e->getMessage(), trans('common.Error'));
 
             return redirect()->back()->withInput();
         }
@@ -115,7 +117,8 @@ class CertificationOfferingController extends Controller
 
             return redirect()->route('certificationOfferings.index');
         } catch (\Exception $e) {
-            GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent());
+            GettingError($e->getMessage(), url()->current(), request()->ip(), request()->userAgent(), true);
+            Toastr::error($e->getMessage(), trans('common.Error'));
 
             return redirect()->back()->withInput();
         }
@@ -197,6 +200,7 @@ class CertificationOfferingController extends Controller
             $rules['options.*.price'] = 'required|numeric|min:0';
             $rules['options.*.product_code'] = 'nullable|string|max:100';
             $rules['options.*.sort_order'] = 'nullable|integer|min:0';
+            $rules['options.*.id'] = 'nullable|integer';
         }
 
         $mode = $request->input('delivery_mode');
@@ -224,6 +228,10 @@ class CertificationOfferingController extends Controller
 
     private function syncDeliveryParts(CertificationOffering $offering, Request $request): void
     {
+        if (! Schema::hasTable('certification_offering_delivery_parts')) {
+            return;
+        }
+
         $offering->deliveryParts()->delete();
 
         $mode = $offering->delivery_mode;
@@ -259,8 +267,6 @@ class CertificationOfferingController extends Controller
         $attrs = [
             'name' => $data['name'],
             'slug' => $data['slug'],
-            'certification_group_id' => $this->nullableForeignId($data['certification_group_id'] ?? null),
-            'certification_category_id' => $this->nullableForeignId($data['certification_category_id'] ?? null),
             'short_description' => $data['short_description'] ?? null,
             'format_label' => $data['format_label'] ?? null,
             'ce_hours' => isset($data['ce_hours']) && $data['ce_hours'] !== '' ? $data['ce_hours'] : null,
@@ -278,6 +284,12 @@ class CertificationOfferingController extends Controller
         if (Schema::hasColumn('certification_offerings', 'requirements')) {
             $attrs['requirements'] = $data['requirements'] ?? null;
         }
+        if (Schema::hasColumn('certification_offerings', 'certification_group_id')) {
+            $attrs['certification_group_id'] = $this->nullableForeignId($data['certification_group_id'] ?? null);
+        }
+        if (Schema::hasColumn('certification_offerings', 'certification_category_id')) {
+            $attrs['certification_category_id'] = $this->nullableForeignId($data['certification_category_id'] ?? null);
+        }
 
         return $attrs;
     }
@@ -288,9 +300,8 @@ class CertificationOfferingController extends Controller
             return;
         }
 
-        $offering->options()->delete();
-
         $rows = $request->input('options', []);
+        $keptIds = [];
         $index = 0;
 
         foreach ($rows as $row) {
@@ -298,15 +309,63 @@ class CertificationOfferingController extends Controller
                 continue;
             }
 
-            $offering->options()->create([
+            $payload = [
                 'title' => $row['title'],
                 'subtitle' => $row['subtitle'] ?? null,
                 'price' => $row['price'],
                 'product_code' => $row['product_code'] ?? null,
                 'sort_order' => isset($row['sort_order']) ? (int) $row['sort_order'] : $index,
-            ]);
+            ];
+
+            $optionId = isset($row['id']) && $row['id'] !== '' ? (int) $row['id'] : null;
+            if ($optionId) {
+                $option = $offering->options()->whereKey($optionId)->first();
+                if ($option) {
+                    $option->update($payload);
+                    $keptIds[] = $option->id;
+                    $index++;
+
+                    continue;
+                }
+            }
+
+            $created = $offering->options()->create($payload);
+            $keptIds[] = $created->id;
             $index++;
         }
+
+        $staleOptions = $offering->options()
+            ->when($keptIds !== [], fn ($query) => $query->whereNotIn('id', $keptIds))
+            ->get();
+
+        foreach ($staleOptions as $option) {
+            if (! $this->optionCanBeDeleted($option)) {
+                continue;
+            }
+
+            $option->delete();
+        }
+    }
+
+    private function optionCanBeDeleted(CertificationOfferingOption $option): bool
+    {
+        if (Schema::hasTable('certification_enrollments')) {
+            if (DB::table('certification_enrollments')
+                ->where('certification_offering_option_id', $option->id)
+                ->exists()) {
+                return false;
+            }
+        }
+
+        if (Schema::hasTable('carts') && Schema::hasColumn('carts', 'certification_offering_option_id')) {
+            if (DB::table('carts')
+                ->where('certification_offering_option_id', $option->id)
+                ->exists()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private function nullableForeignId($value): ?int
